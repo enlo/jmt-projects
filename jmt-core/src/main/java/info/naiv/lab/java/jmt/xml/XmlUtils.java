@@ -1,0 +1,106 @@
+package info.naiv.lab.java.jmt.xml;
+
+import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.resolveService;
+import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import static java.util.Objects.requireNonNull;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.xpath.XPath;
+import static javax.xml.xpath.XPathConstants.NODESET;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+public abstract class XmlUtils {
+
+    /**
+     *
+     * @param path
+     * @return
+     * @throws XPathExpressionException
+     */
+    @ReturnNonNull
+    public static XPathExpression getXPath(String path) throws XPathExpressionException {
+        XPath xpath = get(XPath.class);
+        return xpath.compile(path);
+    }
+
+    /**
+     *
+     * @param source
+     * @param path
+     * @param newValue
+     * @return
+     * @throws XPathExpressionException
+     * @throws java.io.IOException
+     * @throws org.xml.sax.SAXException
+     */
+    @ReturnNonNull
+    public static Document setNodeValue(Document source, String path, String newValue) throws XPathExpressionException, IOException, SAXException {
+        nonNull(source, "source");
+        XPath xpath = get(XPath.class);
+        Object obj = xpath.evaluate(path, source, NODESET);
+        NodeList nl = (NodeList) obj;
+        for (int i = 0; i < nl.getLength(); i++) {
+            Node n = nl.item(i);
+            n.setNodeValue(newValue);
+        }
+        return source;
+    }
+
+    @ReturnNonNull
+    public static byte[] toByteArray(DOMSource source) throws TransformerException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        Result result = new StreamResult(os);
+        Transformer transformer = get(Transformer.class);
+        transformer.transform(source, result);
+        return os.toByteArray();
+    }
+
+    @ReturnNonNull
+    public static byte[] toByteArray(Document source) throws TransformerException {
+        return toByteArray(new DOMSource(source));
+    }
+
+    /**
+     *
+     * @param source
+     * @return
+     * @throws IOException
+     * @throws SAXException
+     */
+    @ReturnNonNull
+    public static Document toDocument(InputSource source) throws IOException, SAXException {
+        nonNull(source, "source");
+        DocumentBuilder builder = get(DocumentBuilder.class);
+        return builder.parse(source);
+    }
+
+    @ReturnNonNull
+    public static String toString(DOMSource source) throws TransformerException {
+        StringWriter sw = new StringWriter();
+        Result result = new StreamResult(sw);
+        Transformer transformer = get(Transformer.class);
+        transformer.transform(source, result);
+        return result.toString();
+    }
+
+    static <T> T get(Class<T> clazz) {
+        return requireNonNull(resolveService(clazz));
+    }
+
+    private XmlUtils() {
+    }
+}

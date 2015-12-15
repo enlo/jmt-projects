@@ -1,0 +1,1 @@
+select * from Emploee where id = #jmtBind($id)

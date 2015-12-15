@@ -1,7 +1,9 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
+import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
@@ -29,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import static java.util.Objects.deepEquals;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,9 +40,9 @@ public abstract class Misc {
     /**
      * リストにオブジェクトが存在しない場合追加する.
      *
-     * @param <T>  要素の型
+     * @param <T> 要素の型
      * @param list リスト
-     * @param obj  追加したいオブジェクト
+     * @param obj 追加したいオブジェクト
      * @return 追加した場合 true.
      */
     public static <T> boolean addIfNotFound(Collection<T> list, T obj) {
@@ -63,103 +64,13 @@ public abstract class Misc {
         return iter;
     }
 
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, T[] arr2) {
-        return arrayCompareTo(arr1, 0, arr2, 0);
-    }
-
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, T[] arr2, int pos2) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
-        int len1 = arr1.length - pos1;
-        int len2 = arr2.length - pos2;
-        return arrayCompareTo(arr1, pos1, len1, arr2, pos2, len2);
-    }
-
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, int len1, T[] arr2, int pos2, int len2) {
-        int lim1 = pos1 + len1;
-        int lim2 = pos2 + len2;
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
-        Arguments.between(pos1, 0, arr1.length - 1, "pos1");
-        Arguments.between(pos2, 0, arr2.length - 1, "pos2");
-        for (int i1 = pos1, i2 = pos2; i1 < lim1 && i2 < lim2; i1++, i2++) {
-            int diff = arr1[i1].compareTo(arr2[i2]);
-            if (diff != 0) {
-                return diff;
-            }
-        }
-        return len1 - len2;
-    }
-
-    public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
-        Arguments.between(pos1, 0, arr1.length - 1, "pos1");
-        Arguments.between(pos2, 0, arr2.length - 1, "pos2");
-        Arguments.between(pos1 + len, 0, arr1.length, "len");
-        Arguments.between(pos2 + len, 0, arr2.length, "len");
-
-        int to = pos1 + len;
-        for (int i1 = pos1, i2 = pos2; i1 < to; i1++, i2++) {
-            if (arr1[i1] != arr2[i2]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
-        Arguments.between(pos1, 0, arr1.length - 1, "pos1");
-        Arguments.between(pos2, 0, arr2.length - 1, "pos2");
-        Arguments.between(pos1 + len, 0, arr1.length, "len");
-        Arguments.between(pos2 + len, 0, arr2.length, "len");
-
-        int to = pos1 + len;
-        for (int i1 = pos1, i2 = pos2; i1 < to; i1++, i2++) {
-            if (arr1[i1] != arr2[i2]) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static <T> boolean arrayEqualsInRange(T[] arr1, int pos1, T[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
-        Arguments.between(pos1, 0, arr1.length - 1, "pos1");
-        Arguments.between(pos2, 0, arr2.length - 1, "pos2");
-        Arguments.between(pos1 + len, 0, arr1.length, "len");
-        Arguments.between(pos2 + len, 0, arr2.length, "len");
-        int to = pos1 + len;
-        for (int i1 = pos1, i2 = pos2; i1 < to; i1++, i2++) {
-            if (!deepEquals(arr1[i1], arr2[i2])) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 文字列連結.
-     *
-     * @param <T>
-     * @param items 連結する項目
-     * @return 連結された文字列.
-     */
-    @ReturnNonNull
-    public static <T> String arrayJoin(T[] items) {
-        return (StringJoiner.SIMPLE).join(items).toString();
-    }
-
     /**
      * 値が範囲内に収まっているかどうかチェック. value, from, to のいずれかが null の場合は false.
      *
-     * @param <T>   値の型.
+     * @param <T> 値の型.
      * @param value 検査する値.
-     * @param from  開始.
-     * @param to    終了.
+     * @param from 開始.
+     * @param to 終了.
      * @return from &lt= value &lt= to
      */
     public static <T extends Comparable<T>> boolean between(T value, T from, T to) {
@@ -174,8 +85,8 @@ public abstract class Misc {
     /**
      * コレクションから受け入れ可能なものを取得
      *
-     * @param <T>       要素の型
-     * @param items     コレクションから等価であるものを取得
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
@@ -195,8 +106,8 @@ public abstract class Misc {
     /**
      * コレクションから受け入れ可能なものを取得
      *
-     * @param <T>       要素の型
-     * @param items     コレクションから等価であるものを取得
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
@@ -216,8 +127,8 @@ public abstract class Misc {
     /**
      * コレクションから受け入れ可能なものを取得
      *
-     * @param <T>       要素の型
-     * @param items     コレクションから等価であるものを取得
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
@@ -237,8 +148,8 @@ public abstract class Misc {
     /**
      * コレクションから等価であるものを取得
      *
-     * @param <T>         要素の型
-     * @param items       コレクションから等価であるものを取得
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
@@ -257,8 +168,8 @@ public abstract class Misc {
     /**
      * コレクションから等価であるものを取得
      *
-     * @param <T>         要素の型
-     * @param items       コレクションから等価であるものを取得
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
@@ -298,10 +209,10 @@ public abstract class Misc {
     /**
      * 値からキーを検索する.
      *
-     * @param <TKey>   キーの型
+     * @param <TKey> キーの型
      * @param <TValue> 値の型
-     * @param map      マップ
-     * @param value    値
+     * @param map マップ
+     * @param value 値
      * @return キーセット
      */
     @ReturnNonNull
@@ -388,7 +299,7 @@ public abstract class Misc {
     /**
      * 中身が空かどうかチェック.
      *
-     * @param <T>    配列の型
+     * @param <T> 配列の型
      * @param object チェックするオブジェクト
      * @return 空ならば true.
      */
@@ -482,7 +393,7 @@ public abstract class Misc {
     /**
      * 中身があるかどうかチェック.
      *
-     * @param <T>    配列の型
+     * @param <T> 配列の型
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
@@ -510,16 +421,16 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static String join(Object... items) {
-        return arrayJoin(items);
+        return arrayToString(items);
     }
 
     /**
      * コレクションを別のコレクションに変換.
      *
      * @param <Dest> 変換先のコレクションの型.
-     * @param <R>    変換先の型
-     * @param <T>    変換元の型
-     * @param dest   変換先のコレクション
+     * @param <R> 変換先の型
+     * @param <T> 変換元の型
+     * @param dest 変換先のコレクション
      * @param source 元のコレクション
      * @param mapper 変換器
      * @return 変換先のコレクション
@@ -541,10 +452,10 @@ public abstract class Misc {
      * マップの値を変換し、別のマップに登録.
      *
      * @param <Dest> 変換先のマップの型.
-     * @param <K>    キーの型
-     * @param <R>    変換先の型
-     * @param <T>    変換元の型
-     * @param dest   変換先のマップ
+     * @param <K> キーの型
+     * @param <R> 変換先の型
+     * @param <T> 変換元の型
+     * @param dest 変換先のマップ
      * @param source 元のマップ
      * @param mapper 変換器
      * @return 変換先のマップ
@@ -564,8 +475,8 @@ public abstract class Misc {
     /**
      * 集合を別の型の集合に変換.
      *
-     * @param <R>    変換先の型
-     * @param <T>    変換元の型
+     * @param <R> 変換先の型
+     * @param <T> 変換元の型
      * @param source 元の集合
      * @param mapper 変換器
      * @return dest.
@@ -579,8 +490,8 @@ public abstract class Misc {
     /**
      * リストを別の型のリストに変換.
      *
-     * @param <R>    変換先の型
-     * @param <T>    変換元の型
+     * @param <R> 変換先の型
+     * @param <T> 変換元の型
      * @param source 元のリスト
      * @param mapper 変換器
      * @return dest.
@@ -635,9 +546,9 @@ public abstract class Misc {
     /**
      * 繰り返し値を取得する.
      *
-     * @param <T>       項目の型
+     * @param <T> 項目の型
      * @param repeatMax 繰り返す回数
-     * @param value     値
+     * @param value 値
      * @return Iterable
      */
     @ReturnNonNull
@@ -646,21 +557,9 @@ public abstract class Misc {
     }
 
     /**
-     *
-     * @param <T>
-     * @param items
-     * @return
-     */
-    @SafeVarargs
-    public static <T extends Comparable<T>> T[] sort(T... items) {
-        Arrays.sort(items, new ComparableComparator<T>());
-        return items;
-    }
-
-    /**
      * Number を BigDecimal に変換
      *
-     * @param source       ソース
+     * @param source ソース
      * @param defaultValue 既定値.
      * @return 変換先. source が null なら defaultValue.
      */
@@ -685,7 +584,7 @@ public abstract class Misc {
     /**
      * 文字列から BigDecimal を作成.
      *
-     * @param source       文字列
+     * @param source 文字列
      * @param defaultValue エラー時の既定値
      * @return 変換結果. source が null なら defaultValue.
      */
@@ -713,7 +612,7 @@ public abstract class Misc {
     /**
      * Dateをカレンダーに変換.
      *
-     * @param date         日付
+     * @param date 日付
      * @param defaultValue 既定値
      * @return 値
      */
@@ -729,9 +628,9 @@ public abstract class Misc {
     }
 
     /**
-     * 文字列をカレンダーに変換.<br> {@link Dates#parseCalendar(String)} を呼び出す.
+     * 文字列をカレンダーに変換.<br> {@link ClassicDateUtils#parseCalendar(String)} を呼び出す.
      *
-     * @param dateText     日付テキスト
+     * @param dateText 日付テキスト
      * @param defaultValue 既定値
      * @return 値
      */
@@ -748,9 +647,9 @@ public abstract class Misc {
     }
 
     /**
-     * 文字列を日付に変換. {@link Dates#parseCalendar(String)} を呼び出す.
+     * 文字列を日付に変換. {@link ClassicDateUtils#parseCalendar(String)} を呼び出す.
      *
-     * @param dateText     日付テキスト
+     * @param dateText 日付テキスト
      * @param defaultValue 値
      * @return 値
      */
@@ -788,7 +687,7 @@ public abstract class Misc {
     /**
      * Number を int に変換.
      *
-     * @param source       ソース
+     * @param source ソース
      * @param defaultValue 既定値
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -802,7 +701,7 @@ public abstract class Misc {
     /**
      * 文字列を int に変更.
      *
-     * @param source       数値文字列.
+     * @param source 数値文字列.
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -814,7 +713,7 @@ public abstract class Misc {
     /**
      * Number を Integer に変換.
      *
-     * @param source       ソース
+     * @param source ソース
      * @param defaultValue 既定値
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -828,7 +727,7 @@ public abstract class Misc {
     /**
      * 文字列をIntegerに変更.
      *
-     * @param source       数値文字列.
+     * @param source 数値文字列.
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -869,7 +768,7 @@ public abstract class Misc {
     /**
      * Number を Long に変換.
      *
-     * @param source       ソース
+     * @param source ソース
      * @param defaultValue 既定値
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -883,7 +782,7 @@ public abstract class Misc {
     /**
      * 文字列をLongに変更.
      *
-     * @param source       数値文字列.
+     * @param source 数値文字列.
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -894,7 +793,7 @@ public abstract class Misc {
     /**
      * Number を Long に変換.
      *
-     * @param source       ソース
+     * @param source ソース
      * @param defaultValue 既定値
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -908,7 +807,7 @@ public abstract class Misc {
     /**
      * 文字列をLongに変更.
      *
-     * @param source       数値文字列.
+     * @param source 数値文字列.
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
@@ -927,7 +826,7 @@ public abstract class Misc {
      * サービスプロバイダーから、NumberFormat を取得し、処理を行う. <br>
      * 戻される値は Long か Double のいずれか.
      *
-     * @param source       文字列
+     * @param source 文字列
      * @param defaultValue 解析できない場合の既定値.
      * @return 結果.
      */
@@ -948,9 +847,9 @@ public abstract class Misc {
      * <dd>文字列に応じて、Long または Double として処理.<dd>
      * </dl>
      *
-     * @param source       文字列
+     * @param source 文字列
      * @param defaultValue 解析できない場合の既定値.
-     * @param hint         型のヒント.
+     * @param hint 型のヒント.
      * @return 結果.
      */
     public static Number toNumber(String source, Number defaultValue, Class<? extends Number> hint) {
@@ -1001,8 +900,8 @@ public abstract class Misc {
     /**
      * オブジェクトを formatter を通して文字列に変換.
      *
-     * @param value        値
-     * @param format       フォーマット
+     * @param value 値
+     * @param format フォーマット
      * @param defaultValue 変換に失敗した場合や null の場合に出力する値.
      * @return 結果
      */

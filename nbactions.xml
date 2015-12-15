@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actions>
+        <action>
+            <actionName>CUSTOM-deploy (wet)</actionName>
+            <displayName>deploy (wet)</displayName>
+            <goals>
+                <goal>deploy</goal>
+            </goals>
+            <properties>
+                <dryRun>false</dryRun>
+                <github.site.skip>false</github.site.skip>
+            </properties>
+        </action>
+    </actions>

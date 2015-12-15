@@ -23,9 +23,10 @@
  */
 package info.naiv.lab.java.jmt.text;
 
-import info.naiv.lab.java.jmt.ArrayIterator;
+import info.naiv.lab.java.jmt.ClassicArrayUtils.ArrayIterator;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.Lazy;
-import static info.naiv.lab.java.jmt.Misc.*;
 import info.naiv.lab.java.jmt.ReverseIterator;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
@@ -177,7 +178,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
             end = elm.length;
         }
         UnicodeScalar[] subseq = copyOfRange(elm, start, end);
-        String substr = arrayJoin(subseq);
+        String substr = arrayToString(subseq);
         return new UnicodeVector(decomposed, substr, new Lazy<>(subseq));
     }
 

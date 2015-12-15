@@ -1,7 +1,7 @@
 package info.naiv.lab.java.jmt.text;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayEqualsInRange;
 import info.naiv.lab.java.jmt.Misc;
-import static info.naiv.lab.java.jmt.Misc.arrayEqualsInRange;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.util.*;

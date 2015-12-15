@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 
 /**
+ * 文字列連結用クラス
  *
  * @author enlo
  * @param <T>
@@ -43,6 +44,7 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
     protected final Adder<StringBuilder, T> more;
 
     /**
+     * コンストラクタ
      *
      * @param first
      * @param more
@@ -53,6 +55,7 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
     }
 
     /**
+     * コンストラクタ
      *
      * @param adder
      */
@@ -60,7 +63,7 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
         this.first = nonNull(adder, "adder");
         this.more = adder;
     }
-    
+
     @Override
     protected final StringBuilder createResult() {
         return new StringBuilder();

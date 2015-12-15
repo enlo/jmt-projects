@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
 import info.naiv.lab.java.jmt.IterationUnit;
-import info.naiv.lab.java.jmt.Misc;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -239,7 +239,7 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
             return 0;
         }
         long minus = rhs.compareTo(lhs) <= 0 ? -1 : 1;
-        Calendar[] mc = Misc.sort(lhs, rhs);
+        Calendar[] mc = arraySort(lhs, rhs);
         int dist = (mc[1].get(Calendar.YEAR) - mc[0].get(Calendar.YEAR)) * 12;
         mc[0].add(Calendar.MONTH, dist);
         dist -= (mc[1].get(Calendar.MONTH) - mc[0].get(Calendar.MONTH));

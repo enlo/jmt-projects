@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.range;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
 import info.naiv.lab.java.jmt.IterationUnit;
-import static info.naiv.lab.java.jmt.Misc.sort;
 
 
 public class Ranges {
@@ -35,13 +35,13 @@ public class Ranges {
 
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> closedOpenRange(T first, T end, IterationUnit<T> unit) {
-        T[] item = sort(first, end);
+        T[] item = arraySort(first, end);
         return new Range(unit, new Bound.ClosedLowerBound<>(item[0]), new Bound.OpenUpperBound<>(item[1]));
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> closedRange(T first, T end, IterationUnit<T> unit) {
-        T[] item = sort(first, end);
+        T[] item = arraySort(first, end);
         return new Range(unit, new Bound.ClosedLowerBound<>(item[0]), new Bound.ClosedUpperBound<>(item[1]));
     }
 
@@ -55,13 +55,13 @@ public class Ranges {
 
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> openClosedRange(T first, T end, IterationUnit<T> unit) {
-        T[] item = sort(first, end);
+        T[] item = arraySort(first, end);
         return new Range(unit, new Bound.OpenLowerBound<>(item[0]), new Bound.ClosedUpperBound<>(item[1]));
     }
 
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> openRange(T first, T end, IterationUnit<T> unit) {
-        T[] item = sort(first, end);
+        T[] item = arraySort(first, end);
         return new Range(unit, new Bound.OpenLowerBound<>(item[0]), new Bound.OpenUpperBound<>(item[1]));
     }
 

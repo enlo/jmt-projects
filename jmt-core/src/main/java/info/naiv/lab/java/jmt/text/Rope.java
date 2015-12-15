@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.text;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
 import info.naiv.lab.java.jmt.MappingIterator;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.fx.Function1;
@@ -250,7 +251,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
         if(idx < 0) {
             return false;
         }
-        return Misc.arrayCompareTo(source.elements(), idx, len, search, 0, len) == 0;
+        return arrayCompareTo(source.elements(), idx, len, search, 0, len) == 0;
     }
 
     /**
@@ -529,7 +530,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
         if(idx < 0) {
             return false;
         }
-        return Misc.arrayCompareTo(source.elements(), offset, len, search, 0, len) == 0;
+        return arrayCompareTo(source.elements(), offset, len, search, 0, len) == 0;
     }
 
     static class Iter extends MappingIterator<String, UnicodeScalar> {

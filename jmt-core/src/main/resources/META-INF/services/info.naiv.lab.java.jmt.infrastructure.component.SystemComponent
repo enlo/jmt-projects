@@ -1,0 +1,10 @@
+info.naiv.lab.java.jmt.datetime.DefaultCurrentDateProvider
+info.naiv.lab.java.jmt.datetime.DefaultShortYearConverter
+info.naiv.lab.java.jmt.datetime.SimpleDateFormatComponent
+info.naiv.lab.java.jmt.text.NumberFormatComponent
+info.naiv.lab.java.jmt.xml.DocumentBuilderComponent
+info.naiv.lab.java.jmt.xml.DocumentBuilderFactoryComponent
+info.naiv.lab.java.jmt.xml.TransformerComponent
+info.naiv.lab.java.jmt.xml.TransformerFactoryComponent
+info.naiv.lab.java.jmt.xml.XPathComponent
+info.naiv.lab.java.jmt.xml.XPathFactoryComponent

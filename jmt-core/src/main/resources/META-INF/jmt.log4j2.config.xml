@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="rootLevel">$${jmt:log4j2.root.level}</Property>
+        <Property name="fileDir">$${jmt:log4j2.file.dir}</Property>
+        <Property name="fileName">$${jmt:log4j2.file.basename}</Property>
+        <Property name="fileSize">$${jmt:log4j2.file.size}</Property>
+        <Property name="rollover">$${jmt:log4j2.file.rollover}</Property>
+    </Properties>
+    <Appenders>
+        <!-- Console -->
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MMM-dd HH:mm:ss.SSS} %-5level %marker %c{1} - %msg%n"/>
+        </Console>
+        <!-- ERROR ONLY -->
+        <RollingRandomAccessFile name="FILE_ERROR"
+                                 fileName="${fileDir}/${fileName}-error.log"
+                                 filePattern="${fileDir}/${fileName}-error-%d{yyyyMMdd}-%i.log.zip">
+            <ThresholdFilter level="ERROR" />
+            <PatternLayout>
+                <Pattern>time:%d{yyyy-MM-dd HH:mm:ss.SSS}; level:%-5level; thread:%t; marker:%c{1}; message:%msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rollover}"/>
+        </RollingRandomAccessFile>
+        <!-- MAIN -->
+        <RollingRandomAccessFile name="FILE"
+                                 fileName="${fileDir}/${fileName}.log"
+                                 filePattern="${fileDir}/${fileName}-%d{yyyyMMdd}-%i.log.zip">
+            <PatternLayout>
+                <Pattern>time:%d{yyyy-MM-dd HH:mm:ss.SSS}; level:%-5level; thread:%t; marker:%c{1}; message:%msg%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="${fileSize}"/>
+            </Policies>
+            <DefaultRolloverStrategy max="${rollover}"/>
+        </RollingRandomAccessFile>
+    </Appenders>
+    <Loggers>
+        <Root level="${rootLevel}" >
+            <AppenderRef ref="CONSOLE"  />
+            <AppenderRef ref="FILE_ERROR"  />
+            <AppenderRef ref="FILE"  />
+        </Root>
+    </Loggers>
+</Configuration>

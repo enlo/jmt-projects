@@ -105,7 +105,6 @@ public class MiscTest {
         assertThat(result.hasNext(), is(false));
     }
 
-
     /**
      * Test of between method, of class Misc.
      */
@@ -136,7 +135,7 @@ public class MiscTest {
     }
 
     /**
-     * Test of containsCompareEquals method, of class Misc.
+     * Test of arrayContainsCompareEquals method, of class Misc.
      */
     @Test
     public void testContainsCompareEquals_Collection_GenericType() {
@@ -148,24 +147,6 @@ public class MiscTest {
         assertThat(list.contains(new BigDecimal("0")), is(false));
         assertThat(list.contains(new BigDecimal("1")), is(false));
         assertThat(list.contains(new BigDecimal("2")), is(false));
-        assertThat(Misc.containsCompareEquals(list, new BigDecimal("0")), is(true));
-        assertThat(Misc.containsCompareEquals(list, new BigDecimal("1")), is(true));
-        assertThat(Misc.containsCompareEquals(list, new BigDecimal("2")), is(false));
-    }
-
-    /**
-     * Test of containsCompareEquals method, of class Misc.
-     */
-    @Test
-    public void testContainsCompareEquals_GenericType_GenericType() {
-        BigDecimal[] list = null;
-        assertThat(Misc.containsCompareEquals(list, null), is(false));
-        assertThat(Misc.containsCompareEquals(list, BigDecimal.ZERO), is(false));
-
-        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
-        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
         assertThat(Misc.containsCompareEquals(list, new BigDecimal("0")), is(true));
         assertThat(Misc.containsCompareEquals(list, new BigDecimal("1")), is(true));
         assertThat(Misc.containsCompareEquals(list, new BigDecimal("2")), is(false));
@@ -217,32 +198,6 @@ public class MiscTest {
         assertThat(Misc.contains(list, predicate), is(true));
 
         list = Arrays.asList(new BigDecimal("1.0"), new BigDecimal("2.0"));
-        assertThat(Misc.contains(list, predicate), is(false));
-    }
-
-    /**
-     * Test of contains method, of class Misc.
-     */
-    @Test
-    public void testContains_GenericType_Predicate1() {
-        final BigDecimal bd = BigDecimal.ZERO;
-        Predicate1<BigDecimal> predicate = new Predicate1<BigDecimal>() {
-            @Override
-            public boolean test(BigDecimal a1) {
-                return bd.compareTo(a1) == 0;
-            }
-        };
-
-        BigDecimal[] list = null;
-        assertThat(Misc.contains(list, predicate), is(false));
-
-        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
-        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
-        assertThat(Misc.contains(list, predicate), is(true));
-
-        list = new BigDecimal[]{new BigDecimal("2.0"), new BigDecimal("1.0")};
         assertThat(Misc.contains(list, predicate), is(false));
     }
 
@@ -564,7 +519,7 @@ public class MiscTest {
         Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
         Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
         try (InputStream nobomis = nobomres.getInputStream();//
-                InputStream bomis = bomres.getInputStream()) {
+             InputStream bomis = bomres.getInputStream()) {
             String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
             String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
             assertThat(bomtext, is(not(nobomtext)));
@@ -585,7 +540,6 @@ public class MiscTest {
         assertThat(Misc.repeat(1, x), is(containsInAnyOrder("A")));
         assertThat(Misc.repeat(2, x), is(contains("A", "A")));
     }
-
 
     /**
      * Test of toBigDecimal method, of class Misc.

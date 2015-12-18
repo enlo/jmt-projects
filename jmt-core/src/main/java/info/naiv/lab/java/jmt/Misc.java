@@ -21,7 +21,6 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -125,27 +124,6 @@ public abstract class Misc {
     }
 
     /**
-     * コレクションから受け入れ可能なものを取得
-     *
-     * @param <T> 要素の型
-     * @param items コレクションから等価であるものを取得
-     * @param predicate 検索
-     * @return 等価な項目があれば true.
-     */
-    public static <T> boolean contains(T[] items, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (predicate.test(item)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * コレクションから等価であるものを取得
      *
      * @param <T> 要素の型
@@ -154,26 +132,6 @@ public abstract class Misc {
      * @return 等価な項目があれば true.
      */
     public static <T extends Comparable<T>> boolean containsCompareEquals(Collection<? extends T> items, T valueToFind) {
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (item.compareTo(valueToFind) == 0) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * コレクションから等価であるものを取得
-     *
-     * @param <T> 要素の型
-     * @param items コレクションから等価であるものを取得
-     * @param valueToFind 検索する値
-     * @return 等価な項目があれば true.
-     */
-    public static <T extends Comparable<T>> boolean containsCompareEquals(T[] items, T valueToFind) {
         if (items == null) {
             return false;
         }

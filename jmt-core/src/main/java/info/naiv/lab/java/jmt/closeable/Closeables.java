@@ -26,6 +26,8 @@ package info.naiv.lab.java.jmt.closeable;
 import info.naiv.lab.java.jmt.ImmutableHolder;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import lombok.extern.slf4j.Slf4j;
 
@@ -33,25 +35,32 @@ import lombok.extern.slf4j.Slf4j;
 public class Closeables {
 
     /**
-     * close. close が例外を投げた場合、RuntimeException にくるんで送出する.
+     * close.
      *
      * @see AutoCloseable#close()
      * @param object
-     * @throws RuntimeException close が失敗した場合.
+     * @return Exception. close が失敗した場合.
      */
-    public static void close(AutoCloseable object) throws RuntimeException {
+    public static Exception close(AutoCloseable object) {
         try {
             object.close();
+            return null;
         }
         catch (Exception e) {
-            throw new RuntimeException(e);
+            return e;
         }
     }
 
-    public static <T extends AutoCloseable> void closeAll(Iterable<T> list) {
+    @SuppressWarnings("ThrowableResultIgnored")
+    public static <T extends AutoCloseable> Map<T, Exception> closeAll(Iterable<T> list) {
+        Map<T, Exception> result = new HashMap<>();
         for (T obj : list) {
-            close(obj);
+            Exception th = close(obj);
+            if (th != null) {
+                result.put(obj, th);
+            }
         }
+        return result;
     }
 
     /**
@@ -67,10 +76,9 @@ public class Closeables {
     }
 
     /**
-     * ロック.
-     * ロックオブジェクトが null の場合は {@link DummyCloseable}を戻す.
+     * ロック. ロックオブジェクトが null の場合は {@link DummyCloseable}を戻す.
      *
-     * @param lock     ロックオブジェクト
+     * @param lock ロックオブジェクト
      * @param nullable lock の null を許容するか.
      * @return 自動クローズ可能な Lock.
      */
@@ -93,7 +101,8 @@ public class Closeables {
             return new ACSHelper<T>(object) {
                 @Override
                 public void close() {
-                    Closeables.close((AutoCloseable) object);
+                    Exception ex = Closeables.close((AutoCloseable) object);
+                    logger.debug("close throws exception.", ex);
                 }
             };
         }

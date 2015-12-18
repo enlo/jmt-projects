@@ -20,12 +20,13 @@ import static org.mockito.Mockito.*;
  * @author enlo
  */
 public class CloseablesTest {
-    
+
     private static class CloseTest {
+
         void close() {
         }
     }
-    
+
     @Before
     public void setUp() {
     }
@@ -51,7 +52,7 @@ public class CloseablesTest {
         assertThat(cl.getContent(), is(lock));
         verify(lock, times(1)).lock();
     }
-    
+
     @Test
     public void testLock_Lock_Boolean_2() {
         Lock lock = mock(Lock.class);
@@ -66,12 +67,12 @@ public class CloseablesTest {
         ACS<Lock> cl = Closeables.lock(null, true);
         assertThat(cl, is(instanceOf(DummyCloseable.class)));
     }
-    
-    @Test(expected=IllegalArgumentException.class)
+
+    @Test(expected = IllegalArgumentException.class)
     public void testLock_Lock_Boolean_4() {
         Closeables.lock(null, false);
     }
-    
+
     /**
      * Test of close method, of class Closeables.
      *
@@ -80,7 +81,7 @@ public class CloseablesTest {
     @Test
     public void testClose() throws Exception {
         AutoCloseable ac = mock(AutoCloseable.class);
-        Closeables.close(ac);
+        assertThat(Closeables.close(ac), is(nullValue()));
         verify(ac, times(1)).close();
     }
 
@@ -89,11 +90,11 @@ public class CloseablesTest {
      *
      * @throws java.lang.Exception
      */
-    @Test(expected = RuntimeException.class)
-    public void testClose_ThrowException() throws Exception {
+    @Test()
+    public void testClose_ReturnException() throws Exception {
         AutoCloseable ac = mock(AutoCloseable.class);
         doThrow(new Exception()).when(ac).close();
-        Closeables.close(ac);
+        assertThat(Closeables.close(ac), is(instanceOf(Exception.class)));
     }
 
     /**

@@ -1,4 +1,3 @@
-
 package info.naiv.lab.java.jmt.support.spring;
 
 import info.naiv.lab.java.jmt.datetime.CurrentDateProvider;
@@ -24,7 +23,6 @@ import org.springframework.beans.factory.BeanFactory;
  * @author enlo
  */
 public class ServiceInjectorTest {
-
 
     public ServiceInjectorTest() {
     }
@@ -103,17 +101,18 @@ public class ServiceInjectorTest {
     static class Injectee {
 
         @InjectService
-                CurrentDateProvider provider;
+        CurrentDateProvider provider;
     }
 
     static class Injectee2 {
-        
+
         @InjectService
         @StringTagOf("1")
-                CurrentDateProvider provider1;
+        CurrentDateProvider provider1;
+
         @InjectService
         @StringTagOf("2")
-                CurrentDateProvider provider2;
+        CurrentDateProvider provider2;
     }
 
 }

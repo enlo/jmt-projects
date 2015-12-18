@@ -38,9 +38,7 @@ import static java.util.UUID.randomUUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
- * 抽象サービスコンテナ.
- * 内部で CopyOnWriteArrayList を利用することで、
- * 登録・削除時のみ同期をとり、読み取り時は同期しない.
+ * 抽象サービスコンテナ. 内部で CopyOnWriteArrayList を利用することで、 登録・削除時のみ同期をとり、読み取り時は同期しない.
  *
  * @author enlo
  */
@@ -103,6 +101,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
     }
 
     @Override
+    @SuppressWarnings("unused")
     public final ServiceConnection registerService(int priority, Object service, Tag tag) throws IllegalArgumentException {
         nonNull(service, "service");
 
@@ -114,6 +113,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
             if (found != null) {
                 return found;
             }
+
             try (Guard ug = new ReverseGuard(rg, true);
                  Guard wg = writeGuard()) {
                 return internalRegisterService(priority, service, tag);

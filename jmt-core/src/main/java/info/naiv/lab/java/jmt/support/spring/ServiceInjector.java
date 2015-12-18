@@ -114,7 +114,7 @@ public class ServiceInjector implements BeanPostProcessor, BeanFactoryAware {
             }
         }
         catch (BeansException ex) {
-            logger.debug("ServiceProvider not found. ", ex);
+            logger.debug("ServiceProvider not found. use default.", ex);
             sp = null;
         }
         if (sp == null) {

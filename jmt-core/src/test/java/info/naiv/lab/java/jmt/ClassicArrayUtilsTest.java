@@ -24,8 +24,11 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.*;
+import info.naiv.lab.java.jmt.fx.Predicate1;
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.ArrayUtils;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.arrayWithSize;
@@ -97,6 +100,32 @@ public class ClassicArrayUtilsTest {
         assertThat(arrayCompareTo(arr1, arr3), is(lessThan(0)));
         assertThat(arrayCompareTo(arr3, arr4), is(greaterThan(0)));
         assertThat(arrayCompareTo(arr2, arr4), is(0));
+    }
+
+    /**
+     * Test of arrayContains method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testArrayContains() {
+        final BigDecimal bd = BigDecimal.ZERO;
+        Predicate1<BigDecimal> predicate = new Predicate1<BigDecimal>() {
+            @Override
+            public boolean test(BigDecimal a1) {
+                return bd.compareTo(a1) == 0;
+            }
+        };
+
+        BigDecimal[] list = null;
+        assertThat(arrayContains(list, predicate), is(false));
+
+        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
+        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
+        assertThat(arrayContains(list, predicate), is(true));
+
+        list = new BigDecimal[]{new BigDecimal("2.0"), new BigDecimal("1.0")};
+        assertThat(arrayContains(list, predicate), is(false));
     }
 
     /**
@@ -202,5 +231,23 @@ public class ClassicArrayUtilsTest {
         actual = createArray("A", "B", "C");
         assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
 
+    }
+
+    /**
+     * Test of arrayContainsCompareEquals method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testArrayContainsCompareEquals() {
+        BigDecimal[] list = null;
+        assertThat(arrayContainsCompareEquals(list, null), is(false));
+        assertThat(arrayContainsCompareEquals(list, BigDecimal.ZERO), is(false));
+
+        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
+        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("0")), is(true));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("1")), is(true));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("2")), is(false));
     }
 }

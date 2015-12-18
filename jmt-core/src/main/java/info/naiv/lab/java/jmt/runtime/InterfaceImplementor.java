@@ -37,7 +37,7 @@ import java.security.AccessController;
 public class InterfaceImplementor {
 
     @ReturnNonNull
-    public static <T> T getInterface(Object target, Class<T> clazz, InvocationHandler handler) {
+    public static <T> T getInterface(Class<T> clazz, InvocationHandler handler) {
         isInterface(clazz, "clazz");
         Object proxy = Proxy.newProxyInstance(clazz.getClassLoader(),
                                               new Class[]{clazz},
@@ -50,7 +50,7 @@ public class InterfaceImplementor {
         isInterface(clazz, "clazz");
         AccessControlContext accCtrlContext = AccessController.getContext();
         InvocationHandler handler = new InterfaceImplementorInvocationHandler(target, accCtrlContext);
-        return getInterface(target, clazz, handler);
+        return getInterface(clazz, handler);
     }
 
     private InterfaceImplementor() {

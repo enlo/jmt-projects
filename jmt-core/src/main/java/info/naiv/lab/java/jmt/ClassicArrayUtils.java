@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
@@ -40,6 +41,10 @@ import lombok.Value;
  * @author enlo
  */
 public class ClassicArrayUtils {
+
+    public static <T> ArrayIterable<T> arrayAsIterable(T[] array) {
+        return new ArrayIterable<>(array);
+    }
 
     public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, T[] arr2) {
         return arrayCompareTo(arr1, 0, arr2, 0);
@@ -69,7 +74,48 @@ public class ClassicArrayUtils {
         return len1 - len2;
     }
 
-    public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
+    /**
+     * コレクションから受け入れ可能なものを取得
+     *
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
+     * @param predicate 検索
+     * @return 等価な項目があれば true.
+     */
+    public static <T> boolean arrayContains(T[] items, Predicate1<? super T> predicate) {
+        nonNull(predicate, "predicate");
+        if (items == null) {
+            return false;
+        }
+        for (T item : items) {
+            if (predicate.test(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * コレクションから等価であるものを取得
+     *
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
+     * @param valueToFind 検索する値
+     * @return 等価な項目があれば true.
+     */
+    public static  <T extends Comparable<T>> boolean arrayContainsCompareEquals(T[] items, T valueToFind) {
+        if (items == null) {
+            return false;
+        }
+        for (T item : items) {
+            if (item.compareTo(valueToFind) == 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static  boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
@@ -86,7 +132,7 @@ public class ClassicArrayUtils {
         return true;
     }
 
-    public static boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
+    public static  boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
@@ -118,6 +164,19 @@ public class ClassicArrayUtils {
         }
         return true;
     }
+    
+
+    /**
+     *
+     * @param <T>
+     * @param items
+     * @return
+     */
+    @SafeVarargs
+    public static <T extends Comparable<T>> T[] arraySort(T... items) {
+        sort(items, new ComparableComparator<T>());
+        return items;
+    }
 
     /**
      * 文字列連結.
@@ -140,29 +199,13 @@ public class ClassicArrayUtils {
      * @return
      */
     @ReturnNonNull
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings(value = "unchecked")
     public static <T> T[] createArray(T first, T... more) {
         assert more != null;
         T[] array = (T[]) Array.newInstance(more.getClass().getComponentType(), more.length + 1);
         Array.set(array, 0, first);
         arraycopy(more, 0, array, 1, more.length);
         return array;
-    }
-    
-    public static <T> ArrayIterable<T> arrayAsIterable(T[] array) {
-        return new ArrayIterable<>(array);
-    }
-
-    /**
-     *
-     * @param <T>
-     * @param items
-     * @return
-     */
-    @SafeVarargs
-    public static <T extends Comparable<T>> T[] arraySort(T... items) {
-        sort(items, new ComparableComparator<T>());
-        return items;
     }
 
     
@@ -206,5 +249,6 @@ public class ClassicArrayUtils {
         }
 
     }
+
 
 }

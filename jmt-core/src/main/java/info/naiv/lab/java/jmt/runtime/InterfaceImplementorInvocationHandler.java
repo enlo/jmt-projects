@@ -33,12 +33,12 @@ import java.security.PrivilegedExceptionAction;
  *
  * @author enlo
  */
-class InterfaceImplementorInvocationHandler implements InvocationHandler {
+public class InterfaceImplementorInvocationHandler implements InvocationHandler {
 
-    final protected AccessControlContext accCtrlContext;
+    protected final AccessControlContext accCtrlContext;
     protected final Object target;
 
-    InterfaceImplementorInvocationHandler(Object target, AccessControlContext accCtrlContext) {
+    public InterfaceImplementorInvocationHandler(Object target, AccessControlContext accCtrlContext) {
         this.target = target;
         this.accCtrlContext = accCtrlContext;
     }

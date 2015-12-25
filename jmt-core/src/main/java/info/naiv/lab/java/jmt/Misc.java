@@ -1,5 +1,6 @@
 package info.naiv.lab.java.jmt;
 
+import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
@@ -16,6 +17,8 @@ import static java.lang.Character.isSpaceChar;
 import static java.lang.Character.isWhitespace;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -31,6 +34,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -79,27 +84,6 @@ public abstract class Misc {
         else {
             return from.compareTo(value) <= 0 && value.compareTo(to) <= 0;
         }
-    }
-
-    /**
-     * コレクションから受け入れ可能なものを取得
-     *
-     * @param <T> 要素の型
-     * @param items コレクションから等価であるものを取得
-     * @param predicate 検索
-     * @return 等価な項目があれば true.
-     */
-    public static <T> boolean contains(Collection<? extends T> items, Function1<Boolean, ? super T> predicate) {
-        nonNull(predicate, "predicate");
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (predicate.apply(item)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -277,6 +261,7 @@ public abstract class Misc {
             return true;
         }
         catch (ClassNotFoundException ex) {
+            logger.trace("{} is not found. {}", className, ex.getMessage());
             return false;
         }
     }
@@ -294,6 +279,7 @@ public abstract class Misc {
             return true;
         }
         catch (ClassNotFoundException ex) {
+            logger.trace("{} is not found. {}", className, ex.getMessage());
             return false;
         }
     }
@@ -395,7 +381,7 @@ public abstract class Misc {
      * @throws IllegalArgumentException dest または mapper が null
      */
     @ReturnNonNull
-    public static <Dest extends Collection<R>, R, T> Dest map(Dest dest, Collection<T> source, Function1<R, T> mapper) throws IllegalArgumentException {
+    public static <Dest extends Collection<R>, R, T> Dest map(Dest dest, Collection<T> source, Function1<T, R> mapper) throws IllegalArgumentException {
         nonNull(dest, "dest");
         nonNull(mapper, "mapper");
         if (source != null) {
@@ -419,7 +405,7 @@ public abstract class Misc {
      * @return 変換先のマップ
      */
     @ReturnNonNull
-    public static <Dest extends Map<K, R>, K, R, T> Dest map(Dest dest, Map<K, T> source, Function1<R, T> mapper) {
+    public static <Dest extends Map<K, R>, K, R, T> Dest map(Dest dest, Map<K, T> source, Function1<T, R> mapper) {
         nonNull(dest, "dest");
         if (source != null) {
             for (Entry<K, T> e : source.entrySet()) {
@@ -440,7 +426,7 @@ public abstract class Misc {
      * @return dest.
      */
     @ReturnNonNull
-    public static <R, T> Set<R> map(Set<T> source, Function1<R, T> mapper) {
+    public static <R, T> Set<R> map(Set<T> source, Function1<T, R> mapper) {
         final Set<R> result = new HashSet<>(source.size());
         return map(result, source, mapper);
     }
@@ -455,7 +441,7 @@ public abstract class Misc {
      * @return dest.
      */
     @ReturnNonNull
-    public static <R, T> List<R> map(List<T> source, Function1<R, T> mapper) {
+    public static <R, T> List<R> map(List<T> source, Function1<T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
     }
@@ -878,6 +864,16 @@ public abstract class Misc {
         }
         else {
             return value.toString();
+        }
+    }
+
+    public static URL toURL(String url) {
+        nonEmpty(url, "url");
+        try {
+            return new URL(url);
+        }
+        catch (MalformedURLException ex) {
+            return null;
         }
     }
 

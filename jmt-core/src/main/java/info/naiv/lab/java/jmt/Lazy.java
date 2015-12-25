@@ -52,7 +52,7 @@ public class Lazy<T> {
         return new Lazy<T>() {
             @Override
             public T initialValue() {
-                return initializer.apply();
+                return initializer.get();
             }
         };
     }

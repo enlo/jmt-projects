@@ -39,18 +39,18 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  */
 public class AutoCreateHolder<T> extends MutableHolder<T> implements Holder<T> {
 
-    private final Function1<T, Class<? extends T>> creator;
+    private final Function1<Class<? extends T>, T> creator;
     private final ReadWriteLock rwl = new ReentrantReadWriteLock();
 
     public AutoCreateHolder(Class<? extends T> clazz) {
         this(null, clazz, StandardFunctions.newInstance(clazz));
     }
 
-    public AutoCreateHolder(Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
+    public AutoCreateHolder(Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
         this(null, clazz, creator);
     }
 
-    public AutoCreateHolder(T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
+    public AutoCreateHolder(T object, Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
         super(object, nonNull(clazz, "clazz"));
         this.creator = nonNull(creator, "creator");
     }

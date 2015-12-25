@@ -58,7 +58,10 @@ public class WorkingDaySettings implements Cloneable, Serializable {
 
     private WeekSettings weekSettings;
 
-    public WorkingDaySettings(WeekSettings weekSettings, Set<Calendar> holidays, Set<Calendar> extractHolidays, boolean shiftForward) {
+    public WorkingDaySettings(WeekSettings weekSettings,
+                              Set<Calendar> holidays,
+                              Set<Calendar> extractHolidays,
+                              boolean shiftForward) {
         nonNull(weekSettings, "weekSettings");
         nonNull(holidays, "holidays");
         nonNull(extractHolidays, "extractHolidays");
@@ -70,7 +73,7 @@ public class WorkingDaySettings implements Cloneable, Serializable {
 
     @Override
     public Object clone() throws CloneNotSupportedException {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+        return super.clone();
     }
 
     @ReturnNonNull

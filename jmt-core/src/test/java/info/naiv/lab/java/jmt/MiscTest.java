@@ -152,32 +152,6 @@ public class MiscTest {
         assertThat(Misc.containsCompareEquals(list, new BigDecimal("2")), is(false));
     }
 
-    /**
-     * Test of contains method, of class Misc.
-     */
-    @Test
-    public void testContains_Collection_Function1() {
-        final BigDecimal bd = BigDecimal.ZERO;
-        Function1<Boolean, BigDecimal> predicate = new Function1<Boolean, BigDecimal>() {
-            @Override
-            public Boolean apply(BigDecimal a1) {
-                return bd.compareTo(a1) == 0;
-            }
-        };
-
-        List<BigDecimal> list = null;
-        assertThat(Misc.contains(list, predicate), is(false));
-
-        list = Arrays.asList(new BigDecimal("0.0"), new BigDecimal("1.0"));
-        assertThat(list.contains(new BigDecimal("0")), is(false));
-        assertThat(list.contains(new BigDecimal("1")), is(false));
-        assertThat(list.contains(new BigDecimal("2")), is(false));
-        assertThat(Misc.contains(list, predicate), is(true));
-
-        list = Arrays.asList(new BigDecimal("1.0"), new BigDecimal("2.0"));
-        assertThat(Misc.contains(list, predicate), is(false));
-    }
-
     @Test
     public void testContains_Collection_Predicate1() {
         final BigDecimal bd = BigDecimal.ZERO;
@@ -400,7 +374,7 @@ public class MiscTest {
         in.add(24);
         in.add(36);
         assertThat(
-                Misc.map(result, in, new Function1<String, Integer>() {
+                Misc.map(result, in, new Function1<Integer, String>() {
                     @Override
                     public String apply(Integer a1) {
                         return a1.toString();
@@ -423,7 +397,7 @@ public class MiscTest {
         in.put("B", 24);
         in.put("C", 36);
         assertThat(
-                Misc.map(result, in, new Function1<String, Integer>() {
+                Misc.map(result, in, new Function1<Integer, String>() {
                     @Override
                     public String apply(Integer a1) {
                         return a1.toString();

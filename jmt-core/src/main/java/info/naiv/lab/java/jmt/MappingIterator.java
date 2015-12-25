@@ -40,7 +40,7 @@ public class MappingIterator<R, T> implements Iterator<R> {
     @NonNull
     final Iterator<T> baseIterator;
     @NonNull
-    final Function1<R, T> mapper;
+    final Function1<T, R> mapper;
 
     @Override
     public boolean hasNext() {

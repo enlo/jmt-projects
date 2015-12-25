@@ -30,7 +30,7 @@ package info.naiv.lab.java.jmt.fx;
  * @param <A1>
  * @param <A2>
  */
-public interface Function2<R, A1, A2> {
+public interface Function2<A1, A2, R> {
 
     /**
      *

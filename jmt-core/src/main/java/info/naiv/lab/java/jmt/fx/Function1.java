@@ -26,10 +26,10 @@ package info.naiv.lab.java.jmt.fx;
 /**
  * UnaryFunction.
  * @author enlo
- * @param <R>
  * @param <A1>
+ * @param <R>
  */
-public interface Function1<R, A1> {
+public interface Function1<A1, R> {
 
     /**
      * @param a1

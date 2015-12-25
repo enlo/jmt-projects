@@ -33,5 +33,5 @@ public interface Function0<R> {
      * 
      * @return 
      */
-    R apply();
+    R get();
 }

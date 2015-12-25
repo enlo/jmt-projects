@@ -536,7 +536,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     static class Iter extends MappingIterator<String, UnicodeScalar> {
 
         public Iter(Iterator<UnicodeScalar> arg0) {
-            super(arg0, new Function1<String, UnicodeScalar>() {
+            super(arg0, new Function1<UnicodeScalar, String>() {
                 @Override
                 public String apply(UnicodeScalar a1) {
                     return a1.getElement();

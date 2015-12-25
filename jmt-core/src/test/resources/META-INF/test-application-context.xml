@@ -13,7 +13,6 @@
 
 	<context:component-scan base-package="info.naiv.java.jmt" />
 
-        <bean class="info.naiv.lab.java.jmt.support.spring.Slf4jLoggerInjector" />
         <bean class="info.naiv.lab.java.jmt.support.spring.ServiceInjector" />
         
 </beans>

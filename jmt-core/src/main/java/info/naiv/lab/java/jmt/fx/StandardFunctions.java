@@ -42,8 +42,8 @@ public class StandardFunctions {
     }
 
     @ReturnNonNull
-    public static  Function1<Integer, String> convertStringToInt(final int defaultValue) {
-        return new Function1<Integer, String>() {
+    public static Function1<String, Integer> convertStringToInt(final int defaultValue) {
+        return new Function1<String, Integer>() {
 
             @Override
             public Integer apply(String a1) {
@@ -60,7 +60,7 @@ public class StandardFunctions {
         };
     }
 
-    public static  StringPredicate endsWith(final String suffix) {
+    public static StringPredicate endsWith(final String suffix) {
         return new StringPredicate() {
             @Override
             public boolean test(String obj) {
@@ -80,8 +80,8 @@ public class StandardFunctions {
     }
 
     @ReturnNonNull
-    public static <T> Function1<T, Holder<T>> getContent(Class<T> clazz) {
-        return new Function1<T, Holder<T>>() {
+    public static <T> Function1<Holder<T>, T> getContent(Class<T> clazz) {
+        return new Function1<Holder<T>, T>() {
 
             @Override
             public T apply(Holder<T> a1) {
@@ -91,8 +91,8 @@ public class StandardFunctions {
     }
 
     @ReturnNonNull
-    public static <T> Function1<T, Class<? extends T>> newInstance(Class<? extends T> clazz) {
-        return new Function1<T, Class<? extends T>>() {
+    public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz) {
+        return new Function1<Class<? extends T>, T>() {
             @Override
             public T apply(Class<? extends T> a1) {
                 try {
@@ -106,15 +106,15 @@ public class StandardFunctions {
     }
 
     @ReturnNonNull
-    public static <T> Function1<T, Class<? extends T>> newInstance(Class<? extends T> clazz, final T initialValue) {
-        return new Function1<T, Class<? extends T>>() {
+    public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz, final T initialValue) {
+        return new Function1<Class<? extends T>, T>() {
             @Override
             public T apply(Class<? extends T> a1) {
                 return initialValue;
             }
         };
     }
-    
+
     private StandardFunctions() {
     }
 

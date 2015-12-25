@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.fx.Function1;
+import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Calendar;
 import static java.util.Calendar.DAY_OF_YEAR;
@@ -33,7 +33,7 @@ import static java.util.Calendar.YEAR;
  *
  * @author enlo
  */
-public class SameDayPredicate implements Function1<Boolean, Calendar> {
+public class SameDayPredicate implements Predicate1<Calendar> {
 
     Calendar value;
 
@@ -43,7 +43,7 @@ public class SameDayPredicate implements Function1<Boolean, Calendar> {
 
     @Override
     @ReturnNonNull
-    public Boolean apply(Calendar a1) {
+    public boolean test(Calendar a1) {
         if (value == a1) {
             return true;
         }

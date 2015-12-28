@@ -15,3 +15,6 @@ hs_err_pid*
 
 /nbactions.xml
 /nb-configuration.xml
+
+/jmt-core/nbactions.xml
+/jmt-core/nb-configuration.xml

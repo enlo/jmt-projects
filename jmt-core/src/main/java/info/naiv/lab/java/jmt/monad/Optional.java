@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.monad;
 
+import info.naiv.lab.java.jmt.iterator.SingleIterator;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Supplier;
@@ -65,7 +66,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
      * フィルター処理.
      *
      * @param predicate 述語オブジェクト
-     * @return {@link #isPresent()} && predicate が true を戻せば自分自身. <br>
+     * @return {@link #isPresent()} &amp;&amp; predicate が true を戻せば自分自身. <br>
      * そうでなければ {@link #empty()}
      */
     @ReturnNonNull

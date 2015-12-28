@@ -36,11 +36,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NonNull;
-import lombok.Value;
 
 /**
  *
@@ -48,11 +45,11 @@ import lombok.Value;
  * @param <T>
  */
 @AllArgsConstructor
-public final class IterableMonad<T> implements Iterable<T>, Serializable {
+public final class Iteratee<T> implements Iterable<T>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final IterableMonad EMPTY = new IterableMonad();
+    private static final Iteratee EMPTY = new Iteratee();
 
     @NonNull
     Iterable<T> value;
@@ -60,15 +57,15 @@ public final class IterableMonad<T> implements Iterable<T>, Serializable {
     @NonNull
     Predicate1<? super T> predicate;
 
-    IterableMonad() {
+    Iteratee() {
         this(Collections.EMPTY_LIST, StandardFunctions.NO_CHECK);
     }
 
-    public IterableMonad(Iterable<T> value) {
+    public Iteratee(Iterable<T> value) {
         this(value, StandardFunctions.NO_CHECK);
     }
 
-    public IterableMonad(T[] value) {
+    public Iteratee(T[] value) {
         this(Arrays.asList(value), StandardFunctions.NO_CHECK);
     }
 
@@ -79,7 +76,7 @@ public final class IterableMonad<T> implements Iterable<T>, Serializable {
      * @return 空のOptional
      */
     @ReturnNonNull
-    public static <T> IterableMonad<T> empty() {
+    public static <T> Iteratee<T> empty() {
         return EMPTY;
     }
 
@@ -87,12 +84,11 @@ public final class IterableMonad<T> implements Iterable<T>, Serializable {
      * フィルター処理.
      *
      * @param predicate 述語オブジェクト
-     * @return {@link #isPresent()} && predicate が true を戻せば自分自身. <br>
-     * そうでなければ {@link #empty()}
+     * @return predicate が true を戻したオブジェクトのみを戻す.
      */
     @ReturnNonNull
-    public IterableMonad<T> filter(Predicate1<? super T> predicate) {
-        return new IterableMonad<>(this, predicate);
+    public Iteratee<T> filter(Predicate1<? super T> predicate) {
+        return new Iteratee<>(this, predicate);
     }
 
     /**
@@ -103,12 +99,12 @@ public final class IterableMonad<T> implements Iterable<T>, Serializable {
      * @return
      */
     @ReturnNonNull
-    public <U> IterableMonad<U> flatMap(Function1<? super T, IterableMonad<U>> mapper) {
+    public <U> Iteratee<U> flatMap(Function1<? super T, Iteratee<U>> mapper) {
         Iterable<U> it = Misc.flat(Misc.map(this, mapper));
-        return new IterableMonad(it);
+        return new Iteratee(it);
     }
 
-    public IterableMonad<T> bind(Consumer1<? super T> consumer) {
+    public Iteratee<T> bind(Consumer1<? super T> consumer) {
         for (T v : this) {
             consumer.accept(v);
         }
@@ -121,19 +117,19 @@ public final class IterableMonad<T> implements Iterable<T>, Serializable {
     }
 
     @ReturnNonNull
-    public <U> IterableMonad<U> map(Function1<? super T, ? extends U> mapper) {
+    public <U> Iteratee<U> map(Function1<? super T, ? extends U> mapper) {
         Iterable<U> it = Misc.map(this, mapper);
-        return new IterableMonad<>(it);
+        return new Iteratee<>(it);
     }
 
     @ReturnNonNull
-    public static <T> IterableMonad<T> of(Iterable<T> value) {
-        return new IterableMonad<>(value);
+    public static <T> Iteratee<T> of(Iterable<T> value) {
+        return new Iteratee<>(value);
     }
 
     @ReturnNonNull
-    public static <T> IterableMonad<T> of(T... value) {
-        return new IterableMonad<>(value);
+    public static <T> Iteratee<T> of(T... value) {
+        return new Iteratee<>(value);
     }
 
     @ReturnNonNull

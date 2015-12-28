@@ -30,7 +30,7 @@
         <dryRun>true</dryRun>
         <github.site.skip>true</github.site.skip>
         <github.global.server>github-enlo</github.global.server>
-        <github.pages.url>https://enlo.github.io/jmt</github.pages.url>
+        <github.pages.url>https://enlo.github.io/jmt-projects</github.pages.url>
         
     </properties>
             
@@ -94,6 +94,19 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.3</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>2.10.3</version>
+                    <configuration>
+                        <author>true</author>
+                        <source>1.7</source>
+                        <show>protected</show>
+                        <encoding>UTF-8</encoding>
+                        <charset>UTF-8</charset>
+                        <docencoding>UTF-8</docencoding>
+                    </configuration>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -210,6 +223,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
             </plugin>
         </plugins>
         

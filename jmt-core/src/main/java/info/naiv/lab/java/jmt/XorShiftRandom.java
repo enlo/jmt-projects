@@ -32,7 +32,7 @@ import java.util.Random;
  * XorShift Random
  *
  * @author enlo
- * @see http://xorshift.di.unimi.it/
+ * @see <a href="http://xorshift.di.unimi.it/">XorShift</a>
  */
 @ThreadSafety
 public abstract class XorShiftRandom extends Random {

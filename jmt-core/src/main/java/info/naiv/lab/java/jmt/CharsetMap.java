@@ -35,7 +35,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
 /**
  * 文字セットマップ. <br> {@link Charset#forName} が十分に高速なので使用する意味はない.
  *
- * @see https://ideone.com/K4lmu3
+ * @see <a href="https://ideone.com/K4lmu3">サンプルコード</a>
  *
  * @author enlo
  */

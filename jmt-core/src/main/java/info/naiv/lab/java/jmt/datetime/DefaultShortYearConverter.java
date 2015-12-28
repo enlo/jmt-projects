@@ -25,10 +25,11 @@ package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Arguments.nonMinus;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
- * 2桁年の短縮年を、4桁の年に変換する.<br>
+ * 2桁年の短縮年を、4桁の年に変換する <br>
  * 変換ルールは {@link SimpleDateFormat} のルールに従う。<br>
  * 基準年-80年から基準年+20年に収まるように調整する。<br>
  * マイナスの値については{@link IllegalArgumentException}を出す.

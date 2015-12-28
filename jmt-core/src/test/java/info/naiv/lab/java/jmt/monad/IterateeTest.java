@@ -39,26 +39,26 @@ import static org.junit.Assert.*;
  *
  * @author enlo
  */
-public class IterableMonadTest {
+public class IterateeTest {
 
-    public IterableMonadTest() {
+    public IterateeTest() {
     }
 
     /**
-     * Test of empty method, of class IterableMonad.
+     * Test of empty method, of class Iteratee.
      */
     @Test
     public void testEmpty() {
-        IterableMonad<Integer> im = IterableMonad.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         assertThat(im, is(emptyIterable()));
     }
 
     /**
-     * Test of filter method, of class IterableMonad.
+     * Test of filter method, of class Iteratee.
      */
     @Test
     public void testFilter() {
-        IterableMonad<Integer> im = IterableMonad.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         assertThat(im.filter(new Predicate1<Integer>() {
             @Override
             public boolean test(Integer obj) {
@@ -68,11 +68,11 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of filter method, of class IterableMonad.
+     * Test of filter method, of class Iteratee.
      */
     @Test
     public void testFilter_empty() {
-        IterableMonad<Integer> im = IterableMonad.of();
+        Iteratee<Integer> im = Iteratee.of();
         assertThat(im.filter(new Predicate1<Integer>() {
             @Override
             public boolean test(Integer obj) {
@@ -82,41 +82,41 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of flatMap method, of class IterableMonad.
+     * Test of flatMap method, of class Iteratee.
      */
     @Test
     public void testFlatMap() {
         List<Integer> l1 = Arrays.asList(1, 2, 3);
         List<Integer> l2 = Arrays.asList(4, 5, 6);
-        IterableMonad<List<Integer>> im = IterableMonad.of(l1, l2);
-        assertThat(im.flatMap(new Function1<List<Integer>, IterableMonad<Integer>>() {
+        Iteratee<List<Integer>> im = Iteratee.of(l1, l2);
+        assertThat(im.flatMap(new Function1<List<Integer>, Iteratee<Integer>>() {
             @Override
-            public IterableMonad<Integer> apply(List<Integer> obj) {
-                return IterableMonad.of(obj);
+            public Iteratee<Integer> apply(List<Integer> obj) {
+                return Iteratee.of(obj);
             }
         }), is(contains(1, 2, 3, 4, 5, 6)));
     }
 
     /**
-     * Test of flatMap method, of class IterableMonad.
+     * Test of flatMap method, of class Iteratee.
      */
     @Test
     public void testFlatMap_empty() {
-        IterableMonad<List<Integer>> im = IterableMonad.empty();
-        assertThat(im.flatMap(new Function1<List<Integer>, IterableMonad<Integer>>() {
+        Iteratee<List<Integer>> im = Iteratee.empty();
+        assertThat(im.flatMap(new Function1<List<Integer>, Iteratee<Integer>>() {
             @Override
-            public IterableMonad<Integer> apply(List<Integer> obj) {
-                return IterableMonad.of(obj);
+            public Iteratee<Integer> apply(List<Integer> obj) {
+                return Iteratee.of(obj);
             }
         }), is(emptyIterable()));
     }
 
     /**
-     * Test of bind method, of class IterableMonad.
+     * Test of bind method, of class Iteratee.
      */
     @Test
     public void testBind() {
-        IterableMonad<Integer> im = IterableMonad.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         final StringBuilder sb = new StringBuilder();
         assertThat(im.bind(new Consumer1<Integer>() {
             @Override
@@ -128,11 +128,11 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of bind method, of class IterableMonad.
+     * Test of bind method, of class Iteratee.
      */
     @Test
     public void testBind_empty() {
-        IterableMonad<Integer> im = IterableMonad.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         final StringBuilder sb = new StringBuilder();
         assertThat(im.bind(new Consumer1<Integer>() {
             @Override
@@ -144,21 +144,21 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of iterator method, of class IterableMonad.
+     * Test of iterator method, of class Iteratee.
      */
     @Test
     public void testIterator() {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        IterableMonad<Integer> im = new IterableMonad(list);
+        Iteratee<Integer> im = new Iteratee(list);
         assertThat(im, contains(1, 2, 3));
     }
 
     /**
-     * Test of map method, of class IterableMonad.
+     * Test of map method, of class Iteratee.
      */
     @Test
     public void testMap() {
-        IterableMonad<Integer> im = IterableMonad.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         assertThat(im.map(new Function1<Integer, String>() {
             @Override
             public String apply(Integer obj) {
@@ -168,11 +168,11 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of map method, of class IterableMonad.
+     * Test of map method, of class Iteratee.
      */
     @Test
     public void testMap_empty() {
-        IterableMonad<Integer> im = IterableMonad.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         assertThat(im.map(new Function1<Integer, String>() {
             @Override
             public String apply(Integer obj) {
@@ -182,41 +182,41 @@ public class IterableMonadTest {
     }
 
     /**
-     * Test of of method, of class IterableMonad.
+     * Test of of method, of class Iteratee.
      */
     @Test
     public void testOf_Iterable() {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        IterableMonad<Integer> im = IterableMonad.of(list);
+        Iteratee<Integer> im = Iteratee.of(list);
         assertThat(im, contains(1, 2, 3));
     }
 
     /**
-     * Test of of method, of class IterableMonad.
+     * Test of of method, of class Iteratee.
      */
     @Test
     public void testOf_GenericType() {
         String[] list = {"1", "2", "3"};
-        IterableMonad<String> im = IterableMonad.of(list);
+        Iteratee<String> im = Iteratee.of(list);
         assertThat(im, contains("1", "2", "3"));
     }
 
     /**
-     * Test of toList method, of class IterableMonad.
+     * Test of toList method, of class Iteratee.
      */
     @Test
     public void testToList() {
-        IterableMonad<Integer> im = IterableMonad.of(10, 20, 30);
+        Iteratee<Integer> im = Iteratee.of(10, 20, 30);
         List<Integer> list = im.toList();
         assertThat(list, is(contains(10, 20, 30)));
     }
 
     /**
-     * Test of toList method, of class IterableMonad.
+     * Test of toList method, of class Iteratee.
      */
     @Test
     public void testToList_empty() {
-        IterableMonad<Integer> im = IterableMonad.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         List<Integer> list = im.toList();
         assertThat(list, is(emptyIterable()));
     }

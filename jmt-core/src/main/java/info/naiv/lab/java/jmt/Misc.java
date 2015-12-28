@@ -75,7 +75,7 @@ public abstract class Misc {
      * @param value 検査する値.
      * @param from 開始.
      * @param to 終了.
-     * @return from &lt= value &lt= to
+     * @return from &lt;= value &lt;= to
      */
     public static <T extends Comparable<T>> boolean between(T value, T from, T to) {
         if (value == null || from == null || to == null) {
@@ -807,9 +807,9 @@ public abstract class Misc {
      * サービスプロバイダーから、NumberFormat を取得する. <br>
      * ヒントとなる型を与え、処理を変更可能. ヒントとなる型と結果は以下の通り.
      * <dl>
-     * <dt>{@link BigDecimal#class}</dt>
+     * <dt>{@link BigDecimal#getClass()}</dt>
      * <dd>BigDecimal として処理.<dd>
-     * <dt>{@link Long#class}</dt>
+     * <dt>{@link Long#getClass()}</dt>
      * <dd>Long として処理.<dd>
      * <dt>上記以外</dt>
      * <dd>文字列に応じて、Long または Double として処理.<dd>

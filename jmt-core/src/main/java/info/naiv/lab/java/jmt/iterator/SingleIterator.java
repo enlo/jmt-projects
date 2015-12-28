@@ -21,36 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.monad;
+package info.naiv.lab.java.jmt.iterator;
 
 import java.util.Iterator;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-class SingleIterator<T> implements Iterator<T> {
+public final class SingleIterator<T> implements Iterator<T> {
 
     final T value;
-    boolean first = true;
+    boolean cont = true;
 
     public SingleIterator(T value) {
         this(true, value);
     }
     
-    SingleIterator(boolean first, T value) {
+    public SingleIterator(boolean hasNext, T value) {
         this.value = value;
-        this.first = first;
+        this.cont = hasNext;
     }
 
     @Override
     public boolean hasNext() {
-        return first;
+        return cont;
     }
 
     @Override
     public T next() {
-        first = false;
+        cont = false;
         return value;
     }
 

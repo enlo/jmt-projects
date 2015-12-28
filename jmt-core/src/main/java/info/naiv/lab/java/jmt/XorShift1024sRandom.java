@@ -31,7 +31,7 @@ import lombok.ToString;
  *
  *
  * @author enlo
- * @see http://xorshift.di.unimi.it/
+ * @see <a href="http://xorshift.di.unimi.it/">XorShift</a>
  */
 @ThreadSafety
 @ToString

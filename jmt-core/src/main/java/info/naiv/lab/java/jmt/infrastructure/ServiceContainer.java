@@ -40,8 +40,8 @@ public interface ServiceContainer extends ServiceProvider {
     UUID id();
 
     /**
-     * サービスの登録.<br>
-     * 優先度を1として、{@link #registerService(int, java.lang.Object, java.util.Collection)
+     * サービスの登録. <br>
+     * 優先度を1として、{@link #registerService(int, Object, Tag)
      * }
      * を呼び出す.
      *
@@ -54,7 +54,7 @@ public interface ServiceContainer extends ServiceProvider {
     ServiceConnection registerService(Object service, Tag tag) throws IllegalArgumentException;
 
     /**
-     * サービスの登録.<br>
+     * サービスの登録. <br>
      * 優先度を1として、{@link #registerService(int, java.lang.Object) }
      * を呼び出す.
      *
@@ -66,7 +66,7 @@ public interface ServiceContainer extends ServiceProvider {
     ServiceConnection registerService(Object service) throws IllegalArgumentException;
 
     /**
-     * サービスの登録.<br>
+     * サービスの登録. <br>
      * 同一オブジェクトが登録されている場合は、優先度を変更する.
      * タグは {@link Tag#NONE} を使用する.
      *
@@ -79,7 +79,7 @@ public interface ServiceContainer extends ServiceProvider {
     ServiceConnection registerService(int priority, Object service) throws IllegalArgumentException;
 
     /**
-     * サービスの登録.<br>
+     * サービスの登録. <br>
      * 同一オブジェクトが登録されている場合は、優先度を変更する.
      *
      * @param priority 優先順位. 大きいほど優先度が高い.

@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>info.naiv.lab.java</groupId>
     <artifactId>jmt-projects</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>A tiny misc java library.</description>
 
-    <url>https://github.com/enlo/jmt</url>
+    <url>https://github.com/enlo/jmt-projects</url>
     <licenses>
         <license>
             <name>MIT License</name>
@@ -35,10 +35,10 @@
     </properties>
             
     <scm>
-        <url>http://github.com/enlo/jmt</url>
-        <connection>scm:git:https://github.com/enlo/jmt.git</connection>
-        <developerConnection>scm:git:https://github.com/enlo/jmt.git</developerConnection>
-        <tag>jmt</tag>
+        <url>https://github.com/enlo/jmt-projects</url>
+        <connection>scm:git:https://github.com/enlo/jmt-projects.git</connection>
+        <developerConnection>scm:git:https://github.com/enlo/jmt-projects.git</developerConnection>
+        <tag>jmt-projects</tag>
     </scm>
     
     <modules>

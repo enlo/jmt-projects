@@ -31,6 +31,14 @@ import java.util.regex.Pattern;
 
 public class StandardFunctions {
 
+    public static Predicate1 NO_CHECK = new Predicate1() {
+        @Override
+        public boolean test(Object obj) {
+            return true;
+        }
+    };
+
+    @ReturnNonNull
     public static StringPredicate byRegex(final String pattern) {
         final Pattern p = Pattern.compile(pattern);
         return new StringPredicate() {
@@ -60,6 +68,7 @@ public class StandardFunctions {
         };
     }
 
+    @ReturnNonNull
     public static StringPredicate endsWith(final String suffix) {
         return new StringPredicate() {
             @Override
@@ -113,6 +122,11 @@ public class StandardFunctions {
                 return initialValue;
             }
         };
+    }
+
+    @ReturnNonNull
+    public static <T> Predicate1<T> noCheck() {
+        return NO_CHECK;
     }
 
     private StandardFunctions() {

@@ -28,7 +28,7 @@ package info.naiv.lab.java.jmt.fx;
  * @author enlo
  * @param <R>
  */
-public interface Function0<R> {
+public interface Supplier<R> {
     /**
      * 
      * @return 

@@ -1,5 +1,7 @@
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.iterator.FlatIterableIterator;
+import info.naiv.lab.java.jmt.iterator.MappingIterator;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
@@ -34,8 +36,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -94,7 +94,7 @@ public abstract class Misc {
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean contains(Collection<? extends T> items, Predicate1<? super T> predicate) {
+    public static <T> boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
         nonNull(predicate, "predicate");
         if (items == null) {
             return false;
@@ -115,7 +115,8 @@ public abstract class Misc {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>> boolean containsCompareEquals(Collection<? extends T> items, T valueToFind) {
+    public static <T extends Comparable<T>>
+            boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         if (items == null) {
             return false;
         }
@@ -381,7 +382,9 @@ public abstract class Misc {
      * @throws IllegalArgumentException dest または mapper が null
      */
     @ReturnNonNull
-    public static <Dest extends Collection<R>, R, T> Dest map(Dest dest, Collection<T> source, Function1<T, R> mapper) throws IllegalArgumentException {
+    public static <Dest extends Collection<R>, R, T>
+            Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper)
+            throws IllegalArgumentException {
         nonNull(dest, "dest");
         nonNull(mapper, "mapper");
         if (source != null) {
@@ -390,6 +393,17 @@ public abstract class Misc {
             }
         }
         return dest;
+    }
+
+    @ReturnNonNull
+    public static <T, U>
+            Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
+        return new Iterable<U>() {
+            @Override
+            public Iterator<U> iterator() {
+                return new MappingIterator<>(iter.iterator(), mapper);
+            }
+        };
     }
 
     /**
@@ -444,6 +458,16 @@ public abstract class Misc {
     public static <R, T> List<R> map(List<T> source, Function1<T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
+    }
+
+    @ReturnNonNull
+    public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new FlatIterableIterator<>(items);
+            }
+        };
     }
 
     /**
@@ -873,6 +897,7 @@ public abstract class Misc {
             return new URL(url);
         }
         catch (MalformedURLException ex) {
+            logger.trace("invalid URL", ex);
             return null;
         }
     }

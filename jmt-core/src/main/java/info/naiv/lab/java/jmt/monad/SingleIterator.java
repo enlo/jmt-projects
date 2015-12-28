@@ -21,27 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.monad;
 
-import lombok.Setter;
+import java.util.Iterator;
 
 /**
  *
  * @author enlo
  */
-public abstract class FinalizerGuardian {
+class SingleIterator<T> implements Iterator<T> {
 
-    @Setter
-    boolean closed = false;
+    final T value;
+    boolean first = true;
 
-    @Override
-    @SuppressWarnings("FinalizeDeclaration")
-    protected void finalize() throws Throwable {
-        if (!closed) {
-            onFinalize();
-        }
-        super.finalize();
+    public SingleIterator(T value) {
+        this(true, value);
+    }
+    
+    SingleIterator(boolean first, T value) {
+        this.value = value;
+        this.first = first;
     }
 
-    protected abstract void onFinalize() throws Throwable;
+    @Override
+    public boolean hasNext() {
+        return first;
+    }
+
+    @Override
+    public T next() {
+        first = false;
+        return value;
+    }
+
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

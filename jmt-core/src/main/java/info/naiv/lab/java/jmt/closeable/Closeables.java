@@ -33,6 +33,13 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class Closeables {
+    
+    public static void nonThrowClose(AutoCloseable object) {
+        Exception e = close(object);
+        if (e != null) {
+            logger.trace("close failed.", e);
+        }
+    }
 
     /**
      * close.
@@ -50,7 +57,7 @@ public class Closeables {
             return e;
         }
     }
-
+    
     @SuppressWarnings("ThrowableResultIgnored")
     public static <T extends AutoCloseable> Map<T, Exception> closeAll(Iterable<T> list) {
         Map<T, Exception> result = new HashMap<>();
@@ -91,7 +98,7 @@ public class Closeables {
             return lock(lock);
         }
     }
-
+    
     @ReturnNonNull
     public static <T> ACS<T> of(final T object) {
         if (object == null) {
@@ -116,17 +123,17 @@ public class Closeables {
             }
         }
     }
-
+    
     @ReturnNonNull
     public static <T> ACS<T> of(T object, Consumer1<T> closeMethod) {
         return new DelegatingAutoCloseable<>(object, closeMethod);
     }
-
+    
     private Closeables() {
     }
-
+    
     private static abstract class ACSHelper<T> extends ImmutableHolder<T> implements ACS<T> {
-
+        
         ACSHelper(T object) {
             super(object);
         }

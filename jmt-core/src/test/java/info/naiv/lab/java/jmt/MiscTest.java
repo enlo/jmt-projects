@@ -7,11 +7,14 @@ package info.naiv.lab.java.jmt;
 
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
@@ -28,16 +31,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyIterable;
-import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
@@ -839,4 +839,93 @@ public class MiscTest {
         verify(cl, times(1)).loadClass("my.sample.Class");
     }
 
+    /**
+     * Test of contains method, of class Misc.
+     */
+    @Test
+    public void testContains() {
+
+        List<BigDecimal> source = Arrays.asList(
+                BigDecimal.TEN,
+                new BigDecimal("0.0"),
+                BigDecimal.ONE
+        );
+
+        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.ZERO)), is(source.contains(BigDecimal.ZERO)));
+        assertThat(Misc.contains(source, StandardFunctions.equal(new BigDecimal("0.0"))), is(source.contains(new BigDecimal("0.0"))));
+        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.TEN)), is(source.contains(BigDecimal.TEN)));
+    }
+
+    /**
+     * Test of containsCompareEquals method, of class Misc.
+     */
+    @Test
+    public void testContainsCompareEquals() {
+
+        List<BigDecimal> source = Arrays.asList(
+                BigDecimal.TEN,
+                new BigDecimal("0.0"),
+                BigDecimal.ONE
+        );
+        assertThat(source.contains(BigDecimal.ZERO), is(false));
+        assertThat(Misc.containsCompareEquals(source, BigDecimal.ZERO), is(true));
+    }
+
+    /**
+     * Test of map method, of class Misc.
+     */
+    @Test
+    public void testMap_Iterable_Function1() {
+        List<Integer> in = new ArrayList<>();
+        in.add(1);
+        in.add(2);
+        in.add(3);
+        in.add(4);
+        in.add(5);
+        in.add(6);
+        Iterable<Integer> it = in;
+        Iterable<Integer> result = Misc.map(it, new Function1<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer a1) {
+                return a1 % 3;
+            }
+        });
+        assertThat(in.size(), is(6));
+        assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
+        assertThat(result, is(contains(1, 2, 0, 1, 2, 0)));
+    }
+
+    /**
+     * Test of flat method, of class Misc.
+     */
+    @Test
+    public void testFlat() {
+
+        List<Integer> in1 = Arrays.asList(1, 2, 3);
+        List<Integer> in2 = Arrays.asList(4, 5, 6);
+        Iterable<Integer> result = Misc.flat(Arrays.asList(in1, in2));
+        assertThat(result, is(contains(1, 2, 3, 4, 5, 6)));
+
+    }
+
+    /**
+     * Test of toURL method, of class Misc.
+     *
+     * @throws java.net.MalformedURLException
+     */
+    @Test
+    public void testToURL() throws MalformedURLException {
+        URL url = new URL("https://github.com/enlo/jmt-projects");
+        assertThat(Misc.toURL("https://github.com/enlo/jmt-projects"), is(url));
+    }
+
+    /**
+     * Test of toURL method, of class Misc.
+     *
+     * @throws java.net.MalformedURLException
+     */
+    @Test
+    public void testToURL_2() throws MalformedURLException {
+        assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
+    }
 }

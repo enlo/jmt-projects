@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.fx.Function0;
+import info.naiv.lab.java.jmt.fx.Supplier;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.EqualsAndHashCode;
@@ -48,7 +48,7 @@ public class Lazy<T> {
         this.initialized.set(true);
     }
 
-    public static <T> Lazy<T> of(final Function0<? extends T> initializer) {
+    public static <T> Lazy<T> of(final Supplier<? extends T> initializer) {
         return new Lazy<T>() {
             @Override
             public T initialValue() {

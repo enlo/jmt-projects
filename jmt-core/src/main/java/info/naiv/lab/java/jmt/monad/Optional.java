@@ -25,10 +25,14 @@ package info.naiv.lab.java.jmt.monad;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Consumer1;
-import info.naiv.lab.java.jmt.fx.Function0;
+import info.naiv.lab.java.jmt.fx.Supplier;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import lombok.Value;
 
 /**
@@ -38,37 +42,76 @@ import lombok.Value;
  * @param <T>
  */
 @Value
-public class Optional<T> implements Serializable {
+public class Optional<T> implements Iterable<T>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Optional<?> EMPTY = new Optional<>(null);
+    public static final Optional EMPTY = new Optional(null);
 
     T value;
 
     /**
+     * 空の Optional
      *
      * @param <T> 型T
      * @return 空のOptional
      */
+    @ReturnNonNull
     public static <T> Optional<T> empty() {
         return (Optional<T>) EMPTY;
     }
 
+    /**
+     * フィルター処理.
+     *
+     * @param predicate 述語オブジェクト
+     * @return {@link #isPresent()} && predicate が true を戻せば自分自身. <br>
+     * そうでなければ {@link #empty()}
+     */
+    @ReturnNonNull
     public Optional<T> filter(Predicate1<? super T> predicate) {
         return isPresent() && predicate.test(value) ? this : Optional.<T>empty();
     }
 
+    /**
+     * フラットマップ.
+     *
+     * @param <U> 戻り値の型
+     * @param mapper 変換オブジェクト
+     * @return
+     */
+    @ReturnNonNull
     public <U> Optional<U> flatMap(Function1<? super T, Optional<U>> mapper) {
-        return isPresent() ? mapper.apply(value) : Optional.<U>empty();
+        if (isPresent()) {
+            Optional<U> result = mapper.apply(value);
+            if (result != null) {
+                return result;
+            }
+        }
+        return Optional.<U>empty();
     }
 
+    /**
+     *
+     * @return 値が null でなければ true.
+     */
     public boolean isPresent() {
         return value != null;
     }
 
+    /**
+     *
+     * @return 値
+     */
     public T get() {
         return value;
+    }
+    
+    public Optional<T> bind(Consumer1<? super T> consumer) {
+        if (isPresent()) {
+            consumer.accept(value);
+        }
+        return this;
     }
 
     public void ifPresent(Consumer1<? super T> consumer) {
@@ -77,6 +120,13 @@ public class Optional<T> implements Serializable {
         }
     }
 
+    @Override
+    @ReturnNonNull
+    public Iterator<T> iterator() {
+        return new SingleIterator<>(isPresent(), value);
+    }
+
+    @ReturnNonNull
     public <U> Optional<U> map(Function1<? super T, ? extends U> mapper) {
         if (isPresent()) {
             return Optional.ofNullable(mapper.apply(value));
@@ -86,27 +136,42 @@ public class Optional<T> implements Serializable {
         }
     }
 
+    @ReturnNonNull
     public static <T> Optional<T> of(T value) {
         nonNull(value, "value");
         return new Optional<>(value);
     }
 
+    @ReturnNonNull
     public static <T> Optional<T> ofNullable(T value) {
         return new Optional<>(value);
     }
 
+    @ReturnNonNull
     public T orElse(T other) {
         return isPresent() ? value : other;
     }
 
-    public T orElseGet(Function0<? extends T> other) {
+    @ReturnNonNull
+    public T orElseGet(Supplier<? extends T> other) {
         return isPresent() ? value : other.get();
     }
 
-    public <X extends Throwable> T orElseThrow(Function0<? extends X> exceptionSupplier) throws X {
+    @ReturnNonNull
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         if (isPresent()) {
             return value;
         }
         throw exceptionSupplier.get();
     }
+
+    @ReturnNonNull
+    public Set<T> toSet() {
+        Set<T> result = new HashSet<>();
+        if (isPresent()) {
+            result.add(value);
+        }
+        return result;
+    }
+
 }

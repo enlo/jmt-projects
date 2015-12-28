@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.iterator;
 
 import info.naiv.lab.java.jmt.fx.Function1;
 import java.util.Iterator;
@@ -31,16 +31,16 @@ import lombok.RequiredArgsConstructor;
 /**
  *
  * @author enlo
- * @param <R>
  * @param <T>
+ * @param <R>
  */
 @RequiredArgsConstructor
-public class MappingIterator<R, T> implements Iterator<R> {
+public class MappingIterator<T, R> implements Iterator<R> {
 
     @NonNull
     final Iterator<T> baseIterator;
     @NonNull
-    final Function1<T, R> mapper;
+    final Function1<? super T, ? extends R> mapper;
 
     @Override
     public boolean hasNext() {

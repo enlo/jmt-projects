@@ -4,7 +4,7 @@
     <parent>
         <groupId>info.naiv.lab.java</groupId>
         <artifactId>jmt-projects</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2-SNAPSHOT</version>
     </parent>
     <artifactId>jmt-core</artifactId>
     <packaging>jar</packaging>

@@ -268,6 +268,14 @@ public abstract class Arguments {
         return arg;
     }
 
+    public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
+        nonNull(lhs, varname);
+        if (lhs.compareTo(rhs) < 0) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
+    }
+
     private Arguments() {
     }
 }

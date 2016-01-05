@@ -24,12 +24,12 @@
 package info.naiv.lab.java.jmt;
 
 import java.util.Date;
-
+import java.util.concurrent.TimeUnit;
 
 public class StandardIterationUnits {
 
-
     public static final IterationUnit<Date> DATE = new AbstractIterationUnit<Date>() {
+        private static final long serialVersionUID = 1L;
 
         @Override
         public Date advance(Date value, long n) {
@@ -37,7 +37,7 @@ public class StandardIterationUnits {
         }
 
         @Override
-        public long distance(Date lhs, Date rhs) {
+        public long doDistance(Date lhs, Date rhs) {
             return rhs.getTime() - lhs.getTime();
         }
 
@@ -47,7 +47,22 @@ public class StandardIterationUnits {
         }
 
     };
+
+    public static final IterationUnit<Date> DATE_DAY_NOTRUNC = new DateDayIterationUnit();
+
+    public static final IterationUnit<Date> DATE_DAY_TRUNCATE = new DateDayIterationUnit() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Date truncate(Date value) {
+            long days = TimeUnit.MILLISECONDS.toDays(value.getTime());
+            long mills = TimeUnit.DAYS.toMillis(days);
+            return new Date(mills);
+        }
+    };
+
     public static final IterationUnit<Integer> INTEGER = new AbstractIterationUnit<Integer>() {
+        private static final long serialVersionUID = 1L;
 
         @Override
         public Integer advance(Integer value, long n) {
@@ -55,7 +70,7 @@ public class StandardIterationUnits {
         }
 
         @Override
-        public long distance(Integer lhs, Integer rhs) {
+        public long doDistance(Integer lhs, Integer rhs) {
             return rhs - lhs;
         }
 
@@ -66,13 +81,84 @@ public class StandardIterationUnits {
 
     };
 
+    public static final IterationUnit<Number> NUMBER_TO_LONG = new AbstractIterationUnit<Number>() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Number advance(Number value, long n) {
+            return value.longValue() + n;
+        }
+
+        @Override
+        protected int doCompare(Number o1, Number o2) {
+            return Long.compare(o1.longValue(), o2.longValue());
+        }
+
+        @Override
+        protected long doDistance(Number o1, Number o2) {
+            return o2.longValue() - o1.longValue();
+        }
+
+        @Override
+        public Number truncate(Number value) {
+            return value.longValue();
+        }
+    };
+
+    public static final IterationUnit<Integer> step(final int step) {
+        return new AbstractIterationUnit<Integer>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Integer advance(Integer value, long n) {
+                return (int) (value + (n * step));
+            }
+
+            @Override
+            protected long doDistance(Integer lhs, Integer rhs) {
+                return (rhs - lhs) / step;
+            }
+
+            @Override
+            protected int doCompare(Integer o1, Integer o2) {
+                return o1.compareTo(o2);
+            }
+
+        };
+    }
+
     private StandardIterationUnits() {
     }
 
+    static class DateDayIterationUnit extends AbstractIterationUnit<Date> {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Date advance(Date value, long n) {
+            return new Date(value.getTime() + TimeUnit.DAYS.toMillis(n));
+        }
+
+        @Override
+        public long doDistance(Date lhs, Date rhs) {
+            return TimeUnit.MILLISECONDS.toDays(rhs.getTime() - lhs.getTime());
+        }
+
+        @Override
+        protected int doCompare(Date o1, Date o2) {
+            return o1.compareTo(o2);
+        }
+
+    }
+
     static abstract class AbstractIterationUnit<T> implements IterationUnit<T> {
-        
+
+        private static final long serialVersionUID = 1L;
+
         protected abstract int doCompare(T o1, T o2);
-        
+
+        protected abstract long doDistance(T o1, T o2);
+
         @Override
         public T next(T value) {
             return advance(value, 1);
@@ -89,7 +175,14 @@ public class StandardIterationUnits {
             o2 = truncate(o2);
             return doCompare(o1, o2);
         }
-        
+
+        @Override
+        public long distance(T lhs, T rhs) {
+            lhs = truncate(lhs);
+            rhs = truncate(rhs);
+            return doDistance(lhs, rhs);
+        }
+
         @Override
         public T truncate(T value) {
             return value;

@@ -24,8 +24,11 @@
 package info.naiv.lab.java.jmt.range;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import info.naiv.lab.java.jmt.ComparableComparator;
 import info.naiv.lab.java.jmt.IterationUnit;
+import info.naiv.lab.java.jmt.iterator.IterationUnitIterator;
 import java.io.Serializable;
+import java.util.Iterator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
@@ -39,8 +42,10 @@ import lombok.ToString;
 @ToString
 public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Getter
-    protected IterationUnit<T> unit;
+    protected final IterationUnit<? super T> unit;
 
     @Getter
     protected final Bound<T> lowerBound;
@@ -48,15 +53,34 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
     @Getter
     protected final Bound<T> upperBound;
 
-    public Range(IterationUnit<T> unit, Bound<T> lowerBound, Bound<T> upperBound) {
-        nonNull(lowerBound, "lowerBound");
+    /**
+     * コンストラクター
+     *
+     * @param unit 単位.
+     * @param lowerBound 下限.
+     * @param upperBound 上限.
+     */
+    public Range(IterationUnit<? super T> unit, Bound<T> lowerBound, Bound<T> upperBound) {
         nonNull(upperBound, "upperBound");
+        nonNull(lowerBound, "lowerBound");
 
-        this.unit = unit;
+        if (unit != null) {
+            this.unit = unit;
+        }
+        else {
+            this.unit = new DefaultUnit<T>();
+        }
+
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
 
+    /**
+     * 範囲内に存在するか.
+     *
+     * @param value 値
+     * @return 範囲内なら true.
+     */
     boolean contains(T value) {
         return lowerBound.on(value, unit) && upperBound.on(value, unit);
     }
@@ -70,21 +94,29 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
     }
 
     public T getMinValue() {
-        checkUnit();
         T val = lowerBound.getValue();
-        return lowerBound.isOpen() ? unit.next(val) : val;
+        return lowerBound.isOpen() ? (T) unit.next(val) : val;
     }
 
     public T getMaxValue() {
-        checkUnit();
         T val = upperBound.getValue();
-        return upperBound.isOpen() ? unit.prior(val) : val;
+        return upperBound.isOpen() ? (T) unit.prior(val) : val;
     }
 
-    private void checkUnit() throws UnsupportedOperationException {
-        if (unit == null) {
-            throw new UnsupportedOperationException("unit is null.");
-        }
+    /**
+     * 反復処理.
+     *
+     * @return
+     */
+    public Iterable<T> toIterable() {
+        final T from = getMinValue();
+        final T to = getMaxValue();
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new IterationUnitIterator<>(from, to, unit);
+            }
+        };
     }
 
     public Range<T> newUnit(IterationUnit<T> newUnit) {
@@ -106,9 +138,41 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
     public Range<T> clone() {
         try {
             return (Range<T>) super.clone();
-        } catch (CloneNotSupportedException ex) {
+        }
+        catch (CloneNotSupportedException ex) {
             throw new InternalError(ex.getMessage());
         }
     }
 
+    private static class DefaultUnit<T extends Comparable<T>>
+            extends ComparableComparator<T> implements IterationUnit<T> {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public T advance(T value, long n) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public long distance(T lhs, T rhs) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T next(T value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T prior(T value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T truncate(T value) {
+            return value;
+        }
+
+    }
 }

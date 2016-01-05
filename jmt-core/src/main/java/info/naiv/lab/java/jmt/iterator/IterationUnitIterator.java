@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.iterator;
 
-import java.io.Serializable;
-import java.util.Comparator;
+import info.naiv.lab.java.jmt.IterationUnit;
+import java.util.Iterator;
+import lombok.EqualsAndHashCode;
 
 /**
  *
  * @author enlo
  * @param <T>
  */
-public interface IterationUnit<T> extends Comparator<T>, Serializable {
+public class IterationUnitIterator<T> implements Iterator<T> {
 
-    /**
-     * 切り捨て.
-     *
-     * @param value 切り捨てする値. value は変更されない.
-     * @return 切り捨てられた値.
-     */
-    T truncate(T value);
+    T it;
+    final T last;
+    final IterationUnit<? super T> unit;
 
-    /**
-     * 次の値.
-     *
-     * @param value もとになる値. value は変更されない.
-     * @return 次の値.
-     */
-    T next(T value);
+    public IterationUnitIterator(T it, T last, IterationUnit<? super T> unit) {
+        this.it = it;
+        this.last = last;
+        this.unit = unit;
+    }
 
-    /**
-     * 前の値.
-     *
-     * @param value もとになる値. value は変更されない.
-     * @return 前の値.
-     */
-    T prior(T value);
+    @Override
+    public boolean hasNext() {
+        return unit.compare(it, last) <= 0;
+    }
 
-    T advance(T value, long n);
+    @Override
+    public T next() {
+        T val = it;
+        it = (T) unit.next(it);
+        return val;
+    }
 
-    long distance(T lhs, T rhs);
+    @Override
+    public void remove() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.range;
 
+import info.naiv.lab.java.jmt.range.Bound.NoBound;
 import java.io.Serializable;
 import java.util.Comparator;
 import lombok.AllArgsConstructor;
@@ -38,20 +39,51 @@ import lombok.Value;
  */
 @AllArgsConstructor
 @ToString
+@EqualsAndHashCode
 public abstract class Bound<T extends Comparable<T>> implements Cloneable, Serializable {
 
-    public boolean isOpen() {
-        return BoundType.OPEN.equals(type);
+    private static final long serialVersionUID = 1L;
+
+    @Getter
+    protected final BoundType type;
+
+    @Getter
+    protected final T value;
+
+    public Bound(T value, BoundType type) {
+        this.value = value;
+        this.type = type;
     }
+
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public Bound<T> clone() {
+        try {
+            return (Bound<T>) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
+    public abstract Bound<T> construct(T newValue);
 
     public boolean isClosed() {
         return BoundType.CLOSED.equals(type);
     }
 
-    @EqualsAndHashCode(callSuper = false)
+    public boolean isOpen() {
+        return BoundType.OPEN.equals(type);
+    }
+
+    public abstract boolean on(T value, Comparator<? super T> c);
+
+    @EqualsAndHashCode(callSuper = true)
     @Value
     @ToString(callSuper = true)
     public static class ClosedLowerBound<T extends Comparable<T>> extends Bound<T> {
+
+        private static final long serialVersionUID = 1L;
 
         public ClosedLowerBound(T value) {
             super(value, BoundType.CLOSED);
@@ -63,35 +95,17 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
         }
 
         @Override
-        public boolean on(T value, Comparator<T> c) {
-            return c.compare(this.value, value) < 0;
-        }
-    }
-
-    @EqualsAndHashCode(callSuper = false)
-    @Value
-    @ToString(callSuper = true)
-    public static class OpenLowerBound<T extends Comparable<T>> extends Bound<T> {
-
-        public OpenLowerBound(T value) {
-            super(value, BoundType.OPEN);
-        }
-
-        @Override
-        public Bound<T> construct(T newValue) {
-            return new OpenLowerBound<>(newValue);
-        }
-
-        @Override
-        public boolean on(T value, Comparator<T> c) {
+        public boolean on(T value, Comparator<? super T> c) {
             return c.compare(this.value, value) <= 0;
         }
     }
 
-    @EqualsAndHashCode(callSuper = false)
+    @EqualsAndHashCode(callSuper = true)
     @Value
     @ToString(callSuper = true)
     public static class ClosedUpperBound<T extends Comparable<T>> extends Bound<T> {
+
+        private static final long serialVersionUID = 1L;
 
         public ClosedUpperBound(T value) {
             super(value, BoundType.CLOSED);
@@ -103,15 +117,62 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
         }
 
         @Override
-        public boolean on(T value, Comparator<T> c) {
-            return c.compare(value, this.value) < 0;
+        public boolean on(T value, Comparator<? super T> c) {
+            return c.compare(value, this.value) <= 0;
         }
     }
 
-    @EqualsAndHashCode(callSuper = false)
+    @EqualsAndHashCode(callSuper = true)
+    @Value
+    @ToString(callSuper = true)
+    public static class NoBound<T extends Comparable<T>> extends Bound<T> {
+
+        private static final long serialVersionUID = 1L;
+
+        public NoBound() {
+            super(null, BoundType.CLOSED);
+        }
+
+        @Override
+        public Bound<T> construct(T newValue) {
+            return new NoBound<>();
+        }
+
+        @Override
+        public boolean on(T value, Comparator<? super T> c) {
+            return true;
+        }
+    }
+
+    @EqualsAndHashCode(callSuper = true)
+    @Value
+    @ToString(callSuper = true)
+    public static class OpenLowerBound<T extends Comparable<T>> extends Bound<T> {
+
+        private static final long serialVersionUID = 1L;
+
+        public OpenLowerBound(T value) {
+            super(value, BoundType.OPEN);
+        }
+
+        @Override
+        public Bound<T> construct(T newValue) {
+            return new OpenLowerBound<>(newValue);
+        }
+
+        @Override
+        public boolean on(T value, Comparator<? super T> c) {
+            return c.compare(this.value, value) < 0;
+        }
+
+    }
+
+    @EqualsAndHashCode(callSuper = true)
     @Value
     @ToString(callSuper = true)
     public static class OpenUpperBound<T extends Comparable<T>> extends Bound<T> {
+
+        private static final long serialVersionUID = 1L;
 
         public OpenUpperBound(T value) {
             super(value, BoundType.OPEN);
@@ -123,30 +184,10 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
         }
 
         @Override
-        public boolean on(T value, Comparator<T> c) {
-            return c.compare(value, this.value) <= 0;
+        public boolean on(T value, Comparator<? super T> c) {
+            return c.compare(value, this.value) < 0;
         }
 
-    }
-
-    @Getter
-    protected final T value;
-
-    @Getter
-    protected final BoundType type;
-
-    public abstract boolean on(T value, Comparator<T> c);
-
-    public abstract Bound<T> construct(T newValue);
-
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public Bound<T> clone() {
-        try {
-            return (Bound<T>) super.clone();
-        } catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
     }
 
 }

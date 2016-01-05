@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,43 +21,56 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.range;
 
-import java.io.Serializable;
-import java.util.Comparator;
+import java.util.Date;
+import static org.hamcrest.Matchers.is;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
- * @param <T>
  */
-public interface IterationUnit<T> extends Comparator<T>, Serializable {
+public class BoundsTest {
+    
+    public BoundsTest() {
+    }
 
     /**
-     * 切り捨て.
-     *
-     * @param value 切り捨てする値. value は変更されない.
-     * @return 切り捨てられた値.
+     * Test of closedLo method, of class Bounds.
      */
-    T truncate(T value);
+    @Test
+    public void testClosedLo() {
+        Bound.ClosedLowerBound<Integer> b = Bounds.closedLo(10);
+        assertThat(b.value, is(10));
+    }
 
     /**
-     * 次の値.
-     *
-     * @param value もとになる値. value は変更されない.
-     * @return 次の値.
+     * Test of closedUp method, of class Bounds.
      */
-    T next(T value);
+    @Test
+    public void testClosedUp() {
+        Bound.ClosedUpperBound<String> b = Bounds.closedUp("ABC");
+        assertThat(b.value, is("ABC"));
+    }
 
     /**
-     * 前の値.
-     *
-     * @param value もとになる値. value は変更されない.
-     * @return 前の値.
+     * Test of openLo method, of class Bounds.
      */
-    T prior(T value);
+    @Test
+    public void testOpenLo() {
+        Bound.OpenLowerBound<Double> b = Bounds.openLo(0.0);
+        assertThat(b.value, is(0.0));
+    }
 
-    T advance(T value, long n);
-
-    long distance(T lhs, T rhs);
+    /**
+     * Test of openUp method, of class Bounds.
+     */
+    @Test
+    public void testOpenUp() {
+        Bound.OpenUpperBound<Date> b = Bounds.openUp(new Date(1));
+        assertThat(b.value, is(new Date(1)));
+    }
+    
 }

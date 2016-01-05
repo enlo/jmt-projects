@@ -55,7 +55,7 @@ public class ServiceInjectionUtils {
         return null;
     }
         
-    protected static <T> T getService(Class<T> clazz, InjectionPoint ip) {
+    public static <T> T getService(Class<T> clazz, InjectionPoint ip) {
         try {
             Annotated at = ip.getAnnotated();
             FromServiceProvider anno = at.getAnnotation(FromServiceProvider.class);

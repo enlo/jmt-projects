@@ -21,27 +21,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.iterator;
 
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.FIELD;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
+import java.util.Iterator;
+import java.util.List;
+import lombok.NonNull;
+import lombok.ToString;
 
 /**
- * ロガーを注入する.
  *
  * @author enlo
+ * @param <T>
  */
-@Retention(RUNTIME)
-@Target(FIELD)
-@Documented
-public @interface InjectLogger {
+@ToString
+public class ReverseIterator<T> implements Iterator<T> {
 
-    /**
-     *
-     * @return ロガーの名前.
-     */
-    String value();
+    int i;
+
+    @NonNull
+    final List<T> source;
+
+    public ReverseIterator(@NonNull List<T> source) {
+        this.source = source;
+        this.i = source.size();
+    }
+
+    @Override
+    public boolean hasNext() {
+        return 0 < i;
+    }
+
+    @Override
+    public T next() {
+        return source.get(--i);
+    }
+
+    @Override
+    public void remove() {
+        source.remove(--i);
+    }
+
 }

@@ -27,7 +27,7 @@ import info.naiv.lab.java.jmt.ClassicArrayUtils.ArrayIterator;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.Lazy;
-import info.naiv.lab.java.jmt.ReverseIterator;
+import info.naiv.lab.java.jmt.iterator.ReverseIterator;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.text.BreakIterator;

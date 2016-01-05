@@ -34,7 +34,7 @@ import lombok.EqualsAndHashCode;
  * @param <T>
  */
 @EqualsAndHashCode(of = "value")
-public class Lazy<T> {
+public class Lazy<T> implements Supplier<T> {
 
     final AtomicBoolean initialized = new AtomicBoolean(false);
 

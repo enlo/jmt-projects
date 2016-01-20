@@ -21,56 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.io;
+package info.naiv.lab.java.jmt.jdbc.sql.template;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import static java.nio.ByteBuffer.allocate;
-import lombok.*;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQuery;
+import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.util.Map;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 /**
  *
  * @author enlo
  */
-@AllArgsConstructor
-public class ByteBufferInputStream extends InputStream {
+public interface SqlTemplate {
 
-    @Getter
-    @Setter
-    @NonNull
-    private ByteBuffer byteBuffer;
+    String getName();
 
-    public ByteBufferInputStream(){
-        this(NIOUtils.DEFAULT_BUFFER_SIZE);
-    }
+    @ReturnNonNull
+    SqlQuery merge(Map<String, Object> parameters);
+
+    @ReturnNonNull
+    SqlQuery merge(SqlParameterSource parameters);
     
-    public ByteBufferInputStream(int bufferSize) {
-        this(allocate(bufferSize));
-        byteBuffer.flip();
-    }
-
-    @Override
-    public int available() throws IOException {
-        return byteBuffer.remaining();
-    }
-
-    @Override
-    public int read() throws IOException {
-        if (!byteBuffer.hasRemaining()) {
-            return -1;
-        }
-        return byteBuffer.get();
-    }
-
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        int count = Math.min(byteBuffer.remaining(), len);
-        if (count == 0) {
-            return -1;
-        }
-        byteBuffer.get(b, off, len);
-        return count;
-    }
-
 }

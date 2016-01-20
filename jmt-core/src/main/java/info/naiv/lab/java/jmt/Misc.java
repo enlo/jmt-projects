@@ -17,6 +17,7 @@ import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.Character.isSpaceChar;
 import static java.lang.Character.isWhitespace;
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
@@ -40,6 +41,35 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class Misc {
+
+    /**
+     * 引数 array が配列だった場合、Object[] を戻す. <br>
+     * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
+     * 引数が配列でない場合、null を戻す.
+     *
+     * @param array 引数
+     * @return array が配列ならObject[]、そうでなければ null.
+     */
+    public static Object[] asObjectArray(Object array) {
+        Object[] result = null;
+        if (array != null) {
+            Class<?> clazz = array.getClass();
+            if (clazz.isArray()) {
+                Class ofArray = clazz.getComponentType();
+                if (ofArray.isPrimitive()) {
+                    int length = Array.getLength(array);
+                    result = new Object[length];
+                    for (int i = 0; i < length; i++) {
+                        result[i] = Array.get(array, i);
+                    }
+                }
+                else {
+                    result = (Object[]) array;
+                }
+            }
+        }
+        return result;
+    }
 
     /**
      * リストにオブジェクトが存在しない場合追加する.

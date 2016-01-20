@@ -276,6 +276,20 @@ public abstract class Arguments {
         return lhs;
     }
 
+    public static long lessThan(long lhs, long rhs, String varname) {
+        if (lhs < rhs) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
+    }
+
+    public static long lessThan(int lhs, int rhs, String varname) {
+        if (lhs < rhs) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
+    }
+    
     private Arguments() {
     }
 }

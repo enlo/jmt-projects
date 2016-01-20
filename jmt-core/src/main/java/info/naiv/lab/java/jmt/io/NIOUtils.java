@@ -23,9 +23,19 @@
  */
 package info.naiv.lab.java.jmt.io;
 
+import static info.naiv.lab.java.jmt.Arguments.lessThan;
+import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.Files.walkFileTree;
@@ -46,6 +56,8 @@ import java.util.regex.Pattern;
  * @author enlo
  */
 public class NIOUtils {
+
+    static final int DEFAULT_BUFFER_SIZE = 0x2000;
 
     /**
      *
@@ -137,7 +149,7 @@ public class NIOUtils {
             m = filenameNoSuffix.matcher(filename);
             if (m.find()) {
                 String key = m.group(1);
-                if(!founds.containsKey(key)) {
+                if (!founds.containsKey(key)) {
                     founds.put(key, filepath);
                 }
             }
@@ -178,9 +190,59 @@ public class NIOUtils {
         String regex = parts.toString();
         if (ignoreCase) {
             return Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        } else {
+        }
+        else {
             return Pattern.compile(regex);
         }
+    }
+
+    public static long copy(InputStream from, OutputStream to) throws IOException {
+        nonNull(from, "from");
+        nonNull(to, "to");
+        byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+        long size = 0;
+        while (true) {
+            int r = from.read(buf);
+            if (0 <= r) {
+                break;
+            }
+            to.write(buf, 0, r);
+            size += r;
+        }
+        return size;
+    }
+
+    public static long copy(Readable from, Appendable to) throws IOException {
+        nonNull(from, "from");
+        nonNull(to, "to");
+        long size = 0;
+        CharBuffer cb = CharBuffer.allocate(DEFAULT_BUFFER_SIZE);
+        while (from.read(cb) > 0) {
+            cb.flip();
+            to.append(cb);
+            size += cb.remaining();
+            cb.clear();
+        }
+        return size;
+    }
+
+    public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
+        if (is instanceof FileInputStream) {
+            FileChannel fch = ((FileInputStream) is).getChannel();
+            long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
+            ByteBuffer bb = ByteBuffer.allocate((int) size);
+            fch.read(bb);
+            return bb;
+        }
+        else {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
+            copy(is, baos);
+            return ByteBuffer.wrap(baos.toByteArray());
+        }
+    }
+
+    public static String toString(InputStream is, Charset charset) throws IOException {
+        return charset.decode(toByteBuffer(is)).toString();
     }
 
     private NIOUtils() {

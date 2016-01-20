@@ -40,15 +40,17 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ByteBufferOutputStream extends OutputStream {
 
-    static final int BUFFER_SIZE = 1024 * 8;
-
     @Getter
     @Setter
     @NonNull
     private ByteBuffer byteBuffer;
 
     public ByteBufferOutputStream() {
-        byteBuffer = allocate(BUFFER_SIZE);
+        this(NIOUtils.DEFAULT_BUFFER_SIZE);
+    }
+
+    public ByteBufferOutputStream(int initialSize) {
+        byteBuffer = allocate(initialSize);
     }
 
     @Override
@@ -75,12 +77,20 @@ public class ByteBufferOutputStream extends OutputStream {
         byteBuffer.put(b, off, len);
     }
 
+    public synchronized ByteBuffer copyBuffer() {
+        return byteBuffer.duplicate();
+    }
+
+    public ByteBuffer flip() {
+        return (ByteBuffer) byteBuffer.flip();
+    }
+
     private void expand(int length) {
-        int size = byteBuffer.capacity();
-        size += max(byteBuffer.capacity() / 2, length);
-        ByteBuffer newBuffer = allocate(size);
+        final int currentSize = byteBuffer.capacity();
+        final int newSize = currentSize + max(currentSize / 2, length);
+        ByteBuffer newBuffer = allocate(newSize);
+        byteBuffer.flip();
         newBuffer.put(byteBuffer);
-        byteBuffer.clear();
         byteBuffer = newBuffer;
     }
 

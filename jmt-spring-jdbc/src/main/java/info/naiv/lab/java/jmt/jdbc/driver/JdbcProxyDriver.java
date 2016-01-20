@@ -21,56 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.io;
+package info.naiv.lab.java.jmt.jdbc.driver;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import static java.nio.ByteBuffer.allocate;
-import lombok.*;
+import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import java.sql.*;
+import java.util.Properties;
+import java.util.logging.Logger;
 
 /**
  *
  * @author enlo
  */
-@AllArgsConstructor
-public class ByteBufferInputStream extends InputStream {
+public class JdbcProxyDriver implements Driver {
 
-    @Getter
-    @Setter
-    @NonNull
-    private ByteBuffer byteBuffer;
+    private final Driver driver;
 
-    public ByteBufferInputStream(){
-        this(NIOUtils.DEFAULT_BUFFER_SIZE);
-    }
-    
-    public ByteBufferInputStream(int bufferSize) {
-        this(allocate(bufferSize));
-        byteBuffer.flip();
+    public JdbcProxyDriver(Driver driver) {
+        nonNull(driver, "driver");
+        this.driver = driver;
     }
 
     @Override
-    public int available() throws IOException {
-        return byteBuffer.remaining();
+    public boolean acceptsURL(String url) throws SQLException {
+        return driver.acceptsURL(url);
     }
 
     @Override
-    public int read() throws IOException {
-        if (!byteBuffer.hasRemaining()) {
-            return -1;
-        }
-        return byteBuffer.get();
+    public Connection connect(String url, Properties info) throws SQLException {
+        return driver.connect(url, info);
     }
 
     @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        int count = Math.min(byteBuffer.remaining(), len);
-        if (count == 0) {
-            return -1;
-        }
-        byteBuffer.get(b, off, len);
-        return count;
+    public int getMajorVersion() {
+        return driver.getMajorVersion();
+    }
+
+    @Override
+    public int getMinorVersion() {
+        return driver.getMinorVersion();
+    }
+
+    @Override
+    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+        return driver.getParentLogger();
+    }
+
+    @Override
+    public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
+        return driver.getPropertyInfo(url, info);
+    }
+
+    @Override
+    public boolean jdbcCompliant() {
+        return driver.jdbcCompliant();
     }
 
 }

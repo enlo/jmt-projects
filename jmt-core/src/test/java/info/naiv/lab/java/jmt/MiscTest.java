@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
+import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
@@ -927,5 +928,21 @@ public class MiscTest {
     @Test
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
+    }
+
+    /**
+     * Test of asObjectArray method, of class Misc.
+     */
+    @Test
+    public void testAsObjectArray() {
+        String a1 = "123";
+        assertThat("String(123)", Misc.asObjectArray(a1), is(nullValue()));
+
+        String[] a2 = {"123", "456"};
+        assertThat("{ '123', '456' }", Misc.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
+
+        int[] a3 = {123, 456};
+        assertThat("{ 123, 456 }", Misc.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
+
     }
 }

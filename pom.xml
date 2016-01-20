@@ -43,6 +43,7 @@
     
     <modules>
         <module>jmt-core</module>
+        <module>jmt-spring-jdbc</module>
     </modules>
     
     <dependencyManagement>
@@ -53,6 +54,11 @@
                 <version>2.0.0.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mvel</groupId>
+                <artifactId>mvel2</artifactId>
+                <version>2.2.7.Final</version>
             </dependency>
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -83,9 +89,18 @@
                 <artifactId>powermock-module-junit4-rule</artifactId>
                 <version>${powermockito.version}</version>
                 <scope>test</scope>
-            </dependency>
+            </dependency>            
         </dependencies>
     </dependencyManagement>
+    
+    <dependencies>
+        <!-- Code Generation -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     
     <build>
         <pluginManagement>

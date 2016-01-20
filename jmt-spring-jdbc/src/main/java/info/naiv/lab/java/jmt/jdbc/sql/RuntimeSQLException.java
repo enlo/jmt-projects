@@ -21,56 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.io;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import static java.nio.ByteBuffer.allocate;
-import lombok.*;
+package info.naiv.lab.java.jmt.jdbc.sql;
 
 /**
  *
  * @author enlo
  */
-@AllArgsConstructor
-public class ByteBufferInputStream extends InputStream {
+public class RuntimeSQLException extends RuntimeException {
 
-    @Getter
-    @Setter
-    @NonNull
-    private ByteBuffer byteBuffer;
+    private static final long serialVersionUID = -7426631134458651943L;
 
-    public ByteBufferInputStream(){
-        this(NIOUtils.DEFAULT_BUFFER_SIZE);
-    }
-    
-    public ByteBufferInputStream(int bufferSize) {
-        this(allocate(bufferSize));
-        byteBuffer.flip();
+    /**
+     * Creates a new instance of <code>RuntimeSQLException</code> without detail
+     * message.
+     */
+    public RuntimeSQLException() {
     }
 
-    @Override
-    public int available() throws IOException {
-        return byteBuffer.remaining();
+    /**
+     * Constructs an instance of <code>RuntimeSQLException</code> with the
+     * specified detail message.
+     *
+     * @param msg the detail message.
+     */
+    public RuntimeSQLException(String msg) {
+        super(msg);
     }
 
-    @Override
-    public int read() throws IOException {
-        if (!byteBuffer.hasRemaining()) {
-            return -1;
-        }
-        return byteBuffer.get();
+    public RuntimeSQLException(Throwable cause) {
+        super(cause);
     }
 
-    @Override
-    public int read(byte[] b, int off, int len) throws IOException {
-        int count = Math.min(byteBuffer.remaining(), len);
-        if (count == 0) {
-            return -1;
-        }
-        byteBuffer.get(b, off, len);
-        return count;
+    public RuntimeSQLException(String message, Throwable cause) {
+        super(message, cause);
     }
 
 }

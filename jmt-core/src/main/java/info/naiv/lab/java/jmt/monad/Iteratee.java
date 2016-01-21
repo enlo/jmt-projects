@@ -36,7 +36,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 /**
@@ -44,30 +43,11 @@ import lombok.NonNull;
  * @author enlo
  * @param <T>
  */
-@AllArgsConstructor
 public final class Iteratee<T> implements Iterable<T>, Serializable {
-
-    private static final long serialVersionUID = 1L;
 
     private static final Iteratee EMPTY = new Iteratee();
 
-    @NonNull
-    Iterable<T> value;
-
-    @NonNull
-    Predicate1<? super T> predicate;
-
-    Iteratee() {
-        this(Collections.EMPTY_LIST, StandardFunctions.NO_CHECK);
-    }
-
-    public Iteratee(Iterable<T> value) {
-        this(value, StandardFunctions.NO_CHECK);
-    }
-
-    public Iteratee(T[] value) {
-        this(Arrays.asList(value), StandardFunctions.NO_CHECK);
-    }
+    private static final long serialVersionUID = 1L;
 
     /**
      * 空の Optional
@@ -78,6 +58,46 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
     @ReturnNonNull
     public static <T> Iteratee<T> empty() {
         return EMPTY;
+    }
+
+    @ReturnNonNull
+    public static <T> Iteratee<T> of(Iterable<T> value) {
+        return new Iteratee<>(value);
+    }
+
+    @ReturnNonNull
+    public static <T> Iteratee<T> of(T... value) {
+        return new Iteratee<>(value);
+    }
+
+    @NonNull
+    Predicate1<? super T> predicate;
+
+    @NonNull
+    Iterable<T> value;
+
+    public Iteratee(Iterable<T> value, Predicate1<? super T> predicate) {
+        this.predicate = predicate;
+        this.value = value;
+    }
+
+    public Iteratee(Iterable<T> value) {
+        this(value, StandardFunctions.NO_CHECK);
+    }
+
+    public Iteratee(T[] value) {
+        this(Arrays.asList(value), StandardFunctions.NO_CHECK);
+    }
+
+    Iteratee() {
+        this(Collections.EMPTY_LIST, StandardFunctions.NO_CHECK);
+    }
+
+    public Iteratee<T> bind(Consumer1<? super T> consumer) {
+        for (T v : this) {
+            consumer.accept(v);
+        }
+        return this;
     }
 
     /**
@@ -104,13 +124,6 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
         return new Iteratee(it);
     }
 
-    public Iteratee<T> bind(Consumer1<? super T> consumer) {
-        for (T v : this) {
-            consumer.accept(v);
-        }
-        return this;
-    }
-
     @Override
     public Iterator<T> iterator() {
         return new FilteringIterator<>(value.iterator(), predicate);
@@ -120,16 +133,6 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
     public <U> Iteratee<U> map(Function1<? super T, ? extends U> mapper) {
         Iterable<U> it = Misc.map(this, mapper);
         return new Iteratee<>(it);
-    }
-
-    @ReturnNonNull
-    public static <T> Iteratee<T> of(Iterable<T> value) {
-        return new Iteratee<>(value);
-    }
-
-    @ReturnNonNull
-    public static <T> Iteratee<T> of(T... value) {
-        return new Iteratee<>(value);
     }
 
     @ReturnNonNull

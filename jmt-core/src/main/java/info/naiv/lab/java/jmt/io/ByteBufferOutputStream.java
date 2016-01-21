@@ -53,6 +53,14 @@ public class ByteBufferOutputStream extends OutputStream {
         byteBuffer = allocate(initialSize);
     }
 
+    public synchronized ByteBuffer copyBuffer() {
+        return byteBuffer.duplicate();
+    }
+
+    public ByteBuffer flip() {
+        return (ByteBuffer) byteBuffer.flip();
+    }
+
     @Override
     public synchronized void write(int b) throws IOException {
         if (!byteBuffer.hasRemaining()) {
@@ -75,14 +83,6 @@ public class ByteBufferOutputStream extends OutputStream {
             expand(b.length);
         }
         byteBuffer.put(b, off, len);
-    }
-
-    public synchronized ByteBuffer copyBuffer() {
-        return byteBuffer.duplicate();
-    }
-
-    public ByteBuffer flip() {
-        return (ByteBuffer) byteBuffer.flip();
     }
 
     private void expand(int length) {

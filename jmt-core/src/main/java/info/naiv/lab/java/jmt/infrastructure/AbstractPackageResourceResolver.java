@@ -50,7 +50,7 @@ public abstract class AbstractPackageResourceResolver implements PackageResource
         includePatternSet = new CopyOnWriteArraySet<>();
         packageNameSet = new CopyOnWriteArraySet<>();
 
-        this.includePatternSet.add(StringPredicate.NOCHECK);
+        this.includePatternSet.add(StringPredicate.NO_CHECK);
     }
 
     @Override

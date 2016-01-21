@@ -37,13 +37,17 @@ import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
 import java.nio.file.CopyOption;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.Files.walkFileTree;
 import java.nio.file.Path;
+import java.nio.file.PathMatcher;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -58,6 +62,54 @@ import java.util.regex.Pattern;
 public class NIOUtils {
 
     static final int DEFAULT_BUFFER_SIZE = 0x2000;
+
+    public static DirectoryStream.Filter<Path> anyPathFilter() {
+        return new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(Path entry) throws IOException {
+                return true;
+            }
+        };
+    }
+
+    public static PathMatcher anyPathMatcher() {
+        return new PathMatcher() {
+            @Override
+            public boolean matches(Path path) {
+                return true;
+            }
+        };
+    }
+
+    public static long copy(InputStream from, OutputStream to) throws IOException {
+        nonNull(from, "from");
+        nonNull(to, "to");
+        byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
+        long size = 0;
+        while (true) {
+            int r = from.read(buf);
+            if (r < 0) {
+                break;
+            }
+            to.write(buf, 0, r);
+            size += r;
+        }
+        return size;
+    }
+
+    public static long copy(Readable from, Appendable to) throws IOException {
+        nonNull(from, "from");
+        nonNull(to, "to");
+        long size = 0;
+        CharBuffer cb = CharBuffer.allocate(DEFAULT_BUFFER_SIZE);
+        while (from.read(cb) > 0) {
+            cb.flip();
+            to.append(cb);
+            size += cb.remaining();
+            cb.clear();
+        }
+        return size;
+    }
 
     /**
      *
@@ -158,16 +210,111 @@ public class NIOUtils {
     }
 
     @ReturnNonNull
-    public static List<Path> listFiles(Path directory, String pattern, int depth) throws IOException {
-        final List<Path> result = new ArrayList<>();
-        walkFileTree(directory, new PatternVisitor(pattern) {
-            @Override
-            protected FileVisitResult onTarget(Path file, BasicFileAttributes attrs) throws IOException {
-                result.add(file);
-                return super.onTarget(file, attrs);
-            }
-        });
+    public static List<String> listFiles(Path directory, String pattern, int depth) throws IOException {
+        final List<String> result = new ArrayList<>();
+        walkFileTree(directory,
+                     EnumSet.noneOf(FileVisitOption.class),
+                     depth,
+                     new PatternVisitor(pattern) {
+                         @Override
+                         protected FileVisitResult onTarget(Path file,
+                                                            BasicFileAttributes attrs) throws IOException {
+                             result.add(file.toString());
+                             return super.onTarget(file, attrs);
+                         }
+                     });
         return result;
+    }
+
+    @ReturnNonNull
+    public static List<Path> listPaths(Path directory, String pattern, int depth) throws IOException {
+        final List<Path> result = new ArrayList<>();
+        walkFileTree(directory,
+                     EnumSet.noneOf(FileVisitOption.class),
+                     depth,
+                     new PatternVisitor(pattern) {
+                         @Override
+                         protected FileVisitResult onTarget(Path file,
+                                                            BasicFileAttributes attrs) throws IOException {
+                             result.add(file);
+                             return super.onTarget(file, attrs);
+                         }
+                     });
+        return result;
+    }
+
+    public static byte[] toByteArray(InputStream is) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        copy(is, os);
+        return os.toByteArray();
+    }
+
+    public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
+        if (is instanceof FileInputStream) {
+            FileChannel fch = ((FileInputStream) is).getChannel();
+            long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
+            ByteBuffer bb = ByteBuffer.allocate((int) size);
+            fch.read(bb);
+            return bb;
+        }
+        else {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
+            copy(is, baos);
+            return ByteBuffer.wrap(baos.toByteArray());
+        }
+    }
+
+    public static DirectoryStream.Filter<Path> toPathFilter(final PathMatcher pathMatcher) {
+        if (pathMatcher == null) {
+            return anyPathFilter();
+        }
+        return new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(Path entry) throws IOException {
+                return pathMatcher.matches(entry);
+            }
+        };
+    }
+
+    public static DirectoryStream.Filter<Path> toPathFilter(final Pattern pattern) {
+        if (pattern == null) {
+            return anyPathFilter();
+        }
+        return new DirectoryStream.Filter<Path>() {
+            @Override
+            public boolean accept(Path entry) throws IOException {
+                return pattern.matcher(entry.toString()).find();
+            }
+        };
+    }
+
+    public static PathMatcher toPathMatcher(final Pattern pattern) {
+        if (pattern == null) {
+            return anyPathMatcher();
+        }
+        return new PathMatcher() {
+            @Override
+            public boolean matches(Path path) {
+                return pattern.matcher(path.toString()).find();
+            }
+        };
+    }
+
+    public static PathMatcher toPathMatcher(final String pattern, final org.springframework.util.PathMatcher pathMatcher) {
+        nonNull(pathMatcher, "spring PathMatcher");
+        if (pattern == null) {
+            return anyPathMatcher();
+        }
+        return new PathMatcher() {
+            @Override
+            public boolean matches(Path path) {
+                return pathMatcher.match(pattern, path.toString());
+            }
+        };
+    }
+
+    public static String toString(InputStream is, Charset charset) throws IOException {
+        return charset.decode(toByteBuffer(is)).toString();
     }
 
     private static void buildPatterns(String name, StringBuilder partsWithSuffix, StringBuilder partsNoSuffix, String suffix, String extension) {
@@ -194,55 +341,6 @@ public class NIOUtils {
         else {
             return Pattern.compile(regex);
         }
-    }
-
-    public static long copy(InputStream from, OutputStream to) throws IOException {
-        nonNull(from, "from");
-        nonNull(to, "to");
-        byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
-        long size = 0;
-        while (true) {
-            int r = from.read(buf);
-            if (0 <= r) {
-                break;
-            }
-            to.write(buf, 0, r);
-            size += r;
-        }
-        return size;
-    }
-
-    public static long copy(Readable from, Appendable to) throws IOException {
-        nonNull(from, "from");
-        nonNull(to, "to");
-        long size = 0;
-        CharBuffer cb = CharBuffer.allocate(DEFAULT_BUFFER_SIZE);
-        while (from.read(cb) > 0) {
-            cb.flip();
-            to.append(cb);
-            size += cb.remaining();
-            cb.clear();
-        }
-        return size;
-    }
-
-    public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
-        if (is instanceof FileInputStream) {
-            FileChannel fch = ((FileInputStream) is).getChannel();
-            long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
-            ByteBuffer bb = ByteBuffer.allocate((int) size);
-            fch.read(bb);
-            return bb;
-        }
-        else {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
-            copy(is, baos);
-            return ByteBuffer.wrap(baos.toByteArray());
-        }
-    }
-
-    public static String toString(InputStream is, Charset charset) throws IOException {
-        return charset.decode(toByteBuffer(is)).toString();
     }
 
     private NIOUtils() {

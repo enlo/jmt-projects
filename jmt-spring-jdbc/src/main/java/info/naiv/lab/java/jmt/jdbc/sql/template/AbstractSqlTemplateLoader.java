@@ -38,11 +38,11 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
+
+    private SqlTemplateLoader parentLoader;
     @Getter
     @Setter
     private String suffix = DEFAULT_SUFFIX;
-
-    private SqlTemplateLoader parentLoader;
 
     @Override
     public final SqlTemplate formString(String template) {
@@ -86,6 +86,11 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
         return itr;
     }
 
+    @Override
+    public void setParent(SqlTemplateLoader parentLoader) {
+        this.parentLoader = parentLoader;
+    }
+
     protected abstract SqlTemplate doFromString(String template);
 
     protected abstract void doInitialize();
@@ -98,11 +103,6 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
         if (initialized.compareAndSet(false, true)) {
             initialize();
         }
-    }
-
-    @Override
-    public void setParent(SqlTemplateLoader parentLoader) {
-        this.parentLoader = parentLoader;
     }
 
 }

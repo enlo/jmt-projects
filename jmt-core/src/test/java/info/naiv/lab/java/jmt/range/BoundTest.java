@@ -42,80 +42,37 @@ public class BoundTest {
     }
 
     /**
-     * Test of isOpen method, of class Bound.
+     * Test of clone method, of class Bound.
      */
     @Test
-    public void testIsOpen() {
+    public void testClone() {
         {
             Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            assertThat("ClosedLowerBound", b.isOpen(), is(false));
+            Bound<Integer> cb = b.clone();
+            assertThat("ClosedLowerBound#type", cb.type, is(b.type));
+            assertThat("ClosedLowerBound#value", cb.value, is(100));
+            assertThat("ClosedLowerBound#class", cb, instanceOf(Bound.ClosedLowerBound.class));
         }
         {
             Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
-            assertThat("ClosedUpperBound", b.isOpen(), is(false));
+            Bound<Integer> cb = b.clone();
+            assertThat("ClosedUpperBound#type", cb.type, is(b.type));
+            assertThat("ClosedUpperBound#value", cb.value, is(10));
+            assertThat("ClosedUpperBound#class", cb, instanceOf(Bound.ClosedUpperBound.class));
         }
         {
             Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
-            assertThat("OpenLowerBound", b.isOpen(), is(true));
+            Bound<Double> cb = b.clone();
+            assertThat("OpenLowerBound#type", cb.type, is(b.type));
+            assertThat("OpenLowerBound#value", cb.value, is(0.1));
+            assertThat("OpenLowerBound#class", cb, instanceOf(Bound.OpenLowerBound.class));
         }
         {
             Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
-            assertThat("OpenUpperBound", b.isOpen(), is(true));
-        }
-    }
-
-    /**
-     * Test of isClosed method, of class Bound.
-     */
-    @Test
-    public void testIsClosed() {
-        {
-            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            assertThat("ClosedLowerBound", b.isClosed(), is(true));
-        }
-        {
-            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
-            assertThat("ClosedUpperBound", b.isClosed(), is(true));
-        }
-        {
-            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
-            assertThat("OpenLowerBound", b.isClosed(), is(false));
-        }
-        {
-            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
-            assertThat("OpenUpperBound", b.isClosed(), is(false));
-        }
-    }
-
-    /**
-     * Test of on method, of class Bound.
-     */
-    @Test
-    public void testOn() {
-        Comparator<Integer> c = new ComparableComparator<>();
-        {
-            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            assertThat("ClosedLowerBound(99)", b.on(99, c), is(false));
-            assertThat("ClosedLowerBound(100)", b.on(100, c), is(true));
-            assertThat("ClosedLowerBound(101)", b.on(101, c), is(true));
-        }
-        {
-            Bound<Integer> b = new Bound.ClosedUpperBound<>(100);
-            assertThat("ClosedUpperBound(99)", b.on(99, c), is(true));
-            assertThat("ClosedUpperBound(100)", b.on(100, c), is(true));
-            assertThat("ClosedUpperBound(101)", b.on(101, c), is(false));
-        }
-        {
-            Bound<Integer> b = new Bound.OpenLowerBound<>(100);
-            assertThat("OpenLowerBound(99)", b.on(99, c), is(false));
-            assertThat("OpenLowerBound(100)", b.on(100, c), is(false));
-            assertThat("OpenLowerBound(101)", b.on(101, c), is(true));
-        }
-        {
-            Bound<Integer> b = new Bound.OpenUpperBound<>(100);
-            assertThat("OpenUpperBound(99)", b.on(99, c), is(true));
-            assertThat("OpenUpperBound(100)", b.on(100, c), is(false));
-            assertThat("OpenUpperBound(101)", b.on(101, c), is(false));
+            Bound<Double> cb = b.clone();
+            assertThat("OpenUpperBound#type", cb.type, is(b.type));
+            assertThat("OpenUpperBound#value", cb.value, is(1.1));
+            assertThat("OpenUpperBound#class", cb, instanceOf(Bound.OpenUpperBound.class));
         }
     }
 
@@ -155,64 +112,6 @@ public class BoundTest {
     }
 
     /**
-     * Test of clone method, of class Bound.
-     */
-    @Test
-    public void testClone() {
-        {
-            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            Bound<Integer> cb = b.clone();
-            assertThat("ClosedLowerBound#type", cb.type, is(b.type));
-            assertThat("ClosedLowerBound#value", cb.value, is(100));
-            assertThat("ClosedLowerBound#class", cb, instanceOf(Bound.ClosedLowerBound.class));
-        }
-        {
-            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
-            Bound<Integer> cb = b.clone();
-            assertThat("ClosedUpperBound#type", cb.type, is(b.type));
-            assertThat("ClosedUpperBound#value", cb.value, is(10));
-            assertThat("ClosedUpperBound#class", cb, instanceOf(Bound.ClosedUpperBound.class));
-        }
-        {
-            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
-            Bound<Double> cb = b.clone();
-            assertThat("OpenLowerBound#type", cb.type, is(b.type));
-            assertThat("OpenLowerBound#value", cb.value, is(0.1));
-            assertThat("OpenLowerBound#class", cb, instanceOf(Bound.OpenLowerBound.class));
-        }
-        {
-            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
-            Bound<Double> cb = b.clone();
-            assertThat("OpenUpperBound#type", cb.type, is(b.type));
-            assertThat("OpenUpperBound#value", cb.value, is(1.1));
-            assertThat("OpenUpperBound#class", cb, instanceOf(Bound.OpenUpperBound.class));
-        }
-    }
-
-    /**
-     * Test of toString method, of class Bound.
-     */
-    @Test
-    public void testToString() {
-        {
-            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            assertThat("ClosedLowerBound", b.toString(), is(not(nullValue())));
-        }
-        {
-            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
-            assertThat("ClosedUpperBound", b.toString(), is(not(nullValue())));
-        }
-        {
-            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
-            assertThat("OpenLowerBound", b.toString(), is(not(nullValue())));
-        }
-        {
-            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
-            assertThat("OpenUpperBound", b.toString(), is(not(nullValue())));
-        }
-    }
-
-    /**
      * Test of equals method, of class Bound.
      */
     @Test
@@ -246,22 +145,26 @@ public class BoundTest {
     }
 
     /**
-     * Test of hashCode method, of class Bound.
+     * Test of getType method, of class Bound.
      */
     @Test
-    public void testHashCode() {
-        Bound<Integer> b1 = new Bound.ClosedLowerBound<>(10);
-        Bound<Integer> b2 = new Bound.ClosedLowerBound<>(10);
-        assertThat(b1.hashCode(), is(b2.hashCode()));
-        Bound<Integer> b3 = new Bound.ClosedUpperBound<>(10);
-        Bound<Integer> b4 = new Bound.ClosedUpperBound<>(10);
-        assertThat(b3.hashCode(), is(b4.hashCode()));
-        Bound<Integer> b5 = new Bound.OpenLowerBound<>(10);
-        Bound<Integer> b6 = new Bound.OpenLowerBound<>(10);
-        assertThat(b5.hashCode(), is(b6.hashCode()));
-        Bound<Integer> b7 = new Bound.OpenUpperBound<>(10);
-        Bound<Integer> b8 = new Bound.OpenUpperBound<>(10);
-        assertThat(b7.hashCode(), is(b8.hashCode()));
+    public void testGetType() {
+        {
+            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
+            assertThat("ClosedLowerBound", b.getType(), is(BoundType.CLOSED));
+        }
+        {
+            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
+            assertThat("ClosedUpperBound", b.getType(), is(BoundType.CLOSED));
+        }
+        {
+            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
+            assertThat("OpenLowerBound", b.getType(), is(BoundType.OPEN));
+        }
+        {
+            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
+            assertThat("OpenUpperBound", b.getType(), is(BoundType.OPEN));
+        }
     }
 
     /**
@@ -288,25 +191,122 @@ public class BoundTest {
     }
 
     /**
-     * Test of getType method, of class Bound.
+     * Test of hashCode method, of class Bound.
      */
     @Test
-    public void testGetType() {
+    public void testHashCode() {
+        Bound<Integer> b1 = new Bound.ClosedLowerBound<>(10);
+        Bound<Integer> b2 = new Bound.ClosedLowerBound<>(10);
+        assertThat(b1.hashCode(), is(b2.hashCode()));
+        Bound<Integer> b3 = new Bound.ClosedUpperBound<>(10);
+        Bound<Integer> b4 = new Bound.ClosedUpperBound<>(10);
+        assertThat(b3.hashCode(), is(b4.hashCode()));
+        Bound<Integer> b5 = new Bound.OpenLowerBound<>(10);
+        Bound<Integer> b6 = new Bound.OpenLowerBound<>(10);
+        assertThat(b5.hashCode(), is(b6.hashCode()));
+        Bound<Integer> b7 = new Bound.OpenUpperBound<>(10);
+        Bound<Integer> b8 = new Bound.OpenUpperBound<>(10);
+        assertThat(b7.hashCode(), is(b8.hashCode()));
+    }
+
+    /**
+     * Test of isClosed method, of class Bound.
+     */
+    @Test
+    public void testIsClosed() {
         {
             Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
-            assertThat("ClosedLowerBound", b.getType(), is(BoundType.CLOSED));
+            assertThat("ClosedLowerBound", b.isClosed(), is(true));
         }
         {
             Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
-            assertThat("ClosedUpperBound", b.getType(), is(BoundType.CLOSED));
+            assertThat("ClosedUpperBound", b.isClosed(), is(true));
         }
         {
             Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
-            assertThat("OpenLowerBound", b.getType(), is(BoundType.OPEN));
+            assertThat("OpenLowerBound", b.isClosed(), is(false));
         }
         {
             Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
-            assertThat("OpenUpperBound", b.getType(), is(BoundType.OPEN));
+            assertThat("OpenUpperBound", b.isClosed(), is(false));
+        }
+    }
+
+    /**
+     * Test of isOpen method, of class Bound.
+     */
+    @Test
+    public void testIsOpen() {
+        {
+            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
+            assertThat("ClosedLowerBound", b.isOpen(), is(false));
+        }
+        {
+            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
+            assertThat("ClosedUpperBound", b.isOpen(), is(false));
+        }
+        {
+            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
+            assertThat("OpenLowerBound", b.isOpen(), is(true));
+        }
+        {
+            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
+            assertThat("OpenUpperBound", b.isOpen(), is(true));
+        }
+    }
+
+    /**
+     * Test of on method, of class Bound.
+     */
+    @Test
+    public void testOn() {
+        Comparator<Integer> c = new ComparableComparator<>();
+        {
+            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
+            assertThat("ClosedLowerBound(99)", b.on(99, c), is(false));
+            assertThat("ClosedLowerBound(100)", b.on(100, c), is(true));
+            assertThat("ClosedLowerBound(101)", b.on(101, c), is(true));
+        }
+        {
+            Bound<Integer> b = new Bound.ClosedUpperBound<>(100);
+            assertThat("ClosedUpperBound(99)", b.on(99, c), is(true));
+            assertThat("ClosedUpperBound(100)", b.on(100, c), is(true));
+            assertThat("ClosedUpperBound(101)", b.on(101, c), is(false));
+        }
+        {
+            Bound<Integer> b = new Bound.OpenLowerBound<>(100);
+            assertThat("OpenLowerBound(99)", b.on(99, c), is(false));
+            assertThat("OpenLowerBound(100)", b.on(100, c), is(false));
+            assertThat("OpenLowerBound(101)", b.on(101, c), is(true));
+        }
+        {
+            Bound<Integer> b = new Bound.OpenUpperBound<>(100);
+            assertThat("OpenUpperBound(99)", b.on(99, c), is(true));
+            assertThat("OpenUpperBound(100)", b.on(100, c), is(false));
+            assertThat("OpenUpperBound(101)", b.on(101, c), is(false));
+        }
+    }
+
+    /**
+     * Test of toString method, of class Bound.
+     */
+    @Test
+    public void testToString() {
+        {
+            Bound<Integer> b = new Bound.ClosedLowerBound<>(100);
+            assertThat("ClosedLowerBound", b.toString(), is(not(nullValue())));
+        }
+        {
+            Bound<Integer> b = new Bound.ClosedUpperBound<>(10);
+            assertThat("ClosedUpperBound", b.toString(), is(not(nullValue())));
+        }
+        {
+            Bound<Double> b = new Bound.OpenLowerBound<>(0.1);
+            assertThat("OpenLowerBound", b.toString(), is(not(nullValue())));
+        }
+        {
+            Bound<Double> b = new Bound.OpenUpperBound<>(1.1);
+            assertThat("OpenUpperBound", b.toString(), is(not(nullValue())));
         }
     }
 

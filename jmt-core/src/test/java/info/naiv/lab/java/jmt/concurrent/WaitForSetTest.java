@@ -38,28 +38,6 @@ import org.junit.Test;
 public class WaitForSetTest {
 
     /**
-     * Test of get method, of class WaitForSet.
-     */
-    @Test
-    public void testGet() {
-        final WaitForSet<String> value = new WaitForSet<>();
-        final Runnable task = new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException ex) {
-                }
-                value.set("ABC");
-            }
-        };
-        ExecutorService pool = Executors.newSingleThreadExecutor();
-        pool.submit(task);
-
-        assertThat(value.get(), is("ABC"));
-    }
-
-    /**
      * Test of doAwait method, of class WaitForSet.
      *
      * @throws java.lang.InterruptedException
@@ -114,6 +92,28 @@ public class WaitForSetTest {
         assertThat(x.get(), is(0));
         assertThat(value.doAwait(100, TimeUnit.MILLISECONDS), is(true));
         assertThat(x.get(), is(1));
+        assertThat(value.get(), is("ABC"));
+    }
+
+    /**
+     * Test of get method, of class WaitForSet.
+     */
+    @Test
+    public void testGet() {
+        final WaitForSet<String> value = new WaitForSet<>();
+        final Runnable task = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ex) {
+                }
+                value.set("ABC");
+            }
+        };
+        ExecutorService pool = Executors.newSingleThreadExecutor();
+        pool.submit(task);
+
         assertThat(value.get(), is("ABC"));
     }
 

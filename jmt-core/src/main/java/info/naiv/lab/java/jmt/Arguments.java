@@ -23,11 +23,11 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Misc.join;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
 import java.util.Collection;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 
 /**
  *
@@ -66,7 +66,7 @@ public abstract class Arguments {
      */
     public static <T extends Comparable<T>> T between(T arg, T begin, T end, String varname) throws IllegalArgumentException {
         if (begin.compareTo(arg) > 0 || end.compareTo(arg) < 0) {
-            String msg = join(varname, " is must be between ", begin, " and ", end, ".");
+            String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
             throw new IllegalArgumentException(msg);
         }
         return arg;
@@ -84,7 +84,7 @@ public abstract class Arguments {
      */
     public static long between(long arg, long begin, long end, String varname) throws IllegalArgumentException {
         if (arg < begin || end < arg) {
-            String msg = join(varname, " is must be between ", begin, " and ", end, ".");
+            String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
             throw new IllegalArgumentException(msg);
         }
         return arg;
@@ -102,7 +102,7 @@ public abstract class Arguments {
      */
     public static int between(int arg, int begin, int end, String varname) throws IllegalArgumentException {
         if (arg < begin || end < arg) {
-            String msg = join(varname, " is must be between ", begin, " and ", end, ".");
+            String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
             throw new IllegalArgumentException(msg);
         }
         return arg;
@@ -120,7 +120,7 @@ public abstract class Arguments {
      */
     public static double between(double arg, double begin, double end, String varname) throws IllegalArgumentException {
         if (arg < begin || end < arg) {
-            String msg = join(varname, " is must be between ", begin, " and ", end, ".");
+            String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
             throw new IllegalArgumentException(msg);
         }
         return arg;
@@ -158,6 +158,28 @@ public abstract class Arguments {
             throw new IllegalArgumentException(varname + " is must be interface.");
         }
         return arg;
+    }
+
+    public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
+        nonNull(lhs, varname);
+        if (lhs.compareTo(rhs) < 0) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
+    }
+
+    public static  long lessThan(long lhs, long rhs, String varname) {
+        if (lhs < rhs) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
+    }
+
+    public static  long lessThan(int lhs, int rhs, String varname) {
+        if (lhs < rhs) {
+            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+        }
+        return lhs;
     }
 
     /**
@@ -218,7 +240,7 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
      */
-    public static long nonMinus(long arg, String varname) throws IllegalArgumentException {
+    public static  long nonMinus(long arg, String varname) throws IllegalArgumentException {
         if (arg < 0) {
             throw new IllegalArgumentException(varname + " is must be plus.");
         }
@@ -247,7 +269,7 @@ public abstract class Arguments {
         nonNull(arg, varname);
         for (int i = 0; i < arg.length; i++) {
             if (arg[i] == null) {
-                String msg = join(varname, "[", i, "] is must not be null.");
+                String msg = arrayToString(varname, "[", i, "] is must not be null.");
                 throw new IllegalArgumentException(msg);
             }
         }
@@ -260,34 +282,12 @@ public abstract class Arguments {
         int i = 0;
         for (Object x : arg) {
             if (x == null) {
-                String msg = join(varname, "[", i, "] is must not be null.");
+                String msg = arrayToString(varname, "[", i, "] is must not be null.");
                 throw new IllegalArgumentException(msg);
             }
             i++;
         }
         return arg;
-    }
-
-    public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
-        nonNull(lhs, varname);
-        if (lhs.compareTo(rhs) < 0) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
-        }
-        return lhs;
-    }
-
-    public static long lessThan(long lhs, long rhs, String varname) {
-        if (lhs < rhs) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
-        }
-        return lhs;
-    }
-
-    public static long lessThan(int lhs, int rhs, String varname) {
-        if (lhs < rhs) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
-        }
-        return lhs;
     }
     
     private Arguments() {

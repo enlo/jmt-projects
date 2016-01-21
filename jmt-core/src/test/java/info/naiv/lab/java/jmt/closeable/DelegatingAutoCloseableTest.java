@@ -19,12 +19,6 @@ import org.mockito.MockitoAnnotations;
  */
 public class DelegatingAutoCloseableTest {
     
-    static interface Test1{
-        void close();
-    }
-    
-    public DelegatingAutoCloseableTest() {
-    }
     
     @BeforeClass
     public static void setUpClass() {
@@ -34,8 +28,12 @@ public class DelegatingAutoCloseableTest {
     public static void tearDownClass() {
     }
     
+    
     @Mock
     Test1 test1;
+    
+    public DelegatingAutoCloseableTest() {
+    }
     
     @Before
     public void setUp() {
@@ -43,13 +41,7 @@ public class DelegatingAutoCloseableTest {
     }
     
     @After
-    public void tearDown() {
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testCtor(){
-        DelegatingAutoCloseable<?> instance = new DelegatingAutoCloseable<>(new Object());
-        instance.close();
+    public void tearDown(){
     }
 
     /**
@@ -73,6 +65,12 @@ public class DelegatingAutoCloseableTest {
         verify(mock, times(1)).accept(test1);
     }
     
+    @Test(expected = IllegalArgumentException.class)
+    public void testCtor() {
+        DelegatingAutoCloseable<?> instance = new DelegatingAutoCloseable<>(new Object());
+        instance.close();
+    }
+
     /**
      * Test of get method, of class DynamicAutoCloseable.
      */
@@ -80,6 +78,11 @@ public class DelegatingAutoCloseableTest {
     public void testGet() {
         DelegatingAutoCloseable<Test1> instance = new DelegatingAutoCloseable<>(test1);
         assertThat(instance.getContent(), is(test1));
+    }
+
+    static interface Test1 {
+
+        void close();
     }
     
 }

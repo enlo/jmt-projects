@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.driver;
 
-import static info.naiv.lab.java.jmt.io.NIOUtils.listFiles;
+import static info.naiv.lab.java.jmt.io.NIOUtils.listPaths;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.IOException;
 import java.net.URL;
@@ -65,7 +65,7 @@ public class ExternalDriverLoader {
     }
 
     protected void listJarFiles(Set<URL> result, Path path) throws IOException {
-        List<Path> found = listFiles(path, "*.jar", 1);
+        List<Path> found = listPaths(path, "*.jar", 1);
         for (Path p : found) {
             URL u = p.toUri().toURL();
             if (!loaded.contains(u)) {

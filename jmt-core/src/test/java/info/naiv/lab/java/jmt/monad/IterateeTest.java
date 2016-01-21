@@ -45,6 +45,38 @@ public class IterateeTest {
     }
 
     /**
+     * Test of bind method, of class Iteratee.
+     */
+    @Test
+    public void testBind() {
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
+        final StringBuilder sb = new StringBuilder();
+        assertThat(im.bind(new Consumer1<Integer>() {
+            @Override
+            public void accept(Integer a1) {
+                sb.append(a1);
+            }
+        }), is(sameInstance(im)));
+        assertThat(sb.toString(), is("12345"));
+    }
+
+    /**
+     * Test of bind method, of class Iteratee.
+     */
+    @Test
+    public void testBind_empty() {
+        Iteratee<Integer> im = Iteratee.empty();
+        final StringBuilder sb = new StringBuilder();
+        assertThat(im.bind(new Consumer1<Integer>() {
+            @Override
+            public void accept(Integer a1) {
+                sb.append(a1);
+            }
+        }), is(sameInstance(im)));
+        assertThat(sb.toString(), is(""));
+    }
+
+    /**
      * Test of empty method, of class Iteratee.
      */
     @Test
@@ -112,38 +144,6 @@ public class IterateeTest {
     }
 
     /**
-     * Test of bind method, of class Iteratee.
-     */
-    @Test
-    public void testBind() {
-        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
-        final StringBuilder sb = new StringBuilder();
-        assertThat(im.bind(new Consumer1<Integer>() {
-            @Override
-            public void accept(Integer a1) {
-                sb.append(a1);
-            }
-        }), is(sameInstance(im)));
-        assertThat(sb.toString(), is("12345"));
-    }
-
-    /**
-     * Test of bind method, of class Iteratee.
-     */
-    @Test
-    public void testBind_empty() {
-        Iteratee<Integer> im = Iteratee.empty();
-        final StringBuilder sb = new StringBuilder();
-        assertThat(im.bind(new Consumer1<Integer>() {
-            @Override
-            public void accept(Integer a1) {
-                sb.append(a1);
-            }
-        }), is(sameInstance(im)));
-        assertThat(sb.toString(), is(""));
-    }
-
-    /**
      * Test of iterator method, of class Iteratee.
      */
     @Test
@@ -185,20 +185,20 @@ public class IterateeTest {
      * Test of of method, of class Iteratee.
      */
     @Test
-    public void testOf_Iterable() {
-        List<Integer> list = Arrays.asList(1, 2, 3);
-        Iteratee<Integer> im = Iteratee.of(list);
-        assertThat(im, contains(1, 2, 3));
+    public void testOf_GenericType() {
+        String[] list = {"1", "2", "3"};
+        Iteratee<String> im = Iteratee.of(list);
+        assertThat(im, contains("1", "2", "3"));
     }
 
     /**
      * Test of of method, of class Iteratee.
      */
     @Test
-    public void testOf_GenericType() {
-        String[] list = {"1", "2", "3"};
-        Iteratee<String> im = Iteratee.of(list);
-        assertThat(im, contains("1", "2", "3"));
+    public void testOf_Iterable() {
+        List<Integer> list = Arrays.asList(1, 2, 3);
+        Iteratee<Integer> im = Iteratee.of(list);
+        assertThat(im, contains(1, 2, 3));
     }
 
     /**

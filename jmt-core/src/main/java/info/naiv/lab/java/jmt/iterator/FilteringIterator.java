@@ -37,11 +37,11 @@ public final class FilteringIterator<T> implements Iterator<T> {
 
     @NonNull
     private final Iterator<T> baseIterator;
+    private boolean cont;
     @NonNull
     private final Predicate1<? super T> filter;
 
     private T nextElement;
-    private boolean cont;
 
     /**
      * コンストラクター.
@@ -68,6 +68,11 @@ public final class FilteringIterator<T> implements Iterator<T> {
         return doNext();
     }
 
+    @Override
+    public void remove() {
+        baseIterator.remove();
+    }
+
     private T doNext() {
         T result = nextElement;
         while (baseIterator.hasNext()) {
@@ -80,10 +85,5 @@ public final class FilteringIterator<T> implements Iterator<T> {
         }
         cont = false;
         return result;
-    }
-
-    @Override
-    public void remove() {
-        baseIterator.remove();
     }
 }

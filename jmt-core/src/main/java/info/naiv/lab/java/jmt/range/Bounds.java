@@ -41,4 +41,7 @@ public class Bounds {
     public static <T extends Comparable<T>> Bound.OpenUpperBound<T> openUp(T value) {
         return new Bound.OpenUpperBound<>(value);
     }
+
+    private Bounds() {
+    }
 }

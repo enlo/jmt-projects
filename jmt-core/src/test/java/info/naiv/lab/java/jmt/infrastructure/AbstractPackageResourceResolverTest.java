@@ -39,8 +39,40 @@ public abstract class AbstractPackageResourceResolverTest {
     public AbstractPackageResourceResolverTest() {
     }
 
-    protected abstract AbstractPackageResourceResolver getPackageResourceResolver();
+    /**
+     * Test of addPackage method, of class AbstractPackageResourceResolver.
+     */
+    @Test
+public void testAddPackage() {
+    AbstractPackageResourceResolver instance = getPackageResourceResolver();
+    String packageName = "my.package";
+    assertThat(instance.getPackageNames(), emptyIterable());
+    instance.addPackage(packageName);
+    assertThat(instance.getPackageNames(), containsInAnyOrder(packageName));
+}
 
+    /**
+     * Test of getPackageNames method, of class AbstractPackageResourceResolver.
+     */
+    @Test
+    public void testGetPackageNames() {
+        AbstractPackageResourceResolver instance = getPackageResourceResolver();
+        assertThat(instance.getPackageNames(), sameInstance((Object) instance.getPackageNameSet()));
+    }
+    
+    /**
+     * Test of list method, of class JdkUsedPackageResourceResolver.
+     */
+    @Test
+    public void testList() {
+        AbstractPackageResourceResolver instance = getPackageResourceResolver();
+        instance.addPackage("TEXT");
+        instance.setIncludePatterns(byRegex(".*\\.txt$"));
+        Set<String> result = instance.list();
+        assertThat(result, hasSize(2));
+        assertThat(result, containsInAnyOrder("TEXT/bomtext.txt", "TEXT/nobomtext.txt"));
+    }
+    
     /**
      * Test of setExcludePatterns method, of class
      * AbstractPackageResourceResolver.
@@ -67,18 +99,6 @@ public abstract class AbstractPackageResourceResolverTest {
     }
 
     /**
-     * Test of addPackage method, of class AbstractPackageResourceResolver.
-     */
-    @Test
-    public void testAddPackage() {
-        AbstractPackageResourceResolver instance = getPackageResourceResolver();
-        String packageName = "my.package";
-        assertThat(instance.getPackageNames(), emptyIterable());
-        instance.addPackage(packageName);
-        assertThat(instance.getPackageNames(), containsInAnyOrder(packageName));
-    }
-
-    /**
      * Test of setPackageNames method, of class AbstractPackageResourceResolver.
      */
     @Test
@@ -89,27 +109,7 @@ public abstract class AbstractPackageResourceResolverTest {
         instance.setPackageNames(packageNames);
         assertThat(instance.getPackageNames(), containsInAnyOrder(packageNames));
     }
-
-    /**
-     * Test of getPackageNames method, of class AbstractPackageResourceResolver.
-     */
-    @Test
-    public void testGetPackageNames() {
-        AbstractPackageResourceResolver instance = getPackageResourceResolver();
-        assertThat(instance.getPackageNames(), sameInstance((Object) instance.getPackageNameSet()));
-    }
-
-    /**
-     * Test of list method, of class JdkUsedPackageResourceResolver.
-     */
-    @Test
-    public void testList() {
-        AbstractPackageResourceResolver instance = getPackageResourceResolver();
-        instance.addPackage("TEXT");
-        instance.setIncludePatterns(byRegex(".*\\.txt$"));
-        Set<String> result = instance.list();
-        assertThat(result, hasSize(2));
-        assertThat(result, containsInAnyOrder("TEXT/bomtext.txt", "TEXT/nobomtext.txt"));
-    }
+    
+    protected abstract AbstractPackageResourceResolver getPackageResourceResolver();
 
 }

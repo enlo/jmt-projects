@@ -12,7 +12,6 @@ import static java.util.Calendar.*;
 import java.util.Date;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang.time.FastDateFormat;
 
 public class ClassicDateUtils {
 
@@ -352,7 +351,7 @@ public class ClassicDateUtils {
     /**
      * 日付テキストをカレンダーに変換する. <br> {@link DateTimePattern}にあるフォーマットを使用する.<br>
      * {@link DateTimePattern}に一致しない場合、<br>
-     * {@link FastDateFormat#getInstance() }を使用して変換を試みる.
+     * {@link SimpleDateFormat#getInstance() }を使用して変換を試みる.
      *
      * @param dateText 日付テキスト
      * @return カレンダー.

@@ -21,9 +21,6 @@ import org.mockito.MockitoAnnotations;
  */
 public class CloseableLockTest {
 
-    public CloseableLockTest() {
-    }
-
     @BeforeClass
     public static void setUpClass() {
     }
@@ -32,8 +29,12 @@ public class CloseableLockTest {
     public static void tearDownClass() {
     }
 
+
     @Mock(name = "lockmock")
     Lock lock;
+
+    public CloseableLockTest() {
+    }
 
     @Before
     public void setUp() {
@@ -44,22 +45,22 @@ public class CloseableLockTest {
     public void tearDown() {
     }
     
+    /**
+     * Test of close method, of class CloseableLock.
+     *
+     * @throws java.lang.Exception
+     */
     @Test
-    public void testCtor() {
-        CloseableLock lck = new CloseableLock(lock);
-        assertThat(lck.getContent(), is(sameInstance(lock)));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testLock_NullArg() {
-        CloseableLock.lock(null);
+    public void testClose() throws Exception {
+        CloseableLock instance = new CloseableLock(lock);
+        instance.close();
+        verify(lock, times(1)).unlock();
     }
 
     @Test()
-    public void testStaticLock() {
-        CloseableLock lck = CloseableLock.lock(lock);
-        assertThat(lck, is(notNullValue()));
-        verify(lock, times(1)).lock();
+    public void testCtor() {
+        CloseableLock lck = new CloseableLock(lock);
+        assertThat(lck.getContent(), is(sameInstance(lock)));
     }
 
     /**
@@ -82,6 +83,31 @@ public class CloseableLockTest {
         CloseableLock instance = new CloseableLock(lock);
         instance.lockInterruptibly();
         verify(lock, times(1)).lockInterruptibly();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testLock_NullArg() {
+        CloseableLock.lock(null);
+    }
+
+    /**
+     * Test of newCondition method, of class CloseableLock.
+     */
+    @Test
+    public void testNewCondition() {
+        
+        Condition mockCond = mock(Condition.class);
+        when(lock.newCondition()).thenReturn(mockCond);
+        
+        CloseableLock instance = new CloseableLock(lock);
+        assertThat(instance.newCondition(), is(sameInstance(mockCond)));
+    }
+
+    @Test
+    public void testStaticLock() {
+        CloseableLock lck = CloseableLock.lock(lock);
+        assertThat(lck, is(notNullValue()));
+        verify(lock, times(1)).lock();
     }
 
     /**
@@ -130,31 +156,6 @@ public class CloseableLockTest {
     public void testUnlock() {
         CloseableLock instance = new CloseableLock(lock);
         instance.unlock();
-        verify(lock, times(1)).unlock();
-    }
-
-    /**
-     * Test of newCondition method, of class CloseableLock.
-     */
-    @Test
-    public void testNewCondition() {
-
-        Condition mockCond = mock(Condition.class);
-        when(lock.newCondition()).thenReturn(mockCond);
-
-        CloseableLock instance = new CloseableLock(lock);
-        assertThat(instance.newCondition(), is(sameInstance(mockCond)));
-    }
-
-    /**
-     * Test of close method, of class CloseableLock.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testClose() throws Exception {
-        CloseableLock instance = new CloseableLock(lock);
-        instance.close();
         verify(lock, times(1)).unlock();
     }
 

@@ -38,12 +38,12 @@ public abstract class JoinerTest<R, T> {
      * Test of join method, of class Joiner.
      */
     @Test
-    public abstract void testJoin_Iterable();
+    public abstract void testJoin_GenericType();
 
     /**
      * Test of join method, of class Joiner.
      */
     @Test
-    public abstract void testJoin_GenericType();
+    public abstract void testJoin_Iterable();
 
 }

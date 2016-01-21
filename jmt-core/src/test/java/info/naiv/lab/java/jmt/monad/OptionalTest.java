@@ -49,12 +49,42 @@ public class OptionalTest {
     }
 
     /**
+     * Test of bind method, of class Optional.
+     */
+    @Test
+    public void testBind() {
+        final StringBuilder sb = new StringBuilder();
+        Optional<Integer> opt = Optional.of(123);
+        assertThat(opt.bind(new Consumer1<Integer>() {
+            @Override
+            public void accept(Integer a1) {
+                sb.append(a1);
+            }
+        }), is(sameInstance(opt)));
+        assertThat(sb.toString(), is("123"));
+    }
+
+    /**
      * Test of empty method, of class Optional.
      */
     @Test
     public void testEmpty() {
         assertThat(Optional.empty(), is(sameInstance((Object) Optional.EMPTY)));
         assertThat(Optional.empty().isPresent(), is(false));
+    }
+
+    /**
+     * Test of equals method, of class Optional.
+     */
+    @Test
+    public void testEquals() {
+        Optional<Integer> opt = new Optional(123);
+        assertThat(Optional.of(123), is(opt));
+        assertThat(Optional.of(456), is(not(opt)));
+        assertThat(Optional.<Integer>empty(), is(not(opt)));
+        assertThat(Optional.<Integer>empty(), is(Optional.<Integer>ofNullable(null)));
+        Optional<String> opt2 = new Optional("abc");
+        assertThat(opt.equals(opt2), is(false));
     }
 
     /**
@@ -84,15 +114,6 @@ public class OptionalTest {
     }
 
     /**
-     * Test of isPresent method, of class Optional.
-     */
-    @Test
-    public void testIsPresent() {
-        Optional<Integer> opt = Optional.of(123);
-        assertThat(opt.isPresent(), is(true));
-    }
-
-    /**
      * Test of get method, of class Optional.
      */
     @Test
@@ -102,19 +123,22 @@ public class OptionalTest {
     }
 
     /**
-     * Test of bind method, of class Optional.
+     * Test of getValue method, of class Optional.
      */
     @Test
-    public void testBind() {
-        final StringBuilder sb = new StringBuilder();
-        Optional<Integer> opt = Optional.of(123);
-        assertThat(opt.bind(new Consumer1<Integer>() {
-            @Override
-            public void accept(Integer a1) {
-                sb.append(a1);
-            }
-        }), is(sameInstance(opt)));
-        assertThat(sb.toString(), is("123"));
+    public void testGetValue() {
+        assertThat(Optional.of(123).getValue(), is(123));
+        assertThat(Optional.empty().getValue(), is(nullValue()));
+    }
+
+    /**
+     * Test of hashCode method, of class Optional.
+     */
+    @Test
+    public void testHashCode() {
+        Optional<Integer> opt = new Optional(123);
+        assertThat(Optional.of(123).hashCode(), is(opt.hashCode()));
+        assertThat(Optional.empty().hashCode(), is(Optional.ofNullable(null).hashCode()));
     }
 
     /**
@@ -132,6 +156,15 @@ public class OptionalTest {
         };
         opt.ifPresent(fx);
         assertThat(sb.toString(), is("123"));
+    }
+
+    /**
+     * Test of isPresent method, of class Optional.
+     */
+    @Test
+    public void testIsPresent() {
+        Optional<Integer> opt = Optional.of(123);
+        assertThat(opt.isPresent(), is(true));
     }
 
     /**
@@ -168,20 +201,20 @@ public class OptionalTest {
     }
 
     /**
-     * Test of of method, of class Optional.
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testOf_empty() {
-        Optional.of(null);
-    }
-
-    /**
      * Test of ofNullable method, of class Optional.
      */
     @Test
     public void testOfNullable() {
         assertThat(Optional.ofNullable("123"), is(new Optional<>("123")));
         assertThat(Optional.ofNullable(null), is(Optional.EMPTY));
+    }
+
+    /**
+     * Test of of method, of class Optional.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testOf_empty() {
+        Optional.of(null);
     }
 
     /**
@@ -248,39 +281,6 @@ public class OptionalTest {
     public void testToSet() {
         Set<Integer> set = Optional.of(123).toSet();
         assertThat(set, containsInAnyOrder(123));
-    }
-
-    /**
-     * Test of getValue method, of class Optional.
-     */
-    @Test
-    public void testGetValue() {
-        assertThat(Optional.of(123).getValue(), is(123));
-        assertThat(Optional.empty().getValue(), is(nullValue()));
-    }
-
-    /**
-     * Test of equals method, of class Optional.
-     */
-    @Test
-    public void testEquals() {
-        Optional<Integer> opt = new Optional(123);
-        assertThat(Optional.of(123), is(opt));
-        assertThat(Optional.of(456), is(not(opt)));
-        assertThat(Optional.<Integer>empty(), is(not(opt)));
-        assertThat(Optional.<Integer>empty(), is(Optional.<Integer>ofNullable(null)));
-        Optional<String> opt2 = new Optional("abc");
-        assertThat(opt.equals(opt2), is(false));
-    }
-
-    /**
-     * Test of hashCode method, of class Optional.
-     */
-    @Test
-    public void testHashCode() {
-        Optional<Integer> opt = new Optional(123);
-        assertThat(Optional.of(123).hashCode(), is(opt.hashCode()));
-        assertThat(Optional.empty().hashCode(), is(Optional.ofNullable(null).hashCode()));
     }
 
     /**

@@ -33,6 +33,10 @@ import java.nio.file.Path;
  */
 public class SystemTempDirectory extends TempDirectory {
 
+    public SystemTempDirectory() throws IOException {
+        this(null);
+    }
+    
     public SystemTempDirectory(String prefix) throws IOException {
         super(createTempDirectory(checkPrefix(prefix)));
     }

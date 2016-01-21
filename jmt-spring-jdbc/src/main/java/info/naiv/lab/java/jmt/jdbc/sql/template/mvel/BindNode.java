@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
-import info.naiv.lab.java.jmt.Misc;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import java.util.Collection;
 import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
@@ -68,9 +68,9 @@ public class BindNode extends Node {
 
     @Override
     public String toString() {
-        return Misc.join("BindNode:", name, "{",
-                         (contents == null ? "" : new String(contents)),
-                         "} (start=", begin, ";end=", end + ")");
+        return arrayToString("BindNode:", name, "{",
+                             (contents == null ? "" : new String(contents)),
+                             "} (start=", begin, ";end=", end + ")");
     }
 
 }

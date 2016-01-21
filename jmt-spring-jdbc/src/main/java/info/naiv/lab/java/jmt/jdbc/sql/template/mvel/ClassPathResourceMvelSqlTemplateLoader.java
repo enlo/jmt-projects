@@ -49,6 +49,11 @@ public class ClassPathResourceMvelSqlTemplateLoader
         super(resolver);
     }
 
+    protected SqlTemplate compile(String name, String template) {        
+        CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
+        return new MvelSqlTemplate(name, ct);
+    }
+
     @Override
     protected SqlTemplate createSqlTemplateByFile(String path, Charset charset) throws IOException {
         ClassPathResource res = new ClassPathResource(path);
@@ -56,11 +61,6 @@ public class ClassPathResourceMvelSqlTemplateLoader
             String text = NIOUtils.toString(is, charset);
             return compile(path, text);
         }
-    }
-
-    protected SqlTemplate compile(String name, String template) {        
-        CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        return new MvelSqlTemplate(name, ct);
     }
 
     @Override

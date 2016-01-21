@@ -42,10 +42,34 @@ public class ComparableComparatorTest {
     public ComparableComparatorTest() {
     }
 
-    interface X extends Comparable<X>{
-        
-    }
     
+    /**
+     * Test of compare method, of class ComparableComparator.
+     */
+    @Test
+    public void testCompare() {
+        ComparableComparator<Integer> instance = ComparableComparator.INSTANCE;
+        assertThat("min(1, 2)", instance.compare(1, 2), is(lessThan(0)));
+        assertThat("min(4, 2)", instance.compare(4, 2), is(greaterThan(0)));
+        assertThat("min(3, 3)", instance.compare(3, 3), is(0));
+        assertThat("min(4, null)", instance.compare(4, null), is(greaterThan(0)));
+        assertThat("min(null, 5)", instance.compare(null, 5), is(lessThan(0)));
+        assertThat("min(null, null)", instance.compare(null, null), is(0));
+    }
+
+    /**
+     * Test of doCompare method, of class ComparableComparator.
+     */
+    @Test
+    public void testDoCompare() {
+        X x = mock(X.class);
+        X y = mock(X.class);
+        when(x.compareTo(y)).thenReturn(0);
+        ComparableComparator instance = ComparableComparator.INSTANCE;
+        instance.doCompare(x, y);
+        verify(x).compareTo(y);
+    }
+
     /**
      * Test of min method, of class ComparableComparator.
      */
@@ -60,32 +84,7 @@ public class ComparableComparatorTest {
         assertThat("min(null, null)", instance.min(null, null), is(nullValue()));
     }
 
-    /**
-     * Test of doCompare method, of class ComparableComparator.
-     */
-    @Test
-    public void testDoCompare() {
-        System.out.println("doCompare");
-        X x = mock(X.class);
-        X y = mock(X.class);
-        when(x.compareTo(y)).thenReturn(0);
-        ComparableComparator instance = ComparableComparator.INSTANCE;
-        instance.doCompare(x, y);
-        verify(x).compareTo(y);
-    }
-
-    /**
-     * Test of compare method, of class ComparableComparator.
-     */
-    @Test
-    public void testCompare() {
-        ComparableComparator<Integer> instance = ComparableComparator.INSTANCE;
-        assertThat("min(1, 2)", instance.compare(1, 2), is(lessThan(0)));
-        assertThat("min(4, 2)", instance.compare(4, 2), is(greaterThan(0)));
-        assertThat("min(3, 3)", instance.compare(3, 3), is(0));
-        assertThat("min(4, null)", instance.compare(4, null), is(greaterThan(0)));
-        assertThat("min(null, 5)", instance.compare(null, 5), is(lessThan(0)));
-        assertThat("min(null, null)", instance.compare(null, null), is(0));
+    interface X extends Comparable<X> {
     }
 
 }

@@ -41,6 +41,10 @@ public class PatternVisitor extends AbstractFileVisitor {
         this.matcher = matcher;
     }
 
+    public PatternVisitor() {
+        this.matcher = NIOUtils.anyPathMatcher();
+    }
+
     public PatternVisitor(String pattern) {
         this(FileSystems.getDefault().getPathMatcher("glob:" + pattern));
     }

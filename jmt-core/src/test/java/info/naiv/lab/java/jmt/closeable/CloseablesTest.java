@@ -21,11 +21,6 @@ import static org.mockito.Mockito.*;
  */
 public class CloseablesTest {
 
-    private static class CloseTest {
-
-        void close() {
-        }
-    }
 
     @Before
     public void setUp() {
@@ -33,6 +28,30 @@ public class CloseablesTest {
 
     @After
     public void tearDown() {
+    }
+
+    /**
+     * Test of close method, of class Closeables.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testClose() throws Exception {
+        AutoCloseable ac = mock(AutoCloseable.class);
+        assertThat(Closeables.close(ac), is(nullValue()));
+        verify(ac, times(1)).close();
+    }
+
+    /**
+     * Test of close method, of class Closeables.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testClose_ReturnException() throws Exception {
+        AutoCloseable ac = mock(AutoCloseable.class);
+        doThrow(new Exception()).when(ac).close();
+        assertThat(Closeables.close(ac), is(instanceOf(Exception.class)));
     }
 
     @Test
@@ -71,30 +90,6 @@ public class CloseablesTest {
     @Test(expected = IllegalArgumentException.class)
     public void testLock_Lock_Boolean_4() {
         Closeables.lock(null, false);
-    }
-
-    /**
-     * Test of close method, of class Closeables.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testClose() throws Exception {
-        AutoCloseable ac = mock(AutoCloseable.class);
-        assertThat(Closeables.close(ac), is(nullValue()));
-        verify(ac, times(1)).close();
-    }
-
-    /**
-     * Test of close method, of class Closeables.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test()
-    public void testClose_ReturnException() throws Exception {
-        AutoCloseable ac = mock(AutoCloseable.class);
-        doThrow(new Exception()).when(ac).close();
-        assertThat(Closeables.close(ac), is(instanceOf(Exception.class)));
     }
 
     /**
@@ -140,6 +135,12 @@ public class CloseablesTest {
         result.close();
         assertThat(result, instanceOf(DelegatingAutoCloseable.class));
         verify(mock, times(1)).close();
+    }
+
+    private static class CloseTest {
+
+        void close() {
+        }
     }
 
 }

@@ -45,47 +45,38 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class AutoCreateHolderTest {
 
-    @Ignore
-    public static class CtorFixture<T> {
-
-        public T expected;
-        public T object;
-        public Class<? extends T> clazz;
-        public Function1<T, Class<? extends T>> creator;
-
-        public CtorFixture(T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
-            this.object = object;
-            this.clazz = clazz;
-            this.creator = creator;
-        }
-
-        public CtorFixture(T expected, T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
-            this.expected = expected;
-            this.object = object;
-            this.clazz = clazz;
-            this.creator = creator;
-        }
-
-    }
-    
-    /**
-     *
-     */
-    @DataPoints("nullCtor")
-    public static CtorFixture[] nullCtorParams = new CtorFixture[]{
-        new CtorFixture(null, null, null),
-        new CtorFixture(null, Integer.class, null),
-        new CtorFixture(1, null, StandardFunctions.newInstance(Integer.class, 0)),
-        new CtorFixture(1, Integer.class, null),};
 
     @DataPoints("ctor")
     public static CtorFixture[] ctorParams = new CtorFixture[]{
         new CtorFixture(0, null, Integer.class, StandardFunctions.newInstance(Integer.class, 0)),
         new CtorFixture(1, 1, Integer.class, StandardFunctions.newInstance(Integer.class, 0)),
         new CtorFixture(10, null, Integer.class, StandardFunctions.newInstance(Integer.class, 10)),};
+    /**
+     *
+     */
+    @DataPoints(value = "nullCtor")
+    public static CtorFixture[] nullCtorParams = new CtorFixture[]{
+        new CtorFixture(null, null, null),
+        new CtorFixture(null, Integer.class, null),
+        new CtorFixture(1, null, StandardFunctions.newInstance(Integer.class, 0)),
+        new CtorFixture(1, Integer.class, null),};
 
     @Rule
     public ExpectedException ex = ExpectedException.none();
+
+    @Test
+    public void testCtor01() {
+        AutoCreateHolder<String> holder = new AutoCreateHolder<>(String.class);
+        assertThat((Object) holder.getContentType(), sameInstance((Object) String.class));
+        assertThat(holder.getContent(), is(new String()));
+    }
+
+    @Theory
+    public void testCtor02(@FromDataPoints("ctor") CtorFixture f) {
+        AutoCreateHolder<?> holder = new AutoCreateHolder<>(f.object, f.clazz, f.creator);
+        assertThat((Object) holder.getContentType(), sameInstance((Object) f.clazz));
+        assertThat(holder.getContent(), is(f.expected));
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCtorNull01() {
@@ -102,20 +93,6 @@ public class AutoCreateHolderTest {
     public void testCtorNull03(@FromDataPoints("nullCtor") CtorFixture f) {
         ex.expect(IllegalArgumentException.class);
         Misc.nop(new AutoCreateHolder<>(f.object, f.clazz, f.creator));
-    }
-
-    @Test
-    public void testCtor01() {
-        AutoCreateHolder<String> holder = new AutoCreateHolder<>(String.class);
-        assertThat((Object) holder.getContentType(), sameInstance((Object) String.class));
-        assertThat(holder.getContent(), is(new String()));
-    }
-
-    @Theory
-    public void testCtor02(@FromDataPoints("ctor") CtorFixture f) {
-        AutoCreateHolder<?> holder = new AutoCreateHolder<>(f.object, f.clazz, f.creator);
-        assertThat((Object) holder.getContentType(), sameInstance((Object) f.clazz));
-        assertThat(holder.getContent(), is(f.expected));
     }
 
     /**
@@ -135,6 +112,28 @@ public class AutoCreateHolderTest {
         AutoCreateHolder<String> instance = new AutoCreateHolder<>(String.class);
         instance.setContent("123");
         assertThat(instance.getContent(), is("123"));
+    }
+
+    @Ignore
+    public static class CtorFixture<T> {
+
+        public Class<? extends T> clazz;
+        public Function1<T, Class<? extends T>> creator;
+        public T expected;
+        public T object;
+
+        public CtorFixture(T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
+            this.object = object;
+            this.clazz = clazz;
+            this.creator = creator;
+        }
+
+        public CtorFixture(T expected, T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
+            this.expected = expected;
+            this.object = object;
+            this.clazz = clazz;
+            this.creator = creator;
+        }
     }
 
 }

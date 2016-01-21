@@ -186,7 +186,7 @@ public class ClassicArrayUtils {
      * @return 連結された文字列.
      */
     @ReturnNonNull
-    public static <T> String arrayToString(T[] items) {
+    public static <T> String arrayToString(T... items) {
         return (StringJoiner.SIMPLE).join(items).toString();
     }
 

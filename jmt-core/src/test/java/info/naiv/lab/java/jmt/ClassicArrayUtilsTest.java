@@ -129,6 +129,24 @@ public class ClassicArrayUtilsTest {
     }
 
     /**
+     * Test of arrayContainsCompareEquals method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testArrayContainsCompareEquals() {
+        BigDecimal[] list = null;
+        assertThat(arrayContainsCompareEquals(list, null), is(false));
+        assertThat(arrayContainsCompareEquals(list, BigDecimal.ZERO), is(false));
+        
+        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
+        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
+        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("0")), is(true));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("1")), is(true));
+        assertThat(arrayContainsCompareEquals(list, new BigDecimal("2")), is(false));
+    }
+
+    /**
      * Test of arrayEqualsInRange method, of class Misc.
      */
     @Test
@@ -231,23 +249,5 @@ public class ClassicArrayUtilsTest {
         actual = createArray("A", "B", "C");
         assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
 
-    }
-
-    /**
-     * Test of arrayContainsCompareEquals method, of class ClassicArrayUtils.
-     */
-    @Test
-    public void testArrayContainsCompareEquals() {
-        BigDecimal[] list = null;
-        assertThat(arrayContainsCompareEquals(list, null), is(false));
-        assertThat(arrayContainsCompareEquals(list, BigDecimal.ZERO), is(false));
-
-        list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
-        assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));
-        assertThat(ArrayUtils.contains(list, new BigDecimal("2")), is(false));
-        assertThat(arrayContainsCompareEquals(list, new BigDecimal("0")), is(true));
-        assertThat(arrayContainsCompareEquals(list, new BigDecimal("1")), is(true));
-        assertThat(arrayContainsCompareEquals(list, new BigDecimal("2")), is(false));
     }
 }

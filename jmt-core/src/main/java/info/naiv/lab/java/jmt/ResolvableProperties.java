@@ -98,6 +98,30 @@ public class ResolvableProperties extends Properties {
         return getPropertyCore(key, null);
     }
 
+    /**
+     * リソースからプロパティを読み込み.
+     *
+     * @see PropertiesLoaderUtils#fillProperties(java.util.Properties,
+     * org.springframework.core.io.Resource)
+     * @param uriLocation URI 文字列.
+     * @return
+     * @throws IOException
+     */
+    public ResolvableProperties loadFromResource(String uriLocation) throws IOException {
+        String path = eval(uriLocation);
+        Resource res = (new DefaultResourceLoader()).getResource(path);
+        PropertiesLoaderUtils.fillProperties(this, res);
+        return this;
+    }
+
+    public ResolvableProperties loadFromResource(String uriLocation, Charset charset) throws IOException {
+        String path = eval(uriLocation);
+        Resource r = (new DefaultResourceLoader()).getResource(path);
+        EncodedResource er = new EncodedResource(r, charset);
+        PropertiesLoaderUtils.fillProperties(this, er);
+        return this;
+    }
+
     public ConcurrentMap<String, String> toMap() {
         ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
         for (String key : this.stringPropertyNames()) {
@@ -155,29 +179,5 @@ public class ResolvableProperties extends Properties {
             value = onPropertyNotFound(propertyName);
         }
         return value;
-    }
-
-    /**
-     * リソースからプロパティを読み込み.
-     *
-     * @see PropertiesLoaderUtils#fillProperties(java.util.Properties,
-     * org.springframework.core.io.Resource)
-     * @param uriLocation URI 文字列.
-     * @return
-     * @throws IOException
-     */
-    public ResolvableProperties loadFromResource(String uriLocation) throws IOException {
-        String path = eval(uriLocation);
-        Resource res = (new DefaultResourceLoader()).getResource(path);
-        PropertiesLoaderUtils.fillProperties(this, res);
-        return this;
-    }
-
-    public ResolvableProperties loadFromResource(String uriLocation, Charset charset) throws IOException {
-        String path = eval(uriLocation);
-        Resource r = (new DefaultResourceLoader()).getResource(path);
-        EncodedResource er = new EncodedResource(r, charset);
-        PropertiesLoaderUtils.fillProperties(this, er);
-        return this;
     }
 }

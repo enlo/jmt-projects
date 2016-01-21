@@ -42,8 +42,9 @@ public class RangesTest {
      * Test of closedOpenRange method, of class Ranges.
      */
     @Test
-    public void testClosedOpenRange_GenericType_GenericType() {
-        Range<Integer> range = Ranges.closedOpenRange(11, 18);
+    public void testClosedOpenRange_3args() {
+        IterationUnit<Integer> iu = StandardIterationUnits.INTEGER;
+        Range<Integer> range = Ranges.closedOpenRange(11, 18, iu);
         assertThat(range.contains(10), is(false));
         assertThat(range.contains(11), is(true));
         assertThat(range.contains(12), is(true));
@@ -56,9 +57,8 @@ public class RangesTest {
      * Test of closedOpenRange method, of class Ranges.
      */
     @Test
-    public void testClosedOpenRange_3args() {
-        IterationUnit<Integer> iu = StandardIterationUnits.INTEGER;
-        Range<Integer> range = Ranges.closedOpenRange(11, 18, iu);
+    public void testClosedOpenRange_GenericType_GenericType() {
+        Range<Integer> range = Ranges.closedOpenRange(11, 18);
         assertThat(range.contains(10), is(false));
         assertThat(range.contains(11), is(true));
         assertThat(range.contains(12), is(true));
@@ -101,20 +101,6 @@ public class RangesTest {
      * Test of openClosedRange method, of class Ranges.
      */
     @Test
-    public void testOpenClosedRange_GenericType_GenericType() {
-        Range<Integer> range = Ranges.openClosedRange(11, 18);
-        assertThat(range.contains(10), is(false));
-        assertThat(range.contains(11), is(false));
-        assertThat(range.contains(12), is(true));
-        assertThat(range.contains(17), is(true));
-        assertThat(range.contains(18), is(true));
-        assertThat(range.contains(19), is(false));
-    }
-
-    /**
-     * Test of openClosedRange method, of class Ranges.
-     */
-    @Test
     public void testOpenClosedRange_3args() {
         IterationUnit<Number> iu = StandardIterationUnits.NUMBER_TO_LONG;
         Range<Double> range = Ranges.openClosedRange(11.0, 18.0, iu);
@@ -125,6 +111,20 @@ public class RangesTest {
         assertThat(range.contains(18.0), is(true));
         assertThat(range.contains(18.5), is(true));
         assertThat(range.contains(19.0), is(false));
+    }
+
+    /**
+     * Test of openClosedRange method, of class Ranges.
+     */
+    @Test
+    public void testOpenClosedRange_GenericType_GenericType() {
+        Range<Integer> range = Ranges.openClosedRange(11, 18);
+        assertThat(range.contains(10), is(false));
+        assertThat(range.contains(11), is(false));
+        assertThat(range.contains(12), is(true));
+        assertThat(range.contains(17), is(true));
+        assertThat(range.contains(18), is(true));
+        assertThat(range.contains(19), is(false));
     }
 
     /**

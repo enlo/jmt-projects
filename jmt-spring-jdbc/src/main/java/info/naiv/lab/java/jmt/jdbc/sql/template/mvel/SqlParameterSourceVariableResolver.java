@@ -33,8 +33,8 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 @SuppressWarnings("serial")
 public class SqlParameterSourceVariableResolver implements VariableResolver {
 
-    private final String name;
     private final Class<?> knownType;
+    private final String name;
     private final SqlParameterSource parameterSource;
 
     public SqlParameterSourceVariableResolver(SqlParameterSource parameterSource, String name) {

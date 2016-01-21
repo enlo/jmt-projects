@@ -32,8 +32,8 @@ import java.util.Iterator;
  */
 public final class SingleIterator<T> implements Iterator<T> {
 
-    final T value;
     boolean cont = true;
+    final T value;
 
     public SingleIterator(T value) {
         this(true, value);

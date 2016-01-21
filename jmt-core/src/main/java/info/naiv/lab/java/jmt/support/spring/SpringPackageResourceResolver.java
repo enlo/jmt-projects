@@ -23,10 +23,12 @@
  */
 package info.naiv.lab.java.jmt.support.spring;
 
+import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import info.naiv.lab.java.jmt.fx.StringPredicate;
 import info.naiv.lab.java.jmt.infrastructure.AbstractPackageResourceResolver;
 import java.util.HashSet;
 import java.util.Set;
+import lombok.Setter;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.ClassMetadata;
@@ -38,12 +40,19 @@ import org.springframework.core.type.filter.AbstractClassTestingTypeFilter;
  */
 public class SpringPackageResourceResolver extends AbstractPackageResourceResolver {
 
+    @Setter
+    private String resourcePattern = null;
+
     public SpringPackageResourceResolver() {
     }
 
     @Override
     public Set<String> list() {
         ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider(false);
+        if (isNotEmpty(resourcePattern)) {
+            provider.setResourcePattern(resourcePattern);
+        }
+
         for (StringPredicate pattern : getIncludePatternSet()) {
             provider.addIncludeFilter(new Filter(pattern));
         }

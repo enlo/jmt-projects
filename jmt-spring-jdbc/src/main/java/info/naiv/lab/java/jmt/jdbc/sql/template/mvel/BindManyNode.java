@@ -23,12 +23,11 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.StringJoiner;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.List;
 import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
@@ -89,6 +88,13 @@ public class BindManyNode extends Node {
         return next != null ? next.eval(runtime, appender, ctx, factory) : null;
     }
 
+    @Override
+    public String toString() {
+        return arrayToString("BindManyNode:", name, "{",
+                                                    (contents == null ? "" : new String(contents)),
+                                                    "} (start=", begin, ";end=", end + ")");
+    }
+
     protected void appendCollectionToCtx(Object ctx, Collection<Object> value) {
         if (ctx instanceof Collection) {
             ((Collection) ctx).addAll(value);
@@ -99,13 +105,6 @@ public class BindManyNode extends Node {
         if (ctx instanceof Collection) {
             ((Collection) ctx).add(value);
         }
-    }
-
-    @Override
-    public String toString() {
-        return Misc.join("BindManyNode:", name, "{",
-                         (contents == null ? "" : new String(contents)),
-                         "} (start=", begin, ";end=", end + ")");
     }
 
 }

@@ -68,5 +68,8 @@ public class Ranges {
     public static <T extends Comparable<T>> Range<T> openRange(T first, T end) {
         return openRange(first, end, null);
     }
+
+    private Ranges() {
+    }
     
 }

@@ -21,25 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.io;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import org.mvel2.templates.res.Node;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.Test;
 
 /**
  *
  * @author enlo
  */
-public class CustomNodes {
+public class TempDirectoryDupTest {
 
-    public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
-
-    static {
-        NODES.put("bind", BindNode.class);
-        NODES.put("bindMany", BindManyNode.class);
+    @Test(expected = IOException.class)
+    public void testDuplicate1() throws IOException {
+        try (TempDirectory temp1 = new SystemTempDirectory();
+             TempDirectory temp2 = new TestTempDirectory(temp1.getPath());
+             TempDirectory temp3 = new TestTempDirectory(temp1.getPath());) {
+        }
     }
 
-    private CustomNodes() {
+    @Test
+    public void testDuplicate2() throws IOException {
+        try (TempDirectory temp1 = new SystemTempDirectory();
+             TempDirectory temp2 = new TestTempDirectory(temp1.getPath());) {
+        }
+    }
+
+    static class TestTempDirectory extends TempDirectory {
+
+        TestTempDirectory(Path tempRoot) throws IOException {
+            super(Files.createDirectory(tempRoot.resolve("1")));
+        }
+
     }
 }

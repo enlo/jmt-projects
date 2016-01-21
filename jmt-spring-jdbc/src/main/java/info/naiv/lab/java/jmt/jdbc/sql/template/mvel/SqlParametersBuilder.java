@@ -32,4 +32,9 @@ import java.util.ArrayList;
 public class SqlParametersBuilder extends ArrayList<Object> {
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
 }

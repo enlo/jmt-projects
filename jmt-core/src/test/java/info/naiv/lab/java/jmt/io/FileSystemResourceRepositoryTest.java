@@ -21,25 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.io;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import org.mvel2.templates.res.Node;
+import java.io.IOException;
+import org.junit.Test;
+import org.junit.Before;
 
 /**
  *
  * @author enlo
  */
-public class CustomNodes {
-
-    public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
-
-    static {
-        NODES.put("bind", BindNode.class);
-        NODES.put("bindMany", BindManyNode.class);
+public class FileSystemResourceRepositoryTest {
+    
+    public FileSystemResourceRepositoryTest() {
+    }
+    
+    @Before
+    public void init() throws IOException {
+        SystemTempDirectory dir = new SystemTempDirectory(null);
     }
 
-    private CustomNodes() {
+    /**
+     * Test of getCategories method, of class FileSystemResourceRepository.
+     */
+    @Test
+    public void testGetCategories() {
     }
+
+    /**
+     * Test of getRootDirectory method, of class FileSystemResourceRepository.
+     */
+    @Test
+    public void testGetRootDirectory() {
+    }
+
+    /**
+     * Test of getWatchable method, of class FileSystemResourceRepository.
+     */
+    @Test
+    public void testGetWatchable_0args() {
+    }
+
+    /**
+     * Test of getWatchable method, of class FileSystemResourceRepository.
+     */
+    @Test
+    public void testGetWatchable_String() {
+    }
+
+    /**
+     * Test of setRootDirectory method, of class FileSystemResourceRepository.
+     */
+    @Test
+    public void testSetRootDirectory() {
+    }
+    
 }

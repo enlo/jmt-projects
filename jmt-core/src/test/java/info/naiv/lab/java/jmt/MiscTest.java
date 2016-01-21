@@ -107,6 +107,22 @@ public class MiscTest {
     }
 
     /**
+     * Test of asObjectArray method, of class Misc.
+     */
+    @Test
+    public void testAsObjectArray() {
+        String a1 = "123";
+        assertThat("String(123)", Misc.asObjectArray(a1), is(nullValue()));
+        
+        String[] a2 = {"123", "456"};
+        assertThat("{ '123', '456' }", Misc.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
+        
+        int[] a3 = {123, 456};
+        assertThat("{ 123, 456 }", Misc.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
+        
+    }
+
+    /**
      * Test of between method, of class Misc.
      */
     @Test
@@ -133,6 +149,38 @@ public class MiscTest {
         assertThat(Misc.between(x, null, to), is(false));
         assertThat(Misc.between(x, from, null), is(false));
         assertThat(Misc.between(x, from, to), is(true));
+    }
+
+    /**
+     * Test of contains method, of class Misc.
+     */
+    @Test
+    public void testContains() {
+        
+        List<BigDecimal> source = Arrays.asList(
+                BigDecimal.TEN,
+                new BigDecimal("0.0"),
+                BigDecimal.ONE
+        );
+        
+        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.ZERO)), is(source.contains(BigDecimal.ZERO)));
+        assertThat(Misc.contains(source, StandardFunctions.equal(new BigDecimal("0.0"))), is(source.contains(new BigDecimal("0.0"))));
+        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.TEN)), is(source.contains(BigDecimal.TEN)));
+    }
+
+    /**
+     * Test of containsCompareEquals method, of class Misc.
+     */
+    @Test
+    public void testContainsCompareEquals() {
+        
+        List<BigDecimal> source = Arrays.asList(
+                BigDecimal.TEN,
+                new BigDecimal("0.0"),
+                BigDecimal.ONE
+        );
+        assertThat(source.contains(BigDecimal.ZERO), is(false));
+        assertThat(Misc.containsCompareEquals(source, BigDecimal.ZERO), is(true));
     }
 
     /**
@@ -189,6 +237,19 @@ public class MiscTest {
         assertThat("equals(null, null)", Misc.equals(null, null), is(true));
     }
 
+    /**
+     * Test of flat method, of class Misc.
+     */
+    @Test
+    public void testFlat() {
+        
+        List<Integer> in1 = Arrays.asList(1, 2, 3);
+        List<Integer> in2 = Arrays.asList(4, 5, 6);
+        Iterable<Integer> result = Misc.flat(Arrays.asList(in1, in2));
+        assertThat(result, is(contains(1, 2, 3, 4, 5, 6)));
+        
+    }
+    
     @Test
     public void testGetFirst() {
         assertThat(Misc.getFirst(Arrays.asList(1, 2, 3)), is(1));
@@ -279,7 +340,32 @@ public class MiscTest {
         assertThat(Misc.isEmpty(""), is(true));
         assertThat(Misc.isEmpty("A"), is(false));
     }
+    
+    /**
+     * Test of isLoadable method, of class Misc.
+     */
+    @Test
+    public void testIsLoadable_String() {
+        assertThat(Misc.isLoadable("java.lang.String"), is(true));
+        assertThat(Misc.isLoadable("my.sample.Class"), is(false));
+    }
 
+    /**
+     * Test of isLoadable method, of class Misc.
+     *
+     * @throws java.lang.ClassNotFoundException
+     */
+    @Test
+    public void testIsLoadable_String_ClassLoader() throws ClassNotFoundException {
+        
+        ClassLoader cl = Mockito.spy(ClassLoader.class);
+        assertThat(Misc.isLoadable("java.lang.String", cl), is(true));
+        verify(cl, times(1)).loadClass("java.lang.String");
+
+        assertThat(Misc.isLoadable("my.sample.Class", cl), is(false));
+        verify(cl, times(1)).loadClass("my.sample.Class");
+    }
+    
     /**
      * Test of isNotBlank method, of class Misc.
      */
@@ -350,18 +436,9 @@ public class MiscTest {
      * Test of join method, of class Misc.
      */
     @Test
-    public void testJoin_Iterable_String() {
+    public void testJoin() {
         List<Object> obj = Arrays.asList((Object) 1, 2, "a");
         assertThat(Misc.join(obj, ","), is("1,2,a"));
-    }
-
-    /**
-     * Test of join method, of class Misc.
-     */
-    @Test
-    public void testJoin_ObjectArr() {
-        assertThat(Misc.join("a", "b", "c"), is("abc"));
-        assertThat(Misc.join("a", null, "c"), is("ac"));
     }
 
     /**
@@ -414,6 +491,30 @@ public class MiscTest {
         assertThat(result, hasEntry("C", "36"));
     }
 
+    /**
+     * Test of map method, of class Misc.
+     */
+    @Test
+    public void testMap_Iterable_Function1() {
+        List<Integer> in = new ArrayList<>();
+        in.add(1);
+        in.add(2);
+        in.add(3);
+        in.add(4);
+        in.add(5);
+        in.add(6);
+        Iterable<Integer> it = in;
+        Iterable<Integer> result = Misc.map(it, new Function1<Integer, Integer>() {
+            @Override
+            public Integer apply(Integer a1) {
+                return a1 % 3;
+            }
+        });
+        assertThat(in.size(), is(6));
+        assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
+        assertThat(result, is(contains(1, 2, 0, 1, 2, 0)));
+    }
+    
     /**
      * Test of map method, of class Misc.
      */
@@ -494,7 +595,7 @@ public class MiscTest {
         Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
         Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
         try (InputStream nobomis = nobomres.getInputStream();//
-             InputStream bomis = bomres.getInputStream()) {
+                InputStream bomis = bomres.getInputStream()) {
             String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
             String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
             assertThat(bomtext, is(not(nobomtext)));
@@ -816,100 +917,6 @@ public class MiscTest {
     }
 
     /**
-     * Test of isLoadable method, of class Misc.
-     */
-    @Test
-    public void testIsLoadable_String() {
-        assertThat(Misc.isLoadable("java.lang.String"), is(true));
-        assertThat(Misc.isLoadable("my.sample.Class"), is(false));
-    }
-
-    /**
-     * Test of isLoadable method, of class Misc.
-     *
-     * @throws java.lang.ClassNotFoundException
-     */
-    @Test
-    public void testIsLoadable_String_ClassLoader() throws ClassNotFoundException {
-
-        ClassLoader cl = Mockito.spy(ClassLoader.class);
-        assertThat(Misc.isLoadable("java.lang.String", cl), is(true));
-        verify(cl, times(1)).loadClass("java.lang.String");
-
-        assertThat(Misc.isLoadable("my.sample.Class", cl), is(false));
-        verify(cl, times(1)).loadClass("my.sample.Class");
-    }
-
-    /**
-     * Test of contains method, of class Misc.
-     */
-    @Test
-    public void testContains() {
-
-        List<BigDecimal> source = Arrays.asList(
-                BigDecimal.TEN,
-                new BigDecimal("0.0"),
-                BigDecimal.ONE
-        );
-
-        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.ZERO)), is(source.contains(BigDecimal.ZERO)));
-        assertThat(Misc.contains(source, StandardFunctions.equal(new BigDecimal("0.0"))), is(source.contains(new BigDecimal("0.0"))));
-        assertThat(Misc.contains(source, StandardFunctions.equal(BigDecimal.TEN)), is(source.contains(BigDecimal.TEN)));
-    }
-
-    /**
-     * Test of containsCompareEquals method, of class Misc.
-     */
-    @Test
-    public void testContainsCompareEquals() {
-
-        List<BigDecimal> source = Arrays.asList(
-                BigDecimal.TEN,
-                new BigDecimal("0.0"),
-                BigDecimal.ONE
-        );
-        assertThat(source.contains(BigDecimal.ZERO), is(false));
-        assertThat(Misc.containsCompareEquals(source, BigDecimal.ZERO), is(true));
-    }
-
-    /**
-     * Test of map method, of class Misc.
-     */
-    @Test
-    public void testMap_Iterable_Function1() {
-        List<Integer> in = new ArrayList<>();
-        in.add(1);
-        in.add(2);
-        in.add(3);
-        in.add(4);
-        in.add(5);
-        in.add(6);
-        Iterable<Integer> it = in;
-        Iterable<Integer> result = Misc.map(it, new Function1<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer a1) {
-                return a1 % 3;
-            }
-        });
-        assertThat(in.size(), is(6));
-        assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
-        assertThat(result, is(contains(1, 2, 0, 1, 2, 0)));
-    }
-
-    /**
-     * Test of flat method, of class Misc.
-     */
-    @Test
-    public void testFlat() {
-
-        List<Integer> in1 = Arrays.asList(1, 2, 3);
-        List<Integer> in2 = Arrays.asList(4, 5, 6);
-        Iterable<Integer> result = Misc.flat(Arrays.asList(in1, in2));
-        assertThat(result, is(contains(1, 2, 3, 4, 5, 6)));
-
-    }
-
-    /**
      * Test of toURL method, of class Misc.
      *
      * @throws java.net.MalformedURLException
@@ -928,21 +935,5 @@ public class MiscTest {
     @Test
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
-    }
-
-    /**
-     * Test of asObjectArray method, of class Misc.
-     */
-    @Test
-    public void testAsObjectArray() {
-        String a1 = "123";
-        assertThat("String(123)", Misc.asObjectArray(a1), is(nullValue()));
-
-        String[] a2 = {"123", "456"};
-        assertThat("{ '123', '456' }", Misc.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
-
-        int[] a3 = {123, 456};
-        assertThat("{ 123, 456 }", Misc.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
-
     }
 }

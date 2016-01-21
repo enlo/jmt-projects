@@ -21,25 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.support.spring;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import org.mvel2.templates.res.Node;
+import info.naiv.lab.java.jmt.infrastructure.PackageResourceResolver;
+import info.naiv.lab.java.jmt.infrastructure.PackageResourceResolverFactory;
 
 /**
  *
  * @author enlo
  */
-public class CustomNodes {
+public class SpringPackageResourceResolverFactory implements PackageResourceResolverFactory {
 
-    public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
-
-    static {
-        NODES.put("bind", BindNode.class);
-        NODES.put("bindMany", BindManyNode.class);
+    @Override
+    public PackageResourceResolver newInstance() {
+        return new SpringPackageResourceResolver();
     }
 
-    private CustomNodes() {
+    @Override
+    public PackageResourceResolver newInstanceForClass() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public PackageResourceResolver newInstanceForResource() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
 }

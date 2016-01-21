@@ -28,10 +28,8 @@ import org.mvel2.UnresolveablePropertyException;
 import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.BaseVariableResolverFactory;
-import org.mvel2.integration.impl.MapVariableResolver;
 import org.mvel2.integration.impl.SimpleSTValueResolver;
 import org.mvel2.integration.impl.SimpleValueResolver;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 /**
@@ -70,24 +68,6 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
     }
 
     @Override
-    public VariableResolver getVariableResolver(String name) {
-        VariableResolver vr = variableResolvers.get(name);
-        if (vr != null) {
-            return vr;
-        }
-        else if (parameterSource.hasValue(name)) {
-            vr = new SqlParameterSourceVariableResolver(parameterSource, name);
-            variableResolvers.put(name, vr);
-            return vr;
-        }
-        else if (nextFactory != null) {
-            return nextFactory.getVariableResolver(name);
-        }
-
-        throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
-    }
-
-    @Override
     public VariableResolver createVariable(String name, Object value, Class<?> type) {
         VariableResolver vr;
         try {
@@ -106,6 +86,24 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
             variableResolvers.put(name, vr);
             return vr;
         }
+    }
+
+    @Override
+    public VariableResolver getVariableResolver(String name) {
+        VariableResolver vr = variableResolvers.get(name);
+        if (vr != null) {
+            return vr;
+        }
+        else if (parameterSource.hasValue(name)) {
+            vr = new SqlParameterSourceVariableResolver(parameterSource, name);
+            variableResolvers.put(name, vr);
+            return vr;
+        }
+        else if (nextFactory != null) {
+            return nextFactory.getVariableResolver(name);
+        }
+        
+        throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
     }
 
     @Override

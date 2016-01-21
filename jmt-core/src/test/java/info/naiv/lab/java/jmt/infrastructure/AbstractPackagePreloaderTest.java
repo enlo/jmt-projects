@@ -36,24 +36,22 @@ public abstract class AbstractPackagePreloaderTest {
     public AbstractPackagePreloaderTest() {
     }
 
-    protected abstract AbstractPackagePreloader getPackagePreloader();
-
     /**
      * Test of addExcludePattern method, of class AbstractPackagePreloader.
      */
     @Test
-    public void testAddExcludePattern() {
-
-        String packageName = "info.naiv.lab.java.jmt.infrastructure.annotation";
-        AbstractPackagePreloader instance = getPackagePreloader();
-        instance.addPackage(packageName);
-        instance.addExcludePattern(".*StringTagOf$");
-        assertThat(instance.load(),
+public void testAddExcludePattern() {
+    
+    String packageName = "info.naiv.lab.java.jmt.infrastructure.annotation";
+    AbstractPackagePreloader instance = getPackagePreloader();
+    instance.addPackage(packageName);
+    instance.addExcludePattern(".*StringTagOf$");
+    assertThat(instance.load(),
                    containsInAnyOrder(
                            "info.naiv.lab.java.jmt.infrastructure.annotation.ClassTagOf",
                            "info.naiv.lab.java.jmt.infrastructure.annotation.IntegerTagOf",
                            "info.naiv.lab.java.jmt.infrastructure.annotation.TagOf"));
-    }
+}
 
     /**
      * Test of addPackage method, of class AbstractPackagePreloader.
@@ -99,5 +97,7 @@ public abstract class AbstractPackagePreloaderTest {
                            "info.naiv.lab.java.jmt.infrastructure.annotation.StringTagOf",
                            "info.naiv.lab.java.jmt.infrastructure.annotation.TagOf"));
     }
+
+    protected abstract AbstractPackagePreloader getPackagePreloader();
 
 }

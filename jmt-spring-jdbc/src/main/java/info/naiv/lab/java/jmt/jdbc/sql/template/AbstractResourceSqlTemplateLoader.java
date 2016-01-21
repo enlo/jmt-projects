@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
-import static info.naiv.lab.java.jmt.Misc.join;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.infrastructure.PackageResourceResolver;
 import info.naiv.lab.java.jmt.infrastructure.PackageResourceResolverFactory;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
@@ -100,7 +100,7 @@ public abstract class AbstractResourceSqlTemplateLoader extends AbstractSqlTempl
     private Set<String> filterByCategory(Set<String> templates, String category) {
         Set<String> filtered = new HashSet<>();
         for (String item : templates) {
-            if (item.startsWith(join(rootPackage, "/", category))) {
+            if (item.startsWith(arrayToString(rootPackage, "/", category))) {
                 filtered.add(item);
             }
         }

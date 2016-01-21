@@ -52,6 +52,13 @@ public class RangeTest {
     }
 
     /**
+     * Test of clone method, of class Range.
+     */
+    @Test
+    public void testClone() {
+    }
+
+    /**
      * Test of end method, of class Range.
      */
     @Test
@@ -61,6 +68,32 @@ public class RangeTest {
         Bound<Integer> ub = Bounds.closedUp(20);
         Range<Integer> r = new Range<>(ui, lb, ub);
         assertThat(r.end(), is(ub.getValue()));
+    }
+
+    /**
+     * Test of equals method, of class Range.
+     */
+    @Test
+    public void testEquals() {
+    }
+
+    /**
+     * Test of getLowerBound method, of class Range.
+     */
+    @Test
+    public void testGetLowerBound() {
+    }
+
+    /**
+     * Test of getMaxValue method, of class Range.
+     */
+    @Test
+    public void testGetMaxValue() {
+        IterationUnit<Integer> ui = StandardIterationUnits.INTEGER;
+        Bound<Integer> lb = Bounds.openLo(10);
+        Bound<Integer> ub = Bounds.openUp(20);
+        Range<Integer> r = new Range<>(ui, lb, ub);
+        assertThat(r.getMaxValue(), is(19));
     }
 
     /**
@@ -76,15 +109,45 @@ public class RangeTest {
     }
 
     /**
-     * Test of getMaxValue method, of class Range.
+     * Test of getUnit method, of class Range.
      */
     @Test
-    public void testGetMaxValue() {
-        IterationUnit<Integer> ui = StandardIterationUnits.INTEGER;
-        Bound<Integer> lb = Bounds.openLo(10);
-        Bound<Integer> ub = Bounds.openUp(20);
-        Range<Integer> r = new Range<>(ui, lb, ub);
-        assertThat(r.getMaxValue(), is(19));
+    public void testGetUnit() {
+    }
+
+    /**
+     * Test of getUpperBound method, of class Range.
+     */
+    @Test
+    public void testGetUpperBound() {
+    }
+
+    /**
+     * Test of hashCode method, of class Range.
+     */
+    @Test
+    public void testHashCode() {
+    }
+
+    /**
+     * Test of newLowerBound method, of class Range.
+     */
+    @Test
+    public void testNewLowerBound() {
+    }
+
+    /**
+     * Test of newUnit method, of class Range.
+     */
+    @Test
+    public void testNewUnit() {
+    }
+
+    /**
+     * Test of newUpperBound method, of class Range.
+     */
+    @Test
+    public void testNewUpperBound() {
     }
 
     /**
@@ -112,73 +175,10 @@ public class RangeTest {
     }
 
     /**
-     * Test of newUnit method, of class Range.
-     */
-    @Test
-    public void testNewUnit() {
-    }
-
-    /**
-     * Test of newUpperBound method, of class Range.
-     */
-    @Test
-    public void testNewUpperBound() {
-    }
-
-    /**
-     * Test of newLowerBound method, of class Range.
-     */
-    @Test
-    public void testNewLowerBound() {
-    }
-
-    /**
-     * Test of clone method, of class Range.
-     */
-    @Test
-    public void testClone() {
-    }
-
-    /**
-     * Test of equals method, of class Range.
-     */
-    @Test
-    public void testEquals() {
-    }
-
-    /**
-     * Test of hashCode method, of class Range.
-     */
-    @Test
-    public void testHashCode() {
-    }
-
-    /**
      * Test of toString method, of class Range.
      */
     @Test
     public void testToString() {
-    }
-
-    /**
-     * Test of getUnit method, of class Range.
-     */
-    @Test
-    public void testGetUnit() {
-    }
-
-    /**
-     * Test of getLowerBound method, of class Range.
-     */
-    @Test
-    public void testGetLowerBound() {
-    }
-
-    /**
-     * Test of getUpperBound method, of class Range.
-     */
-    @Test
-    public void testGetUpperBound() {
     }
 
 }

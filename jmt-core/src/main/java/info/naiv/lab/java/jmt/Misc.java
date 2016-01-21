@@ -4,7 +4,6 @@ import info.naiv.lab.java.jmt.iterator.FlatIterableIterator;
 import info.naiv.lab.java.jmt.iterator.MappingIterator;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
@@ -13,8 +12,11 @@ import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
+import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.io.IOException;
+import java.io.InputStream;
 import static java.lang.Character.isSpaceChar;
 import static java.lang.Character.isWhitespace;
 import java.lang.reflect.Array;
@@ -38,9 +40,37 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 
 @Slf4j
 public abstract class Misc {
+
+    /**
+     * リストにオブジェクトが存在しない場合追加する.
+     *
+     * @param <T> 要素の型
+     * @param list リスト
+     * @param obj 追加したいオブジェクト
+     * @return 追加した場合 true.
+     */
+    public static <T> boolean addIfNotFound(Collection<T> list, T obj) {
+        if (list == null) {
+            return false;
+        }
+        for (T item : list) {
+            if (item.equals(obj)) {
+                return false;
+            }
+        }
+        return list.add(obj);
+    }
+
+    public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
+        for (int i = 0; i < n && iter.hasNext(); i++) {
+            iter.next();
+        }
+        return iter;
+    }
 
     /**
      * 引数 array が配列だった場合、Object[] を戻す. <br>
@@ -69,33 +99,6 @@ public abstract class Misc {
             }
         }
         return result;
-    }
-
-    /**
-     * リストにオブジェクトが存在しない場合追加する.
-     *
-     * @param <T> 要素の型
-     * @param list リスト
-     * @param obj 追加したいオブジェクト
-     * @return 追加した場合 true.
-     */
-    public static <T> boolean addIfNotFound(Collection<T> list, T obj) {
-        if (list == null) {
-            return false;
-        }
-        for (T item : list) {
-            if (item.equals(obj)) {
-                return false;
-            }
-        }
-        return list.add(obj);
-    }
-
-    public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
-        for (int i = 0; i < n && iter.hasNext(); i++) {
-            iter.next();
-        }
-        return iter;
     }
 
     /**
@@ -168,6 +171,16 @@ public abstract class Misc {
      */
     public static <T> boolean equals(T lhs, T rhs) {
         return Objects.equals(lhs, rhs);
+    }
+
+    @ReturnNonNull
+    public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
+        return new Iterable<T>() {
+            @Override
+            public Iterator<T> iterator() {
+                return new FlatIterableIterator<>(items);
+            }
+        };
     }
 
     public static <T> T getFirst(Iterable<T> iterable) {
@@ -384,19 +397,9 @@ public abstract class Misc {
      * @return 連結された文字列.
      */
     @ReturnNonNull
-    public static String join(Iterable<?> items, String delim) {
+    public static
+            String join(Iterable<?> items, String delim) {
         return (StringJoiner.valueOf(delim)).join(items).toString();
-    }
-
-    /**
-     * 文字列連結.
-     *
-     * @param items 連結する項目
-     * @return 連結された文字列.
-     */
-    @ReturnNonNull
-    public static String join(Object... items) {
-        return arrayToString(items);
     }
 
     /**
@@ -413,8 +416,7 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static <Dest extends Collection<R>, R, T>
-            Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper)
-            throws IllegalArgumentException {
+            Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
         nonNull(dest, "dest");
         nonNull(mapper, "mapper");
         if (source != null) {
@@ -426,8 +428,7 @@ public abstract class Misc {
     }
 
     @ReturnNonNull
-    public static <T, U>
-            Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
+    public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
         return new Iterable<U>() {
             @Override
             public Iterator<U> iterator() {
@@ -488,16 +489,6 @@ public abstract class Misc {
     public static <R, T> List<R> map(List<T> source, Function1<T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
-    }
-
-    @ReturnNonNull
-    public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
-        return new Iterable<T>() {
-            @Override
-            public Iterator<T> iterator() {
-                return new FlatIterableIterator<>(items);
-            }
-        };
     }
 
     /**
@@ -605,6 +596,20 @@ public abstract class Misc {
         }
         Charset cs = CharsetMap.get(charset);
         return text.getBytes(cs);
+    }
+
+    @ReturnNonNull
+    public static byte[] toByteArray(Resource resource) {
+        if (resource == null) {
+            return new byte[]{};
+        }
+        try (InputStream io = resource.getInputStream()) {
+            return NIOUtils.toByteArray(io);
+        }
+        catch (IOException ex) {
+            logger.warn("resource open failed.", ex);
+            return new byte[]{};
+        }
     }
 
     /**

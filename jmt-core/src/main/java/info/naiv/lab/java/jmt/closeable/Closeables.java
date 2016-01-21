@@ -34,13 +34,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Closeables {
     
-    public static void nonThrowClose(AutoCloseable object) {
-        Exception e = close(object);
-        if (e != null) {
-            logger.trace("close failed.", e);
-        }
-    }
-
     /**
      * close.
      *
@@ -78,7 +71,7 @@ public class Closeables {
      * @return {@link CloseableLock}
      */
     @ReturnNonNull
-    public static CloseableLock lock(Lock lock) {
+    public static  CloseableLock lock(Lock lock) {
         return CloseableLock.lock(lock);
     }
 
@@ -96,6 +89,13 @@ public class Closeables {
         }
         else {
             return lock(lock);
+        }
+    }
+
+    public static void nonThrowClose(AutoCloseable object) {
+        Exception e = close(object);
+        if (e != null) {
+            logger.trace("close failed.", e);
         }
     }
     

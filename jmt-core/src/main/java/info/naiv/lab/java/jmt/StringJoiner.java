@@ -33,10 +33,10 @@ import info.naiv.lab.java.jmt.mark.ThreadSafety;
 @ThreadSafety
 public class StringJoiner extends AbstractStringJoiner<Object> {
 
-    public static final StringJoiner SIMPLE = new StringJoiner();
     public static final StringJoiner COMMADELIMITED = new StringJoiner(",");
     public static final StringJoiner DOTTED = new StringJoiner(".");
     public static final StringJoiner HYPHENATED = new StringJoiner("-");
+    public static final StringJoiner SIMPLE = new StringJoiner();
     public static final StringJoiner SLASHED = new StringJoiner("/");
 
     public static StringJoiner valueOf(String delim) {

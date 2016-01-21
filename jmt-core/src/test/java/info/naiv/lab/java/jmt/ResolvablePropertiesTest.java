@@ -44,12 +44,13 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest({System.class, ResolvableProperties.class})
 public class ResolvablePropertiesTest {
 
-    public ResolvablePropertiesTest() {
-    }
 
     Properties prop;
 
     ResolvableProperties testTarget;
+
+    public ResolvablePropertiesTest() {
+    }
 
     @Before
     public void setup() {
@@ -68,28 +69,36 @@ public class ResolvablePropertiesTest {
     }
 
     /**
-     * Test of getProperty method, of class ResolvableProperties.
+     * Test of fix method, of class ResolvableProperties.
      */
     @Test
-    public void testGetProperty_String_String() {
-
+    public void testFix() {
         ResolvableProperties p = testTarget;
-
-        assertThat(p.getProperty("itemName", "none"), is("@property"));
-        assertThat(p.getProperty("itemNameOther", "none"), is("none"));
-        assertThat(p.getProperty("itemNameOther", null), is(nullValue()));
-
-        assertThat(p.getProperty("itemName1", "none"), is("@systemProp"));
-        assertThat(p.getProperty("itemName2", "none"), is("@env"));
-        assertThat(p.getProperty("itemName3", "none"), is("${itemNameOther}"));
-
-        assertThat(p.getProperty("itemNameOther", "${itemName1}"), is("@systemProp"));
-        assertThat(p.getProperty("itemNameOther", "${itemName2}"), is("@env"));
-        assertThat(p.getProperty("itemNameOther", "${itemName3}"), is("${itemNameOther}"));
-
+        
+        Properties fixed = p.fix();
+        
+        assertThat(fixed.getProperty("itemName"), is("@property"));
+        assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
+        
+        assertThat(fixed.getProperty("itemName", "none"), is("@property"));
+        assertThat(fixed.getProperty("itemNameOther", "none"), is("none"));
+        assertThat(fixed.getProperty("itemNameOther", null), is(nullValue()));
+        
+        assertThat(fixed.getProperty("itemName1"), is("@systemProp"));
+        assertThat(fixed.getProperty("itemName2"), is("@env"));
+        assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
+        
         p.setProperty("itemNameOther", "");
-        assertThat(p.getProperty("itemName3", "none"), is(""));
-        assertThat(p.getProperty("itemNameOther", "${itemName3}"), is(""));
+        assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
+        assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
+        
+        assertThat(fixed.getProperty("itemNameOther", "${itemName1}"), is("${itemName1}"));
+        assertThat(fixed.getProperty("itemNameOther", "${itemName2}"), is("${itemName2}"));
+        assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
+        
+        assertThat(fixed.getProperty("itemName3", "none"), is("${itemNameOther}"));
+        assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
+
     }
 
     /**
@@ -114,36 +123,27 @@ public class ResolvablePropertiesTest {
     }
 
     /**
-     * Test of fix method, of class ResolvableProperties.
+     * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
-    public void testFix() {
+    public void testGetProperty_String_String() {
         ResolvableProperties p = testTarget;
-
-        Properties fixed = p.fix();
-
-        assertThat(fixed.getProperty("itemName"), is("@property"));
-        assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
-
-        assertThat(fixed.getProperty("itemName", "none"), is("@property"));
-        assertThat(fixed.getProperty("itemNameOther", "none"), is("none"));
-        assertThat(fixed.getProperty("itemNameOther", null), is(nullValue()));
-
-        assertThat(fixed.getProperty("itemName1"), is("@systemProp"));
-        assertThat(fixed.getProperty("itemName2"), is("@env"));
-        assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
-
+        
+        assertThat(p.getProperty("itemName", "none"), is("@property"));
+        assertThat(p.getProperty("itemNameOther", "none"), is("none"));
+        assertThat(p.getProperty("itemNameOther", null), is(nullValue()));
+        
+        assertThat(p.getProperty("itemName1", "none"), is("@systemProp"));
+        assertThat(p.getProperty("itemName2", "none"), is("@env"));
+        assertThat(p.getProperty("itemName3", "none"), is("${itemNameOther}"));
+        
+        assertThat(p.getProperty("itemNameOther", "${itemName1}"), is("@systemProp"));
+        assertThat(p.getProperty("itemNameOther", "${itemName2}"), is("@env"));
+        assertThat(p.getProperty("itemNameOther", "${itemName3}"), is("${itemNameOther}"));
+        
         p.setProperty("itemNameOther", "");
-        assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
-        assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
-
-        assertThat(fixed.getProperty("itemNameOther", "${itemName1}"), is("${itemName1}"));
-        assertThat(fixed.getProperty("itemNameOther", "${itemName2}"), is("${itemName2}"));
-        assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
-
-        assertThat(fixed.getProperty("itemName3", "none"), is("${itemNameOther}"));
-        assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
-
+        assertThat(p.getProperty("itemName3", "none"), is(""));
+        assertThat(p.getProperty("itemNameOther", "${itemName3}"), is(""));
     }
 
 }

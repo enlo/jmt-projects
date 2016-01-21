@@ -79,7 +79,6 @@ public class RopeTest {
      */
     @Test
     public void testCompareTo() {
-        System.out.println("compareTo");
         String[] source = {"ABC", "abc", "cdef", "1234"};
         for (String s : source) {
             Rope l = Rope.valueOf(s);
@@ -206,7 +205,6 @@ public class RopeTest {
      */
     @Test
     public void testGetBreakIterator() {
-        System.out.println("getBreakIterator");
         Rope instance = new Rope("あいう");
         Object iterType = BreakIterator.getCharacterInstance().getClass();
         BreakIterator result = instance.getBreakIterator();

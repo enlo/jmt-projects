@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.iterator;
 
 import info.naiv.lab.java.jmt.IterationUnit;
 import java.util.Iterator;
-import lombok.EqualsAndHashCode;
 
 /**
  *

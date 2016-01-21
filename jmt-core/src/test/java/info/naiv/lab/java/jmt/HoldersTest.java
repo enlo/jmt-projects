@@ -42,30 +42,8 @@ import static org.mockito.Mockito.mock;
 @RunWith(Theories.class)
 public class HoldersTest {
 
-    public HoldersTest() {
-    }
-
-    public static class Fixture {
-
-        public Object expected;
-        public Holder<?> holder;
-        public Class<?> clazz;
-
-        public Fixture(Object expected, Holder<?> holder, Class<?> clazz) {
-            this.expected = expected;
-            this.holder = holder;
-            this.clazz = clazz;
-        }
-    }
 
     public static Holder holder;
-
-    @BeforeClass
-    public static void setupClass() {
-        holder = mock(Holder.class);
-        Mockito.when(holder.getContent()).thenReturn(1);
-        Mockito.when(holder.getContentType()).thenReturn(Integer.class);
-    }
 
     @DataPoints("as")
     public static Fixture[] asAsFixtures() {
@@ -85,6 +63,16 @@ public class HoldersTest {
             new Fixture(1, holder, Integer.class),
             new Fixture(null, holder, Long.class),};
         return fixtures;
+    }
+
+    @BeforeClass
+    public static void setupClass() {
+        holder = mock(Holder.class);
+        Mockito.when(holder.getContent()).thenReturn(1);
+        Mockito.when(holder.getContentType()).thenReturn(Integer.class);
+    }
+
+    public HoldersTest() {
     }
 
     /**
@@ -124,5 +112,18 @@ public class HoldersTest {
     @Test(expected = IllegalArgumentException.class)
     public void testOf02() {
         Holders.of(null);
+    }
+
+    public static class Fixture {
+        public Class<?> clazz;
+
+        public Object expected;
+        public Holder<?> holder;
+
+        public Fixture(Object expected, Holder<?> holder, Class<?> clazz) {
+            this.expected = expected;
+            this.holder = holder;
+            this.clazz = clazz;
+        }
     }
 }

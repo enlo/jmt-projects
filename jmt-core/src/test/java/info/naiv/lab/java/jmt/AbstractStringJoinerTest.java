@@ -34,8 +34,6 @@ import org.junit.Test;
  */
 public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuilder, T> {
 
-    public AbstractStringJoinerTest() {
-    }
 
     final Joiner.Adder<StringBuilder, T> ADDER1 = new Joiner.Adder<StringBuilder, T>() {
         @Override
@@ -50,6 +48,14 @@ public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuild
             return obj;
         }
     };
+
+    public AbstractStringJoinerTest() {
+    }
+
+    @Test
+    public void testCreateResult() {
+        assertThat(new AbstractStringJoinerImpl(ADDER1).createResult(), is(not(nullValue())));
+    }
 
     @Test(expected = IllegalArgumentException.class)
     public void testCtor01() {
@@ -72,11 +78,6 @@ public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuild
     }
 
     @Test
-    public void testCreateResult() {
-        assertThat(new AbstractStringJoinerImpl(ADDER1).createResult(), is(not(nullValue())));
-    }
-
-    @Test
     public void testGetFirst() {
         Joiner.Adder<StringBuilder, T> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
         assertThat(addr, sameInstance(ADDER1));
@@ -90,11 +91,11 @@ public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuild
     
     private class AbstractStringJoinerImpl extends AbstractStringJoiner<T> {
 
-        public AbstractStringJoinerImpl(Adder<StringBuilder, T> first, Adder<StringBuilder, T> more) {
+        AbstractStringJoinerImpl(Adder<StringBuilder, T> first, Adder<StringBuilder, T> more) {
             super(first, more);
         }
 
-        public AbstractStringJoinerImpl(Adder<StringBuilder, T> adder) {
+        AbstractStringJoinerImpl(Adder<StringBuilder, T> adder) {
             super(adder);
         }
     }

@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.concurrent;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -42,9 +41,14 @@ public class WaitForZeroTest {
     public WaitForZeroTest() {
     }
 
+    /**
+     * Test of countDown method, of class WaitForZero.
+     */
     @Test
-    public void testCtor() {
+    public void testCountDown() {
         WaitForZero w4z = new WaitForZero();
+        w4z.count.register();
+        w4z.countDown();
         assertThat(w4z.await(), is(true));
     }
 
@@ -59,14 +63,9 @@ public class WaitForZeroTest {
         assertThat(w4z.await(), is(true));
     }
 
-    /**
-     * Test of countDown method, of class WaitForZero.
-     */
     @Test
-    public void testCountDown() {
+    public void testCtor() {
         WaitForZero w4z = new WaitForZero();
-        w4z.count.register();
-        w4z.countDown();
         assertThat(w4z.await(), is(true));
     }
 

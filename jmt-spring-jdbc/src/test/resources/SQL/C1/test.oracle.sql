@@ -1,0 +1,1 @@
+select * from Emploee where id = @bind{id} and rownum = 1

@@ -196,12 +196,12 @@ public class ClassicDateUtilsTest {
      * Test of createCalendar method, of class ClassicDateUtils.
      */
     @Test
-public void testCreateCalendar_3args() {
-    Calendar actual = ClassicDateUtils.createCalendar(2014, 12, 11);
-    Calendar expected = new GregorianCalendar(2014, Calendar.DECEMBER, 11);
-    expected.setLenient(false);
-    assertThat(actual, is(expected));
-}
+    public void testCreateCalendar_3args() {
+        Calendar actual = ClassicDateUtils.createCalendar(2014, 12, 11);
+        Calendar expected = new GregorianCalendar(2014, Calendar.DECEMBER, 11);
+        expected.setLenient(false);
+        assertThat(actual, is(expected));
+    }
 
     @Test
     public void testCreateCalendar_3args_Ctor() {
@@ -430,10 +430,10 @@ public void testCreateCalendar_3args() {
     /**
      * Test of getCurrentDateProvider method, of class ClassicDateUtils.
      */
-@Test
-public void testGetCurrentDateProvider() {
-    CurrentDateProvider result = ClassicDateUtils.getCurrentDateProvider();
-    assertThat(result, is(sameInstance(currentDateProvider)));
+    @Test
+    public void testGetCurrentDateProvider() {
+        CurrentDateProvider result = ClassicDateUtils.getCurrentDateProvider();
+        assertThat(result, is(sameInstance(currentDateProvider)));
     }
 
     /**
@@ -604,7 +604,7 @@ public void testGetCurrentDateProvider() {
         Calendar now = Calendar.getInstance();
         Calendar expected = (Calendar) now.clone();
         expected.set(field, in.get(field));
-        
+
         assertThat(ClassicDateUtils.copyFields(now, in, field), is(expected));
     }
 

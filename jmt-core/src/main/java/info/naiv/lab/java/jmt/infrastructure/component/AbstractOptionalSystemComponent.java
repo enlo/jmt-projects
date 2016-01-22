@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.infrastructure.component;
 
+import info.naiv.lab.java.jmt.Misc;
 import static info.naiv.lab.java.jmt.Misc.isLoadable;
 import lombok.extern.slf4j.Slf4j;
 
@@ -57,22 +58,15 @@ public abstract class AbstractOptionalSystemComponent implements OptionalSystemC
     }
 
     protected final SystemComponent createComponent(String className) {
-        try {
-            String realClassName = resolveClassName(className);
-            if (realClassName == null) {
-                return null;
-            }
-            return createInstance(realClassName);
-        }
-        catch (IllegalAccessException | ClassNotFoundException |
-               InstantiationException | RuntimeException ex) {
-            logger.error("instantiation failed. {}", ex);
+        String realClassName = resolveClassName(className);
+        if (realClassName == null) {
             return null;
         }
+        return createInstance(realClassName);
     }
 
-    protected SystemComponent createInstance(String className) throws InstantiationException, IllegalAccessException, ClassNotFoundException {
-        return (SystemComponent) Class.forName(className).newInstance();
+    protected SystemComponent createInstance(String className) {
+        return (SystemComponent) Misc.newInstance(className).orElse(null);
     }
 
     protected abstract Iterable<String> getTargetClasses();

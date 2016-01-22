@@ -23,7 +23,10 @@
  */
 package info.naiv.lab.java.jmt.io;
 
+import info.naiv.lab.java.jmt.Misc;
+import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
+import java.nio.file.Watchable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -44,6 +47,16 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     private ResourceRepository parent;
 
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
+
+    @Override
+    public Optional<Watchable> getWatchable() {
+        return Optional.EMPTY;
+    }
+
+    @Override
+    public Optional<Watchable> getWatchable(String category) {
+        return Optional.EMPTY;
+    }
 
     @Override
     public ResourceRepository getParent() {
@@ -99,5 +112,27 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     protected abstract String resolveLocation(String category, String name) throws IOException;
 
     protected abstract Map<String, String> resolveLocations(String category, String globPattern) throws IOException;
+
+    @Override
+    public Map<String, Resource> getResources(String category, FilenamePatternFilter filter) throws IOException {
+        Map<String, Resource> source = getResources(category);
+        Map<String, Resource> result = new HashMap<>();
+        for (Resource res : source.values()) {
+            filter.filter(res, result);
+        }
+        return result;
+    }
+
+    @Override
+    public Resource getResource(String category, FilenamePatternFilter filter) throws IOException {
+        Map<String, Resource> source = getResources(category);
+        Map<String, Resource> result = new HashMap<>();
+        for (Resource res : source.values()) {
+            if (filter.filter(res, result)) {
+                break;
+            }
+        }
+        return Misc.getFirst(result.values());
+    }
 
 }

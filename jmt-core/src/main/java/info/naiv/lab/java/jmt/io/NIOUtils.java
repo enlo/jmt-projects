@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.io;
 
 import static info.naiv.lab.java.jmt.Arguments.lessThan;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import info.naiv.lab.java.jmt.Misc;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.ByteArrayOutputStream;
@@ -52,7 +53,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -148,25 +148,15 @@ public class NIOUtils {
      * @return
      */
     public static Path findByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension, boolean ignoreCase) {
-        StringBuilder partsWithSuffix = new StringBuilder();
-        StringBuilder partsNoSuffix = new StringBuilder();
-        buildPatterns(name, partsWithSuffix, partsNoSuffix, suffix, extension);
-        Pattern filenameWithSuffix = makePattern(partsWithSuffix, ignoreCase);
-        Pattern filenameNoSuffix = makePattern(partsNoSuffix, ignoreCase);
-        Path foundNoSuffix = null;
+        SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, suffix, extension, ignoreCase);
+        Map<String, Path> founds = new HashMap<>();
         for (String item : list) {
             Path filepath = Paths.get(item);
-            String filename = filepath.getFileName().toString();
-            if (filenameWithSuffix.matcher(filename).find()) {
+            if (filter.filter(filepath, founds)) {
                 return filepath;
             }
-            if (foundNoSuffix == null) {
-                if (filenameNoSuffix.matcher(filename).find()) {
-                    foundNoSuffix = filepath;
-                }
-            }
         }
-        return foundNoSuffix;
+        return Misc.getFirst(founds.values());
     }
 
     public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension) {
@@ -185,26 +175,11 @@ public class NIOUtils {
      * @return
      */
     public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension, boolean ignoreCase) {
-        StringBuilder partsWithSuffix = new StringBuilder();
-        StringBuilder partsNoSuffix = new StringBuilder();
-        buildPatterns(name, partsWithSuffix, partsNoSuffix, suffix, extension);
-        Pattern filenameWithSuffix = makePattern(partsWithSuffix, ignoreCase);
-        Pattern filenameNoSuffix = makePattern(partsNoSuffix, ignoreCase);
+        SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, suffix, extension, ignoreCase);
         Map<String, Path> founds = new HashMap<>();
         for (String item : list) {
             Path filepath = Paths.get(item);
-            String filename = filepath.getFileName().toString();
-            Matcher m = filenameWithSuffix.matcher(filename);
-            if (m.find()) {
-                founds.put(m.group(1), filepath);
-            }
-            m = filenameNoSuffix.matcher(filename);
-            if (m.find()) {
-                String key = m.group(1);
-                if (!founds.containsKey(key)) {
-                    founds.put(key, filepath);
-                }
-            }
+            filter.filter(filepath, founds);
         }
         return founds.values();
     }

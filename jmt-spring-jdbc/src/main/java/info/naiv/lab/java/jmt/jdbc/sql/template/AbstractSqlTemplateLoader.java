@@ -24,6 +24,8 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import info.naiv.lab.java.jmt.jdbc.sql.RuntimeSQLException;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -38,7 +40,6 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
-
     private SqlTemplateLoader parentLoader;
     @Getter
     @Setter
@@ -51,24 +52,23 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
     }
 
     @Override
-    public final void initialize() {
-        doInitialize();
-        initialized.set(true);
-    }
-
-    @Override
     public final SqlTemplate load(String category, String name) {
         return load(category, name, StandardCharsets.UTF_8);
     }
 
     @Override
     public final SqlTemplate load(String category, String name, Charset charset) {
-        needInitialize();
-        SqlTemplate st = doLoad(category, name, charset);
-        if (st == null && parentLoader != null) {
-            st = parentLoader.load(category, name, charset);
+        try {
+            needInitialize();
+            SqlTemplate st = doLoad(category, name, charset);
+            if (st == null && parentLoader != null) {
+                st = parentLoader.load(category, name, charset);
+            }
+            return st;
         }
-        return st;
+        catch (IOException ex) {
+            throw new RuntimeSQLException("template load failed.", ex);
+        }
     }
 
     @Override
@@ -78,12 +78,17 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
 
     @Override
     public final Iterable<SqlTemplate> loadCategory(String category, Charset charset) {
-        needInitialize();
-        Iterable<SqlTemplate> itr = doLoadCategory(category, charset);
-        if (isEmpty(itr) && parentLoader != null) {
-            itr = parentLoader.loadCategory(category, charset);
+        try {
+            needInitialize();
+            Iterable<SqlTemplate> itr = doLoadCategory(category, charset);
+            if (isEmpty(itr) && parentLoader != null) {
+                itr = parentLoader.loadCategory(category, charset);
+            }
+            return itr;
         }
-        return itr;
+        catch (IOException ex) {
+            throw new RuntimeSQLException("template load failed.", ex);
+        }
     }
 
     @Override
@@ -93,11 +98,13 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
 
     protected abstract SqlTemplate doFromString(String template);
 
-    protected abstract void doInitialize();
+    protected void initialize() {
 
-    protected abstract SqlTemplate doLoad(String category, String name, Charset charset);
+    }
 
-    protected abstract Iterable<SqlTemplate> doLoadCategory(String category, Charset charset);
+    protected abstract SqlTemplate doLoad(String category, String name, Charset charset) throws IOException;
+
+    protected abstract Iterable<SqlTemplate> doLoadCategory(String category, Charset charset) throws IOException;
 
     protected void needInitialize() {
         if (initialized.compareAndSet(false, true)) {

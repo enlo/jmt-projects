@@ -15,6 +15,7 @@ import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.Character.isSpaceChar;
@@ -183,6 +184,13 @@ public abstract class Misc {
         };
     }
 
+    /**
+     * 最初の項目または null を戻す.
+     *
+     * @param <T>
+     * @param iterable
+     * @return 最初の項目. 空なら null.
+     */
     public static <T> T getFirst(Iterable<T> iterable) {
         if (iterable != null) {
             for (T i : iterable) {
@@ -543,6 +551,63 @@ public abstract class Misc {
     @ReturnNonNull
     public static <T> Iterable<T> repeat(int repeatMax, T value) {
         return new Repeater<>(repeatMax, value);
+    }
+
+    /**
+     * クラスを読み込む.
+     *
+     * @param className クラス名
+     * @return クラスをOptionalでラップしたもの.
+     */
+    public static Optional<Class<?>> resolveClassName(String className) {
+        try {
+            return Optional.<Class<?>>ofNullable(Class.forName(className));
+        }
+        catch (Throwable ex) {
+            logger.debug("class load failed. ", ex);
+            return Optional.<Class<?>>empty();
+        }
+    }
+
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
+            return null;
+        }
+    }
+
+    public static <T> Optional<T> newInstance(Optional<Class<? extends T>> clazz) {
+        if (clazz.isPresent()) {
+            return Optional.ofNullable(newInstance(clazz.get()));
+        }
+        else {
+            return Optional.<T>empty();
+        }
+    }
+
+    public static Optional<Object> newInstance(String className) {
+        Optional<Class<?>> clazz = resolveClassName(className);
+        return newInstance(clazz);
+    }
+
+    /**
+     * クラスを読み込む.
+     *
+     * @param className クラス名
+     * @param initialize 初期化するかどうか.
+     * @param classLoader クラスローダー.
+     * @return クラスをOptionalでラップしたもの.
+     */
+    public static Optional<Class<?>> resolveClassName(String className, boolean initialize, ClassLoader classLoader) {
+        try {
+            return Optional.<Class<?>>ofNullable(Class.forName(className, initialize, classLoader));
+        }
+        catch (Throwable ex) {
+            logger.debug("class load failed. ", ex);
+            return Optional.<Class<?>>empty();
+        }
     }
 
     /**

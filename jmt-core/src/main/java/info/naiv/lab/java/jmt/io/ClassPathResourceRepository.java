@@ -40,7 +40,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  * @author enlo
  */
 public class ClassPathResourceRepository extends AbstractResourceRepository {
-    private static final StringJoiner joiner = StringJoiner.DOTTED;
+    private static final StringJoiner joiner = StringJoiner.valueOf("/");
 
     @Getter
     private String rootPath;
@@ -49,17 +49,6 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
 
     public ClassPathResourceRepository() {
         resolver = new PathMatchingResourcePatternResolver();
-    }
-
-    @Override
-    public Optional<Watchable> getWatchable() {
-        return Optional.<Watchable>empty();
-    }
-
-
-    @Override
-    public Optional<Watchable> getWatchable(String category) {
-        return Optional.<Watchable>empty();
     }
 
     public final void setRootPath(String location) {

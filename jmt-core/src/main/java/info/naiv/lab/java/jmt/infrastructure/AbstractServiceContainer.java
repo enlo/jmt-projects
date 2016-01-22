@@ -29,6 +29,7 @@ import static info.naiv.lab.java.jmt.Misc.addIfNotFound;
 import static info.naiv.lab.java.jmt.closeable.Closeables.closeAll;
 import info.naiv.lab.java.jmt.closeable.Guard;
 import info.naiv.lab.java.jmt.closeable.ReverseGuard;
+import info.naiv.lab.java.jmt.infrastructure.annotation.ServicePriority;
 import info.naiv.lab.java.jmt.infrastructure.component.ComponentServiceConnection;
 import info.naiv.lab.java.jmt.infrastructure.component.ServiceComponent;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
@@ -36,9 +37,12 @@ import java.util.*;
 import static java.util.Collections.unmodifiableSet;
 import static java.util.UUID.randomUUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.annotation.OrderUtils;
 
 /**
- * 抽象サービスコンテナ. 内部で CopyOnWriteArrayList を利用することで、 登録・削除時のみ同期をとり、読み取り時は同期しない.
+ * 抽象サービスコンテナ. <br>
+ * 内部で CopyOnWriteArrayList を利用することで、登録・削除時のみ同期をとる.
  *
  * @author enlo
  */
@@ -87,12 +91,12 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
 
     @Override
     public final ServiceConnection registerService(Object service) throws IllegalArgumentException {
-        return registerService(1, service);
+        return registerService(getAnnotatedPriority(service), service);
     }
 
     @Override
     public final ServiceConnection registerService(Object service, Tag tag) throws IllegalArgumentException {
-        return registerService(1, service, tag);
+        return registerService(getAnnotatedPriority(service), service, tag);
     }
 
     @Override
@@ -109,14 +113,19 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
          登録時は同期をとる.
          */
         try (Guard rg = readGuard()) {
+            ServiceConnection connection = null;
             final AbstractServiceConnection found = getAndUpdate(service, priority, tag);
             if (found != null) {
-                return found;
+                connection = found;
             }
 
             try (Guard ug = new ReverseGuard(rg, true);
                  Guard wg = writeGuard()) {
-                return internalRegisterService(priority, service, tag);
+                if (connection == null) {
+                    connection = internalRegisterService(priority, service, tag);
+                }
+                sortConnections();
+                return connection;
             }
         }
     }
@@ -163,6 +172,14 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
 
     public ThreadSafeServiceContainer toThreadSafe() {
         return new ThreadSafeServiceContainer(this.defaultProvider, new ArrayList<>(this.connections));
+    }
+
+    private void sortConnections() {
+        AbstractServiceConnection[] a = new AbstractServiceConnection[connections.size()];
+        connections.toArray(a);
+        Arrays.sort(a, PriorityComparator.INSTANCE);
+        this.connections.clear();
+        this.connections.addAll(Arrays.asList(a));
     }
 
     @ReturnNonNull
@@ -245,5 +262,18 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
 
     @ReturnNonNull
     protected abstract Guard writeGuard();
+
+    protected int getAnnotatedPriority(Object obj) {
+        if (obj != null) {
+            ServicePriority pa = AnnotationUtils.findAnnotation(obj.getClass(), ServicePriority.class);
+            if (pa != null) {
+                return pa.value();
+            }
+            else {
+                return OrderUtils.getOrder(obj.getClass(), 1);
+            }
+        }
+        return 1;
+    }
 
 }

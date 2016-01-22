@@ -77,8 +77,7 @@ public class NIOUtilsTest {
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.ee.item")));
     }
-    
-    
+
     /**
      * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
      */
@@ -97,7 +96,7 @@ public class NIOUtilsTest {
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.item")));
     }
-    
+
     /**
      * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
      */
@@ -116,7 +115,7 @@ public class NIOUtilsTest {
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.ee.item")));
     }
-    
+
     /**
      * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
      */
@@ -136,8 +135,7 @@ public class NIOUtilsTest {
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.ddd.item")));
     }
-    
-    
+
     /**
      * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
      */
@@ -157,8 +155,7 @@ public class NIOUtilsTest {
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.ddd.item")));
     }
-    
-    
+
     /**
      * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
      */
@@ -171,9 +168,29 @@ public class NIOUtilsTest {
                 "aaa/bbb/ccc/ddd.gg.item",
                 "aaa/bbb/ccc/ddd.ddd.item");
 
-        String name = ".*";
+        String name = "\\w+";
         String suffix = "xx";
         String extension = ".*";
+        boolean ignoreCase = false;
+        Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
+        assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.item")));
+    }
+
+    /**
+     * Test of findByFilenameWithSuffixAndExtention method, of class NIOUtils.
+     */
+    @Test
+    public void testFindByFilenameWithSuffixAndExtention8() {
+
+        List<String> list = Arrays.asList(
+                "aaa/bbb/ccc/ddd.item",
+                "aaa/bbb/ccc/ddd1.item",
+                "aaa/bbb/ccc/ddd2.item",
+                "aaa/bbb/ccc/ddd3.item");
+
+        String name = "ddd";
+        String suffix = "";
+        String extension = "item";
         boolean ignoreCase = false;
         Path result = NIOUtils.findByFilenameWithSuffixAndExtention(list, name, suffix, extension, ignoreCase);
         assertThat(result, is(Paths.get("aaa/bbb/ccc/ddd.item")));

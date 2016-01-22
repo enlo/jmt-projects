@@ -79,6 +79,16 @@ public interface ResourceRepository {
     Resource getResource(String category, String name) throws IOException;
 
     /**
+     * リポジトリー内からリソースを取得する.
+     *
+     * @param category カテゴリー
+     * @param filter 名称フィルター.
+     * @return リソース.
+     * @throws IOException リソースの読み込みに失敗した場合など.
+     */
+    Resource getResource(String category, FilenamePatternFilter filter) throws IOException;
+
+    /**
      * リポジトリー内の特定カテゴリにある全リソースを取得する.
      *
      * @param category カテゴリー
@@ -96,4 +106,15 @@ public interface ResourceRepository {
      * @throws IOException リソースの読み込みに失敗した場合など.
      */
     Map<String, Resource> getResources(String category, String globPattern) throws IOException;
+
+    /**
+     * リポジトリー内の特定カテゴリにある全リソースを取得する.
+     *
+     * @param category カテゴリー
+     * @param filter フィルター.
+     * @return 名前別リソース.
+     * @throws IOException リソースの読み込みに失敗した場合など.
+     */
+    Map<String, Resource> getResources(String category, FilenamePatternFilter filter) throws IOException;
+
 }

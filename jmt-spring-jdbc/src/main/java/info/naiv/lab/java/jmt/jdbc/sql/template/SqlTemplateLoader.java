@@ -51,11 +51,6 @@ public interface SqlTemplateLoader {
     String getSuffix();
 
     /**
-     * 初期化
-     */
-    void initialize();
-
-    /**
      *
      * @param category
      * @param name

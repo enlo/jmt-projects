@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,40 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.io.NIOUtils;
-import info.naiv.lab.java.jmt.jdbc.sql.template.AbstractClassPathResourceSqlTemplateLoader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import java.util.UUID;
-import org.mvel2.templates.CompiledTemplate;
-import org.mvel2.templates.TemplateCompiler;
+import info.naiv.lab.java.jmt.fx.StringPredicate;
+import java.nio.file.Path;
+import java.util.Map;
 import org.springframework.core.io.Resource;
 
-/**
- *
- * @author enlo
- */
-public class ClassPathResourceMvelSqlTemplateLoader
-        extends AbstractClassPathResourceSqlTemplateLoader {
-
-    protected MvelSqlTemplate compile(String name, String template) {
-        CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        return new MvelSqlTemplate(name, ct);
-    }
+public class SimpleFilenamePatternFilter implements FilenamePatternFilter, StringPredicate {
 
     @Override
-    protected MvelSqlTemplate createSqlTemplateFromResource(String name, Resource resource, Charset charset) throws IOException {
-        try (InputStream is = resource.getInputStream()) {
-            return compile(name, NIOUtils.toString(is, charset));
+    public <T> boolean filter(String filename, T arg, Map<String, T> founds) {
+        if (test(filename)) {
+            founds.put(filename, arg);
+            return true;
         }
+        return false;
     }
 
     @Override
-    protected MvelSqlTemplate doFromString(String template) {
-        return compile(UUID.randomUUID().toString(), template);
+    public boolean filter(Path path, Map<String, ? super Path> founds) {
+        return filter(path.getFileName().toString(), path, founds);
+    }
+
+    @Override
+    public boolean filter(Resource resource, Map<String, ? super Resource> founds) {
+        return filter(resource.getFilename(), resource, founds);
+    }
+
+    @Override
+    public boolean test(String filename) {
+        return true;
     }
 
 }

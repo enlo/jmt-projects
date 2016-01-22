@@ -25,12 +25,14 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
+import info.naiv.lab.java.jmt.infrastructure.annotation.ServicePriority;
 import java.util.Objects;
 import static org.hamcrest.Matchers.*;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.core.annotation.Order;
 
 /**
  *
@@ -236,6 +238,69 @@ public abstract class AbstractServiceContainerTest {
      * Test of resolveService method, of class AbstractServiceContainer.
      */
     @Test
+    public void testResolveService_Class_priority() {
+        TestServiceImpl1 s1 = new TestServiceImpl1(1);
+        TestServiceImpl1 s2 = new TestServiceImpl1(2);
+        TestServiceImpl1 s3 = new TestServiceImpl1(3);
+
+        {
+            ServiceContainer container = createContainer();
+            container.registerService(1, s1);
+            container.registerService(2, s2);
+            container.registerService(3, s3);
+            assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s1)));
+        }
+        {
+            ServiceContainer container = createContainer();
+            container.registerService(2, s1);
+            container.registerService(1, s2);
+            container.registerService(3, s3);
+            assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
+        }
+        {
+            ServiceContainer container = createContainer();
+            container.registerService(3, s1);
+            container.registerService(2, s2);
+            container.registerService(1, s3);
+            assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s3)));
+        }
+
+    }
+
+    /**
+     * Test of resolveService method, of class AbstractServiceContainer.
+     */
+    @Test
+    public void testResolveService_Class_priority2() {
+        TestService s1 = new TestAnnotatedServiceImpl1();
+        TestService s2 = new TestAnnotatedServiceImpl2();
+
+        ServiceContainer container = createContainer();
+        container.registerService(s1);
+        container.registerService(s2);
+        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
+
+    }
+
+    /**
+     * Test of resolveService method, of class AbstractServiceContainer.
+     */
+    @Test
+    public void testResolveService_Class_priority3() {
+        TestService s1 = new TestAnnotatedServiceImpl3();
+        TestService s2 = new TestAnnotatedServiceImpl4();
+
+        ServiceContainer container = createContainer();
+        container.registerService(s1);
+        container.registerService(s2);
+        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
+
+    }
+
+    /**
+     * Test of resolveService method, of class AbstractServiceContainer.
+     */
+    @Test
     public void testResolveService_Class_Tag() {
         TestServiceImpl1 s1 = new TestServiceImpl1(1);
         ServiceContainer container = createContainer();
@@ -396,4 +461,35 @@ public abstract class AbstractServiceContainerTest {
         }
     }
 
+    @ServicePriority(2)
+    public static class TestAnnotatedServiceImpl1 extends AbstractTestService implements TestService {
+
+        public TestAnnotatedServiceImpl1() {
+            super(1, 1);
+        }
+    }
+
+    @ServicePriority(1)
+    public static class TestAnnotatedServiceImpl2 extends AbstractTestService implements TestService {
+
+        public TestAnnotatedServiceImpl2() {
+            super(2, 2);
+        }
+    }
+
+    @Order(2)
+    public static class TestAnnotatedServiceImpl3 extends AbstractTestService implements TestService {
+
+        public TestAnnotatedServiceImpl3() {
+            super(1, 1);
+        }
+    }
+
+    @Order(1)
+    public static class TestAnnotatedServiceImpl4 extends AbstractTestService implements TestService {
+
+        public TestAnnotatedServiceImpl4() {
+            super(2, 2);
+        }
+    }
 }

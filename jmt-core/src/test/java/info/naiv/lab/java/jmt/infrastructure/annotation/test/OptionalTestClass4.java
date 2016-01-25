@@ -31,5 +31,5 @@ import info.naiv.lab.java.jmt.infrastructure.annotation.OptionalService;
  */
 @OptionalService(dependOn = {"c.d.f", "e.f.g"})
 public class OptionalTestClass4 {
-    
+
 }

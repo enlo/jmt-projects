@@ -32,7 +32,7 @@ import java.util.Calendar;
  * @author enlo
  */
 public class DefaultCurrentDateProvider
-implements CurrentDateProvider, SystemComponent {
+        implements CurrentDateProvider, SystemComponent {
 
     @Override
     public Calendar getNow() {
@@ -44,5 +44,5 @@ implements CurrentDateProvider, SystemComponent {
         Calendar cal = Calendar.getInstance();
         return getDatePart(cal);
     }
-    
+
 }

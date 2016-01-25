@@ -39,7 +39,6 @@ import java.util.concurrent.TimeUnit;
 @ThreadSafety
 public class WaitForSet<T> extends AbstractAwaitable {
 
-    
     private final CountDownLatch cdl = new CountDownLatch(1);
     private T value;
 

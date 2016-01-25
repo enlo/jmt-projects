@@ -42,7 +42,6 @@ public class ComparableComparatorTest {
     public ComparableComparatorTest() {
     }
 
-    
     /**
      * Test of compare method, of class ComparableComparator.
      */

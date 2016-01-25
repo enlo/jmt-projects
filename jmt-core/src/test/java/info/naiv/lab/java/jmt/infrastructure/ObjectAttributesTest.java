@@ -1,4 +1,3 @@
-
 package info.naiv.lab.java.jmt.infrastructure;
 
 import java.util.HashMap;

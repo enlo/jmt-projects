@@ -28,5 +28,5 @@ package info.naiv.lab.java.jmt.infrastructure.preload.test1;
  * @author enlo
  */
 public class TestClass4 {
-    
+
 }

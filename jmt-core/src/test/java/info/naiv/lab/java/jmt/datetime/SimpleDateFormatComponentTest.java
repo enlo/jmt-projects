@@ -72,7 +72,7 @@ public class SimpleDateFormatComponentTest {
 
         SimpleDateFormat f1 = provider.resolveService(SimpleDateFormat.class, Tag.of("yyyyMMdd"));
         SimpleDateFormat f2 = provider.resolveService(SimpleDateFormat.class, Tag.of("yyyy-MM-dd"));
-        
+
         assertThat("yyyyMMdd", f1.format(date), is("20151012"));
         assertThat("yyyyMMdd", f2.format(date), is("2015-10-12"));
     }

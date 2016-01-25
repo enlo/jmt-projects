@@ -25,13 +25,14 @@ package info.naiv.lab.java.jmt.infrastructure.component;
 
 /**
  * オプションコンポーネントの読み込み.
- * 
+ *
  * @author enlo
  */
 public interface OptionalSystemComponent {
+
     /**
      * オプションコンポーネントの取得.
-     * 
+     *
      * @return コンポーネント. 読み込みできない場合は null
      */
     public SystemComponent loadOptionalComponent();

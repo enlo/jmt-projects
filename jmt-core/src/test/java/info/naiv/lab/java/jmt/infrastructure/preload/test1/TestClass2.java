@@ -31,5 +31,5 @@ import info.naiv.lab.java.jmt.infrastructure.annotation.PreloadTarget;
  */
 @PreloadTarget
 public class TestClass2 {
-    
+
 }

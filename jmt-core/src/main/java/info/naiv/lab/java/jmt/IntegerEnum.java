@@ -30,10 +30,10 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
  * @author enlo
  */
 public interface IntegerEnum {
-    
+
     int getValue();
-    
+
     @ReturnNonNull
     String getName();
-    
+
 }

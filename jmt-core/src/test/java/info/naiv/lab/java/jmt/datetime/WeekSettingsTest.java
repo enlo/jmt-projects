@@ -39,7 +39,6 @@ import org.junit.Test;
  */
 public class WeekSettingsTest {
 
-
     WeekSettings weekSettings;
 
     public WeekSettingsTest() {
@@ -112,6 +111,5 @@ public class WeekSettingsTest {
         int[] actual = newFirstDayOfWeek.getUnofficialHolidays();
         assertThat((Integer[]) ArrayUtils.toObject(actual), is(arrayContaining(Calendar.FRIDAY)));
     }
-    
 
 }

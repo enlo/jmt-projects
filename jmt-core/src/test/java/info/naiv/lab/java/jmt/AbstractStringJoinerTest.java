@@ -34,7 +34,6 @@ import org.junit.Test;
  */
 public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuilder, T> {
 
-
     final Joiner.Adder<StringBuilder, T> ADDER1 = new Joiner.Adder<StringBuilder, T>() {
         @Override
         public StringBuilder add(StringBuilder obj, T value, int idx) {
@@ -88,7 +87,7 @@ public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuild
         Joiner.Adder<StringBuilder, T> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();
         assertThat(more, sameInstance(ADDER2));
     }
-    
+
     private class AbstractStringJoinerImpl extends AbstractStringJoiner<T> {
 
         AbstractStringJoinerImpl(Adder<StringBuilder, T> first, Adder<StringBuilder, T> more) {

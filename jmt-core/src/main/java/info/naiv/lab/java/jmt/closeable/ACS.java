@@ -27,18 +27,17 @@ import info.naiv.lab.java.jmt.Holder;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 
 /**
- * try-with-resource によるリソースの開放を目的とした
- * インターフェイス.
- * 
+ * try-with-resource によるリソースの開放を目的とした インターフェイス.
+ *
  * @author enlo
- * @param  <T> type T
+ * @param <T> type T
  */
 public interface ACS<T> extends Holder<T>, AutoCloseable {
-  
+
     /**
-     * close 呼び出し.
-     * 発生した例外は実行時例外として処理される.
-     * @see AutoCloseable#close() 
+     * close 呼び出し. 発生した例外は実行時例外として処理される.
+     *
+     * @see AutoCloseable#close()
      * @throws RuntimeException close 呼び出し時に発生した例外.
      */
     @Override
@@ -46,6 +45,6 @@ public interface ACS<T> extends Holder<T>, AutoCloseable {
 
     @Override
     @ReturnNonNull
-    T getContent();    
-    
+    T getContent();
+
 }

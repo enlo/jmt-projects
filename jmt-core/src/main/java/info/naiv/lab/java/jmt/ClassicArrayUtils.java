@@ -103,7 +103,7 @@ public class ClassicArrayUtils {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static  <T extends Comparable<T>> boolean arrayContainsCompareEquals(T[] items, T valueToFind) {
+    public static <T extends Comparable<T>> boolean arrayContainsCompareEquals(T[] items, T valueToFind) {
         if (items == null) {
             return false;
         }
@@ -115,7 +115,7 @@ public class ClassicArrayUtils {
         return false;
     }
 
-    public static  boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
+    public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
@@ -132,7 +132,7 @@ public class ClassicArrayUtils {
         return true;
     }
 
-    public static  boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
+    public static boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
@@ -164,7 +164,6 @@ public class ClassicArrayUtils {
         }
         return true;
     }
-    
 
     /**
      *
@@ -208,7 +207,6 @@ public class ClassicArrayUtils {
         return array;
     }
 
-    
     @Value
     public static final class ArrayIterable<T> implements Iterable<T> {
 
@@ -249,6 +247,5 @@ public class ClassicArrayUtils {
         }
 
     }
-
 
 }

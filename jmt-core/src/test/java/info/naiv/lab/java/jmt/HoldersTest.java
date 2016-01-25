@@ -42,7 +42,6 @@ import static org.mockito.Mockito.mock;
 @RunWith(Theories.class)
 public class HoldersTest {
 
-
     public static Holder holder;
 
     @DataPoints("as")
@@ -115,6 +114,7 @@ public class HoldersTest {
     }
 
     public static class Fixture {
+
         public Class<?> clazz;
 
         public Object expected;

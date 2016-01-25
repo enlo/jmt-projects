@@ -34,10 +34,9 @@ import java.lang.reflect.Method;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 
-
 public class ServiceInjectionUtils {
 
-    public static  Tag findTag(FromServiceProvider anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static Tag findTag(FromServiceProvider anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (isNotEmpty(anno.value())) {
             return Tag.of(anno.value());
         }
@@ -54,7 +53,7 @@ public class ServiceInjectionUtils {
         }
         return null;
     }
-        
+
     public static <T> T getService(Class<T> clazz, InjectionPoint ip) {
         try {
             Annotated at = ip.getAnnotated();

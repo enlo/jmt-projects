@@ -77,6 +77,10 @@ public class OptionalServiceRegister {
         return result;
     }
 
+    public List<ServiceConnection> register(String scanPackage) {
+        return register(ServiceProviders.getSystemContainer(), scanPackage);
+    }
+
     protected boolean checkLoadable(String[] depends) {
         if (depends != null) {
             for (String depend : depends) {
@@ -86,9 +90,5 @@ public class OptionalServiceRegister {
             }
         }
         return true;
-    }
-
-    public List<ServiceConnection> register(String scanPackage) {
-        return register(ServiceProviders.getSystemContainer(), scanPackage);
     }
 }

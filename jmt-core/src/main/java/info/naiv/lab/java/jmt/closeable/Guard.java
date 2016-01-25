@@ -32,7 +32,7 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 public class Guard implements ACS<Guard> {
 
     public static final Guard EMPTY = new Guard();
-    
+
     @Override
     public final void close() throws RuntimeException {
         leave();
@@ -57,9 +57,9 @@ public class Guard implements ACS<Guard> {
 
     /**
      * 逆ガード
-     * 
+     *
      * @param doEnter enter するかどうか
-     * @return 
+     * @return
      */
     public Guard reverse(boolean doEnter) {
         return new ReverseGuard(this, doEnter);

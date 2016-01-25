@@ -102,7 +102,7 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
         else if (nextFactory != null) {
             return nextFactory.getVariableResolver(name);
         }
-        
+
         throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
     }
 

@@ -18,30 +18,28 @@ import org.mockito.MockitoAnnotations;
  * @author enlo
  */
 public class DelegatingAutoCloseableTest {
-    
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
-    
+
     @Mock
     Test1 test1;
-    
+
     public DelegatingAutoCloseableTest() {
     }
-    
+
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
-    
+
     @After
-    public void tearDown(){
+    public void tearDown() {
     }
 
     /**
@@ -64,7 +62,7 @@ public class DelegatingAutoCloseableTest {
         instance.close();
         verify(mock, times(1)).accept(test1);
     }
-    
+
     @Test(expected = IllegalArgumentException.class)
     public void testCtor() {
         DelegatingAutoCloseable<?> instance = new DelegatingAutoCloseable<>(new Object());
@@ -84,5 +82,5 @@ public class DelegatingAutoCloseableTest {
 
         void close();
     }
-    
+
 }

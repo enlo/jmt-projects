@@ -197,7 +197,7 @@ public class UnicodeVectorTest {
         assertThat(str1.isEmpty(), is(false));
         assertThat(str2.isEmpty(), is(true));
     }
-    
+
     /**
      * Test of iterator method, of class UnicodeVector.
      */
@@ -311,7 +311,7 @@ public class UnicodeVectorTest {
         UnicodeVector str1 = new UnicodeVector("\u0065\u0301㋐いう");
         str1.subVector(5, 6);
     }
-    
+
     /**
      * Test of subVector method, of class UnicodeVector.
      */
@@ -320,7 +320,7 @@ public class UnicodeVectorTest {
         UnicodeVector str1 = new UnicodeVector("\u0065\u0301㋐いう");
         str1.subVector(-1, 6);
     }
-        
+
     /**
      * Test of toString method, of class UnicodeVector.
      */

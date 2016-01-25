@@ -30,16 +30,20 @@ import lombok.Data;
 
 /**
  * タグ情報
+ *
  * @author enlo
  */
 @Data
 public class Tag {
 
-
-    /** あらゆるタグに一致 */
+    /**
+     * あらゆるタグに一致
+     */
     public static final Tag ANY;
 
-    /** ANYのみ一致 */
+    /**
+     * ANYのみ一致
+     */
     public static final Tag NONE;
 
     static {
@@ -50,18 +54,19 @@ public class Tag {
     /**
      * ファクトリメソッド.
      *
-     * @param id    ID
+     * @param id ID
      * @return タグ
      */
     @ReturnNonNull
     public static Tag of(Serializable id) {
         return new Tag(id);
     }
-    
+
     private final Serializable id;
 
     /**
      * コンストラクター
+     *
      * @param id ID
      */
     public Tag(Serializable id) {

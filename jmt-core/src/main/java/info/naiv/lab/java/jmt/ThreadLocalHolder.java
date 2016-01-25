@@ -51,5 +51,5 @@ public class ThreadLocalHolder<T> extends ThreadLocal<T> implements Holder<T> {
     public Class<? extends T> getContentType() {
         return clazz;
     }
-    
+
 }

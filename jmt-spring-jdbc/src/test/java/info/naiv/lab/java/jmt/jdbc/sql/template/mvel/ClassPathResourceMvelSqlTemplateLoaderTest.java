@@ -23,9 +23,15 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import info.naiv.lab.java.jmt.Misc;
+import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.jdbc.sql.template.AbstractClassPathResourceSqlTemplateLoaderTest;
+import info.naiv.lab.java.jmt.jdbc.sql.template.SqlTemplate;
+import java.nio.charset.Charset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import org.hamcrest.Matchers;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.junit.Assert.*;
 
 /**
@@ -47,17 +53,34 @@ public class ClassPathResourceMvelSqlTemplateLoaderTest
 
     @Override
     public void testLoadCategory_String() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterable<SqlTemplate> templ = instance.loadCategory("C1");
+        assertThat(templ, Matchers.<SqlTemplate>iterableWithSize(3));
+        assertThat(Misc.map(templ, new Function1<SqlTemplate, String>() {
+            @Override
+            public String apply(SqlTemplate a1) {
+                return ((MvelSqlTemplate) a1).getTemplateText();
+            }
+        }), containsInAnyOrder("select top(1) * from Emploee where id = @bind{id}",
+                               "\r\nselect * from Emploee where id = @bind{id}",
+                               "\nselect * from Emp;\n\n"));
     }
 
     @Override
     public void testLoadCategory_String_Charset() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Iterable<SqlTemplate> templ = instance.loadCategory("C2", Charset.forName("MS932"));
+        assertThat(templ, Matchers.<SqlTemplate>iterableWithSize(2));
+        assertThat(Misc.map(templ, new Function1<SqlTemplate, String>() {
+            @Override
+            public String apply(SqlTemplate a1) {
+                return ((MvelSqlTemplate) a1).getTemplateText();
+            }
+        }), containsInAnyOrder("select * from 日本語テーブル", "select * from 日本語テーブル where 名前 = @bind{name}"));
     }
 
     @Override
     public void testLoad_3args() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        MvelSqlTemplate templ = (MvelSqlTemplate) instance.load("C2", "test_sjis", Charset.forName("MS932"));
+        assertThat(new String(templ.getTemplate().getTemplate()), is("select * from 日本語テーブル"));
     }
 
     @Override

@@ -33,7 +33,7 @@ import javax.enterprise.inject.spi.InjectionPoint;
  */
 @Dependent
 public class DependentServiceInjector {
-    
+
     @Produces
     @FromServiceProvider
     public Object getService(InjectionPoint ip) {

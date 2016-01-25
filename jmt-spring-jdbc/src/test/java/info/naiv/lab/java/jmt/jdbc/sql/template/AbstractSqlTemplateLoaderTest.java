@@ -40,16 +40,15 @@ import static org.mockito.Mockito.when;
  */
 public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplateLoader> {
 
-    protected abstract T newConcrete();
+    protected T instance;
 
     public AbstractSqlTemplateLoaderTest() {
     }
 
-    protected T instance;
-
     @Before
     public void init() {
         instance = newConcrete();
+        onInit();
     }
 
     /**
@@ -59,16 +58,12 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
     public abstract void testFormString();
 
     /**
-     * Test of load method, of class AbstractSqlTemplateLoader.
+     * Test of getSuffix method, of class AbstractSqlTemplateLoader.
      */
     @Test
-    public abstract void testLoad_String_String();
-
-    /**
-     * Test of load method, of class AbstractSqlTemplateLoader.
-     */
-    @Test
-    public abstract void testLoad_3args();
+    public void testGetSuffix() {
+        assertThat(instance.getSuffix(), is(defaultSuffix()));
+    }
 
     /**
      * Test of loadCategory method, of class AbstractSqlTemplateLoader.
@@ -81,6 +76,18 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
      */
     @Test
     public abstract void testLoadCategory_String_Charset();
+
+    /**
+     * Test of load method, of class AbstractSqlTemplateLoader.
+     */
+    @Test
+    public abstract void testLoad_3args();
+
+    /**
+     * Test of load method, of class AbstractSqlTemplateLoader.
+     */
+    @Test
+    public abstract void testLoad_String_String();
 
     /**
      * Test of setParent method, of class AbstractSqlTemplateLoader.
@@ -98,18 +105,6 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
     }
 
     /**
-     * Test of getSuffix method, of class AbstractSqlTemplateLoader.
-     */
-    @Test
-    public void testGetSuffix() {
-        assertThat(instance.getSuffix(), is(defaultSuffix()));
-    }
-
-    protected String defaultSuffix() {
-        return "";
-    }
-
-    /**
      * Test of setSuffix method, of class AbstractSqlTemplateLoader.
      */
     @Test
@@ -117,6 +112,15 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
         assertThat(instance.getSuffix(), is(defaultSuffix()));
         instance.setSuffix("postgres");
         assertThat(instance.getSuffix(), is("postgres"));
+    }
+
+    protected String defaultSuffix() {
+        return "";
+    }
+
+    protected abstract T newConcrete();
+
+    protected void onInit() {
     }
 
 }

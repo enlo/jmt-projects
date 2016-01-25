@@ -54,14 +54,14 @@ public class ImmutableHolderTest {
         ImmutableHolder<String> instance = new ImmutableHolder<>(null, String.class);
         assertThat(instance.getContent(), is(nullValue()));
     }
-    
+
     /**
      * Test of getContentType method, of class ImmutableHolder.
      */
     @Test
     public void testGetContentType() {
         ImmutableHolder<String> instance = new ImmutableHolder<>("ABC");
-        assertThat(instance.getContentType(), is((Object)String.class));
+        assertThat(instance.getContentType(), is((Object) String.class));
     }
 
     /**

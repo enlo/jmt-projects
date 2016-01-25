@@ -95,7 +95,7 @@ public class SqlQuery {
         return jdbcTemplate.query(sql, setter, new SingleColumnRowMapper<>(elementType));
     }
 
-    public  List<Map<String, Object>> queryForList(JdbcTemplate jdbcTemplate) {
+    public List<Map<String, Object>> queryForList(JdbcTemplate jdbcTemplate) {
         return jdbcTemplate.query(sql, setter, new ColumnMapRowMapper());
     }
 
@@ -112,7 +112,7 @@ public class SqlQuery {
         return queryForObject(jdbcTemplate, new SingleColumnRowMapper<>(requiredType));
     }
 
-    public  SqlRowSet queryForRowSet(JdbcTemplate jdbcTemplate) {
+    public SqlRowSet queryForRowSet(JdbcTemplate jdbcTemplate) {
         return jdbcTemplate.query(sql, setter, new SqlRowSetResultSetExtractor());
     }
 

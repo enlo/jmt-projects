@@ -238,6 +238,45 @@ public abstract class AbstractServiceContainerTest {
      * Test of resolveService method, of class AbstractServiceContainer.
      */
     @Test
+    public void testResolveService_Class_Tag() {
+        TestServiceImpl1 s1 = new TestServiceImpl1(1);
+        ServiceContainer container = createContainer();
+
+        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
+
+        container.registerService(s1);
+        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s1)));
+        assertThat(container.resolveService(TestService1.class), is(sameInstance((TestService1) s1)));
+        assertThat(container.resolveService(TestService2.class), is(nullValue()));
+        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
+
+        container.registerService(s1, Tag.of(1));
+        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s1)));
+        assertThat(container.resolveService(TestService1.class), is(sameInstance((TestService1) s1)));
+        assertThat(container.resolveService(TestService2.class), is(nullValue()));
+        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(sameInstance((TestService) s1)));
+        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(sameInstance((TestService1) s1)));
+        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
+        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
+        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
+
+    }
+
+    /**
+     * Test of resolveService method, of class AbstractServiceContainer.
+     */
+    @Test
     public void testResolveService_Class_priority() {
         TestServiceImpl1 s1 = new TestServiceImpl1(1);
         TestServiceImpl1 s2 = new TestServiceImpl1(2);
@@ -294,45 +333,6 @@ public abstract class AbstractServiceContainerTest {
         container.registerService(s1);
         container.registerService(s2);
         assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
-
-    }
-
-    /**
-     * Test of resolveService method, of class AbstractServiceContainer.
-     */
-    @Test
-    public void testResolveService_Class_Tag() {
-        TestServiceImpl1 s1 = new TestServiceImpl1(1);
-        ServiceContainer container = createContainer();
-
-        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
-
-        container.registerService(s1);
-        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s1)));
-        assertThat(container.resolveService(TestService1.class), is(sameInstance((TestService1) s1)));
-        assertThat(container.resolveService(TestService2.class), is(nullValue()));
-        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
-
-        container.registerService(s1, Tag.of(1));
-        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s1)));
-        assertThat(container.resolveService(TestService1.class), is(sameInstance((TestService1) s1)));
-        assertThat(container.resolveService(TestService2.class), is(nullValue()));
-        assertThat(container.resolveService(TestService.class, Tag.of(1)), is(sameInstance((TestService) s1)));
-        assertThat(container.resolveService(TestService1.class, Tag.of(1)), is(sameInstance((TestService1) s1)));
-        assertThat(container.resolveService(TestService2.class, Tag.of(1)), is(nullValue()));
-        assertThat(container.resolveService(TestService.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService1.class, Tag.of(2)), is(nullValue()));
-        assertThat(container.resolveService(TestService2.class, Tag.of(2)), is(nullValue()));
 
     }
 
@@ -447,20 +447,6 @@ public abstract class AbstractServiceContainerTest {
         }
     }
 
-    public static class TestServiceImpl1 extends AbstractTestService implements TestService1 {
-
-        public TestServiceImpl1(int i) {
-            super(1, i);
-        }
-    }
-
-    public static class TestServiceImpl2 extends AbstractTestService implements TestService2 {
-
-        public TestServiceImpl2(int i) {
-            super(2, i);
-        }
-    }
-
     @ServicePriority(2)
     public static class TestAnnotatedServiceImpl1 extends AbstractTestService implements TestService {
 
@@ -490,6 +476,20 @@ public abstract class AbstractServiceContainerTest {
 
         public TestAnnotatedServiceImpl4() {
             super(2, 2);
+        }
+    }
+
+    public static class TestServiceImpl1 extends AbstractTestService implements TestService1 {
+
+        public TestServiceImpl1(int i) {
+            super(1, i);
+        }
+    }
+
+    public static class TestServiceImpl2 extends AbstractTestService implements TestService2 {
+
+        public TestServiceImpl2(int i) {
+            super(2, i);
         }
     }
 }

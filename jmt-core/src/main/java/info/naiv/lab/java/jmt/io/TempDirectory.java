@@ -141,9 +141,9 @@ public abstract class TempDirectory implements Closeable {
      * @return
      */
     @ReturnNonNull
-public Path getPath() {
-    return tempRoot;
-}
+    public Path getPath() {
+        return tempRoot;
+    }
 
     @ReturnNonNull
     private Path resolvePrefix(String prefix) throws IOException {
@@ -173,7 +173,7 @@ public Path getPath() {
             }
         }
     }
-    
+
     private class CloseOnShutdown implements Runnable {
 
         @Override

@@ -84,7 +84,8 @@ public class WaitForZeroTest {
                 x.incrementAndGet();
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 value.countDown();
             }
@@ -113,7 +114,8 @@ public class WaitForZeroTest {
             public void run() {
                 try {
                     Thread.sleep(200);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 x.getAndIncrement();
                 value.countDown();
@@ -142,7 +144,8 @@ public class WaitForZeroTest {
             public void run() {
                 try {
                     Thread.sleep(150);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 x.getAndIncrement();
                 value.countDown();

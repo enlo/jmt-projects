@@ -38,5 +38,6 @@ import java.lang.annotation.Target;
 @Documented
 @TagOf
 public @interface IntegerTagOf {
+
     int value();
 }

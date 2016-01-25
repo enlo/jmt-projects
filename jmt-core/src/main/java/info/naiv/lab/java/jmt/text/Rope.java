@@ -248,7 +248,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     private boolean endsWith(UnicodeScalar[] search, int offset) {
         int len = search.length;
         int idx = source.elements().length - offset - len;
-        if(idx < 0) {
+        if (idx < 0) {
             return false;
         }
         return arrayCompareTo(source.elements(), idx, len, search, 0, len) == 0;
@@ -489,8 +489,8 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     /*
      * (non-Javadoc)
      *
-    * @see java.lang.Object#toString()
-    */
+     * @see java.lang.Object#toString()
+     */
     @Override
     public String toString() {
         return source.getSource();
@@ -527,7 +527,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     private boolean startsWith(UnicodeScalar[] search, int offset) {
         int len = search.length;
         int idx = source.elements().length - offset - len;
-        if(idx < 0) {
+        if (idx < 0) {
             return false;
         }
         return arrayCompareTo(source.elements(), offset, len, search, 0, len) == 0;

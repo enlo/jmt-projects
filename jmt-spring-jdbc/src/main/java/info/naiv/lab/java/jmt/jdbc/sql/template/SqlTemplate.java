@@ -41,5 +41,5 @@ public interface SqlTemplate {
 
     @ReturnNonNull
     SqlQuery merge(SqlParameterSource parameters);
-    
+
 }

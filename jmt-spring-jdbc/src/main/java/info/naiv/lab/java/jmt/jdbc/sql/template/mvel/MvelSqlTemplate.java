@@ -47,6 +47,10 @@ public class MvelSqlTemplate implements SqlTemplate {
         this.template = template;
     }
 
+    public String getTemplateText() {
+        return new String(template.getTemplate());
+    }
+
     @Override
     public String getName() {
         return name;

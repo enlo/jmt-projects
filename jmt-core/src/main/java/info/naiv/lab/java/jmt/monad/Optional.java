@@ -107,7 +107,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
     public T get() {
         return value;
     }
-    
+
     public Optional<T> bind(Consumer1<? super T> consumer) {
         if (isPresent()) {
             consumer.accept(value);

@@ -59,7 +59,7 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
     public char charAt(int index) {
         return element.charAt(index);
     }
-    
+
     @ReturnNonNull
     public String getDecomposed() {
         return decomposed.get();
@@ -96,6 +96,7 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
     }
 
     class Decomp extends Lazy<String> {
+
         @Override
         public String initialValue() {
             return normalize(element, NFD);

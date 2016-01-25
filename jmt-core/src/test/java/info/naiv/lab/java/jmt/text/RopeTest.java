@@ -178,7 +178,7 @@ public class RopeTest {
      */
     @Test
     public void testEqualsIgnoreCase() {
-        
+
         Rope lhs = Rope.valueOf("AbcdＡｂあiIう");
         Rope rhs = Rope.valueOf("ABCDＡＢあIIう");
         assertThat(Rope.equalsIgnoreCase(null, null), is(true));
@@ -287,7 +287,7 @@ public class RopeTest {
      */
     @Test
     public void testIsEmpty_Rope() {
-        
+
         assertThat(Rope.isEmpty(null), is(true));
         assertThat(Rope.isEmpty(Rope.EMPTY), is(true));
         assertThat(Rope.isEmpty(Rope.valueOf("")), is(true));

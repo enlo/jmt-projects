@@ -56,30 +56,29 @@ import org.springframework.util.ClassUtils;
 @Slf4j
 public class AnnotationMetadataSetResolver {
 
+    static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
+
+    static final AntPathMatcher matcher = new AntPathMatcher("/");
+
     public static AnnotationMetadataSetResolver newAnyType() {
         AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
         resolver.includeTypeFilters.add(AnyTypeFilter.INSTANCE);
         return resolver;
     }
 
-    static final String DEFAULT_RESOURCE_PATTERN = "**/*.class";
-
-    static final AntPathMatcher matcher = new AntPathMatcher("/");
-
-    @NonNull
-    private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
+    private final List<TypeFilter> excludeTypeFilters = new CopyOnWriteArrayList<>();
+    private final List<TypeFilter> includeTypeFilters = new CopyOnWriteArrayList<>();
 
     @NonNull
     private MetadataReaderFactory metadataReaderFactory = new CachingMetadataReaderFactory();
 
+    private PropertyResolver propertyResolver;
+
     @NonNull
     private String resourcePattern = DEFAULT_RESOURCE_PATTERN;
 
-    private PropertyResolver propertyResolver;
-
-    private final List<TypeFilter> includeTypeFilters = new CopyOnWriteArrayList<>();
-
-    private final List<TypeFilter> excludeTypeFilters = new CopyOnWriteArrayList<>();
+    @NonNull
+    private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
     public Set<AnnotationMetadata> resolve(String basePackage) throws IOException {
         return resolve(basePackage, null);

@@ -31,10 +31,10 @@ import java.util.Calendar;
  * @author enlo
  */
 public interface CurrentDateProvider {
-    
+
     @ReturnNonNull
     Calendar getToday();
-    
+
     @ReturnNonNull
     Calendar getNow();
 }

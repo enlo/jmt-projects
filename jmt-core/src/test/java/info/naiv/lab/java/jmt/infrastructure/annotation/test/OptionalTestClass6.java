@@ -31,5 +31,5 @@ import info.naiv.lab.java.jmt.infrastructure.annotation.OptionalService;
  */
 @OptionalService(dependOn = {"java.lang.String", "javax.enterprise.context.SessionScoped"})
 public class OptionalTestClass6 {
-    
+
 }

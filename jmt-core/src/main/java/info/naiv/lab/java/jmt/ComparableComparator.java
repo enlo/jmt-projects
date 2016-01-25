@@ -46,11 +46,14 @@ public class ComparableComparator<T extends Comparable<T>> implements Comparator
     public int compare(T o1, T o2) {
         if (o1 == o2) {
             return 0;
-        } else if (o1 == null) {
+        }
+        else if (o1 == null) {
             return -1;
-        } else if (o2 == null) {
+        }
+        else if (o2 == null) {
             return 1;
-        } else {
+        }
+        else {
             return doCompare(o1, o2);
         }
     }
@@ -58,11 +61,14 @@ public class ComparableComparator<T extends Comparable<T>> implements Comparator
     public final T min(T o1, T o2) {
         if (o1 == o2) {
             return o1;
-        } else if (o1 == null) {
+        }
+        else if (o1 == null) {
             return o2;
-        } else if (o2 == null) {
+        }
+        else if (o2 == null) {
             return o1;
-        } else {
+        }
+        else {
             return doCompare(o1, o2) < 0 ? o1 : o2;
         }
     }

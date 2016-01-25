@@ -24,23 +24,13 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
 import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
-import info.naiv.lab.java.jmt.io.SuffixAndExtensionFilter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.io.Resource;
 
 @Slf4j
-public abstract class AbstractClassPathResourceSqlTemplateLoader extends AbstractSqlTemplateLoader {
-
-    @Getter
-    @Setter
-    private String extension = "sql";
+public abstract class AbstractClassPathResourceSqlTemplateLoader
+        extends AbstractResourceSqlTemplateLoader {
 
     @Getter
     @Setter
@@ -59,37 +49,9 @@ public abstract class AbstractClassPathResourceSqlTemplateLoader extends Abstrac
         this.resourceRepository.setRootPath(rootPackage);
     }
 
-    @Override
-    protected Iterable<SqlTemplate> doLoadCategory(String category, Charset charset) throws IOException {
-        SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(".+", getSuffix(), getExtension(), true);
-        Map<String, Resource> list = getResourceRepository().getResources(category, filter);
-        List<SqlTemplate> result = new ArrayList<>(list.size());
-        for (Resource res : list.values()) {
-            SqlTemplate st = createSqlTemplateFromResource(res.getFilename(), res, charset);
-            if (st != null) {
-                result.add(st);
-            }
-        }
-        return result;
-    }
-
     public void setRootPackage(String rootPackage) {
         this.rootPackage = rootPackage;
         this.resourceRepository.setRootPath(rootPackage);
-    }
-
-    protected abstract SqlTemplate createSqlTemplateFromResource(String name, Resource resource, Charset charset) throws IOException;
-
-    @Override
-    protected SqlTemplate doLoad(String category, String name, Charset charset) throws IOException {
-        SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(".+", getSuffix(), getExtension(), true);
-        Resource res = getResourceRepository().getResource(category, filter);
-        if (res != null) {
-            return createSqlTemplateFromResource(res.getFilename(), res, charset);
-        }
-        else {
-            return null;
-        }
     }
 
 }

@@ -33,7 +33,7 @@ import java.util.Map;
  * @param <T>
  */
 public abstract class AbstractTlsServiceComponent<T> extends AbstractServiceComponent<T> {
-    
+
     final ThreadLocal<Map<Tag, T>> tls = new ThreadLocal<Map<Tag, T>>() {
         @Override
         protected Map<Tag, T> initialValue() {
@@ -42,8 +42,8 @@ public abstract class AbstractTlsServiceComponent<T> extends AbstractServiceComp
     };
 
     @Override
-    protected Map<Tag, T> getComponentMap(){
+    protected Map<Tag, T> getComponentMap() {
         return tls.get();
-    }    
-        
+    }
+
 }

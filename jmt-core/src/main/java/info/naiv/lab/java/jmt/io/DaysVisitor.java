@@ -62,6 +62,7 @@ public class DaysVisitor extends AbstractFileVisitor {
     }
 
     private class After implements Predicate1<FileTime> {
+
         @Override
         public boolean test(FileTime obj) {
             return border <= obj.toMillis();
@@ -69,6 +70,7 @@ public class DaysVisitor extends AbstractFileVisitor {
     }
 
     private class Before implements Predicate1<FileTime> {
+
         @Override
         public boolean test(FileTime obj) {
             return obj.toMillis() <= border;

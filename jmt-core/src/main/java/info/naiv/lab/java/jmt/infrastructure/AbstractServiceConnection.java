@@ -84,7 +84,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
     }
 
     @Override
-    public  boolean isClosed() {
+    public boolean isClosed() {
         return closed.get() || this.container.get() == null;
     }
 
@@ -95,7 +95,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
      * @param tag タグ
      * @return 一致する場合は true.
      */
-    protected  boolean contains(Class<?> serviceType, Tag tag) {
+    protected boolean contains(Class<?> serviceType, Tag tag) {
         return this.tag.contains(tag) && isAssignableTo(serviceType);
     }
 

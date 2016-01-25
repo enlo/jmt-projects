@@ -37,5 +37,6 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Documented
 public @interface InjectService {
+
     String value() default "";
 }

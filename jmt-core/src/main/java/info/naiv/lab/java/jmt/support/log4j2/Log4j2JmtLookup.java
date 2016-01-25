@@ -44,6 +44,7 @@ import org.apache.logging.log4j.status.StatusLogger;
  */
 @Plugin(name = "jmt", category = StrLookup.CATEGORY)
 public class Log4j2JmtLookup extends AbstractLookup implements SystemComponent {
+
     private static final String DEFAULT = "jmtDefault";
 
     private static final Logger LOGGER = StatusLogger.getLogger();
@@ -90,7 +91,8 @@ public class Log4j2JmtLookup extends AbstractLookup implements SystemComponent {
                 value = getValue(defaultProperties, key, "");
             }
             return value;
-        } catch (RuntimeException | Error ex) {
+        }
+        catch (RuntimeException | Error ex) {
             LOGGER.warn(LOOKUP, "Error while getting property [{}].", key, ex);
             return "";
         }
@@ -99,7 +101,8 @@ public class Log4j2JmtLookup extends AbstractLookup implements SystemComponent {
     private ConcurrentMap getProperties(String name) {
         if (DEFAULT.equals(name)) {
             return defaultProperties;
-        } else {
+        }
+        else {
             ConcurrentMap p = loggerProperties.get(name);
             if (p == null) {
                 return defaultProperties;
@@ -111,7 +114,8 @@ public class Log4j2JmtLookup extends AbstractLookup implements SystemComponent {
     private String getValue(ConcurrentMap<String, String> props, String key, String defaultValue) {
         if (props == null) {
             return defaultValue;
-        } else {
+        }
+        else {
             String value = props.get(key);
             if (value == null) {
                 value = defaultValue;

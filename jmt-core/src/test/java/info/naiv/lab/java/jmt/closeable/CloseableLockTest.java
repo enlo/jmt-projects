@@ -29,7 +29,6 @@ public class CloseableLockTest {
     public static void tearDownClass() {
     }
 
-
     @Mock(name = "lockmock")
     Lock lock;
 
@@ -44,7 +43,7 @@ public class CloseableLockTest {
     @After
     public void tearDown() {
     }
-    
+
     /**
      * Test of close method, of class CloseableLock.
      *
@@ -95,10 +94,10 @@ public class CloseableLockTest {
      */
     @Test
     public void testNewCondition() {
-        
+
         Condition mockCond = mock(Condition.class);
         when(lock.newCondition()).thenReturn(mockCond);
-        
+
         CloseableLock instance = new CloseableLock(lock);
         assertThat(instance.newCondition(), is(sameInstance(mockCond)));
     }

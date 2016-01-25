@@ -29,6 +29,6 @@ package info.naiv.lab.java.jmt.fx;
  * @param <T>
  */
 public interface Predicate1<T> {
-    
+
     boolean test(T obj);
 }

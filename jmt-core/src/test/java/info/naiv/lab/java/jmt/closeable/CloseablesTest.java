@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
  */
 public class CloseablesTest {
 
-
     @Before
     public void setUp() {
     }

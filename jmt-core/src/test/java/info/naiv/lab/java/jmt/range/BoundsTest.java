@@ -33,7 +33,7 @@ import static org.junit.Assert.*;
  * @author enlo
  */
 public class BoundsTest {
-    
+
     public BoundsTest() {
     }
 
@@ -72,5 +72,5 @@ public class BoundsTest {
         Bound.OpenUpperBound<Date> b = Bounds.openUp(new Date(1));
         assertThat(b.value, is(new Date(1)));
     }
-    
+
 }

@@ -40,7 +40,8 @@ public abstract class AbstractAwaitable implements Awaitable {
         try {
             lastException.set(null);
             return doAwait();
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             lastException.set(ex);
             logger.warn("failed on await. {} ", ex.getMessage());
             return false;
@@ -52,7 +53,8 @@ public abstract class AbstractAwaitable implements Awaitable {
         try {
             lastException.set(null);
             return doAwait(timeout, unit);
-        } catch (Exception ex) {
+        }
+        catch (Exception ex) {
             lastException.set(ex);
             logger.warn("failed on await. (timeout={}, unit={}) {} ", timeout, unit, ex.getMessage());
             return false;

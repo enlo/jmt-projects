@@ -56,7 +56,7 @@ public interface FilenamePatternFilter {
     /**
      * フィルター処理を行う.
      *
-     * @param resource  リソース.
+     * @param resource リソース.
      * @param founds フィルターを通ったリソースと名称
      * @return 検索を停止する場合 true. 継続して検索を行う必要がある場合 false.
      * @return

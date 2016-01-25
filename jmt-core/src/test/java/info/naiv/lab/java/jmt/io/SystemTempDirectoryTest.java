@@ -45,9 +45,9 @@ public class SystemTempDirectoryTest extends TempDirectoryTest {
              TempDirectory temp2 = newConcrete(temp1.getPath(), "");
              TempDirectory temp3 = newConcrete(temp1.getPath(), "")) {
 
-           assertThat(temp2.getPath().getParent(), is(temp1.getPath()));
-           assertThat(temp3.getPath().getParent(), is(temp1.getPath()));
-           assertThat(temp3.getPath(), is(not(temp2.getPath())));
+            assertThat(temp2.getPath().getParent(), is(temp1.getPath()));
+            assertThat(temp3.getPath().getParent(), is(temp1.getPath()));
+            assertThat(temp3.getPath(), is(not(temp2.getPath())));
         }
     }
 

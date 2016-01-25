@@ -32,11 +32,11 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 public interface ServiceConnection extends AutoCloseable {
 
     /**
-     * 
+     *
      * @return タグオブジェクト
      */
     Tag getTag();
-    
+
     /**
      * @return 優先順位
      */
@@ -47,9 +47,9 @@ public interface ServiceConnection extends AutoCloseable {
      */
     @Override
     void close();
-    
+
     /**
-     * 
+     *
      * @return コンテナーから削除されている場合 true.
      */
     boolean isClosed();

@@ -75,9 +75,11 @@ public final class CharsetMap extends SingletonMapSupport<String, Charset> {
     protected Charset newValue(String key) {
         if (check(UTF_8, key)) {
             return UTF_8;
-        } else if (check(ISO_8859_1, key)) {
+        }
+        else if (check(ISO_8859_1, key)) {
             return ISO_8859_1;
-        } else if (check(US_ASCII, key)) {
+        }
+        else if (check(US_ASCII, key)) {
             return US_ASCII;
         }
         return forName(key);

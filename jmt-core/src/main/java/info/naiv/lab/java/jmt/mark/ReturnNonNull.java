@@ -34,4 +34,5 @@ import java.lang.annotation.Target;
  */
 @Target({METHOD, TYPE})
 @Documented
-public @interface ReturnNonNull {}
+public @interface ReturnNonNull {
+}

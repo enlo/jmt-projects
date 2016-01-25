@@ -37,8 +37,8 @@ public class Repeater<T> implements Iterable<T> {
 
     final int repeatMax;
     final T value;
-    
-    public Repeater(int repeatMax, T value){
+
+    public Repeater(int repeatMax, T value) {
         this.repeatMax = repeatMax;
         this.value = value;
     }
@@ -46,7 +46,6 @@ public class Repeater<T> implements Iterable<T> {
     public T getValue() {
         return value;
     }
-
 
     @Override
     @ReturnNonNull

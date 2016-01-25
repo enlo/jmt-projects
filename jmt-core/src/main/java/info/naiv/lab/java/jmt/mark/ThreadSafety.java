@@ -33,4 +33,5 @@ import java.lang.annotation.Target;
  */
 @Target({METHOD, TYPE})
 @Documented
-public @interface ThreadSafety {}
+public @interface ThreadSafety {
+}

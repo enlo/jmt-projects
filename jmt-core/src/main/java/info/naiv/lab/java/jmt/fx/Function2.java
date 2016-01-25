@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.fx;
 
 /**
  * BinaryFunction
+ *
  * @author enlo
  * @param <R>
  * @param <A1>

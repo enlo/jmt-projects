@@ -191,6 +191,84 @@ public class ArgumentsTest {
     }
 
     /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test
+    public void testLessThan_3args_1() {
+        assertThat(Arguments.lessThan(0, 1, ""), is(0));
+        assertThat(Arguments.lessThan(20, 30, ""), is(20));
+        assertThat(Arguments.lessThan(-1, 0, ""), is(-1));
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test
+    public void testLessThan_3args_2() {
+        assertThat(Arguments.lessThan(0L, 1, ""), is(0L));
+        assertThat(Arguments.lessThan(20L, 30, ""), is(20L));
+        assertThat(Arguments.lessThan(-1L, 0, ""), is(-1L));
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test
+    public void testLessThan_3args_3() {
+        assertThat(Arguments.lessThan(d(0), d(1), ""), is(d(0L)));
+        assertThat(Arguments.lessThan(d(20L), d(30), ""), is(d(20L)));
+        assertThat(Arguments.lessThan(d(-1L), d(0), ""), is(d(-1L)));
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_4() {
+        Arguments.lessThan(1, 1, "");
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_5() {
+        Arguments.lessThan(2, 1, "");
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_6() {
+        Arguments.lessThan(1L, 1, "");
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_7() {
+        Arguments.lessThan(2L, 1, "");
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_8() {
+        Arguments.lessThan(d(1), d(1), "");
+    }
+
+    /**
+     * Test of lessThan method, of class Arguments.
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void testLessThan_3args_9() {
+        Arguments.lessThan(d(2), d(1), "");
+    }
+
+    /**
      * Test of nonEmpty method, of class Arguments.
      */
     @Test(expected = IllegalArgumentException.class)
@@ -326,7 +404,7 @@ public class ArgumentsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testNonNullAll_2args_2() {
-        Iterable<?> args = Arrays.asList((Object)null);
+        Iterable<?> args = Arrays.asList((Object) null);
         Arguments.nonNullAll(args, "args");
     }
 
@@ -386,5 +464,9 @@ public class ArgumentsTest {
         Object nonNull = new Object();
         String varname = "arg";
         assertThat(Arguments.nonNull(nonNull, varname), is(sameInstance(nonNull)));
+    }
+
+    private Date d(long i) {
+        return new Date(i);
     }
 }

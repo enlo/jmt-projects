@@ -33,15 +33,15 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
  * @param <T>
  */
 public interface ServiceComponent<T> {
-        
+
     /**
      *
      * @return オブジェクトの型.
      */
     @ReturnNonNull
     Class<? extends T> getContentType();
-    
+
     T getContent(Tag tag, ServiceProvider provider);
-    
+
     boolean contains(Tag tag, ServiceProvider provider);
 }

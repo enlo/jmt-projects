@@ -49,16 +49,6 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     @Override
-    public Optional<Watchable> getWatchable() {
-        return Optional.EMPTY;
-    }
-
-    @Override
-    public Optional<Watchable> getWatchable(String category) {
-        return Optional.EMPTY;
-    }
-
-    @Override
     public ResourceRepository getParent() {
         return parent;
     }
@@ -77,6 +67,18 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
             }
             return res;
         }
+    }
+
+    @Override
+    public Resource getResource(String category, FilenamePatternFilter filter) throws IOException {
+        Map<String, Resource> source = getResources(category);
+        Map<String, Resource> result = new HashMap<>();
+        for (Resource res : source.values()) {
+            if (filter.filter(res, result)) {
+                break;
+            }
+        }
+        return Misc.getFirst(result.values());
     }
 
     @Override
@@ -105,15 +107,6 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     }
 
     @Override
-    public void setParent(ResourceRepository parent) {
-        this.parent = parent;
-    }
-
-    protected abstract String resolveLocation(String category, String name) throws IOException;
-
-    protected abstract Map<String, String> resolveLocations(String category, String globPattern) throws IOException;
-
-    @Override
     public Map<String, Resource> getResources(String category, FilenamePatternFilter filter) throws IOException {
         Map<String, Resource> source = getResources(category);
         Map<String, Resource> result = new HashMap<>();
@@ -124,15 +117,22 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     }
 
     @Override
-    public Resource getResource(String category, FilenamePatternFilter filter) throws IOException {
-        Map<String, Resource> source = getResources(category);
-        Map<String, Resource> result = new HashMap<>();
-        for (Resource res : source.values()) {
-            if (filter.filter(res, result)) {
-                break;
-            }
-        }
-        return Misc.getFirst(result.values());
+    public Optional<Watchable> getWatchable() {
+        return Optional.EMPTY;
     }
+
+    @Override
+    public Optional<Watchable> getWatchable(String category) {
+        return Optional.EMPTY;
+    }
+
+    @Override
+    public void setParent(ResourceRepository parent) {
+        this.parent = parent;
+    }
+
+    protected abstract String resolveLocation(String category, String name) throws IOException;
+
+    protected abstract Map<String, String> resolveLocations(String category, String globPattern) throws IOException;
 
 }

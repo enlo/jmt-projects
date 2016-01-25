@@ -142,10 +142,12 @@ public class ResolvableProperties extends Properties {
         if (value == null) {
             if (defaultValue == null) {
                 return null;
-            } else {
+            }
+            else {
                 return eval(defaultValue);
             }
-        } else {
+        }
+        else {
             return eval(value);
         }
     }

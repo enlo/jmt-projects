@@ -37,17 +37,18 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Theories.class)
 public class CharsetMapTest {
-    
+
     @DataPoints
-    public static String[] charSets = {"UTF8", "SHIFT_JIS", "MS932", "iso-8859-1" };
-    
+    public static String[] charSets = {"UTF8", "SHIFT_JIS", "MS932", "iso-8859-1"};
+
     /**
      * Test of get method, of class CharsetMap.
+     *
      * @param charset
      */
     @Theory
-    public void testGet(String charset) {        
+    public void testGet(String charset) {
         assertThat(charset, CharsetMap.get(charset), is(Charset.forName(charset)));
     }
-    
+
 }

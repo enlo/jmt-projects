@@ -36,8 +36,8 @@ import java.util.Random;
  */
 @ThreadSafety
 public abstract class XorShiftRandom extends Random {
-    private static final long serialVersionUID = -2899992351727546151L;
 
+    private static final long serialVersionUID = -2899992351727546151L;
 
     protected static final long M32 = 2685821657736338717L;
     protected static final long M8 = 1181783497276652981L;

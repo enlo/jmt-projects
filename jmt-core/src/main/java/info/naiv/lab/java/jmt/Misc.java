@@ -511,6 +511,29 @@ public abstract class Misc {
         return new ComparableComparator<T>().min(x, y);
     }
 
+    public static <T> T newInstance(Class<T> clazz) {
+        try {
+            return clazz.newInstance();
+        }
+        catch (InstantiationException | IllegalAccessException ex) {
+            return null;
+        }
+    }
+
+    public static <T> Optional<T> newInstance(Optional<Class<? extends T>> clazz) {
+        if (clazz.isPresent()) {
+            return Optional.ofNullable(newInstance(clazz.get()));
+        }
+        else {
+            return Optional.<T>empty();
+        }
+    }
+
+    public static Optional<Object> newInstance(String className) {
+        Optional<Class<?>> clazz = resolveClassName(className);
+        return newInstance(clazz);
+    }
+
     /**
      * No Operation.
      *
@@ -567,29 +590,6 @@ public abstract class Misc {
             logger.debug("class load failed. ", ex);
             return Optional.<Class<?>>empty();
         }
-    }
-
-    public static <T> T newInstance(Class<T> clazz) {
-        try {
-            return clazz.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException ex) {
-            return null;
-        }
-    }
-
-    public static <T> Optional<T> newInstance(Optional<Class<? extends T>> clazz) {
-        if (clazz.isPresent()) {
-            return Optional.ofNullable(newInstance(clazz.get()));
-        }
-        else {
-            return Optional.<T>empty();
-        }
-    }
-
-    public static Optional<Object> newInstance(String className) {
-        Optional<Class<?>> clazz = resolveClassName(className);
-        return newInstance(clazz);
     }
 
     /**

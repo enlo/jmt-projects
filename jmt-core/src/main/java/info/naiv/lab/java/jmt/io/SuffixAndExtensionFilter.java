@@ -39,61 +39,6 @@ import org.springframework.core.io.Resource;
  */
 public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implements DirectoryStream.Filter<Path>, PathMatcher {
 
-    final Pattern filenameWithSuffix;
-    final Pattern filenameNoSuffix;
-
-    public SuffixAndExtensionFilter(String name, String suffix, String extension, boolean ignoreCase) {
-        StringBuilder partsWithSuffix = new StringBuilder();
-        StringBuilder partsNoSuffix = new StringBuilder();
-        buildPatterns(name, partsWithSuffix, partsNoSuffix, suffix, extension);
-        filenameWithSuffix = makePattern(partsWithSuffix, ignoreCase);
-        filenameNoSuffix = makePattern(partsNoSuffix, ignoreCase);
-    }
-
-    @Override
-    public boolean accept(Path entry) throws IOException {
-        return test(entry.getFileName().toString());
-    }
-
-    @Override
-    public boolean filter(Resource resource, Map<String, ? super Resource> founds) {
-        return filter(resource.getFilename(), resource, founds);
-    }
-
-    @Override
-    public boolean matches(Path path) {
-        return test(path.getFileName().toString());
-    }
-
-    @Override
-    public boolean test(String filename) {
-        Matcher m = filenameWithSuffix.matcher(filename);
-        if (m.find()) {
-            return true;
-        }
-        m = filenameNoSuffix.matcher(filename);
-        return m.find();
-    }
-
-    @Override
-    public <T> boolean filter(String filename, T arg, Map<String, T> founds) {
-        Matcher m = filenameWithSuffix.matcher(filename);
-        if (m.find()) {
-            founds.put(m.group(1), arg);
-            return true;
-        }
-        m = filenameNoSuffix.matcher(filename);
-        if (m.find()) {
-            String key = m.group(1);
-            if (!founds.containsKey(key)) {
-                founds.put(key, arg);
-            }
-            return false;
-        }
-        return false;
-
-    }
-
     private static void buildPatterns(String name, StringBuilder partsWithSuffix, StringBuilder partsNoSuffix, String suffix, String extension) {
         if (isNotBlank(name)) {
             partsWithSuffix.append("^(").append(name).append(")");
@@ -118,6 +63,60 @@ public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implem
         else {
             return Pattern.compile(regex);
         }
+    }
+    final Pattern filenameNoSuffix;
+    final Pattern filenameWithSuffix;
+
+    public SuffixAndExtensionFilter(String name, String suffix, String extension, boolean ignoreCase) {
+        StringBuilder partsWithSuffix = new StringBuilder();
+        StringBuilder partsNoSuffix = new StringBuilder();
+        buildPatterns(name, partsWithSuffix, partsNoSuffix, suffix, extension);
+        filenameWithSuffix = makePattern(partsWithSuffix, ignoreCase);
+        filenameNoSuffix = makePattern(partsNoSuffix, ignoreCase);
+    }
+
+    @Override
+    public boolean accept(Path entry) throws IOException {
+        return test(entry.getFileName().toString());
+    }
+
+    @Override
+    public boolean filter(Resource resource, Map<String, ? super Resource> founds) {
+        return filter(resource.getFilename(), resource, founds);
+    }
+
+    @Override
+    public <T> boolean filter(String filename, T arg, Map<String, T> founds) {
+        Matcher m = filenameWithSuffix.matcher(filename);
+        if (m.find()) {
+            founds.put(m.group(1), arg);
+            return true;
+        }
+        m = filenameNoSuffix.matcher(filename);
+        if (m.find()) {
+            String key = m.group(1);
+            if (!founds.containsKey(key)) {
+                founds.put(key, arg);
+            }
+            return false;
+        }
+        return false;
+
+    }
+
+    @Override
+    public boolean matches(Path path) {
+        return test(path.getFileName().toString());
+    }
+
+    @Override
+    public boolean test(String filename) {
+        Matcher m = filenameWithSuffix.matcher(filename);
+        if (m.find()) {
+            return true;
+        }
+        m = filenameNoSuffix.matcher(filename);
+        return m.find();
     }
 
 }

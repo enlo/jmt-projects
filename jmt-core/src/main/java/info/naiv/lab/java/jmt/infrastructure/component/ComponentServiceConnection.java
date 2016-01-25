@@ -58,7 +58,7 @@ public class ComponentServiceConnection extends AbstractServiceConnection {
     }
 
     @Override
-    public  boolean isAssignableTo(Class<?> clazz) {
+    public boolean isAssignableTo(Class<?> clazz) {
         return clazz.isAssignableFrom(serviceHolder.getClass())
                 || clazz.isAssignableFrom(serviceHolder.getContentType());
     }

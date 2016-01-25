@@ -44,7 +44,6 @@ import org.springframework.core.io.ResourceLoader;
  */
 public abstract class TempDirectoryTest {
 
-
     private final ResourceLoader loader = new DefaultResourceLoader();
 
     public TempDirectoryTest() {
@@ -58,7 +57,7 @@ public abstract class TempDirectoryTest {
     @Test
     public void testAdd_String_File() throws IOException {
         try (TempDirectory temp1 = newConcrete("1");
-                TempDirectory temp2 = newConcrete("2")) {
+             TempDirectory temp2 = newConcrete("2")) {
             Path path = temp2.getPath();
             Resource res = loader.getResource("classpath:TEXT/bomtext.txt");
             byte[] expectedData = Misc.toByteArray(res);
@@ -79,7 +78,7 @@ public abstract class TempDirectoryTest {
     @Test
     public void testAdd_String_File_noPrefix() throws IOException {
         try (TempDirectory temp1 = newConcrete("1");
-                TempDirectory temp2 = newConcrete("2")) {
+             TempDirectory temp2 = newConcrete("2")) {
             Path path = temp2.getPath();
             Resource res = loader.getResource("classpath:TEXT/bomtext.txt");
             byte[] expectedData = Misc.toByteArray(res);
@@ -142,7 +141,7 @@ public abstract class TempDirectoryTest {
     @Test
     public void testAdd_String_Path() throws IOException {
         try (TempDirectory temp1 = newConcrete("1");
-                TempDirectory temp2 = newConcrete("2")) {
+             TempDirectory temp2 = newConcrete("2")) {
             Path path = temp2.getPath();
             Resource res = loader.getResource("classpath:TEXT/bomtext.txt");
             byte[] expectedData = Misc.toByteArray(res);
@@ -164,7 +163,7 @@ public abstract class TempDirectoryTest {
     @Test
     public void testAdd_String_Path_noPrefix() throws IOException {
         try (TempDirectory temp1 = newConcrete("1");
-                TempDirectory temp2 = newConcrete("2")) {
+             TempDirectory temp2 = newConcrete("2")) {
             Path path = temp2.getPath();
             Resource res = loader.getResource("classpath:TEXT/bomtext.txt");
             byte[] expectedData = Misc.toByteArray(res);

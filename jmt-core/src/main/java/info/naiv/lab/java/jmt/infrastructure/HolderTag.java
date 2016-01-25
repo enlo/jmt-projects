@@ -33,12 +33,12 @@ import info.naiv.lab.java.jmt.Holder;
 public class HolderTag<T> extends Tag implements Holder<T> {
 
     private final Holder<T> hold;
-    
+
     public HolderTag(Holder<T> id) {
         super(new Object[]{id});
         hold = id;
     }
-    
+
     @Override
     public T getContent() {
         return hold.getContent();
@@ -48,5 +48,5 @@ public class HolderTag<T> extends Tag implements Holder<T> {
     public Class<? extends T> getContentType() {
         return hold.getContentType();
     }
-    
+
 }

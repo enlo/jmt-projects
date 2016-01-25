@@ -131,19 +131,23 @@ public class StandardIterationUnits {
     }
 
     static abstract class AbstractIterationUnit<T> implements IterationUnit<T> {
+
         private static final long serialVersionUID = 1L;
+
         @Override
         public int compare(T o1, T o2) {
             o1 = truncate(o1);
             o2 = truncate(o2);
             return doCompare(o1, o2);
         }
+
         @Override
         public long distance(T lhs, T rhs) {
             lhs = truncate(lhs);
             rhs = truncate(rhs);
             return doDistance(lhs, rhs);
         }
+
         @Override
         public T next(T value) {
             return advance(value, 1);
@@ -166,15 +170,19 @@ public class StandardIterationUnits {
     }
 
     static class DateDayIterationUnit extends AbstractIterationUnit<Date> {
+
         private static final long serialVersionUID = 1L;
+
         @Override
         public Date advance(Date value, long n) {
             return new Date(value.getTime() + TimeUnit.DAYS.toMillis(n));
         }
+
         @Override
         public long doDistance(Date lhs, Date rhs) {
             return TimeUnit.MILLISECONDS.toDays(rhs.getTime() - lhs.getTime());
         }
+
         @Override
         protected int doCompare(Date o1, Date o2) {
             return o1.compareTo(o2);

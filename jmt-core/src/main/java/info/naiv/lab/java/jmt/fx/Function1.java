@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.fx;
 
 /**
  * UnaryFunction.
+ *
  * @author enlo
  * @param <A1>
  * @param <R>

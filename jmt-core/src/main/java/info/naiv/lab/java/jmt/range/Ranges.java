@@ -26,9 +26,8 @@ package info.naiv.lab.java.jmt.range;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
 import info.naiv.lab.java.jmt.IterationUnit;
 
-
 public class Ranges {
-    
+
     public static <T extends Comparable<T>> Range<T> closedOpenRange(T first, T end) {
         return closedOpenRange(first, end, null);
     }
@@ -71,5 +70,5 @@ public class Ranges {
 
     private Ranges() {
     }
-    
+
 }

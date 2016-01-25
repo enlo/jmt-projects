@@ -91,8 +91,8 @@ public class BindManyNode extends Node {
     @Override
     public String toString() {
         return arrayToString("BindManyNode:", name, "{",
-                                                    (contents == null ? "" : new String(contents)),
-                                                    "} (start=", begin, ";end=", end + ")");
+                             (contents == null ? "" : new String(contents)),
+                             "} (start=", begin, ";end=", end + ")");
     }
 
     protected void appendCollectionToCtx(Object ctx, Collection<Object> value) {

@@ -40,7 +40,13 @@ public abstract class AbstractClassPreloaderTest {
     public AbstractClassPreloaderTest() {
     }
 
-    protected abstract AbstractClassPreloader newConcrete();
+    /**
+     * Test of getScanPackages method, of class AbstractClassPreloader.
+     */
+    @Test
+    public void testGetScanPackages() {
+        assertThat(newConcrete().getScanPackages(), is(empty()));
+    }
 
     /**
      * Test of preload method, of class AbstractClassPreloader.
@@ -59,12 +65,6 @@ public abstract class AbstractClassPreloaderTest {
         assertThat(instance.getScanPackages(), is(containsInAnyOrder("a", "b", "c")));
     }
 
-    /**
-     * Test of getScanPackages method, of class AbstractClassPreloader.
-     */
-    @Test
-    public void testGetScanPackages() {
-        assertThat(newConcrete().getScanPackages(), is(empty()));
-    }
+    protected abstract AbstractClassPreloader newConcrete();
 
 }

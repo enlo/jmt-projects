@@ -54,7 +54,6 @@ public class InterfaceImplementorInvocationHandler implements InvocationHandler 
         }, accCtrlContext);
         return convertResult(method, result);
     }
-    
 
     protected Object[] convertArguments(Method method, Object[] args) {
         return args;

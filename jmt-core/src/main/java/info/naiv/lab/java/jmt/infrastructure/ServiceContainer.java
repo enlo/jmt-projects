@@ -67,8 +67,7 @@ public interface ServiceContainer extends ServiceProvider {
 
     /**
      * サービスの登録. <br>
-     * 同一オブジェクトが登録されている場合は、優先度を変更する.
-     * タグは {@link Tag#NONE} を使用する.
+     * 同一オブジェクトが登録されている場合は、優先度を変更する. タグは {@link Tag#NONE} を使用する.
      *
      * @param priority 優先順位. 大きいほど優先度が高い.
      * @param service 登録したいインスタンス.

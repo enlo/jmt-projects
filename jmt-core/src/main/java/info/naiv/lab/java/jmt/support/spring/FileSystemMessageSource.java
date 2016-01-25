@@ -35,7 +35,6 @@ import org.springframework.core.io.Resource;
  */
 public class FileSystemMessageSource extends ReloadableResourceBundleMessageSource {
 
-
     Path baseDirectory;
     ResourceLoader localResourceLoader;
 

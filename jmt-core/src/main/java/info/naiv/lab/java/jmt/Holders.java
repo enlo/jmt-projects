@@ -38,7 +38,6 @@ public abstract class Holders {
             return null;
         }
     }
-    
 
     public static <T> T getContentAs(Holder<?> holder, Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {

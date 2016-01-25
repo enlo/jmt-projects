@@ -38,7 +38,7 @@ public final class SingleIterator<T> implements Iterator<T> {
     public SingleIterator(T value) {
         this(true, value);
     }
-    
+
     public SingleIterator(boolean hasNext, T value) {
         this.value = value;
         this.cont = hasNext;

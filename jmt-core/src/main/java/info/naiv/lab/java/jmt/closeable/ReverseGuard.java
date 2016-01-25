@@ -56,7 +56,7 @@ public class ReverseGuard extends Guard {
     @ReturnNonNull
     public Guard reverse(boolean doEnter) {
         Guard x = this.g;
-        if(doEnter) {
+        if (doEnter) {
             x.enter();
         }
         return x;

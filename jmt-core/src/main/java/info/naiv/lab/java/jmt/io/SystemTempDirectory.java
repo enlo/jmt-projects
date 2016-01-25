@@ -36,11 +36,11 @@ public class SystemTempDirectory extends TempDirectory {
     public SystemTempDirectory() throws IOException {
         this(null);
     }
-    
+
     public SystemTempDirectory(String prefix) throws IOException {
         super(createTempDirectory(checkPrefix(prefix)));
     }
-    
+
     public SystemTempDirectory(Path path, String prefix) throws IOException {
         super(createTempDirectory(path, checkPrefix(prefix)));
     }

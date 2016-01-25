@@ -26,7 +26,6 @@ package info.naiv.lab.java.jmt.infrastructure;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
 
-
 public class ServiceProviders {
 
     static final ServiceContainer systemContainer = new SystemServiceContainer();
@@ -77,8 +76,7 @@ public class ServiceProviders {
     public static <T> T resolveService(Class<T> serviceType) {
         return getThreadContainer().resolveService(serviceType);
     }
-    
-    
+
     /**
      * スレッドコンテナーからサービスを取得.
      *
@@ -106,8 +104,7 @@ public class ServiceProviders {
     }
 
     /**
-     * スレッドコンテナーからサービスを取得. 
-     * 複数一致するものがある場合、一致するものをすべて戻す.
+     * スレッドコンテナーからサービスを取得. 複数一致するものがある場合、一致するものをすべて戻す.
      *
      * @param <T> サービスの型.
      * @param serviceType サービスタイプ
@@ -126,7 +123,7 @@ public class ServiceProviders {
      * @return 今まで設定されていたコンテナー.
      */
     @ReturnNonNull
-    public static  ServiceContainer setThreadContainer(ServiceContainer container) {
+    public static ServiceContainer setThreadContainer(ServiceContainer container) {
         ServiceContainer current = threadLocalContainer.get();
         if (container == null) {
             threadLocalContainer.remove();

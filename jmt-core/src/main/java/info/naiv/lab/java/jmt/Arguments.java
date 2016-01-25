@@ -163,23 +163,23 @@ public abstract class Arguments {
     public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
         nonNull(lhs, varname);
         if (lhs.compareTo(rhs) < 0) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+            return lhs;
         }
-        return lhs;
+        throw new IllegalArgumentException(varname + " is must less than " + rhs);
     }
 
-    public static  long lessThan(long lhs, long rhs, String varname) {
+    public static long lessThan(long lhs, long rhs, String varname) {
         if (lhs < rhs) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+            return lhs;
         }
-        return lhs;
+        throw new IllegalArgumentException(varname + " is must less than " + rhs);
     }
 
-    public static  long lessThan(int lhs, int rhs, String varname) {
+    public static int lessThan(int lhs, int rhs, String varname) {
         if (lhs < rhs) {
-            throw new IllegalArgumentException(varname + " is must less than " + rhs);
+            return lhs;
         }
-        return lhs;
+        throw new IllegalArgumentException(varname + " is must less than " + rhs);
     }
 
     /**
@@ -240,7 +240,7 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
      */
-    public static  long nonMinus(long arg, String varname) throws IllegalArgumentException {
+    public static long nonMinus(long arg, String varname) throws IllegalArgumentException {
         if (arg < 0) {
             throw new IllegalArgumentException(varname + " is must be plus.");
         }
@@ -289,7 +289,7 @@ public abstract class Arguments {
         }
         return arg;
     }
-    
+
     private Arguments() {
     }
 }

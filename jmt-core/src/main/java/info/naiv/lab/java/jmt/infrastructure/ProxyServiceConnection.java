@@ -56,7 +56,7 @@ public class ProxyServiceConnection extends AbstractServiceConnection {
     }
 
     @Override
-    public  boolean isSameInstance(Object object) {
+    public boolean isSameInstance(Object object) {
         return serviceHolder == object;
     }
 

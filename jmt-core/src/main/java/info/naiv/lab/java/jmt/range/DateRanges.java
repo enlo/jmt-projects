@@ -35,9 +35,9 @@ import java.util.concurrent.TimeUnit;
 public class DateRanges {
 
     /**
-     * 
+     *
      * @param amount
-     * @return 
+     * @return
      */
     public static Range<Date> beforeDays(int amount) {
         Date max = ClassicDateUtils.now().getTime();

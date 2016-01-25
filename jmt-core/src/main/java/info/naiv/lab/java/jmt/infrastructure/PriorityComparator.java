@@ -32,7 +32,7 @@ import java.util.Comparator;
 public class PriorityComparator implements Comparator<ServiceConnection> {
 
     public static final PriorityComparator INSTANCE = new PriorityComparator();
-    
+
     @Override
     public int compare(ServiceConnection o1, ServiceConnection o2) {
         return Integer.compare(o1.getPriority(), o2.getPriority());

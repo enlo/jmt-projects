@@ -32,10 +32,10 @@ import org.junit.Before;
  * @author enlo
  */
 public class FileSystemResourceRepositoryTest {
-    
+
     public FileSystemResourceRepositoryTest() {
     }
-    
+
     @Before
     public void init() throws IOException {
         SystemTempDirectory dir = new SystemTempDirectory(null);
@@ -75,5 +75,5 @@ public class FileSystemResourceRepositoryTest {
     @Test
     public void testSetRootDirectory() {
     }
-    
+
 }

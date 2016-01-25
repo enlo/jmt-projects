@@ -136,7 +136,7 @@ public class ClassicArrayUtilsTest {
         BigDecimal[] list = null;
         assertThat(arrayContainsCompareEquals(list, null), is(false));
         assertThat(arrayContainsCompareEquals(list, BigDecimal.ZERO), is(false));
-        
+
         list = new BigDecimal[]{new BigDecimal("0.0"), new BigDecimal("1.0")};
         assertThat(ArrayUtils.contains(list, new BigDecimal("0")), is(false));
         assertThat(ArrayUtils.contains(list, new BigDecimal("1")), is(false));

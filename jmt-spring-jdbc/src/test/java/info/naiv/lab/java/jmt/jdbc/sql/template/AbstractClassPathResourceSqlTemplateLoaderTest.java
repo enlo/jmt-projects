@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.jdbc.sql.template;
 
 import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -37,47 +36,18 @@ import static org.mockito.Mockito.mock;
  * @param <T>
  */
 public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends AbstractClassPathResourceSqlTemplateLoader>
-        extends AbstractSqlTemplateLoaderTest<T> {
+        extends AbstractResourceSqlTemplateLoaderTest<T> {
 
     public AbstractClassPathResourceSqlTemplateLoaderTest() {
     }
 
     /**
-     * Test of setRootPackage method, of class
+     * Test of getRootPackage method, of class
      * AbstractClassPathResourceSqlTemplateLoader.
      */
     @Test
-    public void testSetRootPackage() {
-        instance.setRootPackage("test");
-        assertThat(instance.getRootPackage(), is("test"));
-    }
-
-    /**
-     * Test of getExtension method, of class
-     * AbstractClassPathResourceSqlTemplateLoader.
-     */
-    @Test
-    public void testGetExtension() {
-        assertThat(instance.getExtension(), is(defaultExntension()));
-    }
-
-    /**
-     * Test of setExtension method, of class
-     * AbstractClassPathResourceSqlTemplateLoader.
-     */
-    @Test
-    public void testSetExtension() {
-        instance.setExtension("txt");
-        assertThat(instance.getExtension(), is("txt"));
-    }
-
-    /**
-     * Test of getResourceRepository method, of class
-     * AbstractClassPathResourceSqlTemplateLoader.
-     */
-    @Test
-    public void testGetResourceRepository() {
-        assertThat(instance.getResourceRepository(), is(notNullValue()));
+    public void testGetRootPackage() {
+        assertThat(instance.getRootPackage(), is(defaultRootPackage()));
     }
 
     /**
@@ -92,19 +62,17 @@ public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends A
     }
 
     /**
-     * Test of getRootPackage method, of class
+     * Test of setRootPackage method, of class
      * AbstractClassPathResourceSqlTemplateLoader.
      */
     @Test
-    public void testGetRootPackage() {
-        assertThat(instance.getRootPackage(), is(defaultRootPackage()));
+    public void testSetRootPackage() {
+        instance.setRootPackage("test");
+        assertThat(instance.getRootPackage(), is("test"));
     }
 
     protected String defaultRootPackage() {
         return "SQL";
     }
 
-    protected String defaultExntension() {
-        return "sql";
-    }
 }

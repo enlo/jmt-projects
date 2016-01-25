@@ -234,6 +234,19 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return null;
     }
 
+    protected int getAnnotatedPriority(Object obj) {
+        if (obj != null) {
+            ServicePriority pa = AnnotationUtils.findAnnotation(obj.getClass(), ServicePriority.class);
+            if (pa != null) {
+                return pa.value();
+            }
+            else {
+                return OrderUtils.getOrder(obj.getClass(), 1);
+            }
+        }
+        return 1;
+    }
+
     @ReturnNonNull
     protected ServiceConnection internalRegisterService(int priority, Object service, Tag tag) {
         final AbstractServiceConnection conn = createConnection(priority, service, tag);
@@ -262,18 +275,5 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
 
     @ReturnNonNull
     protected abstract Guard writeGuard();
-
-    protected int getAnnotatedPriority(Object obj) {
-        if (obj != null) {
-            ServicePriority pa = AnnotationUtils.findAnnotation(obj.getClass(), ServicePriority.class);
-            if (pa != null) {
-                return pa.value();
-            }
-            else {
-                return OrderUtils.getOrder(obj.getClass(), 1);
-            }
-        }
-        return 1;
-    }
 
 }

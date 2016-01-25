@@ -56,7 +56,8 @@ public class Log4j2JmtConfigurer {
         if (isNotEmpty(resourcePath)) {
             URI location = URI.create(resourcePath);
             lc.setConfigLocation(location);
-        } else {
+        }
+        else {
             lc.reconfigure();
         }
     }

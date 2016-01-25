@@ -67,13 +67,6 @@ public class OptionalServiceRegisterTest {
         assertThat(container.resolveService(OptionalTestClass6.class), is(notNullValue()));
     }
 
-    protected OptionalServiceRegister newInstance() {
-        OptionalServiceRegister instance = new OptionalServiceRegister();
-        ResourcePatternResolver res = new PathMatchingResourcePatternResolver();
-        instance.getResolver().setResourcePatternResolver(res);
-        return instance;
-    }
-
     /**
      * Test of register method, of class OptionalServiceRegister.
      */
@@ -85,7 +78,7 @@ public class OptionalServiceRegisterTest {
         assertThat(container.resolveService(OptionalTestClass3.class), is(nullValue()));
         assertThat(container.resolveService(OptionalTestClass4.class), is(nullValue()));
         assertThat(container.resolveService(OptionalTestClass6.class), is(nullValue()));
-        
+
         OptionalServiceRegister instance = newInstance();
         List<ServiceConnection> conn = instance.register("info.naiv.lab.java.jmt.infrastructure.annotation.test");
         assertThat(conn, is(hasSize(3)));
@@ -94,6 +87,13 @@ public class OptionalServiceRegisterTest {
         assertThat(container.resolveService(OptionalTestClass3.class), is(notNullValue()));
         assertThat(container.resolveService(OptionalTestClass4.class), is(nullValue()));
         assertThat(container.resolveService(OptionalTestClass6.class), is(notNullValue()));
+    }
+
+    protected OptionalServiceRegister newInstance() {
+        OptionalServiceRegister instance = new OptionalServiceRegister();
+        ResourcePatternResolver res = new PathMatchingResourcePatternResolver();
+        instance.getResolver().setResourcePatternResolver(res);
+        return instance;
     }
 
 }

@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.infrastructure.preload;
 
 import info.naiv.lab.java.jmt.infrastructure.AnnotationMetadataSetResolver;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
@@ -37,15 +36,11 @@ import lombok.NonNull;
  */
 public abstract class AbstractClassPreloader implements ClassPreloader {
 
+    protected final AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
+
     @Getter
     @NonNull
     protected Set<String> scanPackages = new HashSet<>();
-
-    public void setScanPackages(Collection<String> scanPackages) {
-        this.scanPackages = new HashSet<>(scanPackages);
-    }
-
-    protected final AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
 
     public AbstractClassPreloader() {
     }
@@ -57,6 +52,10 @@ public abstract class AbstractClassPreloader implements ClassPreloader {
             preloadOne(scanPackage, classSet);
         }
         return classSet;
+    }
+
+    public void setScanPackages(Collection<String> scanPackages) {
+        this.scanPackages = new HashSet<>(scanPackages);
     }
 
     protected abstract void preloadOne(String scanPackage, Set<Class<?>> classSet);

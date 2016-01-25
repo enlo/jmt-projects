@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.range;
 
-
 public class Bounds {
 
     public static <T extends Comparable<T>> Bound.ClosedLowerBound<T> closedLo(T value) {

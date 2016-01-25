@@ -153,6 +153,7 @@ public class ServiceConnectionTest {
 
     /**
      * Test of isClosed method, of class AbstractServiceConnection.
+     *
      * @throws java.lang.Exception
      */
     @Test

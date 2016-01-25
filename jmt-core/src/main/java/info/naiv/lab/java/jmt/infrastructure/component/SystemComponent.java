@@ -28,5 +28,5 @@ package info.naiv.lab.java.jmt.infrastructure.component;
  * @author enlo
  */
 public interface SystemComponent {
-    
+
 }

@@ -28,8 +28,7 @@ public class ClassicDateUtils {
     }
 
     /**
-     * 日付を加算する.
-     * 既存のオブジェクトは変更しない.
+     * 日付を加算する. 既存のオブジェクトは変更しない.
      *
      * @param date 日付
      * @param amount 加算する値
@@ -44,8 +43,7 @@ public class ClassicDateUtils {
     }
 
     /**
-     * 日付を加算する.
-     * 既存のオブジェクトは変更しない.
+     * 日付を加算する. 既存のオブジェクトは変更しない.
      *
      * @param cal カレンダー
      * @param amount 加算する値
@@ -259,7 +257,8 @@ public class ClassicDateUtils {
                 bits -= Long.MIN_VALUE;
             }
             val = bits % n;
-        } while (bits - val + (n - 1) < 0);
+        }
+        while (bits - val + (n - 1) < 0);
         return new Date(from.getTime() + val);
     }
 
@@ -330,9 +329,11 @@ public class ClassicDateUtils {
     public static boolean isSameDay(Calendar lhs, Calendar rhs) {
         if (lhs == rhs) {
             return true;
-        } else if (rhs == null || lhs == null) {
+        }
+        else if (rhs == null || lhs == null) {
             return false;
-        } else {
+        }
+        else {
             return lhs.get(ERA) == rhs.get(ERA)
                     && lhs.get(YEAR) == rhs.get(YEAR)
                     && lhs.get(DAY_OF_YEAR) == rhs.get(DAY_OF_YEAR);
@@ -405,13 +406,13 @@ public class ClassicDateUtils {
      * @return 短縮年変換器を追加.
      */
     @ReturnNonNull
-static  ShortYearConverter getShortYearConverter() {
-    ShortYearConverter conv = get(ShortYearConverter.class);
-    if (conv == null) {
-        conv = new DefaultShortYearConverter();
+    static ShortYearConverter getShortYearConverter() {
+        ShortYearConverter conv = get(ShortYearConverter.class);
+        if (conv == null) {
+            conv = new DefaultShortYearConverter();
+        }
+        return conv;
     }
-    return conv;
-}
 
     private ClassicDateUtils() {
     }

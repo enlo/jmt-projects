@@ -29,7 +29,7 @@ import info.naiv.lab.java.jmt.infrastructure.annotation.OptionalService;
  *
  * @author enlo
  */
-@OptionalService(dependOn={"a.b.c"})
+@OptionalService(dependOn = {"a.b.c"})
 public class OptionalTestClass1 {
-    
+
 }

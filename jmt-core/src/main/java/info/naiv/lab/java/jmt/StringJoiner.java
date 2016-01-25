@@ -40,7 +40,7 @@ public class StringJoiner extends AbstractStringJoiner<Object> {
     public static final StringJoiner SLASHED = new StringJoiner("/");
 
     public static StringJoiner valueOf(String delim) {
-        if(delim == null) {
+        if (delim == null) {
             return SIMPLE;
         }
         switch (delim) {

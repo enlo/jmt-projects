@@ -230,6 +230,7 @@ public class NIOUtils {
             long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
             ByteBuffer bb = ByteBuffer.allocate((int) size);
             fch.read(bb);
+            bb.flip();
             return bb;
         }
         else {

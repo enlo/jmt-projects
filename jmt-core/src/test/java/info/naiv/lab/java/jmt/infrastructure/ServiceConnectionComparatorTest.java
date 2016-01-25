@@ -75,12 +75,14 @@ public class ServiceConnectionComparatorTest {
             ServiceConnection x = conn[i];
             for (int j = 0; j < conn.length; j++) {
                 ServiceConnection y = conn[j];
-               int actual = instance.compare(x, y);
-                if(i == j) {
+                int actual = instance.compare(x, y);
+                if (i == j) {
                     assertThat(actual, is(0));
-                } else if(i < j) {
+                }
+                else if (i < j) {
                     assertThat(actual, is(lessThan(0)));
-                } else {
+                }
+                else {
                     assertThat(actual, is(greaterThan(0)));
                 }
             }

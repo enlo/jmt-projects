@@ -24,16 +24,17 @@
 package info.naiv.lab.java.jmt.fx;
 
 /**
- * 
+ *
  * @author enlo
  * @param <A1>
  * @param <A2>
  */
 public interface Consumer2<A1, A2> {
+
     /**
-     * 
+     *
      * @param a1
-     * @param a2 
+     * @param a2
      */
     void accept(A1 a1, A2 a2);
 }

@@ -45,7 +45,6 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class AutoCreateHolderTest {
 
-
     @DataPoints("ctor")
     public static CtorFixture[] ctorParams = new CtorFixture[]{
         new CtorFixture(0, null, Integer.class, StandardFunctions.newInstance(Integer.class, 0)),

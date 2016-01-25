@@ -24,17 +24,10 @@
 package info.naiv.lab.java.jmt.infrastructure.preload;
 
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.infrastructure.AnnotationMetadataSetResolver;
-import info.naiv.lab.java.jmt.infrastructure.annotation.OptionalService;
 import info.naiv.lab.java.jmt.infrastructure.annotation.PreloadTarget;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.core.type.filter.TypeFilter;

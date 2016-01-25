@@ -1,0 +1,1 @@
+select * from 日本語テーブル where 名前 = @bind{name}

@@ -187,7 +187,7 @@ public class XmlUtilsTest {
         Resource xml = context.getResource("classpath:TEXT/test.xml");
         try (InputStream stream = xml.getInputStream()) {
             InputSource source = new InputSource(stream);
-            
+
             Document doc = XmlUtils.toDocument(source);
             assertThat(doc, is(notNullValue()));
             assertThat(doc.getDocumentElement().getTagName(), is("configuration"));

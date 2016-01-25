@@ -51,7 +51,8 @@ public class WaitForSetTest {
             public void run() {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 x.set(1);
                 value.set("ABC");
@@ -78,7 +79,8 @@ public class WaitForSetTest {
             public void run() {
                 try {
                     Thread.sleep(150);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 x.set(1);
                 value.set("ABC");
@@ -106,7 +108,8 @@ public class WaitForSetTest {
             public void run() {
                 try {
                     Thread.sleep(100);
-                } catch (InterruptedException ex) {
+                }
+                catch (InterruptedException ex) {
                 }
                 value.set("ABC");
             }

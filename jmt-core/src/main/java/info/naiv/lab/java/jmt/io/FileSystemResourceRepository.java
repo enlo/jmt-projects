@@ -27,6 +27,7 @@ import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.Watchable;
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +50,9 @@ import org.springframework.core.io.FileSystemResourceLoader;
 @Slf4j
 public class FileSystemResourceRepository extends AbstractResourceRepository {
 
-
     final ConcurrentMap<String, Path> categories = new ConcurrentHashMap<>();
     @NonNull
-            Path rootDirectory;
+    Path rootDirectory;
 
     public FileSystemResourceRepository() {
         setResourceLoader(new FileSystemResourceLoader());
@@ -84,7 +84,8 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
             return categories.get(category);
         }
         else {
-            Path path = rootDirectory.resolve(category);
+            Path root = rootDirectory != null ? rootDirectory : Paths.get(".");
+            Path path = root.resolve(category);
             Path res = categories.putIfAbsent(category, path);
             return res == null ? path : res;
         }

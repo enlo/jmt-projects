@@ -41,10 +41,10 @@ public class ByteBufferInputStream extends InputStream {
     @NonNull
     private ByteBuffer byteBuffer;
 
-    public ByteBufferInputStream(){
+    public ByteBufferInputStream() {
         this(NIOUtils.DEFAULT_BUFFER_SIZE);
     }
-    
+
     public ByteBufferInputStream(int bufferSize) {
         this(allocate(bufferSize));
         byteBuffer.flip();

@@ -37,5 +37,6 @@ import java.lang.annotation.Target;
 @Target(ANNOTATION_TYPE)
 @Documented
 public @interface TagOf {
+
     String value() default "value";
 }

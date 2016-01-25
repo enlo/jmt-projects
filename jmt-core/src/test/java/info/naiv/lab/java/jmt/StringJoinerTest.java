@@ -35,14 +35,14 @@ import org.junit.Before;
  * @author enlo
  */
 public class StringJoinerTest extends AbstractStringJoinerTest<String> {
-    
+
     public StringJoinerTest() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -50,7 +50,7 @@ public class StringJoinerTest extends AbstractStringJoinerTest<String> {
     @Override
     public void testJoin_GenericType() {
         StringJoiner joiner = StringJoiner.valueOf(",");
-        String[] strs = {"a", "b", "c" };
+        String[] strs = {"a", "b", "c"};
         String actual = joiner.join(strs).toString();
         assertThat(actual, is("a,b,c"));
     }
@@ -63,5 +63,4 @@ public class StringJoinerTest extends AbstractStringJoinerTest<String> {
         assertThat(actual, is("a,b,c"));
     }
 
-    
 }

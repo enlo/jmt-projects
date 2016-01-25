@@ -29,9 +29,10 @@ package info.naiv.lab.java.jmt.fx;
  * @param <R>
  */
 public interface Supplier<R> {
+
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     R get();
 }

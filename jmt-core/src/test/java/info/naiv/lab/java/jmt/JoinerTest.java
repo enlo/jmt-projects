@@ -30,10 +30,10 @@ import org.junit.Test;
  * @author enlo
  */
 public abstract class JoinerTest<R, T> {
-    
+
     public JoinerTest() {
     }
-    
+
     /**
      * Test of join method, of class Joiner.
      */

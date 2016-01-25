@@ -24,9 +24,7 @@
 package info.naiv.lab.java.jmt.io;
 
 import info.naiv.lab.java.jmt.StringJoiner;
-import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
-import java.nio.file.Watchable;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -40,6 +38,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  * @author enlo
  */
 public class ClassPathResourceRepository extends AbstractResourceRepository {
+
     private static final StringJoiner joiner = StringJoiner.valueOf("/");
 
     @Getter
@@ -49,6 +48,11 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
 
     public ClassPathResourceRepository() {
         resolver = new PathMatchingResourcePatternResolver();
+    }
+
+    public ClassPathResourceRepository(String location) {
+        resolver = new PathMatchingResourcePatternResolver();
+        rootPath = location;
     }
 
     public final void setRootPath(String location) {

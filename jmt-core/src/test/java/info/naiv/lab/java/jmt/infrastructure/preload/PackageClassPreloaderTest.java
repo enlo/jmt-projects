@@ -46,6 +46,15 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
     public PackageClassPreloaderTest() {
     }
 
+    /**
+     * Test of getExtractPattern method, of class PackageClassPreloader.
+     */
+    @Test
+    public void testGetExtractPattern() {
+        PackageClassPreloader instance = newConcrete();
+        assertThat(instance.getExtractPattern(), is(empty()));
+    }
+
     @Override
     public void testPreload() {
         PackageClassPreloader loader = newConcrete();
@@ -85,15 +94,6 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
         PackageClassPreloader loader = newConcrete();
         loader.setExtractPattern(Arrays.asList("a", "b", "b", "c"));
         assertThat(loader.getExtractPattern(), is(containsInAnyOrder("a", "b", "c")));
-    }
-
-    /**
-     * Test of getExtractPattern method, of class PackageClassPreloader.
-     */
-    @Test
-    public void testGetExtractPattern() {
-        PackageClassPreloader instance = newConcrete();
-        assertThat(instance.getExtractPattern(), is(empty()));
     }
 
     @Override

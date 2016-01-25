@@ -1,4 +1,3 @@
-
 package info.naiv.lab.java.jmt.xml;
 
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;

@@ -32,14 +32,14 @@ import info.naiv.lab.java.jmt.ImmutableHolder;
 class DummyCloseable<T> extends ImmutableHolder<T> implements ACS<T> {
 
     DummyCloseable(T object) {
-       super(object);
+        super(object);
     }
-    
+
     DummyCloseable(T object, Class<T> clazz) {
-       super(object, clazz);
+        super(object, clazz);
     }
-    
+
     @Override
     public void close() {
-    }    
+    }
 }

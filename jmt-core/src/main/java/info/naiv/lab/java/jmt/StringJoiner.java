@@ -58,7 +58,7 @@ public class StringJoiner extends AbstractStringJoiner<Object> {
     }
 
     public StringJoiner(final String delim) {
-        super(new SimpleAdder(), new Adder<StringBuilder, Object>() {
+        super(new SimpleAdder(), new Adder<Object, StringBuilder>() {
             @Override
             public StringBuilder add(StringBuilder obj, Object value, int idx) {
                 return obj.append(delim).append(value);
@@ -70,14 +70,11 @@ public class StringJoiner extends AbstractStringJoiner<Object> {
         super(new SimpleAdder());
     }
 
-    private static class SimpleAdder implements Adder<StringBuilder, Object> {
+    private static class SimpleAdder implements Adder<Object, StringBuilder> {
 
         @Override
         public StringBuilder add(StringBuilder obj, Object value, int idx) {
-            if (value != null) {
-                return obj.append(value);
-            }
-            return obj;
+            return obj.append(value);
         }
     }
 }

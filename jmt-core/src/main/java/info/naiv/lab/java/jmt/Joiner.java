@@ -24,16 +24,32 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import lombok.Setter;
 
 /**
  * オブジェクト連結.
  *
  * @author enlo
- * @param <R>
  * @param <T>
+ * @param <R>
  */
-public abstract class Joiner<R, T> {
+public abstract class Joiner<T, R> {
+
+    @Setter
+    private Predicate1<T> accepter = StandardFunctions.NON_NULL;
+
+    /**
+     * 連結処理.
+     * 
+     * @param items アイテム.
+     * @return 
+     */
+    public R joinItems(T... items) {
+        return join(items);
+    }
 
     /**
      * 連結処理.
@@ -44,14 +60,16 @@ public abstract class Joiner<R, T> {
     public R join(Iterable<? extends T> items) {
         nonNull(items, "items");
         R r = createResult();
-        Adder<R, T> adder = getFirst();
-        final Adder<R, T> more = getMore();
+        Adder<T, R> adder = getFirst();
+        final Adder<T, R> more = getMore();
         int i = 0;
         r = preLoop(r);
         for (T item : items) {
-            r = adder.add(r, item, i);
-            adder = more;
-            i++;
+            if (accepter.test(item)) {
+                r = adder.add(r, item, i);
+                adder = more;
+                i++;
+            }
         }
         r = postLoop(r, i);
         return r;
@@ -66,13 +84,15 @@ public abstract class Joiner<R, T> {
     public R join(T[] items) {
         nonNull(items, "items");
         R r = createResult();
-        Adder<R, T> adder = getFirst();
-        final Adder<R, T> more = getMore();
+        Adder<T, R> adder = getFirst();
+        final Adder<T, R> more = getMore();
         final int size = items.length;
         r = preLoop(r);
         for (int i = 0; i < size; i++) {
-            r = adder.add(r, items[i], i);
-            adder = more;
+            if (accepter.test(items[i])) {
+                r = adder.add(r, items[i], i);
+                adder = more;
+            }
         }
         r = postLoop(r, size);
         return r;
@@ -88,14 +108,14 @@ public abstract class Joiner<R, T> {
      * @return 最初の連結器
      */
     @ReturnNonNull
-    protected abstract Adder<R, T> getFirst();
+    protected abstract Adder<T, R> getFirst();
 
     /**
      *
      * @return 2回以降の連結器
      */
     @ReturnNonNull
-    protected abstract Adder<R, T> getMore();
+    protected abstract Adder<T, R> getMore();
 
     /**
      * ループ後処理.
@@ -124,8 +144,9 @@ public abstract class Joiner<R, T> {
      * @param <R>
      * @param <T>
      */
-    public static interface Adder<R, T> {
+    public static interface Adder<T, R> {
 
         R add(R obj, T value, int idx);
     }
+
 }

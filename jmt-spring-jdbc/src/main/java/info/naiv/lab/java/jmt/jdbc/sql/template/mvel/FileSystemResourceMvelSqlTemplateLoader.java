@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node.CustomNodes;
 import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.jdbc.sql.template.AbstractFileSystemResourceSqlTemplateLoader;
 import java.io.IOException;

@@ -21,12 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
-import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.StringJoiner;
-import java.util.Arrays;
 import java.util.Collection;
 import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
@@ -38,20 +35,18 @@ import org.mvel2.templates.util.TemplateOutputStream;
  *
  * @author enlo
  */
-public class BindManyNode extends Node {
-
-    private static final StringJoiner joiner = StringJoiner.valueOf(", ");
+public class BindNode extends Node {
 
     private static final long serialVersionUID = 1L;
 
-    public BindManyNode() {
+    public BindNode() {
     }
 
-    public BindManyNode(int begin, String name, char[] template, int start, int end) {
+    public BindNode(int begin, String name, char[] template, int start, int end) {
         super(begin, name, template, start, end);
     }
 
-    public BindManyNode(int begin, String name, char[] template, int start, int end, Node next) {
+    public BindNode(int begin, String name, char[] template, int start, int end, Node next) {
         super(begin, name, template, start, end, next);
     }
 
@@ -63,48 +58,19 @@ public class BindManyNode extends Node {
     @Override
     public Object eval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
         Object value = MVEL.eval(contents, ctx, factory);
-        int count = 1;
-        if (value != null) {
-            Object[] arr = Misc.asObjectArray(value);
-            if (arr != null) {
-                count = arr.length;
-                appendCollectionToCtx(ctx, Arrays.asList(arr));
-            }
-            else if (value instanceof Collection) {
-                Collection list = (Collection) value;
-                count = list.size();
-                appendCollectionToCtx(ctx, list);
-            }
-            else if (value instanceof Iterable) {
-                Collection list = Misc.toList((Iterable) value);
-                count = list.size();
-                appendCollectionToCtx(ctx, list);
-            }
-            else {
-                appendToCtx(ctx, value);
-            }
+        if (ctx instanceof Collection) {
+            Collection params = ((Collection) ctx);
+            params.add(value);
         }
-        appender.append(joiner.join(Misc.repeat(count, "?")));
+        appender.append("?");
         return next != null ? next.eval(runtime, appender, ctx, factory) : null;
     }
 
     @Override
     public String toString() {
-        return arrayToString("BindManyNode:", name, "{",
+        return arrayToString("BindNode:", name, "{",
                              (contents == null ? "" : new String(contents)),
                              "} (start=", begin, ";end=", end + ")");
-    }
-
-    protected void appendCollectionToCtx(Object ctx, Collection<Object> value) {
-        if (ctx instanceof Collection) {
-            ((Collection) ctx).addAll(value);
-        }
-    }
-
-    protected void appendToCtx(Object ctx, Object value) {
-        if (ctx instanceof Collection) {
-            ((Collection) ctx).add(value);
-        }
     }
 
 }

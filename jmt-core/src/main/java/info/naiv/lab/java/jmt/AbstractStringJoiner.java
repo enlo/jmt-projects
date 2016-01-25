@@ -31,17 +31,17 @@ import static info.naiv.lab.java.jmt.Arguments.nonNull;
  * @author enlo
  * @param <T>
  */
-public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
+public abstract class AbstractStringJoiner<T> extends Joiner<T, StringBuilder> {
 
     /**
      *
      */
-    protected final Adder<StringBuilder, T> first;
+    protected final Adder<T, StringBuilder> first;
 
     /**
      *
      */
-    protected final Adder<StringBuilder, T> more;
+    protected final Adder<T, StringBuilder> more;
 
     /**
      * コンストラクタ
@@ -49,7 +49,7 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
      * @param first
      * @param more
      */
-    public AbstractStringJoiner(Adder<StringBuilder, T> first, Adder<StringBuilder, T> more) {
+    public AbstractStringJoiner(Adder<T, StringBuilder> first, Adder<T, StringBuilder> more) {
         this.first = nonNull(first, "first");
         this.more = nonNull(more, "more");
     }
@@ -59,7 +59,7 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
      *
      * @param adder
      */
-    public AbstractStringJoiner(Adder<StringBuilder, T> adder) {
+    public AbstractStringJoiner(Adder<T, StringBuilder> adder) {
         this.first = nonNull(adder, "adder");
         this.more = adder;
     }
@@ -70,12 +70,12 @@ public abstract class AbstractStringJoiner<T> extends Joiner<StringBuilder, T> {
     }
 
     @Override
-    protected final Adder<StringBuilder, T> getFirst() {
+    protected final Adder<T, StringBuilder> getFirst() {
         return first;
     }
 
     @Override
-    protected final Adder<StringBuilder, T> getMore() {
+    protected final Adder<T, StringBuilder> getMore() {
         return more;
     }
 

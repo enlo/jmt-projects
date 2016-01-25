@@ -31,6 +31,13 @@ import java.util.regex.Pattern;
 
 public class StandardFunctions {
 
+    public static final Predicate1 NON_NULL = new Predicate1<Object>() {
+        @Override
+        public boolean test(Object obj) {
+            return obj != null;
+        }
+    };
+
     public static Predicate1 NO_CHECK = new Predicate1() {
         @Override
         public boolean test(Object obj) {
@@ -127,6 +134,11 @@ public class StandardFunctions {
     @ReturnNonNull
     public static <T> Predicate1<T> noCheck() {
         return NO_CHECK;
+    }
+
+    @ReturnNonNull
+    public static <T> Predicate1<T> nonNull() {
+        return NON_NULL;
     }
 
     private StandardFunctions() {

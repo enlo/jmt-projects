@@ -32,16 +32,16 @@ import org.junit.Test;
  * @author enlo
  * @param <T>
  */
-public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuilder, T> {
+public abstract class AbstractStringJoinerTest<T> extends JoinerTest<T, StringBuilder> {
 
-    final Joiner.Adder<StringBuilder, T> ADDER1 = new Joiner.Adder<StringBuilder, T>() {
+    final Joiner.Adder<T, StringBuilder> ADDER1 = new Joiner.Adder<T, StringBuilder>() {
         @Override
         public StringBuilder add(StringBuilder obj, T value, int idx) {
             return obj;
         }
     };
 
-    final Joiner.Adder<StringBuilder, T> ADDER2 = new Joiner.Adder<StringBuilder, T>() {
+    final Joiner.Adder<T, StringBuilder> ADDER2 = new Joiner.Adder<T, StringBuilder>() {
         @Override
         public StringBuilder add(StringBuilder obj, T value, int idx) {
             return obj;
@@ -78,23 +78,23 @@ public abstract class AbstractStringJoinerTest<T> extends JoinerTest<StringBuild
 
     @Test
     public void testGetFirst() {
-        Joiner.Adder<StringBuilder, T> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
+        Joiner.Adder<T, StringBuilder> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
         assertThat(addr, sameInstance(ADDER1));
     }
 
     @Test
     public void testGetMore() {
-        Joiner.Adder<StringBuilder, T> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();
+        Joiner.Adder<T, StringBuilder> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();
         assertThat(more, sameInstance(ADDER2));
     }
 
     private class AbstractStringJoinerImpl extends AbstractStringJoiner<T> {
 
-        AbstractStringJoinerImpl(Adder<StringBuilder, T> first, Adder<StringBuilder, T> more) {
+        AbstractStringJoinerImpl(Adder<T, StringBuilder> first, Adder<T, StringBuilder> more) {
             super(first, more);
         }
 
-        AbstractStringJoinerImpl(Adder<StringBuilder, T> adder) {
+        AbstractStringJoinerImpl(Adder<T, StringBuilder> adder) {
             super(adder);
         }
     }

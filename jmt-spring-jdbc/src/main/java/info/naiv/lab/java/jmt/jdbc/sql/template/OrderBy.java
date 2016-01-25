@@ -21,25 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.jdbc.sql.template;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import org.mvel2.templates.res.Node;
+import java.io.Serializable;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public class CustomNodes {
+@Value
+public class OrderBy implements Serializable {
 
-    public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
+    private static final long serialVersionUID = 1L;
 
-    static {
-        NODES.put("bind", BindNode.class);
-        NODES.put("bindMany", BindManyNode.class);
+    public static final OrderBy asc(String orderItem) {
+        return new OrderBy(orderItem, Order.ASC);
     }
 
-    private CustomNodes() {
+    public static final OrderBy desc(String orderItem) {
+        return new OrderBy(orderItem, Order.DESC);
+    }
+
+    private final Order order;
+    private final String orderItem;
+
+    public OrderBy(String orderItem, Order order) {
+        this.orderItem = orderItem;
+        this.order = order;
+    }
+
+    public boolean isAsc() {
+        return Order.ASC.equals(order);
+    }
+
+    public boolean isDesc() {
+        return Order.DESC.equals(order);
     }
 }

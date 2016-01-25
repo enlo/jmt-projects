@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
+package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
-import static org.junit.Assert.*;
 import org.junit.Test;
+import static org.junit.Assert.*;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
@@ -40,27 +40,27 @@ import org.mvel2.templates.TemplateRuntime;
  *
  * @author enlo
  */
-public class BindNodeTest {
+public class BindManyNodeTest {
 
-    public BindNodeTest() {
+    public BindManyNodeTest() {
     }
 
     /**
-     * Test of eval method, of class BindNode.
+     * Test of eval method, of class BindManyNode.
      */
     @Test
     public void testEval() {
 
         String template
                 = "select * from Users where category = @bind{ category }"
-                + " and (@foreach{ name : names } name = @bind{name} @end{ 'or' })";
+                + " and (name in (@bindMany{ names }))";
 
         int category = 1;
         List<String> names = Arrays.asList("jone", "doe", "mike");
 
         String expectedSql
                 = "select * from Users where category = ?"
-                + " and ( name = ? or name = ? or name = ? )";
+                + " and (name in (?, ?, ?))";
 
         Map<String, Object> map = new HashMap<>();
         map.put("category", category);
@@ -72,6 +72,7 @@ public class BindNodeTest {
 
         assertThat(actualSql, is(expectedSql));
         assertThat(actualParams, is(contains((Object) category, names.get(0), names.get(1), names.get(2))));
+
     }
 
 }

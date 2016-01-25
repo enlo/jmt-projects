@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node.CustomNodes;
 import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.jdbc.sql.template.AbstractClassPathResourceSqlTemplateLoader;
 import java.io.IOException;
@@ -39,6 +40,13 @@ import org.springframework.core.io.Resource;
  */
 public class ClassPathResourceMvelSqlTemplateLoader
         extends AbstractClassPathResourceSqlTemplateLoader {
+
+    public ClassPathResourceMvelSqlTemplateLoader() {
+    }
+
+    public ClassPathResourceMvelSqlTemplateLoader(String rootPackage) {
+        setRootPackage(rootPackage);
+    }
 
     protected MvelSqlTemplate compile(String name, String template) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);

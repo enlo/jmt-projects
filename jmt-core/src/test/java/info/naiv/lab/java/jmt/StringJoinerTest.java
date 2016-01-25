@@ -29,6 +29,7 @@ import static org.hamcrest.Matchers.is;
 import org.junit.After;
 import static org.junit.Assert.*;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -55,6 +56,30 @@ public class StringJoinerTest extends AbstractStringJoinerTest<String> {
         assertThat(actual, is("a,b,c"));
     }
 
+    @Test
+    public void testJoin_GenericType_2() {
+        StringJoiner joiner = StringJoiner.valueOf(",");
+        String[] strs = {"a", null, "c"};
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("a,c"));
+    }
+
+    @Test
+    public void testJoin_GenericType_3() {
+        StringJoiner joiner = StringJoiner.valueOf(",");
+        String[] strs = {"a", "", "c"};
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("a,,c"));
+    }
+
+    @Test
+    public void testJoin_GenericType_4() {
+        StringJoiner joiner = new StringJoiner();
+        String[] strs = {"a", null, "c"};
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("ac"));
+    }
+
     @Override
     public void testJoin_Iterable() {
         StringJoiner joiner = StringJoiner.valueOf(",");
@@ -63,4 +88,27 @@ public class StringJoinerTest extends AbstractStringJoinerTest<String> {
         assertThat(actual, is("a,b,c"));
     }
 
+    @Test
+    public void testJoin_Iterable_2() {
+        StringJoiner joiner = StringJoiner.valueOf(",");
+        List<String> strs = Arrays.asList("a", null, "c");
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("a,c"));
+    }
+
+    @Test
+    public void testJoin_Iterable_3() {
+        StringJoiner joiner = StringJoiner.valueOf(",");
+        List<String> strs = Arrays.asList("a", "", "c");
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("a,,c"));
+    }
+
+    @Test
+    public void testJoin_Iterable_4() {
+        StringJoiner joiner = new StringJoiner();
+        List<String> strs = Arrays.asList("a", null, "c");
+        String actual = joiner.join(strs).toString();
+        assertThat(actual, is("ac"));
+    }
 }

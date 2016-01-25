@@ -42,6 +42,46 @@ import lombok.Value;
  */
 public class ClassicArrayUtils {
 
+    /**
+     * 引数 array が配列だった場合、Object[] を戻す. <br>
+     * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
+     * 引数が配列でない場合、null を戻す.
+     *
+     * @param array 引数
+     * @return array が配列ならObject[]、そうでなければ null.
+     */
+    public static Object[] asObjectArray(Object array) {
+        Object[] result = null;
+        if (array != null) {
+            Class<?> clazz = array.getClass();
+            if (clazz.isArray()) {
+                Class ofArray = clazz.getComponentType();
+                if (ofArray.isPrimitive()) {
+                    int length = Array.getLength(array);
+                    result = new Object[length];
+                    for (int i = 0; i < length; i++) {
+                        result[i] = Array.get(array, i);
+                    }
+                }
+                else {
+                    result = (Object[]) array;
+                }
+            }
+        }
+        return result;
+    }
+
+    public static <T> boolean isArrayOf(Object array, Class<T> clazz) {
+        if (array != null) {
+            Class<?> aclz = array.getClass();
+            if (aclz.isArray()) {
+                Class ofArray = aclz.getComponentType();
+                return ofArray.equals(clazz);
+            }
+        }
+        return false;
+    }
+
     public static <T> ArrayIterable<T> arrayAsIterable(T[] array) {
         return new ArrayIterable<>(array);
     }

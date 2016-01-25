@@ -23,7 +23,14 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.ClassicArrayUtils.*;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayAsIterable;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContainsCompareEquals;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayEqualsInRange;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.createArray;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.math.BigDecimal;
 import java.util.Arrays;
@@ -36,8 +43,9 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -249,5 +257,36 @@ public class ClassicArrayUtilsTest {
         actual = createArray("A", "B", "C");
         assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
 
+    }
+
+    /**
+     * Test of asObjectArray method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testAsObjectArray() {
+        String a1 = "123";
+        assertThat("String(123)", ClassicArrayUtils.asObjectArray(a1), is(nullValue()));
+
+        String[] a2 = {"123", "456"};
+        assertThat("{ '123', '456' }", ClassicArrayUtils.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
+
+        int[] a3 = {123, 456};
+        assertThat("{ 123, 456 }", ClassicArrayUtils.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
+
+    }
+
+    /**
+     * Test of isArrayOf method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testIsArrayOf() {
+        String a1 = "123";
+        assertThat("String(123)", ClassicArrayUtils.isArrayOf(a1, String.class), is(false));
+
+        String[] a2 = {"123", "456"};
+        assertThat("{ '123', '456' }", ClassicArrayUtils.isArrayOf(a2, String.class), is(true));
+
+        int[] a3 = {123, 456};
+        assertThat("{ 123, 456 }", ClassicArrayUtils.isArrayOf(a3, String.class), is(false));
     }
 }

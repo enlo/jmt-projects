@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import lombok.Value;
 import org.springframework.dao.support.DataAccessUtils;
-import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreatorFactory;

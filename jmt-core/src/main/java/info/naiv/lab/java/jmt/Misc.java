@@ -74,35 +74,6 @@ public abstract class Misc {
     }
 
     /**
-     * 引数 array が配列だった場合、Object[] を戻す. <br>
-     * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
-     * 引数が配列でない場合、null を戻す.
-     *
-     * @param array 引数
-     * @return array が配列ならObject[]、そうでなければ null.
-     */
-    public static Object[] asObjectArray(Object array) {
-        Object[] result = null;
-        if (array != null) {
-            Class<?> clazz = array.getClass();
-            if (clazz.isArray()) {
-                Class ofArray = clazz.getComponentType();
-                if (ofArray.isPrimitive()) {
-                    int length = Array.getLength(array);
-                    result = new Object[length];
-                    for (int i = 0; i < length; i++) {
-                        result[i] = Array.get(array, i);
-                    }
-                }
-                else {
-                    result = (Object[]) array;
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
      * 値が範囲内に収まっているかどうかチェック. value, from, to のいずれかが null の場合は false.
      *
      * @param <T> 値の型.
@@ -228,7 +199,7 @@ public abstract class Misc {
      * @return 空か空白のみなら true.
      * @see Character#isWhitespace(char)
      */
-    public static boolean isBlank(String object) {
+    public static boolean isBlank(CharSequence object) {
         if (isEmpty(object)) {
             return true;
         }
@@ -250,8 +221,8 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空ならば true.
      */
-    public static boolean isEmpty(String object) {
-        return object == null || object.isEmpty();
+    public static boolean isEmpty(CharSequence object) {
+        return object == null || object.length() == 0;
     }
 
     /**

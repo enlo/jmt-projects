@@ -107,22 +107,6 @@ public class MiscTest {
     }
 
     /**
-     * Test of asObjectArray method, of class Misc.
-     */
-    @Test
-    public void testAsObjectArray() {
-        String a1 = "123";
-        assertThat("String(123)", Misc.asObjectArray(a1), is(nullValue()));
-
-        String[] a2 = {"123", "456"};
-        assertThat("{ '123', '456' }", Misc.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
-
-        int[] a3 = {123, 456};
-        assertThat("{ 123, 456 }", Misc.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
-
-    }
-
-    /**
      * Test of between method, of class Misc.
      */
     @Test

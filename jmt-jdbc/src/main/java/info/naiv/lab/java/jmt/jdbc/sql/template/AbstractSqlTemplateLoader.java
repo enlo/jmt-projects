@@ -27,6 +27,7 @@ import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,9 +49,14 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
     private String suffix = DEFAULT_SUFFIX;
 
     @Override
-    public final SqlTemplate formString(String template) {
+    public final SqlTemplate fromString(String template) {
+        return fromString(UUID.randomUUID().toString(), template);
+    }
+
+    @Override
+    public SqlTemplate fromString(String name, String template) {
         needInitialize();
-        return doFromString(template);
+        return doFromString(name, template);
     }
 
     @Override
@@ -101,7 +107,7 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
         this.parentLoader = parentLoader;
     }
 
-    protected abstract SqlTemplate doFromString(String template);
+    protected abstract SqlTemplate doFromString(String name, String template);
 
     protected abstract SqlTemplate doLoad(String category, String name, Charset charset) throws IOException;
 

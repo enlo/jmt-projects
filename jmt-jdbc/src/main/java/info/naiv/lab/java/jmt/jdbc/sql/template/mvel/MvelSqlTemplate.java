@@ -23,9 +23,11 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import info.naiv.lab.java.jmt.jdbc.sql.Query;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQuery;
 import info.naiv.lab.java.jmt.jdbc.sql.template.SqlTemplate;
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Map;
 import lombok.Value;
 import org.mvel2.integration.VariableResolverFactory;
@@ -78,6 +80,11 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
     @Override
     public SqlQuery merge(Object bean) {
         return merge(new BeanPropertySqlParameterSource(bean));
+    }
+
+    @Override
+    public Query merge() {
+        return merge(new HashMap<>());
     }
 
 }

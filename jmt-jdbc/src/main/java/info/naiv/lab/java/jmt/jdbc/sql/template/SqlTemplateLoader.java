@@ -42,8 +42,17 @@ public interface SqlTemplateLoader {
      * @return
      */
     @ReturnNonNull
-    SqlTemplate formString(String template);
+    SqlTemplate fromString(String template);
 
+    /**
+     *
+     * @param name
+     * @param template
+     * @return
+     */
+    @ReturnNonNull
+    SqlTemplate fromString(String name, String template);
+    
     /**
      *
      * @return Suffix.

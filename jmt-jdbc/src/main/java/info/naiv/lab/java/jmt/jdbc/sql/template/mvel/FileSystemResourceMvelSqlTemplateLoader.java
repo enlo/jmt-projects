@@ -29,7 +29,6 @@ import info.naiv.lab.java.jmt.jdbc.sql.template.AbstractFileSystemResourceSqlTem
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.UUID;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.springframework.core.io.Resource;
@@ -54,8 +53,8 @@ public class FileSystemResourceMvelSqlTemplateLoader
     }
 
     @Override
-    protected MvelSqlTemplate doFromString(String template) {
-        return compile(UUID.randomUUID().toString(), template);
+    protected MvelSqlTemplate doFromString(String name, String template) {
+        return compile(name, template);
     }
 
 }

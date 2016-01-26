@@ -23,14 +23,19 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
 
 /**
@@ -41,20 +46,21 @@ public interface Query {
 
     /**
      *
-     * @param <T>
      * @param jdbcOperations
      * @param batchValues
      * @return
      */
-    <T> int[] batchUpadate(JdbcOperations jdbcOperations, List<Object[]> batchValues);
+    int[] batchUpadate(JdbcOperations jdbcOperations, List<Object[]> batchValues);
 
-    <T> int[] batchUpadate(JdbcOperations jdbcOperations, final List<Object[]> batchValues, final int[] columnTypes);
+    int[] batchUpadate(JdbcOperations jdbcOperations, final List<Object[]> batchValues, final int[] columnTypes);
 
-    <T> int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter);
+    int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter);
+
+    PreparedStatement createPreparedStatement(Connection con) throws SQLException;
 
     void execute(JdbcOperations jdbcOperations);
 
-    <T> void execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action);
+    <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action);
 
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
 
@@ -96,4 +102,9 @@ public interface Query {
      */
     Query rebind(List<?> args);
 
+    PreparedStatementCreator toPreparedStatementCreator();
+
+    int update(JdbcOperations jdbcOperations);
+
+    int update(JdbcOperations jdbcOperations, KeyHolder keyHolder);
 }

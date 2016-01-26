@@ -52,10 +52,10 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
     }
 
     /**
-     * Test of formString method, of class AbstractSqlTemplateLoader.
+     * Test of fromString method, of class AbstractSqlTemplateLoader.
      */
     @Test
-    public abstract void testFormString();
+    public abstract void testFromString();
 
     /**
      * Test of getSuffix method, of class AbstractSqlTemplateLoader.

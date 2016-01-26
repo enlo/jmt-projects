@@ -39,6 +39,10 @@ public interface SqlTemplate {
 
     String getName();
 
+
+    @ReturnNonNull
+    Query merge();
+    
     @ReturnNonNull
     Query merge(Map<String, Object> parameters);
 

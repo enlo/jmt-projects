@@ -45,8 +45,8 @@ public class FileSystemResourceMvelSqlTemplateLoaderTest
     }
 
     @Override
-    public void testFormString() {
-        MvelSqlTemplate templ = instance.doFromString("select * from Test");
+    public void testFromString() {
+        MvelSqlTemplate templ = (MvelSqlTemplate) instance.fromString("select * from Test");
         assertThat(templ, is(notNullValue()));
         assertThat(new String(templ.getTemplate().getTemplate()), is("select * from Test"));
     }

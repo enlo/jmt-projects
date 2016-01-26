@@ -19,3 +19,4 @@ hs_err_pid*
 /jmt-core/nbactions.xml
 /jmt-core/nb-configuration.xml
 /jmt-spring-jdbc/target/
+/jmt-jdbc/target/

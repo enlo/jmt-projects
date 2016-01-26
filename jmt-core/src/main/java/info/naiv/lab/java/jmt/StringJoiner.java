@@ -31,7 +31,7 @@ import info.naiv.lab.java.jmt.mark.ThreadSafety;
  * @author enlo
  */
 @ThreadSafety
-public class StringJoiner extends AbstractStringJoiner<Object> {
+public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
 
     public static final StringJoiner COMMADELIMITED = new StringJoiner(",");
     public static final StringJoiner DOTTED = new StringJoiner(".");

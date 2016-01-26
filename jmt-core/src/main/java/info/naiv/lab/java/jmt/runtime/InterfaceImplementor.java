@@ -24,8 +24,10 @@
 package info.naiv.lab.java.jmt.runtime;
 
 import static info.naiv.lab.java.jmt.Arguments.isInterface;
+import info.naiv.lab.java.jmt.fx.Function2;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.security.AccessControlContext;
 import java.security.AccessController;
@@ -46,11 +48,16 @@ public class InterfaceImplementor {
     }
 
     @ReturnNonNull
-    public static <T> T getInterface(Object target, Class<T> clazz) {
+    public static <T> T getInterface(Class<T> clazz, Function2<Method, Object[], ? extends Object> externalRunner) {
         isInterface(clazz, "clazz");
         AccessControlContext accCtrlContext = AccessController.getContext();
-        InvocationHandler handler = new InterfaceImplementorInvocationHandler(target, accCtrlContext);
+        InvocationHandler handler = new InterfaceImplementorInvocationHandler(accCtrlContext, externalRunner);
         return getInterface(clazz, handler);
+    }
+
+    @ReturnNonNull
+    public static <T> T getInterface(Class<T> clazz) {
+        return getInterface(clazz, (Function2<Method, Object[], ? extends Object>) null);
     }
 
     private InterfaceImplementor() {

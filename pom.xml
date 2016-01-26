@@ -43,7 +43,7 @@
     
     <modules>
         <module>jmt-core</module>
-        <module>jmt-spring-jdbc</module>
+        <module>jmt-jdbc</module>
     </modules>
     
     <dependencyManagement>

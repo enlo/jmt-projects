@@ -25,10 +25,13 @@ package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import static java.util.Arrays.sort;
+import java.util.Collection;
 import java.util.Iterator;
 import static java.util.Objects.deepEquals;
 import lombok.NonNull;
@@ -52,19 +55,16 @@ public class ClassicArrayUtils {
      */
     public static Object[] asObjectArray(Object array) {
         Object[] result = null;
-        if (array != null) {
+        if (array instanceof Object[]) {
+            return (Object[]) array;
+        }
+        else if (array != null) {
             Class<?> clazz = array.getClass();
             if (clazz.isArray()) {
-                Class ofArray = clazz.getComponentType();
-                if (ofArray.isPrimitive()) {
-                    int length = Array.getLength(array);
-                    result = new Object[length];
-                    for (int i = 0; i < length; i++) {
-                        result[i] = Array.get(array, i);
-                    }
-                }
-                else {
-                    result = (Object[]) array;
+                int length = Array.getLength(array);
+                result = new Object[length];
+                for (int i = 0; i < length; i++) {
+                    result[i] = Array.get(array, i);
                 }
             }
         }
@@ -114,8 +114,12 @@ public class ClassicArrayUtils {
         return len1 - len2;
     }
 
+    public static <T> boolean arrayContains(T[] items, T search) {
+        return arrayContains(items, StandardFunctions.equal(search));
+    }
+
     /**
-     * コレクションから受け入れ可能なものを取得
+     * コレクションに項目があるかどうか
      *
      * @param <T> 要素の型
      * @param items コレクションから等価であるものを取得

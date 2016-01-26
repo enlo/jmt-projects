@@ -242,6 +242,22 @@ public class ClassicArrayUtilsTest {
     }
 
     /**
+     * Test of asObjectArray method, of class ClassicArrayUtils.
+     */
+    @Test
+    public void testAsObjectArray() {
+        String a1 = "123";
+        assertThat("String(123)", ClassicArrayUtils.asObjectArray(a1), is(nullValue()));
+
+        String[] a2 = {"123", "456"};
+        assertThat("{ '123', '456' }", ClassicArrayUtils.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
+
+        int[] a3 = {123, 456};
+        assertThat("{ 123, 456 }", ClassicArrayUtils.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
+
+    }
+
+    /**
      * Test of createArray method, of class ClassicArrayUtils.
      */
     @Test
@@ -256,22 +272,6 @@ public class ClassicArrayUtilsTest {
 
         actual = createArray("A", "B", "C");
         assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
-
-    }
-
-    /**
-     * Test of asObjectArray method, of class ClassicArrayUtils.
-     */
-    @Test
-    public void testAsObjectArray() {
-        String a1 = "123";
-        assertThat("String(123)", ClassicArrayUtils.asObjectArray(a1), is(nullValue()));
-
-        String[] a2 = {"123", "456"};
-        assertThat("{ '123', '456' }", ClassicArrayUtils.asObjectArray(a2), is(arrayContaining((Object) "123", "456")));
-
-        int[] a3 = {123, 456};
-        assertThat("{ 123, 456 }", ClassicArrayUtils.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
 
     }
 

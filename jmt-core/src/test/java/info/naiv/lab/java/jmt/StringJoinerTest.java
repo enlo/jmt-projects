@@ -35,7 +35,7 @@ import org.junit.Test;
  *
  * @author enlo
  */
-public class StringJoinerTest extends AbstractStringJoinerTest<String> {
+public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
 
     public StringJoinerTest() {
     }

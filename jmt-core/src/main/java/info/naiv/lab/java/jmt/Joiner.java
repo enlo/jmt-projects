@@ -43,16 +43,6 @@ public abstract class Joiner<T, R> {
 
     /**
      * 連結処理.
-     * 
-     * @param items アイテム.
-     * @return 
-     */
-    public R joinItems(T... items) {
-        return join(items);
-    }
-
-    /**
-     * 連結処理.
      *
      * @param items
      * @return
@@ -96,6 +86,16 @@ public abstract class Joiner<T, R> {
         }
         r = postLoop(r, size);
         return r;
+    }
+
+    /**
+     * 連結処理.
+     *
+     * @param items アイテム.
+     * @return
+     */
+    public R joinItems(T... items) {
+        return join(items);
     }
 
     /**

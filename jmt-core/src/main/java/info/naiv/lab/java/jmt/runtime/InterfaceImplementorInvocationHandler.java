@@ -23,11 +23,14 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
+import info.naiv.lab.java.jmt.fx.Function2;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  *
@@ -36,11 +39,18 @@ import java.security.PrivilegedExceptionAction;
 public class InterfaceImplementorInvocationHandler implements InvocationHandler {
 
     protected final AccessControlContext accCtrlContext;
-    protected final Object target;
 
-    public InterfaceImplementorInvocationHandler(Object target, AccessControlContext accCtrlContext) {
-        this.target = target;
+    @Getter
+    @Setter
+    protected Function2<Method, Object[], ? extends Object> externalRunner;
+
+    public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext) {
+        this(accCtrlContext, null);
+    }
+
+    public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext, Function2<Method, Object[], ? extends Object> externalRunner) {
         this.accCtrlContext = accCtrlContext;
+        this.externalRunner = externalRunner;
     }
 
     @Override
@@ -64,6 +74,9 @@ public class InterfaceImplementorInvocationHandler implements InvocationHandler 
     }
 
     protected Object internalInvoke(Method method, Object[] args) {
+        if (externalRunner != null) {
+            return externalRunner.apply(method, args);
+        }
         return null;
     }
 }

@@ -50,17 +50,8 @@ public abstract class AbstractFileSystemResourceSqlTemplateLoaderTest<T extends 
     protected String path;
     protected TempDirectory tempDirectory;
 
-    @After
-    public void closeTemp() {
-        try {
-            tempDirectory.close();
-        }
-        catch (IOException ex) {
-        }
-    }
-
     @Before
-    public void initTemp() throws IOException {
+    public void setUp() throws IOException {
         tempDirectory = new SystemTempDirectory();
         path = tempDirectory.getPath().toString();
         ResourceRepository rr = new ClassPathResourceRepository("SQL");
@@ -69,6 +60,15 @@ public abstract class AbstractFileSystemResourceSqlTemplateLoaderTest<T extends 
         }
         for (Resource res : rr.getResources("C2").values()) {
             tempDirectory.add("C2", res);
+        }
+    }
+
+    @After
+    public void tearDown() {
+        try {
+            tempDirectory.close();
+        }
+        catch (IOException ex) {
         }
     }
 

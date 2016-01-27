@@ -28,6 +28,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
@@ -56,6 +57,8 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 public class SqlQuery implements Query, PreparedStatementCreator {
 
     final PreparedStatementSetter setter;
+
+    @Getter
     final String sql;
 
     public SqlQuery(String sql, Object[] args) {
@@ -91,7 +94,6 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     /**
      *
-     * @param <T>
      * @param jdbcOperations
      * @param batchValues
      * @return

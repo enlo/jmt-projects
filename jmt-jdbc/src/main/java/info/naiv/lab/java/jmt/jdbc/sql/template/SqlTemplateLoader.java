@@ -52,7 +52,7 @@ public interface SqlTemplateLoader {
      */
     @ReturnNonNull
     SqlTemplate fromString(String name, String template);
-    
+
     /**
      *
      * @return Suffix.

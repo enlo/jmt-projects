@@ -27,22 +27,16 @@ package info.naiv.lab.java.jmt.jdbc.sql.dialect;
  *
  * @author enlo
  */
-public interface Dialect {
+public class H2Dialect extends AbstractDialect {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
+    @Override
+    public String getKeyword() {
+        return "h2";
+    }
 
-    PagingSupportType getPagingSupport();
+    @Override
+    public String rowNumber(String order) {
+        return "rownum";
+    }
 
-    /**
-     * 行番号を戻す関数.
-     *
-     * @param order 並び順.
-     * @return
-     */
-    String rowNumber(String order);
 }

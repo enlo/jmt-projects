@@ -21,28 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.dialect;
+package info.naiv.lab.java.jmt.jdbc.sql;
+
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 
 /**
  *
  * @author enlo
  */
-public interface Dialect {
+public interface SqlModifier {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
-
-    PagingSupportType getPagingSupport();
-
-    /**
-     * 行番号を戻す関数.
-     *
-     * @param order 並び順.
-     * @return
-     */
-    String rowNumber(String order);
+    String modify(String sql, Dialect dialect);
 }

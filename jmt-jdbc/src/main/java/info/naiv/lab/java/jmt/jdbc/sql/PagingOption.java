@@ -21,28 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.dialect;
+package info.naiv.lab.java.jmt.jdbc.sql;
+
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public interface Dialect {
+@Value
+public class PagingOption implements SqlModifier {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
+    int offset;
+    int rowSize;
 
-    PagingSupportType getPagingSupport();
+    public PagingOption(int offset, int rowSize) {
+        this.offset = offset;
+        this.rowSize = rowSize;
+    }
 
-    /**
-     * 行番号を戻す関数.
-     *
-     * @param order 並び順.
-     * @return
-     */
-    String rowNumber(String order);
+    @Override
+    public String modify(String sql, Dialect dialect) {
+        int off = 0 <= offset ? offset : 0;
+        int size = 0 <= rowSize ? rowSize : -1;
+        return dialect.getPagingSupport().modify(sql, dialect, off, size);
+    }
+
 }

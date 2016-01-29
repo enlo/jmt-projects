@@ -27,22 +27,21 @@ package info.naiv.lab.java.jmt.jdbc.sql.dialect;
  *
  * @author enlo
  */
-public interface Dialect {
+public class OracleDialect extends AbstractDialect {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
+    @Override
+    public String getKeyword() {
+        return "oracle";
+    }
 
-    PagingSupportType getPagingSupport();
+    @Override
+    public PagingSupportType getPagingSupport() {
+        return PagingSupportType.ROWNUM_SUPPORT;
+    }
 
-    /**
-     * 行番号を戻す関数.
-     *
-     * @param order 並び順.
-     * @return
-     */
-    String rowNumber(String order);
+    @Override
+    public String rowNumber(String order) {
+        return "rownum";
+    }
+
 }

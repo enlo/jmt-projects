@@ -67,7 +67,7 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
     public final String getSuffix() {
         if (isEmpty(suffix)) {
             if (dialect != null) {
-                return dialect.getSystemName();
+                return dialect.getKeyword();
             }
         }
         return suffix;

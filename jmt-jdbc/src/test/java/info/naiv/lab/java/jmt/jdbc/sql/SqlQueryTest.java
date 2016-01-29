@@ -23,6 +23,15 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.H2Dialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.MySqlDialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Oracle12Dialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.OracleDialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.PostgreSqlDialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.SqlServer2012Dialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.SqlServerDialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.StandardDialect;
 import info.naiv.lab.java.jmt.jdbc.sql.template.mvel.ClassPathResourceMvelSqlTemplateLoader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -181,23 +190,6 @@ public class SqlQueryTest {
     }
 
     /**
-     * Test of createPreparedStatement method, of class SqlQuery.
-     *
-     * @throws java.lang.Exception
-     */
-    @Test
-    public void testCreatePreparedStatement() throws Exception {
-        User u = new User();
-        u.setName("Phillip");
-        SqlQuery query = (SqlQuery) loader.fromString("select * from Users where Name like @bind{name + ' %'}").merge(u);
-        RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
-        List<User> users = jdbcTemplate.query(query, rowMapper);
-        assertThat(users, is(notNullValue()));
-        assertThat(users, hasSize(1));
-        assertThat(users.get(0).id, is(2));
-    }
-
-    /**
      * Test of execute method, of class SqlQuery.
      */
     @Test
@@ -265,6 +257,15 @@ public class SqlQueryTest {
     public void testGetMaxRowSize() {
         Query query1 = loader.fromString("select * from Users order by id").merge();
         assertThat(query1.getMaxRowSize(), is(-1));
+    }
+
+    /**
+     * Test of getPagingOption method, of class SqlQuery.
+     */
+    @Test
+    public void testGetPagingOption() {
+        SqlQuery q = (SqlQuery) loader.fromString("select count(*) from Users").merge();
+        assertThat(q.getPagingOption(), is(nullValue()));
     }
 
     /**
@@ -518,13 +519,36 @@ public class SqlQueryTest {
         assertThat(list, hasSize(10));
     }
 
+    Dialect[] dialects() {
+        return new Dialect[]{
+            new H2Dialect(),
+            new MySqlDialect(),
+            new Oracle12Dialect(),
+            new OracleDialect(),
+            new PostgreSqlDialect(),
+            new SqlServer2012Dialect(),
+            new SqlServerDialect(),
+            new StandardDialect(),};
+    }
+
     /**
-     * Test of toPreparedStatementCreator method, of class SqlQuery.
+     * Test of setPage method, of class SqlQuery.
      */
     @Test
-    public void testToPreparedStatementCreator() {
-        Query cq = loader.fromString("select count(*) from Users").merge();
-        assertThat(cq.toPreparedStatementCreator(), is(sameInstance((Object) cq)));
+    public void testSetPage() {
+        for (Dialect dialect : dialects()) {
+            testSetPageCommon1(dialect);
+        }
+    }
+
+    /**
+     * Test of setPage method, of class SqlQuery.
+     */
+    @Test
+    public void testSetPage_02() {
+        for (Dialect dialect : dialects()) {
+            testSetPageCommon2(dialect);
+        }
     }
 
     /**
@@ -571,6 +595,27 @@ public class SqlQueryTest {
 
         count = cq.queryForObject(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
+    }
+
+    protected void testSetPageCommon1(Dialect dialect) {
+        String name = dialect.getKeyword();
+        loader.setDialect(dialect);
+        Query q = loader.fromString("select * from Users order by id").merge();
+        q.setPage(15, 10);
+        List<User> list = q.queryForBeanList(jdbcTemplate, User.class);
+        assertThat(name, list, hasSize(10));
+        assertThat(name, list.get(0).getId(), is(16));
+        assertThat(name, list.get(9).getId(), is(25));
+    }
+
+    protected void testSetPageCommon2(Dialect dialect) {
+        String name = dialect.getKeyword();
+        loader.setDialect(dialect);
+        Query q = loader.fromString("select * from Users order by id").merge();
+        q.setPage(15, -1);
+        List<User> list = q.queryForBeanList(jdbcTemplate, User.class);
+        assertThat(name, list, hasSize(85));
+        assertThat(name, list.get(0).getId(), is(16));
     }
 
     @Data

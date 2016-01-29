@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -38,13 +39,11 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.PreparedStatementCreatorFactory;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.RowMapperResultSetExtractor;
 import org.springframework.jdbc.core.SingleColumnRowMapper;
-import org.springframework.jdbc.core.SqlProvider;
 import org.springframework.jdbc.core.SqlRowSetResultSetExtractor;
 import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.StatementCreatorUtils;
@@ -55,53 +54,35 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  *
  * @author enlo
  */
-public class SqlQuery implements Query, PreparedStatementCreator {
+public class SqlQuery implements Query {
+
+    final SqlQueryContext context;
 
     int fetchSize = -1;
     int maxRowSize = -1;
 
-    final InternalPreparedStatementSetter setter;
-
     @Getter
+    PagingOption pagingOption;
+
+    final InternalPreparedStatementSetter setter;
     final String sql;
 
-    public SqlQuery(String sql, SqlQueryContext ctx) {
-        this(sql, ctx.parameters);
+    public SqlQuery(String sql, SqlQueryContext context) {
+        this.sql = sql;
+        this.context = context;
+        this.setter = new InternalPreparedStatementSetter(context.getParameters());
     }
 
-    public SqlQuery(String sql, Object[] args) {
+    private SqlQuery(String sql, SqlQueryContext context, PreparedStatementSetter newSetter) {
         this.sql = sql;
+        this.context = context;
+        this.setter = new InternalPreparedStatementSetter(newSetter);
+    }
+
+    private SqlQuery(String sql, SqlQueryContext context, Object[] args) {
+        this.sql = sql;
+        this.context = context;
         this.setter = new InternalPreparedStatementSetter(args);
-    }
-
-    public SqlQuery(String sql, List<?> args) {
-        this.sql = sql;
-        this.setter = new InternalPreparedStatementSetter(args);
-    }
-
-    public SqlQuery(PreparedStatementCreatorFactory factory, List<?> args) {
-        PreparedStatementSetter pss = factory.newPreparedStatementSetter(args);
-        this.sql = ((SqlProvider) pss).getSql();
-        this.setter = new InternalPreparedStatementSetter(pss);
-    }
-
-    public SqlQuery(PreparedStatementCreatorFactory factory, Object[] args) {
-        PreparedStatementSetter pss = factory.newPreparedStatementSetter(args);
-        this.sql = ((SqlProvider) pss).getSql();
-        this.setter = new InternalPreparedStatementSetter(pss);
-    }
-
-    public SqlQuery(String sql, PreparedStatementSetter setter) {
-        this.sql = sql;
-        this.setter = new InternalPreparedStatementSetter(setter);
-    }
-
-    public SqlQuery(String sql) {
-        this(sql, new PreparedStatementSetter() {
-            @Override
-            public void setValues(PreparedStatement ps) throws SQLException {
-            }
-        });
     }
 
     /**
@@ -144,7 +125,8 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter) {
-        return jdbcOperations.batchUpdate(sql, new BatchPreparedStatementSetter() {
+        String q = getSql();
+        return jdbcOperations.batchUpdate(q, new BatchPreparedStatementSetter() {
 
             @Override
             public int getBatchSize() {
@@ -164,15 +146,9 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     }
 
     @Override
-    public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-        PreparedStatement ps = con.prepareStatement(sql);
-        setter.setValues(ps);
-        return ps;
-    }
-
-    @Override
     public void execute(JdbcOperations jdbcOperations) {
-        jdbcOperations.execute(sql, new PreparedStatementCallback<Void>() {
+        String q = modifyForQuery(getSql());
+        jdbcOperations.execute(q, new PreparedStatementCallback<Void>() {
 
             @Override
             public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -185,7 +161,8 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action) {
-        return jdbcOperations.execute(sql, new PreparedStatementCallback<T>() {
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.execute(q, new PreparedStatementCallback<T>() {
             @Override
             public T doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
                 setter.setValues(ps);
@@ -204,6 +181,10 @@ public class SqlQuery implements Query, PreparedStatementCreator {
         return maxRowSize;
     }
 
+    public String getSql() {
+        return sql;
+    }
+
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
         return query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper));
@@ -211,7 +192,8 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor) {
-        return jdbcOperations.query(sql, setter, resultSetExtractor);
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, resultSetExtractor);
     }
 
     @Override
@@ -221,12 +203,14 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public <T> List<T> queryForList(JdbcOperations jdbcOperations, Class<T> elementType) {
-        return jdbcOperations.query(sql, setter, new SingleColumnRowMapper<>(elementType));
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
     }
 
     @Override
     public List<Map<String, Object>> queryForList(JdbcOperations jdbcOperations) {
-        return jdbcOperations.query(sql, setter, new ColumnMapRowMapper());
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new ColumnMapRowMapper());
     }
 
     @Override
@@ -247,7 +231,8 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
-        return jdbcOperations.query(sql, setter, new SqlRowSetResultSetExtractor());
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
     }
 
     @Override
@@ -257,12 +242,12 @@ public class SqlQuery implements Query, PreparedStatementCreator {
 
     @Override
     public SqlQuery rebind(PreparedStatementSetter newSetter) {
-        return new SqlQuery(sql, newSetter);
+        return new SqlQuery(getSql(), context, newSetter);
     }
 
     @Override
     public SqlQuery rebind(List<?> args) {
-        return new SqlQuery(sql, args);
+        return new SqlQuery(getSql(), context, args.toArray());
     }
 
     @Override
@@ -276,18 +261,41 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     }
 
     @Override
-    public PreparedStatementCreator toPreparedStatementCreator() {
-        return this;
+    public void setPage(int offset, int size) {
+        this.pagingOption = new PagingOption(offset, size);
     }
 
     @Override
     public int update(JdbcOperations jdbcOperations) {
-        return jdbcOperations.update(sql, setter);
+        String q = modifyForUpdate(getSql());
+        return jdbcOperations.update(q, setter);
     }
 
     @Override
     public int update(JdbcOperations jdbcOperations, KeyHolder keyHolder) {
-        return jdbcOperations.update(toPreparedStatementCreator(), keyHolder);
+        return jdbcOperations.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
+                String q = modifyForUpdate(getSql());
+                PreparedStatement ps = con.prepareStatement(q);
+                setter.setValues(ps);
+                return ps;
+            }
+        }, keyHolder);
+    }
+
+    protected String modifyForQuery(String query) {
+        Dialect dialect = context.getDialect();
+        if (dialect != null) {
+            if (pagingOption != null) {
+                query = pagingOption.modify(query, dialect);
+            }
+        }
+        return query;
+    }
+
+    protected String modifyForUpdate(String query) {
+        return query;
     }
 
     private class InternalPreparedStatementSetter implements PreparedStatementSetter {

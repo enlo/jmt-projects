@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.apache.commons.io.IOUtils;
-import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;

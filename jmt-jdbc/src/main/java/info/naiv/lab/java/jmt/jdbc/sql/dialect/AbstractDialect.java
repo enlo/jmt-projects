@@ -23,26 +23,25 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.dialect;
 
+import info.naiv.lab.java.jmt.CharBufferJoiner;
+
 /**
  *
  * @author enlo
  */
-public interface Dialect {
+public abstract class AbstractDialect implements Dialect {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
+    protected static String build(CharSequence... items) {
+        return CharBufferJoiner.SIMPLE.joinItems(items).toString();
+    }
 
-    PagingSupportType getPagingSupport();
+    @Override
+    public PagingSupportType getPagingSupport() {
+        return PagingSupportType.SQLSTD;
+    }
 
-    /**
-     * 行番号を戻す関数.
-     *
-     * @param order 並び順.
-     * @return
-     */
-    String rowNumber(String order);
+    @Override
+    public String rowNumber(String order) {
+        return build(" row_number() over(", order, ") ");
+    }
 }

@@ -30,7 +30,7 @@ import java.nio.CharBuffer;
  *
  * @author enlo
  */
-public class CharBufferJoiner extends AbstractJoiner<Object, CharBuffer> {
+public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
 
     public static final CharBufferJoiner COMMADELIMITED = new CharBufferJoiner(",");
     public static final CharBufferJoiner DOTTED = new CharBufferJoiner(".");
@@ -57,19 +57,8 @@ public class CharBufferJoiner extends AbstractJoiner<Object, CharBuffer> {
         }
     }
 
-    private static CharBuffer addObject(CharBuffer obj, Object value) {
-        if (value instanceof CharSequence) {
-            return obj.append((CharSequence) value);
-        }
-        else if (value instanceof char[]) {
-            return obj.put((char[]) value);
-        }
-        else if (value instanceof Character) {
-            return obj.put((Character) value);
-        }
-        else {
-            return obj.put(String.valueOf(value));
-        }
+    private static CharBuffer addCharSequence(CharBuffer obj, CharSequence value) {
+        return obj.append(value);
     }
 
     protected final int capacity;
@@ -89,21 +78,21 @@ public class CharBufferJoiner extends AbstractJoiner<Object, CharBuffer> {
     }
 
     public CharBufferJoiner(int capacity, final CharSequence delim) {
-        super(new SimpleAdder(), new Adder<Object, CharBuffer>() {
+        super(new SimpleAdder(), new Adder<CharSequence, CharBuffer>() {
             @Override
-            public CharBuffer add(CharBuffer obj, Object value, int idx) {
+            public CharBuffer add(CharBuffer obj, CharSequence value, int idx) {
                 obj.append(delim);
-                return addObject(obj, value);
+                return addCharSequence(obj, value);
             }
         });
         this.capacity = capacity;
     }
 
-    public CharBufferJoiner(Adder<Object, CharBuffer> first, Adder<Object, CharBuffer> more) {
+    public CharBufferJoiner(Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
         this(DEFAULT_CAPACITY, first, more);
     }
 
-    public CharBufferJoiner(int capacity, Adder<Object, CharBuffer> first, Adder<Object, CharBuffer> more) {
+    public CharBufferJoiner(int capacity, Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
         super(first, more);
         this.capacity = capacity;
     }
@@ -117,11 +106,16 @@ public class CharBufferJoiner extends AbstractJoiner<Object, CharBuffer> {
         return CharBuffer.allocate(capacity);
     }
 
-    private static class SimpleAdder implements Adder<Object, CharBuffer> {
+    @Override
+    protected CharBuffer postLoop(CharBuffer r, int count) {
+        return (CharBuffer) r.flip();
+    }
+
+    private static class SimpleAdder implements Adder<CharSequence, CharBuffer> {
 
         @Override
-        public CharBuffer add(CharBuffer obj, Object value, int idx) {
-            return addObject(obj, value);
+        public CharBuffer add(CharBuffer obj, CharSequence value, int idx) {
+            return addCharSequence(obj, value);
         }
     }
 

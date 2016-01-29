@@ -27,11 +27,11 @@ package info.naiv.lab.java.jmt.jdbc.sql.dialect;
  *
  * @author enlo
  */
-public enum OffsetLimitSupportType {
+public class SqlServer2012Dialect extends SqlServerDialect {
 
-    SQL2008,
-    MYSQL_LIKE,
-    LIMIT_ONLY,
-    UNDEFINED,;
+    @Override
+    public PagingSupportType getPagingSupport() {
+        return PagingSupportType.SQLSTD;
+    }
 
 }

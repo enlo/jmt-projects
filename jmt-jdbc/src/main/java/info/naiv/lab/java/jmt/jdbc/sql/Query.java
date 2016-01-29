@@ -23,15 +23,11 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
@@ -112,7 +108,7 @@ public interface Query {
 
     void setMaxRowSize(int maxRowSize);
 
-    PreparedStatementCreator toPreparedStatementCreator();
+    void setPage(int offset, int size);
 
     int update(JdbcOperations jdbcOperations);
 

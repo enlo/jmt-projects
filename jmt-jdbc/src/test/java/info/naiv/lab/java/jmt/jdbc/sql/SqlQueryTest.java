@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
-import info.naiv.lab.java.jmt.jdbc.JdbcType;
 import info.naiv.lab.java.jmt.jdbc.sql.template.mvel.ClassPathResourceMvelSqlTemplateLoader;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -183,6 +182,8 @@ public class SqlQueryTest {
 
     /**
      * Test of createPreparedStatement method, of class SqlQuery.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testCreatePreparedStatement() throws Exception {
@@ -246,6 +247,61 @@ public class SqlQueryTest {
 
         count = cq.queryForObject(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
+    }
+
+    /**
+     * Test of getFetchSize method, of class SqlQuery.
+     */
+    @Test
+    public void testGetFetchSize() {
+        Query query1 = loader.fromString("select * from Users order by id").merge();
+        assertThat(query1.getFetchSize(), is(-1));
+    }
+
+    /**
+     * Test of getMaxRowSize method, of class SqlQuery.
+     */
+    @Test
+    public void testGetMaxRowSize() {
+        Query query1 = loader.fromString("select * from Users order by id").merge();
+        assertThat(query1.getMaxRowSize(), is(-1));
+    }
+
+    /**
+     * Test of getSql method, of class SqlQuery.
+     */
+    @Test
+    public void testGetSql() {
+        Query query = loader.fromString("select count(*) from Users").merge();
+        assertThat(((SqlQuery) query).getSql(), is("select count(*) from Users"));
+    }
+
+    /**
+     * Test of queryForBeanList method, of class SqlQuery.
+     */
+    @Test
+    public void testQueryForBeanList() {
+        Query query = loader.fromString("select * from Users order by id LIMIT 3").merge();
+        List<User> ul = query.queryForBeanList(jdbcTemplate, User.class);
+        assertThat(ul, hasSize(3));
+
+        User u = ul.get(0);
+        assertThat(u.getId(), is(1));
+        assertThat(u.getName(), is("Rowan Chapman"));
+        assertThat(u.getEmail(), is("mi.fringilla.mi@NullafacilisisSuspendisse.net"));
+        assertThat(u.getPhone(), is("042-538-8703"));
+        assertThat(u.getFax(), is("049-595-6445"));
+        assertThat(u.getPostal(), is("2904"));
+        assertThat(u.getCountry(), is("Cook Islands"));
+
+        u = ul.get(2);
+        assertThat(u.getId(), is(3));
+        assertThat(u.getName(), is("Sophia Sullivan"));
+        assertThat(u.getEmail(), is("egestas.ligula.Nullam@est.com"));
+        assertThat(u.getPhone(), is("036-470-5724"));
+        assertThat(u.getFax(), is("098-525-1793"));
+        assertThat(u.getPostal(), is("0486AT"));
+        assertThat(u.getCountry(), is("Malaysia"));
     }
 
     /**
@@ -341,6 +397,22 @@ public class SqlQueryTest {
     }
 
     /**
+     * Test of queryForSingleBean method, of class SqlQuery.
+     */
+    @Test
+    public void testQueryForSingleBean() {
+        Query query = loader.fromString("select * from Users order by id LIMIT 1").merge();
+        User u = query.queryForSingleBean(jdbcTemplate, User.class);
+        assertThat(u.getId(), is(1));
+        assertThat(u.getName(), is("Rowan Chapman"));
+        assertThat(u.getEmail(), is("mi.fringilla.mi@NullafacilisisSuspendisse.net"));
+        assertThat(u.getPhone(), is("042-538-8703"));
+        assertThat(u.getFax(), is("049-595-6445"));
+        assertThat(u.getPostal(), is("2904"));
+        assertThat(u.getCountry(), is("Cook Islands"));
+    }
+
+    /**
      * Test of query method, of class SqlQuery.
      */
     @Test
@@ -411,6 +483,39 @@ public class SqlQueryTest {
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(1));
+    }
+
+    /**
+     * Test of setFetchSize method, of class SqlQuery.
+     */
+    @Test
+    public void testSetFetchSize() {
+        Query query = loader.fromString("select * from Users order by id").merge();
+
+        query.setFetchSize(10);
+        assertThat(query.getFetchSize(), is(10));
+        query.execute(jdbcTemplate, new PreparedStatementCallback<Void>() {
+            @Override
+            public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                assertThat(ps.getFetchSize(), is(10));
+                return null;
+            }
+        });
+    }
+
+    /**
+     * Test of setMaxRowSize method, of class SqlQuery.
+     */
+    @Test
+    public void testSetMaxRowSize() {
+        Query query = loader.fromString("select * from Users order by id").merge();
+        List<Map<String, Object>> list = query.queryForList(jdbcTemplate);
+        assertThat(list, hasSize(100));
+
+        query.setMaxRowSize(10);
+        assertThat(query.getMaxRowSize(), is(10));
+        list = query.queryForList(jdbcTemplate);
+        assertThat(list, hasSize(10));
     }
 
     /**

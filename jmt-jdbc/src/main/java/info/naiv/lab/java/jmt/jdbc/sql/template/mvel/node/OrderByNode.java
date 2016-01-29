@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.jdbc.sql.template.OrderBy;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
@@ -39,7 +40,7 @@ public class OrderByNode extends CustomNode {
     protected static final String ORDER_BY_PREFIX = " order by ";
 
     @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
         if (value instanceof Iterable) {
             Iterable<?> ordItems = (Iterable<?>) value;
             new Joiner(appender).join(ordItems);
@@ -65,7 +66,6 @@ public class OrderByNode extends CustomNode {
 
     protected void appendOrder(TemplateOutputStream appender, OrderBy ord) {
         appender.append(ord.getOrderItem()).append(" ").append(ord.getOrder().name());
-
     }
 
     private static class Joiner extends TemplateOutputStreamJoiner<Object> {
@@ -85,9 +85,5 @@ public class OrderByNode extends CustomNode {
             return output.append(value.toString());
         }
 
-        @Override
-        protected TemplateOutputStream preLoop(TemplateOutputStream r) {
-            return r.append(ORDER_BY_PREFIX);
-        }
     }
 }

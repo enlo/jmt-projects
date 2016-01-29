@@ -556,7 +556,7 @@ public abstract class Misc {
         try {
             return Optional.<Class<?>>ofNullable(Class.forName(className));
         }
-        catch (Throwable ex) {
+        catch (ClassNotFoundException ex) {
             logger.debug("class load failed. ", ex);
             return Optional.<Class<?>>empty();
         }
@@ -574,7 +574,7 @@ public abstract class Misc {
         try {
             return Optional.<Class<?>>ofNullable(Class.forName(className, initialize, classLoader));
         }
-        catch (Throwable ex) {
+        catch (ClassNotFoundException ex) {
             logger.debug("class load failed. ", ex);
             return Optional.<Class<?>>empty();
         }

@@ -21,6 +21,7 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -278,7 +279,7 @@ public class MiscTest {
      */
     @Test
     public void testIsEmpty_Collection() {
-        assertThat(Misc.isEmpty((List) null), is(true));
+        assertThat(Misc.isEmpty((Collection<?>) null), is(true));
         assertThat(Misc.isEmpty(Arrays.asList()), is(true));
         assertThat(Misc.isEmpty(Arrays.asList("")), is(false));
     }
@@ -320,7 +321,7 @@ public class MiscTest {
      */
     @Test
     public void testIsEmpty_String() {
-        assertThat(Misc.isEmpty((String) null), is(true));
+        assertThat(Misc.isEmpty((CharSequence) null), is(true));
         assertThat(Misc.isEmpty(""), is(true));
         assertThat(Misc.isEmpty("A"), is(false));
     }
@@ -369,7 +370,7 @@ public class MiscTest {
      */
     @Test
     public void testIsNotEmpty_Collection() {
-        assertThat(Misc.isNotEmpty((List) null), is(false));
+        assertThat(Misc.isNotEmpty((Collection<?>) null), is(false));
         assertThat(Misc.isNotEmpty(Arrays.asList()), is(false));
         assertThat(Misc.isNotEmpty(Arrays.asList("")), is(true));
     }

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
-import java.util.ArrayList;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -67,11 +67,11 @@ public class BindNodeTest {
         map.put("names", names);
 
         CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        List<Object> actualParams = new ArrayList<>();
-        String actualSql = (String) TemplateRuntime.execute(templ, actualParams, map);
+        SqlQueryContext ctx = new SqlQueryContext(null);
+        String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
 
         assertThat(actualSql, is(expectedSql));
-        assertThat(actualParams, is(contains((Object) category, names.get(0), names.get(1), names.get(2))));
+        assertThat(ctx.getParameters(), is(contains((Object) category, names.get(0), names.get(1), names.get(2))));
     }
 
 }

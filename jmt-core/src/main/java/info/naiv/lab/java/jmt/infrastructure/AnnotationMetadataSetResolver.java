@@ -100,7 +100,7 @@ public class AnnotationMetadataSetResolver {
                         }
                     }
                 }
-                catch (Throwable ex) {
+                catch (IOException ex) {
                     logger.debug("metadata read error.", ex);
                 }
             }

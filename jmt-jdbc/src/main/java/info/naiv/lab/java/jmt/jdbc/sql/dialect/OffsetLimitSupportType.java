@@ -21,21 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
-
-import java.util.ArrayList;
+package info.naiv.lab.java.jmt.jdbc.sql.dialect;
 
 /**
  *
  * @author enlo
  */
-public class SqlParametersBuilder extends ArrayList<Object> {
+public enum OffsetLimitSupportType {
 
-    private static final long serialVersionUID = 1L;
+    SQL2008,
+    MYSQL_LIKE,
+    LIMIT_ONLY,
+    UNDEFINED,;
 
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public Object clone() {
-        return super.clone();
-    }
 }

@@ -21,25 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
-
-import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+package info.naiv.lab.java.jmt.jdbc.sql.dialect;
 
 /**
  *
  * @author enlo
  */
-public class BindNode extends CustomNode {
+public interface Dialect {
 
-    private static final long serialVersionUID = 1L;
+    String getSystemName();
 
-    @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
-        ctx.addParameter(value);
-        appender.append("?");
-    }
+    OffsetLimitSupportType getOffsetLimitSupport();
 
+    String getRowNumber();
 }

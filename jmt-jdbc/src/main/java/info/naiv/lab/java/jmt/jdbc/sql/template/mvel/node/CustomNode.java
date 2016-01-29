@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import java.io.Serializable;
 import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
@@ -52,7 +53,9 @@ public abstract class CustomNode extends Node {
     @Override
     public final Object eval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
         Object value = MVEL.executeExpression(ce, ctx, factory);
-        onEval(value, runtime, appender, ctx, factory);
+        if (ctx instanceof SqlQueryContext) {
+            onEval(value, runtime, appender, (SqlQueryContext) ctx, factory);
+        }
         return next != null ? next.eval(runtime, appender, ctx, factory) : null;
     }
 
@@ -70,5 +73,5 @@ public abstract class CustomNode extends Node {
 
     }
 
-    protected abstract void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
+    protected abstract void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory);
 }

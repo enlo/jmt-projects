@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.jdbc.sql.template.OrderBy;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
@@ -158,7 +159,8 @@ public class OrderByNodeTest {
 
     protected String makeSql(String template, Map<String, Object> map) {
         CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        String actualSql = (String) TemplateRuntime.execute(templ, null, map);
+        SqlQueryContext ctx = new SqlQueryContext(null);
+        String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
         return actualSql;
     }
 

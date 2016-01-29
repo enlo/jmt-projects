@@ -26,7 +26,7 @@ package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.StringJoiner;
-import java.util.Arrays;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import java.util.Collection;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
@@ -43,54 +43,27 @@ public class BindManyNode extends CustomNode {
     private static final long serialVersionUID = 1L;
 
     @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        int count = 1;
+    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
+        int count;
         if (value instanceof Collection) {
             Collection list = (Collection) value;
-            count = appendCollectionToCtx(ctx, list);
+            count = ctx.addParameters(list);
         }
         else if (value instanceof Iterable) {
             Iterable<?> iter = (Iterable<?>) value;
-            count = appendIterableToCtx(ctx, iter);
+            count = ctx.addParameters(iter);
         }
         else {
             Object[] arr = asObjectArray(value);
             if (arr != null) {
-                count = appendCollectionToCtx(ctx, Arrays.asList(arr));
+                count = ctx.addParameters(arr);
             }
             else {
-                count = appendToCtx(ctx, value);
+                ctx.addParameter(value);
+                count = 1;
             }
         }
         appender.append(joiner.join(Misc.repeat(count, "?")));
-    }
-
-    protected int appendCollectionToCtx(Object ctx, Collection<Object> value) {
-        if (ctx instanceof Collection) {
-            ((Collection) ctx).addAll(value);
-            return value.size();
-        }
-        return 0;
-    }
-
-    protected int appendIterableToCtx(Object ctx, Iterable<?> value) {
-        int count = 0;
-        if (ctx instanceof Collection) {
-            Collection col = (Collection) ctx;
-            for (Object obj : value) {
-                count++;
-                col.add(obj);
-            }
-        }
-        return count;
-    }
-
-    protected int appendToCtx(Object ctx, Object value) {
-        if (ctx instanceof Collection) {
-            ((Collection) ctx).add(value);
-            return 1;
-        }
-        return 0;
     }
 
 }

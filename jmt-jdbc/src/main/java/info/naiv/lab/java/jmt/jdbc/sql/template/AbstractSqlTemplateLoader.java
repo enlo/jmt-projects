@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -40,11 +41,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
 
+    @Getter
+    @Setter
+    private Dialect dialect;
+
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
     private SqlTemplateLoader parentLoader;
 
-    @Getter
     @Setter
     private String suffix = DEFAULT_SUFFIX;
 
@@ -57,6 +61,16 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
     public SqlTemplate fromString(String name, String template) {
         needInitialize();
         return doFromString(name, template);
+    }
+
+    @Override
+    public final String getSuffix() {
+        if (isEmpty(suffix)) {
+            if (dialect != null) {
+                return dialect.getSystemName();
+            }
+        }
+        return suffix;
     }
 
     @Override

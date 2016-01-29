@@ -56,15 +56,19 @@ public interface Query {
 
     int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter);
 
-    PreparedStatement createPreparedStatement(Connection con) throws SQLException;
-
     void execute(JdbcOperations jdbcOperations);
 
     <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action);
 
+    int getFetchSize();
+
+    int getMaxRowSize();
+
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
 
     <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor);
+
+    <T> List<T> queryForBeanList(JdbcOperations jdbcOperations, Class<T> mappedClass);
 
     <T> List<T> queryForList(JdbcOperations jdbcOperations, Class<T> elementType);
 
@@ -84,6 +88,8 @@ public interface Query {
      */
     SqlRowSet queryForRowSet(JdbcOperations jdbcOperations);
 
+    <T> T queryForSingleBean(JdbcOperations jdbcOperations, Class<T> mappedClass);
+
     /**
      * 引数を入れ替える. <br>
      * すでにマージされたSQLが変更されるわけではないので注意.
@@ -101,6 +107,10 @@ public interface Query {
      * @return
      */
     Query rebind(List<?> args);
+
+    void setFetchSize(int fetchSize);
+
+    void setMaxRowSize(int maxRowSize);
 
     PreparedStatementCreator toPreparedStatementCreator();
 

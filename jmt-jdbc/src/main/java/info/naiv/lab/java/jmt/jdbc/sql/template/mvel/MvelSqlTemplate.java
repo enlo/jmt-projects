@@ -23,14 +23,17 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.jdbc.sql.Query;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQuery;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import info.naiv.lab.java.jmt.jdbc.sql.template.SqlTemplate;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Value;
 import org.mvel2.integration.VariableResolverFactory;
+import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateRuntime;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -47,10 +50,12 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
 
     String name;
     CompiledTemplate template;
+    Dialect dialect;
 
-    public MvelSqlTemplate(String name, CompiledTemplate template) {
+    public MvelSqlTemplate(String name, CompiledTemplate template, Dialect dialect) {
         this.name = name;
         this.template = template;
+        this.dialect = dialect;
     }
 
     public String getTemplateText() {
@@ -64,17 +69,21 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
 
     @Override
     public SqlQuery merge(Map<String, Object> parameters) {
-        SqlParametersBuilder builder = new SqlParametersBuilder();
-        String sql = (String) TemplateRuntime.execute(template, builder, parameters);
-        return new SqlQuery(sql, builder);
+        VariableResolverFactory factory = new MapVariableResolverFactory(parameters);
+        return createQuery(factory);
     }
 
     @Override
     public SqlQuery merge(SqlParameterSource parameters) {
-        SqlParametersBuilder builder = new SqlParametersBuilder();
         VariableResolverFactory factory = new SqlParameterSourceVariableResolverFactory(parameters);
-        String sql = (String) TemplateRuntime.execute(template, builder, factory);
-        return new SqlQuery(sql, builder);
+        return createQuery(factory);
+    }
+
+    protected SqlQuery createQuery(VariableResolverFactory factory) {
+        factory.createVariable("dialect", dialect, Dialect.class);
+        SqlQueryContext context = new SqlQueryContext(dialect);
+        String sql = (String) TemplateRuntime.execute(template, context, factory);
+        return new SqlQuery(sql, context);
     }
 
     @Override

@@ -36,21 +36,16 @@ public abstract class AbstractClassPathResourceSqlTemplateLoader
     @Setter
     private ClassPathResourceRepository resourceRepository;
 
-    @Getter
-    private String rootPackage;
-
     public AbstractClassPathResourceSqlTemplateLoader() {
         this(new ClassPathResourceRepository());
     }
 
     public AbstractClassPathResourceSqlTemplateLoader(ClassPathResourceRepository resourceRepository) {
-        this.rootPackage = "SQL";
         this.resourceRepository = resourceRepository;
-        this.resourceRepository.setRootPath(rootPackage);
+        this.resourceRepository.setRootPath("SQL");
     }
 
     public void setRootPackage(String rootPackage) {
-        this.rootPackage = rootPackage;
         this.resourceRepository.setRootPath(rootPackage);
     }
 

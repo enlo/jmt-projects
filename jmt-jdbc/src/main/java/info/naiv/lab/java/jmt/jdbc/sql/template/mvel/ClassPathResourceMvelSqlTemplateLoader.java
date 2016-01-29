@@ -49,7 +49,7 @@ public class ClassPathResourceMvelSqlTemplateLoader
 
     protected MvelSqlTemplate compile(String name, String template) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        return new MvelSqlTemplate(name, ct);
+        return new MvelSqlTemplate(name, ct, getDialect());
     }
 
     @Override

@@ -33,6 +33,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
@@ -56,32 +57,43 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  */
 public class SqlQuery implements Query, PreparedStatementCreator {
 
-    final PreparedStatementSetter setter;
+    int fetchSize = -1;
+    int maxRowSize = -1;
+
+    final InternalPreparedStatementSetter setter;
 
     @Getter
     final String sql;
 
+    public SqlQuery(String sql, SqlQueryContext ctx) {
+        this(sql, ctx.parameters);
+    }
+
     public SqlQuery(String sql, Object[] args) {
-        this(sql, new ArgumentPreparedStatementSetter(args));
+        this.sql = sql;
+        this.setter = new InternalPreparedStatementSetter(args);
     }
 
     public SqlQuery(String sql, List<?> args) {
-        this(sql, new ArgumentPreparedStatementSetter(args.toArray()));
+        this.sql = sql;
+        this.setter = new InternalPreparedStatementSetter(args);
     }
 
     public SqlQuery(PreparedStatementCreatorFactory factory, List<?> args) {
-        this.setter = factory.newPreparedStatementSetter(args);
-        this.sql = ((SqlProvider) this.setter).getSql();
+        PreparedStatementSetter pss = factory.newPreparedStatementSetter(args);
+        this.sql = ((SqlProvider) pss).getSql();
+        this.setter = new InternalPreparedStatementSetter(pss);
     }
 
     public SqlQuery(PreparedStatementCreatorFactory factory, Object[] args) {
-        this.setter = factory.newPreparedStatementSetter(args);
-        this.sql = ((SqlProvider) this.setter).getSql();
+        PreparedStatementSetter pss = factory.newPreparedStatementSetter(args);
+        this.sql = ((SqlProvider) pss).getSql();
+        this.setter = new InternalPreparedStatementSetter(pss);
     }
 
     public SqlQuery(String sql, PreparedStatementSetter setter) {
         this.sql = sql;
-        this.setter = setter;
+        this.setter = new InternalPreparedStatementSetter(setter);
     }
 
     public SqlQuery(String sql) {
@@ -183,6 +195,16 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     }
 
     @Override
+    public int getFetchSize() {
+        return fetchSize;
+    }
+
+    @Override
+    public int getMaxRowSize() {
+        return maxRowSize;
+    }
+
+    @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
         return query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper));
     }
@@ -190,6 +212,11 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor) {
         return jdbcOperations.query(sql, setter, resultSetExtractor);
+    }
+
+    @Override
+    public <T> List<T> queryForBeanList(JdbcOperations jdbcOperations, Class<T> mappedClass) {
+        return query(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
     }
 
     @Override
@@ -224,6 +251,11 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     }
 
     @Override
+    public <T> T queryForSingleBean(JdbcOperations jdbcOperations, Class<T> mappedClass) {
+        return queryForObject(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
+    }
+
+    @Override
     public SqlQuery rebind(PreparedStatementSetter newSetter) {
         return new SqlQuery(sql, newSetter);
     }
@@ -231,6 +263,16 @@ public class SqlQuery implements Query, PreparedStatementCreator {
     @Override
     public SqlQuery rebind(List<?> args) {
         return new SqlQuery(sql, args);
+    }
+
+    @Override
+    public void setFetchSize(int fetchSize) {
+        this.fetchSize = fetchSize;
+    }
+
+    @Override
+    public void setMaxRowSize(int maxRowSize) {
+        this.maxRowSize = maxRowSize;
     }
 
     @Override
@@ -248,4 +290,32 @@ public class SqlQuery implements Query, PreparedStatementCreator {
         return jdbcOperations.update(toPreparedStatementCreator(), keyHolder);
     }
 
+    private class InternalPreparedStatementSetter implements PreparedStatementSetter {
+
+        PreparedStatementSetter internalSetter;
+
+        InternalPreparedStatementSetter(PreparedStatementSetter setter) {
+            this.internalSetter = setter;
+        }
+
+        InternalPreparedStatementSetter(List<?> args) {
+            this(args.toArray());
+        }
+
+        InternalPreparedStatementSetter(Object[] args) {
+            this(new ArgumentPreparedStatementSetter(args));
+        }
+
+        @Override
+        public void setValues(PreparedStatement ps) throws SQLException {
+            if (0 <= maxRowSize) {
+                ps.setMaxRows(maxRowSize);
+            }
+            if (0 <= fetchSize) {
+                ps.setFetchSize(fetchSize);
+            }
+            internalSetter.setValues(ps);
+        }
+
+    }
 }

@@ -42,15 +42,6 @@ public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends A
     }
 
     /**
-     * Test of getRootPackage method, of class
-     * AbstractClassPathResourceSqlTemplateLoader.
-     */
-    @Test
-    public void testGetRootPackage() {
-        assertThat(instance.getRootPackage(), is(defaultRootPackage()));
-    }
-
-    /**
      * Test of setResourceRepository method, of class
      * AbstractClassPathResourceSqlTemplateLoader.
      */
@@ -67,8 +58,9 @@ public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends A
      */
     @Test
     public void testSetRootPackage() {
+        assertThat(instance.getResourceRepository().getRootPath(), is(defaultRootPackage()));
         instance.setRootPackage("test");
-        assertThat(instance.getRootPackage(), is("test"));
+        assertThat(instance.getResourceRepository().getRootPath(), is("test"));
     }
 
     protected String defaultRootPackage() {

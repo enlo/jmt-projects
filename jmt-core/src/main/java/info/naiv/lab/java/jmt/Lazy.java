@@ -57,6 +57,7 @@ public class Lazy<T> implements Supplier<T> {
         };
     }
 
+    @Override
     public final T get() {
         if (initialized.compareAndSet(false, true)) {
             value = initialValue();

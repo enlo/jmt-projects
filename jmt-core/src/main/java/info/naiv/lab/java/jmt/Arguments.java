@@ -160,6 +160,15 @@ public abstract class Arguments {
         return arg;
     }
 
+    /**
+     * lhs &lt; rhs を満たすかどうかチェック.
+     *
+     * @param <T>
+     * @param lhs
+     * @param rhs
+     * @param varname
+     * @return
+     */
     public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
         nonNull(lhs, varname);
         if (lhs.compareTo(rhs) < 0) {
@@ -168,6 +177,14 @@ public abstract class Arguments {
         throw new IllegalArgumentException(varname + " is must less than " + rhs);
     }
 
+    /**
+     * lhs &lt; rhs を満たすかどうかチェック.
+     *
+     * @param lhs
+     * @param rhs
+     * @param varname
+     * @return
+     */
     public static long lessThan(long lhs, long rhs, String varname) {
         if (lhs < rhs) {
             return lhs;
@@ -175,6 +192,14 @@ public abstract class Arguments {
         throw new IllegalArgumentException(varname + " is must less than " + rhs);
     }
 
+    /**
+     * lhs &lt; rhs を満たすかどうかチェック.
+     *
+     * @param lhs
+     * @param rhs
+     * @param varname
+     * @return
+     */
     public static int lessThan(int lhs, int rhs, String varname) {
         if (lhs < rhs) {
             return lhs;
@@ -264,6 +289,15 @@ public abstract class Arguments {
         return arg;
     }
 
+    /**
+     * 配列の全項目が null でないことをチェックする.
+     *
+     * @param <T>
+     * @param arg
+     * @param varname
+     * @return
+     * @throws IllegalArgumentException
+     */
     @ReturnNonNull
     public static <T> T[] nonNullAll(T[] arg, String varname) throws IllegalArgumentException {
         nonNull(arg, varname);
@@ -276,6 +310,15 @@ public abstract class Arguments {
         return arg;
     }
 
+    /**
+     * コレクションの全項目が null でないことをチェックする.
+     *
+     * @param <T>
+     * @param arg
+     * @param varname
+     * @return
+     * @throws IllegalArgumentException
+     */
     @ReturnNonNull
     public static <T extends Iterable> T nonNullAll(T arg, String varname) throws IllegalArgumentException {
         nonNull(arg, varname);

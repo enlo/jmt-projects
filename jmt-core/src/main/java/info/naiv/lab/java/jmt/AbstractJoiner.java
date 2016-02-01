@@ -33,14 +33,33 @@ import static info.naiv.lab.java.jmt.Arguments.nonNull;
  */
 public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
 
+    /**
+     * 最初に1回だけ実行される Adder.
+     */
     protected final Adder<T, R> first;
+    
+    /**
+     * 2回以降に実行される Adder.
+     */
     protected final Adder<T, R> more;
 
+    /**
+     * 2つの {@link Adder} で初期化する.
+     * 
+     * @param first １回目の Adder.
+     * @param more 2回目以降の Adder.
+     */
     public AbstractJoiner(Adder<T, R> first, Adder<T, R> more) {
         this.first = nonNull(first, "first");
         this.more = nonNull(more, "more");
     }
 
+    /**
+     * 1つの {@link Adder } で初期化する.
+     * first, more ともに同じ Adder を使用する.
+     * 
+     * @param adder Adder.
+     */
     public AbstractJoiner(Adder<T, R> adder) {
         this.first = nonNull(adder, "adder");
         this.more = adder;

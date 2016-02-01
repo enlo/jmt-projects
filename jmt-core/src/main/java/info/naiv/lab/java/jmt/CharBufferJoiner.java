@@ -32,13 +32,38 @@ import java.nio.CharBuffer;
  */
 public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
 
+    /**
+     * カンマ「,」区切り.
+     */
     public static final CharBufferJoiner COMMADELIMITED = new CharBufferJoiner(",");
+
+    /**
+     * ドット「.」区切り.
+     */
     public static final CharBufferJoiner DOTTED = new CharBufferJoiner(".");
+    /**
+     * ハイフン「-」区切り.
+     */
     public static final CharBufferJoiner HYPHENATED = new CharBufferJoiner("-");
+    /**
+     * 区切り文字無し.
+     */
     public static final CharBufferJoiner SIMPLE = new CharBufferJoiner();
+    /**
+     * スラッシュ「/」区切り.
+     */
     public static final CharBufferJoiner SLASHED = new CharBufferJoiner("/");
+    /**
+     * 既定のバッファサイズ. 1024byte
+     */
     protected static final int DEFAULT_CAPACITY = 1024;
 
+    /**
+     * インスタンスの取得.
+     *
+     * @param delim 区切り文字.
+     * @return インスタンス.
+     */
     public static CharBufferJoiner valueOf(String delim) {
         if (delim == null) {
             return SIMPLE;
@@ -61,18 +86,37 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
         return obj.append(value);
     }
 
+    /**
+     * キャパシティ.
+     */
     protected final int capacity;
 
+    /**
+     * 既定のバッファサイズを使用したコンストラクター. 区切り文字無し.
+     *
+     * @see DEFAULT_CAPACITY
+     *
+     */
     public CharBufferJoiner() {
         super(new SimpleAdder());
         this.capacity = DEFAULT_CAPACITY;
     }
 
+    /**
+     * バッファサイズを指定したコンストラクター. 区切り文字無し.
+     *
+     * @param capacity バッファサイズ.
+     */
     public CharBufferJoiner(int capacity) {
         super(new SimpleAdder());
         this.capacity = capacity;
     }
 
+    /**
+     * 区切り文字を指定したコンストラクター.
+     *
+     * @param delim 区切り文字.
+     */
     public CharBufferJoiner(CharSequence delim) {
         this(DEFAULT_CAPACITY, delim);
     }

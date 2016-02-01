@@ -31,6 +31,8 @@ import lombok.ToString;
 
 /**
  *
+ * 値の変更が可能な {@link Holder}.
+ *
  * @author enlo
  * @param <T>
  */
@@ -41,6 +43,12 @@ public class MutableHolder<T> implements Holder<T> {
     private final Class<? extends T> clazz;
     private T object;
 
+    /**
+     * コンストラクター. <br>
+     * 初期値からクラス情報を取得するため、null は不可とする.
+     *
+     * @param object 初期値. null 不可.
+     */
     @SuppressWarnings("unchecked")
     public MutableHolder(T object) {
         nonNull(object, "object");
@@ -48,6 +56,12 @@ public class MutableHolder<T> implements Holder<T> {
         this.clazz = (Class<? extends T>) object.getClass();
     }
 
+    /**
+     * コンストラクター.
+     *
+     * @param object 初期値.
+     * @param clazz 値の型.
+     */
     public MutableHolder(T object, Class<? extends T> clazz) {
         this.object = object;
         this.clazz = clazz;
@@ -63,6 +77,11 @@ public class MutableHolder<T> implements Holder<T> {
         return requireNonNull(clazz, "class is must be non null.");
     }
 
+    /**
+     * 値の設定.
+     *
+     * @param object 設定する値.
+     */
     public void setContent(T object) {
         this.object = isInstanceOf(object, getContentType(), "object");
     }

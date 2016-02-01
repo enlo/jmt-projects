@@ -33,6 +33,7 @@ import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
+ * 値が null の場合に後からインスタンスを生成する {@link Holder }.
  *
  * @author enlo
  * @param <T>
@@ -42,14 +43,34 @@ public class AutoCreateHolder<T> extends MutableHolder<T> implements Holder<T> {
     private final Function1<Class<? extends T>, T> creator;
     private final ReadWriteLock rwl = new ReentrantReadWriteLock();
 
+    /**
+     * コンストラクタ. <br> {@link Class#newInstance() } を使用して値を作成する.
+     *
+     * @param clazz 値の型.
+     */
     public AutoCreateHolder(Class<? extends T> clazz) {
         this(null, clazz, StandardFunctions.newInstance(clazz));
     }
 
+    /**
+     * コンストラクタ. <br>
+     * creator を使用して値を作成する.
+     *
+     * @param clazz 値の型.
+     * @param creator インスタンス生成器.
+     */
     public AutoCreateHolder(Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
         this(null, clazz, creator);
     }
 
+    /**
+     * コンストラクタ. <br>
+     * 初期値と、creator を設定する.
+     *
+     * @param object 初期値.
+     * @param clazz 値の型.
+     * @param creator インスタンス生成器.
+     */
     public AutoCreateHolder(T object, Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
         super(object, nonNull(clazz, "clazz"));
         this.creator = nonNull(creator, "creator");
@@ -83,6 +104,11 @@ public class AutoCreateHolder<T> extends MutableHolder<T> implements Holder<T> {
         }
     }
 
+    /**
+     * インスタンス生成.
+     *
+     * @return 生成したインスタンス.
+     */
     protected T createInstance() {
         return creator.apply(getContentType());
     }

@@ -28,8 +28,10 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import org.junit.Test;
@@ -219,5 +221,23 @@ public class IterateeTest {
         Iteratee<Integer> im = Iteratee.empty();
         List<Integer> list = im.toList();
         assertThat(list, is(emptyIterable()));
+    }
+
+    /**
+     * Test of toMap method, of class Iteratee.
+     */
+    @Test
+    public void testToMap() {
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Map<String, Integer> map = im.toMap(new Function1<Integer, String>() {
+            @Override
+            public String apply(Integer a1) {
+                return Integer.toString(a1);
+            }
+        });
+        assertThat(map.size(), is(10));
+        for (int i : Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)) {
+            assertThat(map, hasEntry(String.valueOf(i), i));
+        }
     }
 }

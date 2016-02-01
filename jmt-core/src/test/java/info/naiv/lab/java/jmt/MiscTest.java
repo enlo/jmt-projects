@@ -8,6 +8,7 @@ package info.naiv.lab.java.jmt;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
+import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -38,32 +39,45 @@ import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
+import org.junit.After;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertThat;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.*;
 import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  *
  * @author enlo
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("/META-INF/test-application-context.xml")
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Misc.class, Class.class})
 public class MiscTest {
 
-    @Autowired
-    ApplicationContext context;
+    ClassPathXmlApplicationContext context;
+
+    @Before
+    public void setUp() {
+        context = new ClassPathXmlApplicationContext("/META-INF/test-application-context.xml");
+    }
+
+    @After
+    public void tearDown() {
+        context.close();
+    }
 
     /**
      * Test of addIfNotFound method, of class Misc.
@@ -222,6 +236,21 @@ public class MiscTest {
     }
 
     /**
+     * Test of filter method, of class Misc.
+     */
+    @Test
+    public void testFilter() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 3, 4, 4, 5, 8);
+        Iterable<Integer> a1 = Misc.filter(list, new Predicate1<Integer>() {
+            @Override
+            public boolean test(Integer obj) {
+                return obj % 2 == 0;
+            }
+        });
+        assertThat(a1, is(contains(2, 4, 4, 8)));
+    }
+
+    /**
      * Test of flat method, of class Misc.
      */
     @Test
@@ -234,11 +263,33 @@ public class MiscTest {
 
     }
 
+    /**
+     * Test of getFirst method, of class Misc.
+     */
     @Test
-    public void testGetFirst() {
+    public void testGetFirst_Iterable() {
         assertThat(Misc.getFirst(Arrays.asList(1, 2, 3)), is(1));
         assertThat(Misc.getFirst(Collections.EMPTY_LIST), is(nullValue()));
         assertThat(Misc.getFirst(null), is(nullValue()));
+    }
+
+    /**
+     * Test of getFirst method, of class Misc.
+     */
+    @Test
+    public void testGetFirst_Iterable_Predicate1() {
+
+        Predicate1<Integer> pred = new Predicate1<Integer>() {
+
+            @Override
+            public boolean test(Integer obj) {
+                return obj % 2 == 0;
+            }
+        };
+
+        assertThat(Misc.getFirst(Arrays.asList(1, 2, 3), pred), is(2));
+        assertThat(Misc.getFirst(Collections.EMPTY_LIST, pred), is(nullValue()));
+        assertThat(Misc.getFirst(null, pred), is(nullValue()));
     }
 
     @Test
@@ -271,6 +322,16 @@ public class MiscTest {
         assertThat("NEWLINE", Misc.isBlank(Constants.CRLF), is(true));
         assertThat("ZWNBSP", Misc.isBlank(Constants.ZWNBSP), is(true));
         assertThat("ZWNBSP", Misc.isBlank("a"), is(false));
+    }
+
+    /**
+     * Test of isEmpty method, of class Misc.
+     */
+    @Test
+    public void testIsEmpty_CharSequence() {
+        assertThat(Misc.isEmpty((CharSequence) null), is(true));
+        assertThat(Misc.isEmpty(""), is(true));
+        assertThat(Misc.isEmpty("A"), is(false));
     }
 
     /**
@@ -313,16 +374,6 @@ public class MiscTest {
         assertThat(Misc.isEmpty(map), is(true));
         map.put("key", "value");
         assertThat(Misc.isEmpty(map), is(false));
-    }
-
-    /**
-     * Test of isEmpty method, of class Misc.
-     */
-    @Test
-    public void testIsEmpty_String() {
-        assertThat(Misc.isEmpty((CharSequence) null), is(true));
-        assertThat(Misc.isEmpty(""), is(true));
-        assertThat(Misc.isEmpty("A"), is(false));
     }
 
     /**
@@ -561,6 +612,44 @@ public class MiscTest {
     }
 
     /**
+     * Test of newInstance method, of class Misc.
+     */
+    @Test
+    public void testNewInstance_Class() {
+        String str = Misc.newInstance(String.class);
+        assertThat(str, is((Object) ""));
+    }
+
+    /**
+     * Test of newInstance method, of class Misc.
+     */
+    @Test
+    public void testNewInstance_Optional() {
+        Optional<Class<String>> clz1 = Optional.of(String.class);
+        Optional<String> opt1 = Misc.newInstance(clz1);
+        assertThat(opt1.isPresent(), is(true));
+        assertThat(opt1.get(), is(instanceOf(String.class)));
+        assertThat(opt1.get(), is((Object) ""));
+
+        Optional opt2 = Misc.newInstance(Optional.EMPTY);
+        assertThat(opt2.isPresent(), is(false));
+    }
+
+    /**
+     * Test of newInstance method, of class Misc.
+     */
+    @Test
+    public void testNewInstance_String() {
+        Optional opt1 = Misc.newInstance("java.lang.String");
+        assertThat(opt1.isPresent(), is(true));
+        assertThat(opt1.get(), is(instanceOf(String.class)));
+        assertThat(opt1.get(), is((Object) ""));
+
+        Optional opt2 = Misc.newInstance("test.Sample");
+        assertThat(opt2.isPresent(), is(false));
+    }
+
+    /**
      * Test of nop method, of class Misc.
      */
     @Test
@@ -602,6 +691,45 @@ public class MiscTest {
     }
 
     /**
+     * Test of resolveClassName method, of class Misc.
+     *
+     * @throws java.lang.ClassNotFoundException
+     */
+    @Test
+    public void testResolveClassName_3args() throws ClassNotFoundException, Exception {
+
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
+
+        PowerMockito.spy(Class.class);
+        PowerMockito.spy(Misc.class);
+
+        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
+        assertThat(Misc.resolveClassName("java.lang.String", false, cl), is(clz1));
+        assertThat(Misc.resolveClassName("java.lang.Integer", true, cl), is(clz2));
+
+        PowerMockito.verifyStatic(times(1));
+        Class.forName("java.lang.String", false, cl);
+
+        PowerMockito.verifyStatic(times(1));
+        Class.forName("java.lang.Integer", true, cl);
+
+        assertThat(Misc.resolveClassName("test.Sample", true, cl), is(Optional.EMPTY));
+    }
+
+    /**
+     * Test of resolveClassName method, of class Misc.
+     */
+    @Test
+    public void testResolveClassName_String() {
+        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
+        assertThat(Misc.resolveClassName("java.lang.String"), is(clz1));
+        assertThat(Misc.resolveClassName("java.lang.Integer"), is(clz2));
+        assertThat(Misc.resolveClassName("test.Sample"), is(Optional.EMPTY));
+    }
+
+    /**
      * Test of toBigDecimal method, of class Misc.
      */
     @Test
@@ -630,7 +758,22 @@ public class MiscTest {
      * Test of toByteArray method, of class Misc.
      */
     @Test
-    public void testToByteArray() {
+    public void testToByteArray_Resource() {
+        String text = "あいうABC漢字テスト";
+        String charset = "MS932";
+        Charset cs = Charset.forName(charset);
+        byte[] expected = text.getBytes(cs);
+
+        Resource res = new ByteArrayResource(expected);
+        assertArrayEquals(new byte[]{}, Misc.toByteArray(null));
+        assertArrayEquals(expected, Misc.toByteArray(res));
+    }
+
+    /**
+     * Test of toByteArray method, of class Misc.
+     */
+    @Test
+    public void testToByteArray_String_String() {
 
         String text = "あいうABC漢字テスト";
         String charset = "MS932";

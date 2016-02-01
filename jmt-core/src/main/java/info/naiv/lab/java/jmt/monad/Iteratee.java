@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.monad;
 
+import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Function1;
@@ -34,8 +35,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import lombok.NonNull;
 
 /**
@@ -144,4 +147,13 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
         return result;
     }
 
+    @ReturnNonNull
+    public <K> Map<K, T> toMap(Function1<T, K> keyResolver) {
+        nonNull(keyResolver, "keyResolver");
+        final Map<K, T> result = new HashMap<>();
+        for (T v : this) {
+            result.put(keyResolver.apply(v), v);
+        }
+        return result;
+    }
 }

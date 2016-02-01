@@ -15,6 +15,7 @@ import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.io.InputStream;
@@ -145,6 +146,11 @@ public abstract class Misc {
     }
 
     @ReturnNonNull
+    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<T> predicate) {
+        return new Iteratee<>(iterable, predicate);
+    }
+
+    @ReturnNonNull
     public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
         return new Iterable<T>() {
             @Override
@@ -165,6 +171,26 @@ public abstract class Misc {
         if (iterable != null) {
             for (T i : iterable) {
                 return i;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 条件に一致する最初の項目、または null を戻す.
+     *
+     * @param <T>
+     * @param iterable
+     * @param predicate
+     * @return
+     */
+    public static <T> T getFirst(Iterable<T> iterable, Predicate1<T> predicate) {
+        nonNull(predicate, "predicate");
+        if (iterable != null) {
+            for (T i : iterable) {
+                if (predicate.test(i)) {
+                    return i;
+                }
             }
         }
         return null;
@@ -490,7 +516,7 @@ public abstract class Misc {
         }
     }
 
-    public static <T> Optional<T> newInstance(Optional<Class<? extends T>> clazz) {
+    public static <T> Optional<T> newInstance(Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
             return Optional.ofNullable(newInstance(clazz.get()));
         }
@@ -501,7 +527,7 @@ public abstract class Misc {
 
     public static Optional<Object> newInstance(String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
-        return newInstance(clazz);
+        return newInstance((Optional) clazz);
     }
 
     /**
@@ -572,7 +598,8 @@ public abstract class Misc {
      */
     public static Optional<Class<?>> resolveClassName(String className, boolean initialize, ClassLoader classLoader) {
         try {
-            return Optional.<Class<?>>ofNullable(Class.forName(className, initialize, classLoader));
+            Class clz = Class.forName(className, initialize, classLoader);
+            return Optional.<Class<?>>ofNullable(clz);
         }
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. ", ex);

@@ -23,10 +23,23 @@
  */
 package info.naiv.lab.java.jmt;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+
 public class Constants {
 
     public static final String CR = "\r";
     public static final String CRLF = "\r\n";
+    public static final Class<?>[] KNOWN_INT_TYPES = {
+        BigInteger.class,
+        Long.class,
+        Integer.class,
+        Short.class,
+        Byte.class,};
+    public static final Class<?>[] KNOWN_REAL_TYPES = {
+        BigDecimal.class,
+        Double.class,
+        Float.class,};
     public static final String LF = "\n";
     public static final int SEVEN_DAYS = 7;
     public static final String ZWNBSP = "\uFEFF";

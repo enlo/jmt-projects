@@ -36,6 +36,8 @@ import static org.junit.Assert.*;
  */
 public class RopeTest {
 
+    static final String NULL_STRING = null;
+
     public RopeTest() {
     }
 
@@ -543,7 +545,7 @@ public class RopeTest {
      */
     @Test
     public void testValueOf_String() {
-        assertThat(Rope.valueOf((String) null), is(sameInstance(Rope.EMPTY)));
+        assertThat(Rope.valueOf(NULL_STRING), is(sameInstance(Rope.EMPTY)));
         assertThat(Rope.valueOf(""), is(sameInstance(Rope.EMPTY)));
         assertThat(Rope.valueOf(" "), is(new Rope(" ")));
         assertThat(Rope.valueOf("123"), is(new Rope("123")));

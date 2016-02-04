@@ -26,6 +26,8 @@ import static org.mockito.Mockito.when;
  */
 public class ClassicDateUtilsTest {
 
+    static final Calendar NULL_CALENDAR = null;
+
     CurrentDateProvider currentDateProvider;
     Calendar testCalendar;
 
@@ -125,7 +127,7 @@ public class ClassicDateUtilsTest {
      */
     @Test(expected = IllegalArgumentException.class)
     public void testClearDatePart_null() {
-        ClassicDateUtils.clearDatePart((Calendar) null);
+        ClassicDateUtils.clearDatePart(NULL_CALENDAR);
     }
 
     /**

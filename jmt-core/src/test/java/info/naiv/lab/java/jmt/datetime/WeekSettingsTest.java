@@ -75,7 +75,7 @@ public class WeekSettingsTest {
     @Test
     public void testGetUnofficialHolidays() {
         int[] actual = weekSettings.getUnofficialHolidays();
-        assertThat((Integer[]) ArrayUtils.toObject(actual), is(arrayContaining(Calendar.FRIDAY)));
+        assertThat(ArrayUtils.toObject(actual), is(arrayContaining(Calendar.FRIDAY)));
     }
 
     /**
@@ -109,7 +109,7 @@ public class WeekSettingsTest {
         assertThat(newFirstDayOfWeek.getFirstDayOfWeek(), is(Calendar.SUNDAY));
         assertThat(newFirstDayOfWeek.getOfficialHoliday(), is(Calendar.WEDNESDAY));
         int[] actual = newFirstDayOfWeek.getUnofficialHolidays();
-        assertThat((Integer[]) ArrayUtils.toObject(actual), is(arrayContaining(Calendar.FRIDAY)));
+        assertThat(ArrayUtils.toObject(actual), is(arrayContaining(Calendar.FRIDAY)));
     }
 
 }

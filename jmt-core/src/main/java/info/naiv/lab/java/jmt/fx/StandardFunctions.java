@@ -57,6 +57,16 @@ public class StandardFunctions {
     }
 
     @ReturnNonNull
+    public static <T extends Comparable<T>> Predicate1<T> compareEqual(final T value) {
+        return new Predicate1<T>() {
+            @Override
+            public boolean test(T obj) {
+                return value.compareTo(obj) == 0;
+            }
+        };
+    }
+
+    @ReturnNonNull
     public static Function1<String, Integer> convertStringToInt(final int defaultValue) {
         return new Function1<String, Integer>() {
 

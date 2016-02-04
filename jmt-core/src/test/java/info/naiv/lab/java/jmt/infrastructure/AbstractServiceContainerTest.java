@@ -317,7 +317,7 @@ public abstract class AbstractServiceContainerTest {
         ServiceContainer container = createContainer();
         container.registerService(s1);
         container.registerService(s2);
-        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
+        assertThat(container.resolveService(TestService.class), is(sameInstance(s2)));
 
     }
 
@@ -332,7 +332,7 @@ public abstract class AbstractServiceContainerTest {
         ServiceContainer container = createContainer();
         container.registerService(s1);
         container.registerService(s2);
-        assertThat(container.resolveService(TestService.class), is(sameInstance((TestService) s2)));
+        assertThat(container.resolveService(TestService.class), is(sameInstance(s2)));
 
     }
 

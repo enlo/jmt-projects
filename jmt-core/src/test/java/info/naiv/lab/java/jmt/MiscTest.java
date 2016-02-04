@@ -67,6 +67,12 @@ import org.springframework.core.io.Resource;
 @PrepareForTest({Misc.class, Class.class})
 public class MiscTest {
 
+    static final Date NULL_DATE = null;
+
+    static final Map NULL_MAP = null;
+    static final Number NULL_NUMBER = null;
+    static final String NULL_STRING = null;
+
     ClassPathXmlApplicationContext context;
 
     @Before
@@ -369,7 +375,7 @@ public class MiscTest {
      */
     @Test
     public void testIsEmpty_Map() {
-        assertThat(Misc.isEmpty((Map) null), is(true));
+        assertThat(Misc.isEmpty(NULL_MAP), is(true));
         Map<String, String> map = new HashMap<>();
         assertThat(Misc.isEmpty(map), is(true));
         map.put("key", "value");
@@ -450,7 +456,8 @@ public class MiscTest {
      */
     @Test
     public void testIsNotEmpty_Map() {
-        assertThat(Misc.isNotEmpty((Map) null), is(false));
+        Map nullMap = null;
+        assertThat(Misc.isNotEmpty(nullMap), is(false));
         Map<String, String> map = new HashMap<>();
         assertThat(Misc.isNotEmpty(map), is(false));
         map.put("key", "value");
@@ -734,8 +741,8 @@ public class MiscTest {
      */
     @Test
     public void testToBigDecimal_Number_BigDecimal() {
-        assertThat(Misc.toBigDecimal((Number) null, null), is(nullValue()));
-        assertThat(Misc.toBigDecimal((Number) null, BigDecimal.ONE), is(BigDecimal.ONE));
+        assertThat(Misc.toBigDecimal(NULL_NUMBER, null), is(nullValue()));
+        assertThat(Misc.toBigDecimal(NULL_NUMBER, BigDecimal.ONE), is(BigDecimal.ONE));
         assertThat(Misc.toBigDecimal(12, BigDecimal.ONE), is(BigDecimal.valueOf(12)));
         assertThat(Misc.toBigDecimal(12.5, BigDecimal.ONE), is(BigDecimal.valueOf(12.5)));
         assertThat(Misc.toBigDecimal(BigInteger.TEN, BigDecimal.ONE), is(BigDecimal.TEN));
@@ -746,7 +753,7 @@ public class MiscTest {
      */
     @Test
     public void testToBigDecimal_String_BigDecimal() {
-        assertThat(Misc.toBigDecimal((String) null, null), is(nullValue()));
+        assertThat(Misc.toBigDecimal(NULL_STRING, null), is(nullValue()));
         assertThat(Misc.toBigDecimal("", BigDecimal.ONE), is(BigDecimal.ONE));
         assertThat(Misc.toBigDecimal("INT", BigDecimal.ONE), is(BigDecimal.ONE));
         assertThat(Misc.toBigDecimal("12", BigDecimal.ONE), is(BigDecimal.valueOf(12)));
@@ -789,8 +796,8 @@ public class MiscTest {
     @Test
     public void testToCalendar_Date_Calendar() {
         Calendar d = Calendar.getInstance();
-        assertThat(Misc.toCalendar((Date) null, null), is(nullValue()));
-        assertThat(Misc.toCalendar((Date) null, d), is(d));
+        assertThat(Misc.toCalendar(NULL_DATE, null), is(nullValue()));
+        assertThat(Misc.toCalendar(NULL_DATE, d), is(d));
         d = new GregorianCalendar(2015, Calendar.MARCH, 12);
 
         Date now = new Date();
@@ -808,8 +815,8 @@ public class MiscTest {
     @Test
     public void testToCalendar_String_Calendar() {
         Calendar d = Calendar.getInstance();
-        assertThat(Misc.toCalendar((String) null, null), is(nullValue()));
-        assertThat(Misc.toCalendar((String) null, d), is(d));
+        assertThat(Misc.toCalendar(NULL_STRING, null), is(nullValue()));
+        assertThat(Misc.toCalendar(NULL_STRING, d), is(d));
         d = new GregorianCalendar(2015, Calendar.MARCH, 12);
         assertThat(Misc.toCalendar("2015.03.12", null), is(comparesEqualTo(d)));
         assertThat(Misc.toCalendar("2015/3/12", null), is(comparesEqualTo(d)));
@@ -839,7 +846,7 @@ public class MiscTest {
      */
     @Test
     public void testToDoubleNum() {
-        assertThat(Misc.toDoubleNum((Number) null, 1d), is(1d));
+        assertThat(Misc.toDoubleNum(NULL_NUMBER, 1d), is(1d));
         assertThat(Misc.toDoubleNum(2, 1d), is(2d));
         assertThat(Misc.toDoubleNum(12.5, 1d), is(12.5d));
         assertThat(Misc.toDoubleNum(Double.MAX_VALUE, 1d), is(Double.MAX_VALUE));
@@ -851,7 +858,7 @@ public class MiscTest {
      */
     @Test
     public void testToFloatNum() {
-        assertThat(Misc.toFloatNum((Number) null, 1f), is(1f));
+        assertThat(Misc.toFloatNum(NULL_NUMBER, 1f), is(1f));
         assertThat(Misc.toFloatNum(2, 1f), is(2f));
         assertThat(Misc.toFloatNum(12.5, 1f), is(12.5f));
         assertThat(Misc.toFloatNum(Double.MAX_VALUE, 1f), is(Float.POSITIVE_INFINITY));
@@ -863,8 +870,8 @@ public class MiscTest {
      */
     @Test
     public void testToIntNum_Number_Integer() {
-        assertThat(Misc.toIntNum((Number) null, null), is(nullValue()));
-        assertThat(Misc.toIntNum((Number) null, 1), is(1));
+        assertThat(Misc.toIntNum(NULL_NUMBER, null), is(nullValue()));
+        assertThat(Misc.toIntNum(NULL_NUMBER, 1), is(1));
         assertThat(Misc.toIntNum(2, 1), is(2));
         assertThat(Misc.toIntNum(12.5, 1), is(12));
     }
@@ -874,7 +881,7 @@ public class MiscTest {
      */
     @Test
     public void testToIntNum_String_Integer() {
-        assertThat(Misc.toIntNum((String) null, null), is(nullValue()));
+        assertThat(Misc.toIntNum(NULL_STRING, null), is(nullValue()));
         assertThat(Misc.toIntNum("", 1), is(1));
         assertThat(Misc.toIntNum("2", 1), is(2));
         assertThat(Misc.toIntNum("12.5", 1), is(12));
@@ -886,7 +893,7 @@ public class MiscTest {
      */
     @Test
     public void testToInt_Number_int() {
-        assertThat(Misc.toInt((Number) null, 1), is(1));
+        assertThat(Misc.toInt(NULL_NUMBER, 1), is(1));
         assertThat(Misc.toInt(2, 1), is(2));
         assertThat(Misc.toInt(12.5, 1), is(12));
     }
@@ -896,7 +903,7 @@ public class MiscTest {
      */
     @Test
     public void testToInt_String_int() {
-        assertThat(Misc.toInt((String) null, 1), is(1));
+        assertThat(Misc.toInt(NULL_STRING, 1), is(1));
         assertThat(Misc.toInt("", 1), is(1));
         assertThat(Misc.toInt("2", 1), is(2));
         assertThat(Misc.toInt("12.5", 1), is(12));
@@ -929,8 +936,8 @@ public class MiscTest {
      */
     @Test
     public void testToLongNum_Number_Long() {
-        assertThat(Misc.toLongNum((Number) null, null), is(nullValue()));
-        assertThat(Misc.toLongNum((Number) null, 1L), is(1L));
+        assertThat(Misc.toLongNum(NULL_NUMBER, null), is(nullValue()));
+        assertThat(Misc.toLongNum(NULL_NUMBER, 1L), is(1L));
         assertThat(Misc.toLongNum(2, 1L), is(2L));
         assertThat(Misc.toLongNum(12.5, 1L), is(12L));
         assertThat(Misc.toLongNum(Long.MAX_VALUE, 1L), is(Long.MAX_VALUE));
@@ -942,7 +949,7 @@ public class MiscTest {
      */
     @Test
     public void testToLongNum_String_Long() {
-        assertThat(Misc.toLongNum((String) null, null), is(nullValue()));
+        assertThat(Misc.toLongNum(NULL_STRING, null), is(nullValue()));
         assertThat(Misc.toLongNum("", 1L), is(1L));
         assertThat(Misc.toLongNum("2", 1L), is(2L));
         assertThat(Misc.toLongNum("12.5", 1L), is(12L));
@@ -956,7 +963,7 @@ public class MiscTest {
      */
     @Test
     public void testToLong_Number_long() {
-        assertThat(Misc.toLong((Number) null, 1L), is(1L));
+        assertThat(Misc.toLong(NULL_NUMBER, 1L), is(1L));
         assertThat(Misc.toLong(2, 1L), is(2L));
         assertThat(Misc.toLong(12.5, 1L), is(12L));
         assertThat(Misc.toLong(Long.MAX_VALUE, 1L), is(Long.MAX_VALUE));
@@ -968,7 +975,7 @@ public class MiscTest {
      */
     @Test
     public void testToLong_String_long() {
-        assertThat(Misc.toLong((String) null, 1L), is(1L));
+        assertThat(Misc.toLong(NULL_STRING, 1L), is(1L));
         assertThat(Misc.toLong("", 1L), is(1L));
         assertThat(Misc.toLong("2", 1L), is(2L));
         assertThat(Misc.toLong("12.5", 1L), is(12L));
@@ -982,7 +989,7 @@ public class MiscTest {
      */
     @Test
     public void testToNumber_3args() {
-        assertThat(Misc.toNumber((String) null, null, null), is(nullValue()));
+        assertThat(Misc.toNumber(NULL_STRING, null, null), is(nullValue()));
         assertThat(Misc.toNumber("2", 1, BigDecimal.class), is((Number) new BigDecimal(2)));
         assertThat(Misc.toNumber("12.5", 1L, Long.class), is((Number) 12L));
         assertThat(Misc.toNumber("123,456,789,910", 1L, Long.class), is((Number) 123456789910L));
@@ -993,7 +1000,7 @@ public class MiscTest {
      */
     @Test
     public void testToNumber_String_Number() {
-        assertThat(Misc.toNumber((String) null, null), is(nullValue()));
+        assertThat(Misc.toNumber(NULL_STRING, null), is(nullValue()));
         assertThat(Misc.toNumber("", 1), is((Number) 1));
         assertThat(Misc.toNumber("2", 1), is((Number) 2L));
         assertThat(Misc.toNumber("12.5", 1L), is((Number) 12.5));

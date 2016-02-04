@@ -37,7 +37,7 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
      * 最初に1回だけ実行される Adder.
      */
     protected final Adder<T, R> first;
-    
+
     /**
      * 2回以降に実行される Adder.
      */
@@ -45,7 +45,7 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
 
     /**
      * 2つの {@link Adder} で初期化する.
-     * 
+     *
      * @param first １回目の Adder.
      * @param more 2回目以降の Adder.
      */
@@ -55,9 +55,8 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
     }
 
     /**
-     * 1つの {@link Adder } で初期化する.
-     * first, more ともに同じ Adder を使用する.
-     * 
+     * 1つの {@link Adder } で初期化する. first, more ともに同じ Adder を使用する.
+     *
      * @param adder Adder.
      */
     public AbstractJoiner(Adder<T, R> adder) {

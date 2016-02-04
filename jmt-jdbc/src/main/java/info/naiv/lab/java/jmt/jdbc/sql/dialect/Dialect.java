@@ -39,10 +39,11 @@ public interface Dialect {
     PagingSupportType getPagingSupport();
 
     /**
-     * 行番号を戻す関数.
+     * 行番号を戻す関数. 窓関数の row_number() over (order) に展開される.
      *
      * @param order 並び順.
      * @return
      */
     String rowNumber(String order);
+
 }

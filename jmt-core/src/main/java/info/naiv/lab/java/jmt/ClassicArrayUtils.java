@@ -44,6 +44,39 @@ import lombok.Value;
 public class ClassicArrayUtils {
 
     /**
+     * 条件を満たす要素のインデックスを取得する.
+     *
+     * @param <T> 値の型
+     * @param array 配列
+     * @param predicate 条件
+     * @return 条件に一致する要素のインデックス. 存在しない場合、-1
+     */
+    public static <T> int arrayIndexOf(T[] array, Predicate1<? super T> predicate) {
+        nonNull(predicate, "predicate");
+        if (array == null) {
+            return -1;
+        }
+        for (int i = 0; i < array.length; i++) {
+            if (predicate.test(array[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 一致する要素のインデックスを取得する.
+     *
+     * @param <T> 値の型
+     * @param array 配列
+     * @param search 要素
+     * @return 一致する要素のインデックス. 存在しない場合、-1
+     */
+    public static <T> int arrayIndexOf(T[] array, T search) {
+        return arrayIndexOf(array, StandardFunctions.equal(search));
+    }
+
+    /**
      * 引数 array が配列だった場合、Object[] を戻す. <br>
      * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
      * 引数が配列でない場合、null を戻す.
@@ -112,49 +145,40 @@ public class ClassicArrayUtils {
         return len1 - len2;
     }
 
-    public static <T> boolean arrayContains(T[] items, T search) {
-        return arrayContains(items, StandardFunctions.equal(search));
+    /**
+     * 配列内に要素が存在するかどうか.
+     *
+     * @param <T> 要素の型
+     * @param array 配列
+     * @param search 探す要素.
+     * @return
+     */
+    public static <T> boolean arrayContains(T[] array, T search) {
+        return 0 <= arrayIndexOf(array, StandardFunctions.equal(search));
     }
 
     /**
      * コレクションに項目があるかどうか
      *
      * @param <T> 要素の型
-     * @param items コレクションから等価であるものを取得
+     * @param array コレクションから等価であるものを取得
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean arrayContains(T[] items, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (predicate.test(item)) {
-                return true;
-            }
-        }
-        return false;
+    public static <T> boolean arrayContains(T[] array, Predicate1<? super T> predicate) {
+        return 0 <= arrayIndexOf(array, predicate);
     }
 
     /**
      * コレクションから等価であるものを取得
      *
      * @param <T> 要素の型
-     * @param items コレクションから等価であるものを取得
-     * @param valueToFind 検索する値
+     * @param array コレクションから等価であるものを取得
+     * @param search 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>> boolean arrayContainsCompareEquals(T[] items, T valueToFind) {
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (item.compareTo(valueToFind) == 0) {
-                return true;
-            }
-        }
-        return false;
+    public static <T extends Comparable<T>> boolean arrayContainsCompareEquals(T[] array, T search) {
+        return 0 <= arrayIndexOf(array, StandardFunctions.compareEqual(search));
     }
 
     public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {

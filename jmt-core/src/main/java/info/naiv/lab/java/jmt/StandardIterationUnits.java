@@ -81,6 +81,58 @@ public class StandardIterationUnits {
 
     };
 
+    public static final IterationUnit<Double> DOUBLE = new AbstractIterationUnit<Double>() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Double advance(Double value, long n) {
+            if (n == 0) {
+                return value;
+            }
+            double dir = n < 0 ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
+            long c = Math.abs(n);
+            double d = value;
+            for (int i = 0; i < c; i++) {
+                d = Math.nextAfter(d, dir);
+            }
+            return d;
+        }
+
+        @Override
+        protected int doCompare(Double o1, Double o2) {
+            return o1.compareTo(o2);
+        }
+
+        @Override
+        protected long doDistance(Double o1, Double o2) {
+            if (o1.isInfinite() || o1.isNaN() || o2.isInfinite() || o2.isNaN()) {
+                throw new IllegalArgumentException("o1 or o2 is invalid number.");
+            }
+            else if (o1.equals(o2)) {
+                return 0;
+            }
+            long sign;
+            double fr;
+            double to;
+            if (o1 < o2) {
+                sign = 1;
+                fr = o1;
+                to = o2;
+            }
+            else {
+                sign = -1;
+                fr = o2;
+                to = o1;
+            }
+            long n = 0;
+            while (fr < to) {
+                n++;
+                fr = Math.nextUp(fr);
+            }
+            return sign * n;
+        }
+    };
+
     public static final IterationUnit<Number> NUMBER_TO_LONG = new AbstractIterationUnit<Number>() {
         private static final long serialVersionUID = 1L;
 

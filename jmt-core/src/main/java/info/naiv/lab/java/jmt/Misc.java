@@ -168,12 +168,13 @@ public abstract class Misc {
      * @param byteFormat 各バイトごとのフォーマット.
      * @return フォーマット済み文字列.
      */
-    public static  String formatBytes(byte[] data, String byteFormat) {
-        Formatter formatter = new Formatter();
-        for (byte b : data) {
-            formatter.format(byteFormat, b);
+    public static String formatBytes(byte[] data, String byteFormat) {
+        try (Formatter formatter = new Formatter()) {
+            for (byte b : data) {
+                formatter.format(byteFormat, b);
+            }
+            return formatter.toString();
         }
-        return formatter.toString();
     }
 
     /**
@@ -298,7 +299,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空ならば true.
      */
-    public static  boolean isEmpty(Map<?, ?> object) {
+    public static boolean isEmpty(Map<?, ?> object) {
         return object == null || object.isEmpty();
     }
 
@@ -394,7 +395,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
-    public static  boolean isNotEmpty(Map<?, ?> object) {
+    public static boolean isNotEmpty(Map<?, ?> object) {
         return !isEmpty(object);
     }
 
@@ -407,8 +408,8 @@ public abstract class Misc {
      */
     public static
             <T> boolean isNotEmpty(T[] object) {
-                return !isEmpty(object);
-            }
+        return !isEmpty(object);
+    }
 
     /**
      * 文字列連結.
@@ -419,8 +420,8 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static
-                            String join(Iterable<?> items, String delim) {
-                                return (StringJoiner.valueOf(delim)).join(items).toString();
+            String join(Iterable<?> items, String delim) {
+        return (StringJoiner.valueOf(delim)).join(items).toString();
     }
 
     /**
@@ -541,7 +542,7 @@ public abstract class Misc {
         }
     }
 
-    public static  Optional<Object> newInstance(String className) {
+    public static Optional<Object> newInstance(String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
         return newInstance((Optional) clazz);
     }
@@ -563,7 +564,7 @@ public abstract class Misc {
      * @param string 文字列
      * @return 先頭から ZWNBSP を除外した文字列.
      */
-    public static  String removeZwnbsp(String string) {
+    public static String removeZwnbsp(String string) {
         if (isEmpty(string)) {
             return string;
         }
@@ -812,7 +813,7 @@ public abstract class Misc {
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
-    public static  Integer toIntNum(String source, Integer defaultValue) {
+    public static Integer toIntNum(String source, Integer defaultValue) {
         Number num = toNumber(source, null);
         if (num != null) {
             return num.intValue();

@@ -121,6 +121,12 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
         this(DEFAULT_CAPACITY, delim);
     }
 
+    /**
+     * キャパシティと区切り文字を指定したコンストラクター.
+     *
+     * @param capacity キャパシティ.
+     * @param delim 区切り文字.
+     */
     public CharBufferJoiner(int capacity, final CharSequence delim) {
         super(new SimpleAdder(), new Adder<CharSequence, CharBuffer>() {
             @Override
@@ -132,15 +138,33 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
         this.capacity = capacity;
     }
 
+    /**
+     * adder を指定したコンストラクター.
+     * 
+     * @param first 最初の adder
+     * @param more 2回目以降の adder
+     */
     public CharBufferJoiner(Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
         this(DEFAULT_CAPACITY, first, more);
     }
 
+    /**
+     * キャパシティと adder を指定したコンストラクター.
+     * @param capacity  キャパシティ
+     * @param first 最初の adder
+     * @param more 2回目以降の adder
+     */
     public CharBufferJoiner(int capacity, Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
         super(first, more);
         this.capacity = capacity;
     }
 
+    /**
+     * キャパシティが変更された CharBufferJoiner を取得.
+     * 
+     * @param newCapacity   新しいキャパシティ.
+     * @return キャパシティを変更した CharBufferJoiner.
+     */
     public CharBufferJoiner newCapacity(int newCapacity) {
         return new CharBufferJoiner(newCapacity, first, more);
     }

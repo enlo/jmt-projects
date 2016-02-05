@@ -36,24 +36,6 @@ public class ArgumentsTest {
     }
 
     /**
-     * Test of arrayOfFirstAndMore method, of class Arguments.
-     */
-    @Test
-    public void testArrayOfFirstAndMore() {
-        String[] actual;
-
-        actual = Arguments.arrayOfFirstAndMore("A");
-        assertThat(actual, is(allOf(arrayWithSize(1), arrayContaining("A"))));
-
-        actual = Arguments.arrayOfFirstAndMore("A", (String) null);
-        assertThat(actual, is(allOf(arrayWithSize(2), arrayContaining("A", null))));
-
-        actual = Arguments.arrayOfFirstAndMore("A", "B", "C");
-        assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
-
-    }
-
-    /**
      * Test of between method, of class Arguments.
      */
     @Test()

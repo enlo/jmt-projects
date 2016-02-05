@@ -24,8 +24,6 @@
 package info.naiv.lab.java.jmt;
 
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import static java.lang.System.arraycopy;
-import java.lang.reflect.Array;
 import java.util.Collection;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 
@@ -34,24 +32,6 @@ import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
  * @author enlo
  */
 public abstract class Arguments {
-
-    /**
-     * arrayOfFirstAndMore
-     *
-     * @param <T>
-     * @param first
-     * @param more 追加
-     * @return
-     */
-    @ReturnNonNull
-    @SuppressWarnings("unchecked")
-    public static <T> T[] arrayOfFirstAndMore(T first, T... more) {
-        assert more != null;
-        T[] array = (T[]) Array.newInstance(more.getClass().getComponentType(), more.length + 1);
-        Array.set(array, 0, first);
-        arraycopy(more, 0, array, 1, more.length);
-        return array;
-    }
 
     /**
      * 引数の範囲チェック.

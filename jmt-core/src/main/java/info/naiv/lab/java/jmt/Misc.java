@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -161,6 +162,21 @@ public abstract class Misc {
     }
 
     /**
+     * バイト列を文字列にフォーマットする.
+     *
+     * @param data バイト列.
+     * @param byteFormat 各バイトごとのフォーマット.
+     * @return フォーマット済み文字列.
+     */
+    public static  String formatBytes(byte[] data, String byteFormat) {
+        Formatter formatter = new Formatter();
+        for (byte b : data) {
+            formatter.format(byteFormat, b);
+        }
+        return formatter.toString();
+    }
+
+    /**
      * 最初の項目または null を戻す.
      *
      * @param <T>
@@ -282,7 +298,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空ならば true.
      */
-    public static boolean isEmpty(Map<?, ?> object) {
+    public static  boolean isEmpty(Map<?, ?> object) {
         return object == null || object.isEmpty();
     }
 
@@ -378,7 +394,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
-    public static boolean isNotEmpty(Map<?, ?> object) {
+    public static  boolean isNotEmpty(Map<?, ?> object) {
         return !isEmpty(object);
     }
 
@@ -389,9 +405,10 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
-    public static <T> boolean isNotEmpty(T[] object) {
-        return !isEmpty(object);
-    }
+    public static
+            <T> boolean isNotEmpty(T[] object) {
+                return !isEmpty(object);
+            }
 
     /**
      * 文字列連結.
@@ -402,8 +419,8 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static
-            String join(Iterable<?> items, String delim) {
-        return (StringJoiner.valueOf(delim)).join(items).toString();
+                            String join(Iterable<?> items, String delim) {
+                                return (StringJoiner.valueOf(delim)).join(items).toString();
     }
 
     /**
@@ -419,8 +436,7 @@ public abstract class Misc {
      * @throws IllegalArgumentException dest または mapper が null
      */
     @ReturnNonNull
-    public static <Dest extends Collection<R>, R, T>
-            Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
+    public static <Dest extends Collection<R>, R, T> Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
         nonNull(dest, "dest");
         nonNull(mapper, "mapper");
         if (source != null) {
@@ -525,7 +541,7 @@ public abstract class Misc {
         }
     }
 
-    public static Optional<Object> newInstance(String className) {
+    public static  Optional<Object> newInstance(String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
         return newInstance((Optional) clazz);
     }
@@ -547,7 +563,7 @@ public abstract class Misc {
      * @param string 文字列
      * @return 先頭から ZWNBSP を除外した文字列.
      */
-    public static String removeZwnbsp(String string) {
+    public static  String removeZwnbsp(String string) {
         if (isEmpty(string)) {
             return string;
         }
@@ -796,7 +812,7 @@ public abstract class Misc {
      * @param defaultValue 既定値.
      * @return 変換結果. 変換できない場合はdefaultValue.
      */
-    public static Integer toIntNum(String source, Integer defaultValue) {
+    public static  Integer toIntNum(String source, Integer defaultValue) {
         Number num = toNumber(source, null);
         if (num != null) {
             return num.intValue();
@@ -988,13 +1004,19 @@ public abstract class Misc {
         }
     }
 
+    /**
+     * 文字列をURLに変更する.
+     *
+     * @param url URL文字列.
+     * @return URL. URLの形式が不正であれば、null.
+     */
     public static URL toURL(String url) {
         nonEmpty(url, "url");
         try {
             return new URL(url);
         }
         catch (MalformedURLException ex) {
-            logger.trace("invalid URL", ex);
+            logger.trace(url, ex);
             return null;
         }
     }

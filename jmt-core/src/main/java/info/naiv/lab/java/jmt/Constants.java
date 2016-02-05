@@ -26,22 +26,50 @@ package info.naiv.lab.java.jmt;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+/**
+ * 定数.
+ *
+ * @author enlo
+ */
 public class Constants {
 
+    /**
+     * 改行コード CR
+     */
     public static final String CR = "\r";
+    /**
+     * 改行コード CR+LF
+     */
     public static final String CRLF = "\r\n";
+
+    /**
+     * 既知の整数型
+     */
     public static final Class<?>[] KNOWN_INT_TYPES = {
         BigInteger.class,
         Long.class,
         Integer.class,
         Short.class,
         Byte.class,};
+    /**
+     * 既知の実数型
+     */
     public static final Class<?>[] KNOWN_REAL_TYPES = {
         BigDecimal.class,
         Double.class,
         Float.class,};
+
+    /**
+     * 改行コード LF
+     */
     public static final String LF = "\n";
+    /**
+     * 7DAYS
+     */
     public static final int SEVEN_DAYS = 7;
+    /**
+     * BOM または ZWNBSP.
+     */
     public static final String ZWNBSP = "\uFEFF";
 
     private Constants() {

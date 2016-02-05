@@ -58,6 +58,13 @@ public class ComparableComparator<T extends Comparable<T>> implements Comparator
         }
     }
 
+    /**
+     * 値の小さなほうを取得する.
+     *
+     * @param o1
+     * @param o2
+     * @return
+     */
     public final T min(T o1, T o2) {
         if (o1 == o2) {
             return o1;
@@ -73,6 +80,13 @@ public class ComparableComparator<T extends Comparable<T>> implements Comparator
         }
     }
 
+    /**
+     * 比較メソッド.
+     *
+     * @param o1
+     * @param o2
+     * @return
+     */
     protected int doCompare(T o1, T o2) {
         return o1.compareTo(o2);
     }

@@ -27,6 +27,7 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.mark.ThreadSafety;
 
 /**
+ * オブジェクトホルダー.
  *
  * @author enlo
  * @param <T> 保持するオブジェクトの型

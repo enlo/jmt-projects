@@ -102,6 +102,14 @@ public class ClassicArrayUtils {
         return result;
     }
 
+    /**
+     * オブジェクトが指定された型の配列かどうかをチェックする.
+     *
+     * @param <T> 型パラメータT
+     * @param array 配列オブジェクト
+     * @param clazz 型情報.
+     * @return array が T[] なら true.
+     */
     public static <T> boolean isArrayOf(Object array, Class<T> clazz) {
         if (array != null) {
             Class<?> aclz = array.getClass();
@@ -113,14 +121,39 @@ public class ClassicArrayUtils {
         return false;
     }
 
+    /**
+     * 配列を {@link Iterable} に変換する.
+     *
+     * @param <T>
+     * @param array
+     * @return
+     */
     public static <T> ArrayIterable<T> arrayAsIterable(T[] array) {
         return new ArrayIterable<>(array);
     }
 
+    /**
+     * 配列の中身が等しいかチェック.
+     *
+     * @param <T>
+     * @param arr1
+     * @param arr2
+     * @return
+     */
     public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, T[] arr2) {
         return arrayCompareTo(arr1, 0, arr2, 0);
     }
 
+    /**
+     * 開始位置からの中身を比較する.
+     *
+     * @param <T>
+     * @param arr1
+     * @param pos1
+     * @param arr2
+     * @param pos2
+     * @return
+     */
     public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, T[] arr2, int pos2) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
@@ -129,6 +162,18 @@ public class ClassicArrayUtils {
         return arrayCompareTo(arr1, pos1, len1, arr2, pos2, len2);
     }
 
+    /**
+     * 部分配列の中身を比較する.
+     *
+     * @param <T>
+     * @param arr1
+     * @param pos1
+     * @param len1
+     * @param arr2
+     * @param pos2
+     * @param len2
+     * @return
+     */
     public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, int len1, T[] arr2, int pos2, int len2) {
         int lim1 = pos1 + len1;
         int lim2 = pos2 + len2;
@@ -181,6 +226,16 @@ public class ClassicArrayUtils {
         return 0 <= arrayIndexOf(array, StandardFunctions.compareEqual(search));
     }
 
+    /**
+     * 部分配列の中身が等しいかチェックする.
+     *
+     * @param arr1
+     * @param pos1
+     * @param arr2
+     * @param pos2
+     * @param len
+     * @return
+     */
     public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
@@ -198,6 +253,16 @@ public class ClassicArrayUtils {
         return true;
     }
 
+    /**
+     * 部分配列の中身が等しいかチェックする.
+     *
+     * @param arr1
+     * @param pos1
+     * @param arr2
+     * @param pos2
+     * @param len
+     * @return
+     */
     public static boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
@@ -215,6 +280,17 @@ public class ClassicArrayUtils {
         return true;
     }
 
+    /**
+     * 部分配列の中身が等しいかチェックする.
+     *
+     * @param <T>
+     * @param arr1
+     * @param pos1
+     * @param arr2
+     * @param pos2
+     * @param len
+     * @return
+     */
     public static <T> boolean arrayEqualsInRange(T[] arr1, int pos1, T[] arr2, int pos2, int len) {
         nonNull(arr1, "arr1");
         nonNull(arr2, "arr2");
@@ -232,6 +308,7 @@ public class ClassicArrayUtils {
     }
 
     /**
+     * 配列を並び替える.
      *
      * @param <T>
      * @param items
@@ -256,7 +333,7 @@ public class ClassicArrayUtils {
     }
 
     /**
-     * arrayOfFirstAndMore
+     * 配列を作成する.
      *
      * @param <T>
      * @param first
@@ -273,6 +350,11 @@ public class ClassicArrayUtils {
         return array;
     }
 
+    /**
+     * 配列用 Iterable.
+     *
+     * @param <T>
+     */
     @Value
     public static final class ArrayIterable<T> implements Iterable<T> {
 
@@ -286,6 +368,7 @@ public class ClassicArrayUtils {
     }
 
     /**
+     * 配列用 Iterator.
      *
      * @author enlo
      * @param <T>

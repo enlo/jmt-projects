@@ -39,7 +39,7 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
     protected final Adder<T, R> first;
 
     /**
-     * 2回以降に実行される Adder.
+     * 2回目以降に実行される Adder.
      */
     protected final Adder<T, R> more;
 

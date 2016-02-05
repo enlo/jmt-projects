@@ -1070,4 +1070,14 @@ public class MiscTest {
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
     }
+
+    /**
+     * Test of formatBytes method, of class Misc.
+     */
+    @Test
+    public void testFormatBytes() {
+        byte[] data = "abcあかさ".getBytes(StandardCharsets.UTF_8);
+        assertThat(Misc.formatBytes(data, "%02x"), is("616263e38182e3818be38195"));
+        assertThat(Misc.formatBytes(data, "%02X"), is("616263E38182E3818BE38195"));
+    }
 }

@@ -27,10 +27,16 @@ import lombok.Setter;
 
 /**
  *
+ * ファイナライザ実行時に、オブジェクトを破棄するための仕組み.
+ *
+ *
  * @author enlo
  */
 public abstract class FinalizerGuardian {
 
+    /**
+     * ファイナライズ不要なら true.
+     */
     @Setter
     boolean closed = false;
 
@@ -43,5 +49,10 @@ public abstract class FinalizerGuardian {
         super.finalize();
     }
 
+    /**
+     * ファイナライズ時の処理.
+     *
+     * @throws Throwable
+     */
     protected abstract void onFinalize() throws Throwable;
 }

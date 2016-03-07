@@ -109,7 +109,7 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
     @Override
     public boolean isResolveable(String name) {
         return variableResolvers.containsKey(name)
-                || (parameterSource != null && parameterSource.hasValue(name))
+                || (parameterSource != null && name != null && parameterSource.hasValue(name))
                 || (nextFactory != null && nextFactory.isResolveable(name));
     }
 

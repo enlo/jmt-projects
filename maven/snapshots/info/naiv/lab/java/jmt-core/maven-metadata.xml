@@ -4,8 +4,8 @@
   <artifactId>jmt-core</artifactId>
   <versioning>
     <versions>
-      <version>1.0.2-SNAPSHOT</version>
+      <version>1.0.3-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20160205114958</lastUpdated>
+    <lastUpdated>20160307015448</lastUpdated>
   </versioning>
 </metadata>

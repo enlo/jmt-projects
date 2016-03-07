@@ -21,34 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.dialect;
+package info.naiv.lab.java.jmt;
+
+import info.naiv.lab.java.jmt.range.Range;
+import lombok.Data;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-public interface Dialect {
+@Data
+public class SimpleRangeLimiter<T extends Comparable<T>> implements RangeLimiter<T> {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
+    T min;
+    T max;
 
-    PagingSupportType getPagingSupport();
+    public SimpleRangeLimiter() {
 
-    /**
-     * 行番号疑似列. rownum または row_number() over () に展開される. 未サポートなら例外.
-     *
-     * @return
-     */
-    String rowNumber();
+    }
 
-    /**
-     * 文字列連結記号を取得.
-     *
-     * @return 文字列連結記号.
-     */
-    String getStringConcatenateOperator();
+    public SimpleRangeLimiter(Range<T> range) {
+        min = range.getMinValue();
+        max = range.getMaxValue();
+    }
+
+    public SimpleRangeLimiter(T min, T max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    @Override
+    public T limit(T value) {
+        return Misc.minmax(value, min, max);
+    }
+
 }

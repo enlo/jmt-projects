@@ -41,7 +41,13 @@ public abstract class AbstractDialect implements Dialect {
     }
 
     @Override
-    public String rowNumber(String order) {
-        return build(" row_number() over(", order, ") ");
+    public String getStringConcatenateOperator() {
+        return "||";
     }
+
+    @Override
+    public String rowNumber() {
+        return " row_number() over() ";
+    }
+
 }

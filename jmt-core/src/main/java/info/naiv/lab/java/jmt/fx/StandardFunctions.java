@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.fx;
 
 import info.naiv.lab.java.jmt.Holder;
+import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.Integer.parseInt;
 import java.util.Objects;
@@ -61,7 +62,7 @@ public class StandardFunctions {
         return new Predicate1<T>() {
             @Override
             public boolean test(T obj) {
-                return value.compareTo(obj) == 0;
+                return Misc.compareEqual(value, obj);
             }
         };
     }

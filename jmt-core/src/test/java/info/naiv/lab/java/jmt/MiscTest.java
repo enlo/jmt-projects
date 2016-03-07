@@ -38,6 +38,7 @@ import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -156,6 +157,24 @@ public class MiscTest {
     }
 
     /**
+     * Test of compareEqual method, of class Misc.
+     */
+    @Test
+    public void testCompareEqual() {
+        BigDecimal bd1 = new BigDecimal("1.0");
+        BigDecimal bd2 = new BigDecimal("1");
+        BigDecimal bd3 = new BigDecimal("1");
+        BigDecimal bd4 = new BigDecimal("1.1");
+
+        assertThat(bd1, not(is(equalTo(bd2))));
+        assertThat(bd2, (is(equalTo(bd3))));
+        assertThat(bd3, not(is(equalTo(bd4))));
+        assertThat(Misc.compareEqual(bd1, bd2), is(true));
+        assertThat(Misc.compareEqual(bd2, bd3), is(true));
+        assertThat(Misc.compareEqual(bd3, bd4), is(false));
+    }
+
+    /**
      * Test of contains method, of class Misc.
      */
     @Test
@@ -229,16 +248,16 @@ public class MiscTest {
     }
 
     /**
-     * Test of equals method, of class Misc.
+     * Test of equal method, of class Misc.
      */
     @Test
-    public void testEquals() {
-        assertThat("equals(1, 2)", Misc.equals(1, 2), is(false));
-        assertThat("equals(4, 2)", Misc.equals(4, 2), is(false));
-        assertThat("equals(3, 3)", Misc.equals(3, 3), is(true));
-        assertThat("equals(null, 4)", Misc.equals(null, 4), is(false));
-        assertThat("equals(5, null)", Misc.equals(5, null), is(false));
-        assertThat("equals(null, null)", Misc.equals(null, null), is(true));
+    public void testEqual() {
+        assertThat("equals(1, 2)", Misc.equal(1, 2), is(false));
+        assertThat("equals(4, 2)", Misc.equal(4, 2), is(false));
+        assertThat("equals(3, 3)", Misc.equal(3, 3), is(true));
+        assertThat("equals(null, 4)", Misc.equal(null, 4), is(false));
+        assertThat("equals(5, null)", Misc.equal(5, null), is(false));
+        assertThat("equals(null, null)", Misc.equal(null, null), is(true));
     }
 
     /**
@@ -267,6 +286,16 @@ public class MiscTest {
         Iterable<Integer> result = Misc.flat(Arrays.asList(in1, in2));
         assertThat(result, is(contains(1, 2, 3, 4, 5, 6)));
 
+    }
+
+    /**
+     * Test of formatBytes method, of class Misc.
+     */
+    @Test
+    public void testFormatBytes() {
+        byte[] data = "abcあかさ".getBytes(StandardCharsets.UTF_8);
+        assertThat(Misc.formatBytes(data, "%02x"), is("616263e38182e3818be38195"));
+        assertThat(Misc.formatBytes(data, "%02X"), is("616263E38182E3818BE38195"));
     }
 
     /**
@@ -619,6 +648,19 @@ public class MiscTest {
     }
 
     /**
+     * Test of minmax method, of class Misc.
+     */
+    @Test
+    public void testMinmax() {
+        assertThat(Misc.minmax(1, 2, 5), is(2));
+        assertThat(Misc.minmax(2, 2, 5), is(2));
+        assertThat(Misc.minmax(3, 2, 5), is(3));
+        assertThat(Misc.minmax(4, 2, 5), is(4));
+        assertThat(Misc.minmax(5, 2, 5), is(5));
+        assertThat(Misc.minmax(6, 2, 5), is(5));
+    }
+
+    /**
      * Test of newInstance method, of class Misc.
      */
     @Test
@@ -663,6 +705,73 @@ public class MiscTest {
     public void testNop() {
         Object x = null;
         Misc.nop(x);
+    }
+
+    /**
+     * Test of normalizeLineSeparator method, of class Misc.
+     */
+    @Test
+    public void testNormalizeLineSeparator_String() {
+        String text = "あいうえお\rかきくけこ\r\nさしすせそ\nたちつてと\u2028なにぬねの";
+        String expected = "あいうえお\r\nかきくけこ\r\nさしすせそ\r\nたちつてと\r\nなにぬねの";
+        String actual = Misc.normalizeLineSeparator(text);
+        assertThat(actual, is(expected));
+    }
+
+    /**
+     * Test of normalizeLineSeparator method, of class Misc.
+     */
+    @Test
+    public void testNormalizeLineSeparator_String_String() {
+        String text = "あいうえお\rかきくけこ\r\nさしすせそ\nたちつてと\u2028なにぬねの";
+        String expected = "あいうえお<br>かきくけこ<br>さしすせそ<br>たちつてと<br>なにぬねの";
+        String actual = Misc.normalizeLineSeparator(text, "<br>");
+        assertThat(actual, is(expected));
+    }
+
+    /**
+     * Test of objectToDouble method, of class Misc.
+     */
+    @Test
+    public void testObjectToDouble() {
+        Object ival = 12.0d;
+        assertThat(Misc.objectToDouble(ival, 0), is(12d));
+        ival = "-10.1235";
+        assertThat(Misc.objectToDouble(ival, 0), is(-10.1235));
+        ival = "Not a number";
+        assertThat(Misc.objectToDouble(ival, 0), is(0d));
+        ival = 4.5;
+        assertThat(Misc.objectToDouble(ival, 0), is(4.5));
+    }
+
+    /**
+     * Test of objectToInt method, of class Misc.
+     */
+    @Test
+    public void testObjectToInt() {
+        Object ival = 12;
+        assertThat(Misc.objectToInt(ival, 0), is(12));
+        ival = "11";
+        assertThat(Misc.objectToInt(ival, 0), is(11));
+        ival = "Not a number";
+        assertThat(Misc.objectToInt(ival, 0), is(0));
+        ival = 4.5;
+        assertThat(Misc.objectToInt(ival, 0), is(4));
+    }
+
+    /**
+     * Test of objectToLong method, of class Misc.
+     */
+    @Test
+    public void testObjectToLong() {
+        Object ival = 120L;
+        assertThat(Misc.objectToLong(ival, 0), is(120L));
+        ival = "11";
+        assertThat(Misc.objectToLong(ival, 0), is(11L));
+        ival = "Not a number";
+        assertThat(Misc.objectToLong(ival, 0), is(0L));
+        ival = 4.5;
+        assertThat(Misc.objectToLong(ival, 0), is(4L));
     }
 
     /**
@@ -1069,15 +1178,5 @@ public class MiscTest {
     @Test
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
-    }
-
-    /**
-     * Test of formatBytes method, of class Misc.
-     */
-    @Test
-    public void testFormatBytes() {
-        byte[] data = "abcあかさ".getBytes(StandardCharsets.UTF_8);
-        assertThat(Misc.formatBytes(data, "%02x"), is("616263e38182e3818be38195"));
-        assertThat(Misc.formatBytes(data, "%02X"), is("616263E38182E3818BE38195"));
     }
 }

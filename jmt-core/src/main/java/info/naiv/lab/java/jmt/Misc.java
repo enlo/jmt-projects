@@ -93,6 +93,23 @@ public abstract class Misc {
     }
 
     /**
+     * compareTo を利用して同一の値かどうかを検証する。 どちらかの値が null なら false を戻す.
+     *
+     * @param <T> 値の型
+     * @param lhs 左辺値
+     * @param rhs 右辺値
+     * @return どちらかの値が null なら false, そうでなければ lhs.compareTo(rhs) == 0
+     */
+    public static <T extends Comparable<T>> boolean compareEqual(T lhs, T rhs) {
+        if (lhs == null || rhs == null) {
+            return false;
+        }
+        else {
+            return lhs.compareTo(rhs) == 0;
+        }
+    }
+
+    /**
      * コレクションから受け入れ可能なものを取得
      *
      * @param <T> 要素の型
@@ -100,7 +117,8 @@ public abstract class Misc {
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
+    public static <T>
+            boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
         nonNull(predicate, "predicate");
         if (items == null) {
             return false;
@@ -121,8 +139,7 @@ public abstract class Misc {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>>
-            boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
+    public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         if (items == null) {
             return false;
         }
@@ -142,8 +159,8 @@ public abstract class Misc {
      * @param rhs
      * @return
      */
-    public static <T> boolean equals(T lhs, T rhs) {
-        return Objects.equals(lhs, rhs);
+    public static <T> boolean equal(T lhs, T rhs) {
+        return (lhs == rhs) || ((lhs != null) && lhs.equals(rhs));
     }
 
     @ReturnNonNull
@@ -524,6 +541,27 @@ public abstract class Misc {
         return new ComparableComparator<T>().min(x, y);
     }
 
+    /**
+     * [min ～ max] 内の値を戻す.
+     *
+     * @param <T>
+     * @param x 値
+     * @param min 最小値
+     * @param max 最大値
+     * @return min ≦ x ≦ max の値
+     */
+    public static <T extends Comparable<T>> T minmax(T x, T min, T max) {
+        if (min != null && x.compareTo(min) <= 0) {
+            return min;
+        }
+        else if (max != null && max.compareTo(x) <= 0) {
+            return max;
+        }
+        else {
+            return x;
+        }
+    }
+
     public static <T> T newInstance(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -556,6 +594,84 @@ public abstract class Misc {
     @Nop
     public static <T> void nop(T x) {
 
+    }
+
+    /**
+     * 改行文字を正規化.
+     *
+     * @param text テキスト
+     * @return 全ての改行文字を CRLF にしたテキスト
+     */
+    public static String normalizeLineSeparator(String text) {
+        return normalizeLineSeparator(text, Constants.CRLF);
+    }
+
+    /**
+     * 改行文字を正規化.
+     *
+     * @param text テキスト
+     * @param ls 改行文字
+     * @return 全ての改行文字を ls にしたテキスト
+     */
+    public static String normalizeLineSeparator(String text, String ls) {
+        return text.replaceAll("\\u000D\\u000A|\\u000A|\\u000D|\\u0085|\\u0008|\\u000C|\\u2028|\\u2029", ls);
+    }
+
+    /**
+     * オブジェクトを double に変換する.
+     *
+     * @param value 数値に変換したいオブジェクト.
+     * @param defaultValue 数値に変換できない場合の既定値.
+     * @return 数値オブジェクト
+     */
+    public static double objectToDouble(Object value, double defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        else if (value instanceof Number) {
+            return ((Number) value).doubleValue();
+        }
+        else {
+            return toNumber(value.toString(), defaultValue).doubleValue();
+        }
+    }
+
+    /**
+     * オブジェクトを int に変換する.
+     *
+     * @param value 数値に変換したいオブジェクト.
+     * @param defaultValue 数値に変換できない場合の既定値.
+     * @return 数値オブジェクト
+     */
+    public static int objectToInt(Object value, int defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        else if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        else {
+            return toInt(value.toString(), defaultValue);
+        }
+    }
+
+    /**
+     * オブジェクトを long に変換する.
+     *
+     * @param value 数値に変換したいオブジェクト.
+     * @param defaultValue 数値に変換できない場合の既定値.
+     * @return 数値オブジェクト
+     */
+    public static long objectToLong(Object value, long defaultValue) {
+        if (value == null) {
+            return defaultValue;
+        }
+        else if (value instanceof Number) {
+            return ((Number) value).longValue();
+        }
+        else {
+            return toLong(value.toString(), defaultValue);
+        }
     }
 
     /**

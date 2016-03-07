@@ -40,7 +40,7 @@ public class OracleDialect extends AbstractDialect {
     }
 
     @Override
-    public String rowNumber(String order) {
+    public String rowNumber() {
         return "rownum";
     }
 

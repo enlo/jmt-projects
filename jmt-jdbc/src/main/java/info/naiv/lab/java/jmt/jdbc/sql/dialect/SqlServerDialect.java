@@ -36,7 +36,12 @@ public class SqlServerDialect extends AbstractDialect {
 
     @Override
     public PagingSupportType getPagingSupport() {
-        return PagingSupportType.ROWNUM_SUPPORT;
+        return PagingSupportType.UNDEFINED;
+    }
+
+    @Override
+    public String getStringConcatenateOperator() {
+        return "+";
     }
 
 }

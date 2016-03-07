@@ -7,9 +7,11 @@ package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.DateUtils;
 import static org.hamcrest.Matchers.*;
@@ -177,6 +179,78 @@ public class ClassicDateUtilsTest {
         doTestComputeFirstBizDayOfWeek(19, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
         doTestComputeFirstBizDayOfWeek(20, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 19));
         doTestComputeFirstBizDayOfWeek(21, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 19));
+    }
+
+    /**
+     * Test of computeNextWeekday method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testComputeNextWeekday() {
+        List<Integer> weeks = Arrays.asList(Calendar.WEDNESDAY, Calendar.FRIDAY, Calendar.SATURDAY);
+        Calendar base = new GregorianCalendar(2014, Calendar.JULY, 27);
+        Calendar from = (Calendar) base.clone();
+        Calendar[] expecteds = {
+            new GregorianCalendar(2014, Calendar.JULY, 30), // 27
+            new GregorianCalendar(2014, Calendar.JULY, 30), // 28
+            new GregorianCalendar(2014, Calendar.JULY, 30), // 29
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 30
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 31
+            new GregorianCalendar(2014, Calendar.AUGUST, 2), // 1
+            new GregorianCalendar(2014, Calendar.AUGUST, 6), // 2
+        };
+        for (int i = 0; i < expecteds.length; i++, base.add(Calendar.DATE, 1), from.add(Calendar.DATE, 1)) {
+            Calendar expected = expecteds[i];
+            Calendar actual = ClassicDateUtils.computeNextWeekday(from, weeks, base);
+            assertThat(actual, is(expected));
+        }
+    }
+
+    /**
+     * Test of computeNextWeekday method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testComputeNextWeekday2() {
+        List<Integer> weeks = Arrays.asList(Calendar.SUNDAY, Calendar.TUESDAY);
+        Calendar base = new GregorianCalendar(2014, Calendar.JULY, 27);
+        Calendar from = (Calendar) base.clone();
+        Calendar[] expecteds = {
+            new GregorianCalendar(2014, Calendar.JULY, 29), // 27
+            new GregorianCalendar(2014, Calendar.JULY, 29), // 28
+            new GregorianCalendar(2014, Calendar.AUGUST, 3), // 29
+            new GregorianCalendar(2014, Calendar.AUGUST, 3), // 30
+            new GregorianCalendar(2014, Calendar.AUGUST, 3), // 31
+            new GregorianCalendar(2014, Calendar.AUGUST, 3), // 1
+            new GregorianCalendar(2014, Calendar.AUGUST, 3), // 2
+        };
+        for (int i = 0; i < expecteds.length; i++, base.add(Calendar.DATE, 1), from.add(Calendar.DATE, 1)) {
+            Calendar expected = expecteds[i];
+            Calendar actual = ClassicDateUtils.computeNextWeekday(from, weeks, base);
+            assertThat(actual, is(expected));
+        }
+    }
+
+    /**
+     * Test of computeNextWeekday method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testComputeNextWeekday3() {
+        List<Integer> weeks = Arrays.asList(Calendar.WEDNESDAY, Calendar.FRIDAY, Calendar.SATURDAY);
+        Calendar base = new GregorianCalendar(2014, Calendar.JULY, 30);
+        Calendar from = new GregorianCalendar(2014, Calendar.JULY, 27);
+        Calendar[] expecteds = {
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 27
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 28
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 29
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 30
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 31
+            new GregorianCalendar(2014, Calendar.AUGUST, 1), // 1
+            new GregorianCalendar(2014, Calendar.AUGUST, 2), // 2
+        };
+        for (int i = 0; i < expecteds.length; i++, from.add(Calendar.DATE, 1)) {
+            Calendar expected = expecteds[i];
+            Calendar actual = ClassicDateUtils.computeNextWeekday(from, weeks, base);
+            assertThat("" + i, actual, is(expected));
+        }
     }
 
     /**
@@ -430,6 +504,13 @@ public class ClassicDateUtilsTest {
     }
 
     /**
+     * Test of createRandomDate method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testCreateRandomDate() {
+    }
+
+    /**
      * Test of getCurrentDateProvider method, of class ClassicDateUtils.
      */
     @Test
@@ -491,6 +572,13 @@ public class ClassicDateUtilsTest {
         Date actual = ClassicDateUtils.getTimePart(in);
         assertThat(actual, is(expected));
         assertThat(in, is(base));
+    }
+
+    /**
+     * Test of isSameDay method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testIsSameDay() {
     }
 
     /**

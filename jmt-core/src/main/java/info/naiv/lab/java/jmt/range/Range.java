@@ -45,10 +45,9 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
     private static final long serialVersionUID = 1L;
 
     @Getter
-    protected final IterationUnit<? super T> unit;
-
-    @Getter
     protected final Bound<T> lowerBound;
+    @Getter
+    protected final IterationUnit<? super T> unit;
 
     @Getter
     protected final Bound<T> upperBound;
@@ -76,31 +75,68 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
     }
 
     /**
-     * 範囲内に存在するか.
      *
-     * @param value 値
-     * @return 範囲内なら true.
+     * @see #getLowerBound()
+     * @see Bound#getValue()
+     * @return 下限設定値.
      */
-    boolean contains(T value) {
-        return lowerBound.on(value, unit) && upperBound.on(value, unit);
-    }
-
     public T begin() {
         return lowerBound.getValue();
     }
 
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public Range<T> clone() {
+        try {
+            return (Range<T>) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
+    /**
+     *
+     * @see #getUpperBound()
+     * @see Bound#getValue()
+     * @return 上限設定値.
+     */
     public T end() {
         return upperBound.getValue();
     }
 
+    /**
+     * 許容される最大の値を戻す.
+     *
+     * @return 許容される最大の値.
+     */
+    public T getMaxValue() {
+        T val = upperBound.getValue();
+        return upperBound.isOpen() ? (T) unit.prior(val) : val;
+    }
+
+    /**
+     * 許容される最小の値を戻す.
+     *
+     * @return 許容される最大の値.
+     */
     public T getMinValue() {
         T val = lowerBound.getValue();
         return lowerBound.isOpen() ? (T) unit.next(val) : val;
     }
 
-    public T getMaxValue() {
-        T val = upperBound.getValue();
-        return upperBound.isOpen() ? (T) unit.prior(val) : val;
+    public Range<T> newLowerBound(T newValue) {
+        Bound<T> newLb = lowerBound.construct(newValue);
+        return new Range<>(unit, newLb, upperBound);
+    }
+
+    public Range<T> newUnit(IterationUnit<T> newUnit) {
+        return new Range<>(newUnit, lowerBound, upperBound);
+    }
+
+    public Range<T> newUpperBound(T newValue) {
+        Bound<T> newUb = upperBound.construct(newValue);
+        return new Range<>(unit, lowerBound, newUb);
     }
 
     /**
@@ -119,29 +155,14 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
         };
     }
 
-    public Range<T> newUnit(IterationUnit<T> newUnit) {
-        return new Range<>(newUnit, lowerBound, upperBound);
-    }
-
-    public Range<T> newUpperBound(T newValue) {
-        Bound<T> newUb = upperBound.construct(newValue);
-        return new Range<>(unit, lowerBound, newUb);
-    }
-
-    public Range<T> newLowerBound(T newValue) {
-        Bound<T> newLb = lowerBound.construct(newValue);
-        return new Range<>(unit, newLb, upperBound);
-    }
-
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public Range<T> clone() {
-        try {
-            return (Range<T>) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
+    /**
+     * 範囲内に存在するか.
+     *
+     * @param value 値
+     * @return 範囲内なら true.
+     */
+    boolean contains(T value) {
+        return lowerBound.on(value, unit) && upperBound.on(value, unit);
     }
 
     private static class DefaultUnit<T extends Comparable<T>>

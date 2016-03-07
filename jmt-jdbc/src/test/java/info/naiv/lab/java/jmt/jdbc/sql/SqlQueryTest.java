@@ -28,6 +28,7 @@ import info.naiv.lab.java.jmt.jdbc.sql.dialect.H2Dialect;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.MySqlDialect;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.Oracle12Dialect;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.OracleDialect;
+import info.naiv.lab.java.jmt.jdbc.sql.dialect.PagingSupportType;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.PostgreSqlDialect;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.SqlServer2012Dialect;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.SqlServerDialect;
@@ -537,7 +538,13 @@ public class SqlQueryTest {
     @Test
     public void testSetPage() {
         for (Dialect dialect : dialects()) {
-            testSetPageCommon1(dialect);
+            try {
+                testSetPageCommon1(dialect);
+                assertThat(dialect.getPagingSupport(), is(not(PagingSupportType.UNDEFINED)));
+            }
+            catch (Exception e) {
+                assertThat(dialect.getPagingSupport(), is(PagingSupportType.UNDEFINED));
+            }
         }
     }
 
@@ -547,7 +554,13 @@ public class SqlQueryTest {
     @Test
     public void testSetPage_02() {
         for (Dialect dialect : dialects()) {
-            testSetPageCommon2(dialect);
+            try {
+                testSetPageCommon2(dialect);
+                assertThat(dialect.getPagingSupport(), is(not(PagingSupportType.UNDEFINED)));
+            }
+            catch (Exception e) {
+                assertThat(dialect.getPagingSupport(), is(PagingSupportType.UNDEFINED));
+            }
         }
     }
 

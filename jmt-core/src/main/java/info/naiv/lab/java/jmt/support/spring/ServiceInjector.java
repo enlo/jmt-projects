@@ -93,9 +93,11 @@ public class ServiceInjector implements BeanPostProcessor, BeanFactoryAware {
             Object obj;
             Tag tag = findTag(anno, asList(annotations));
             if (tag == null) {
+                logger.debug("resolveService(class={})", clazz);
                 obj = getServiceProvider().resolveService(clazz);
             }
             else {
+                logger.debug("resolveService(class={}, tag={})", clazz, tag);
                 obj = getServiceProvider().resolveService(clazz, tag);
             }
             return obj;
@@ -111,14 +113,16 @@ public class ServiceInjector implements BeanPostProcessor, BeanFactoryAware {
         try {
             if (beanFactory != null) {
                 sp = beanFactory.getBean(ServiceProvider.class);
+                logger.debug("use Bean.");
             }
         }
         catch (BeansException ex) {
-            logger.debug("ServiceProvider not found. use default.", ex);
+            logger.debug("ServiceProvider not found.", ex);
             sp = null;
         }
         if (sp == null) {
             sp = getThreadContainer();
+            logger.debug("use ThreadContainer.");
         }
         return sp;
     }

@@ -91,7 +91,8 @@ public abstract class MapBuilder<K, V> {
     public static <K, V> MapBuilder<K, V> treeMap(Comparator<K> comp, K key, V value) {
         return new TreeMapBuilder<K, V>(comp).put(key, value);
     }
-    protected Map<K, V> map;
+
+    protected final Map<K, V> map;
 
     /**
      * コンストラクタ.
@@ -101,6 +102,8 @@ public abstract class MapBuilder<K, V> {
     protected MapBuilder(Map<K, V> map) {
         this.map = map;
     }
+
+    public abstract Map<K, V> build();
 
     /**
      * マップに値を追加.
@@ -119,10 +122,8 @@ public abstract class MapBuilder<K, V> {
      * @return 作成したマップ.
      */
     public Map<K, V> toMap() {
-        return build(map);
+        return build();
     }
-
-    protected abstract Map<K, V> build(Map<K, V> map);
 
     static class ConcurrentHashMapBuilder<K, V> extends MapBuilder<K, V> {
 
@@ -131,7 +132,7 @@ public abstract class MapBuilder<K, V> {
         }
 
         @Override
-        protected Map<K, V> build(Map<K, V> map) {
+        public Map<K, V> build() {
             return new ConcurrentHashMap<>(map);
         }
 
@@ -144,7 +145,7 @@ public abstract class MapBuilder<K, V> {
         }
 
         @Override
-        protected Map<K, V> build(Map<K, V> map) {
+        public Map<K, V> build() {
             return new HashMap<>(map);
         }
 
@@ -161,7 +162,7 @@ public abstract class MapBuilder<K, V> {
         }
 
         @Override
-        protected Map<K, V> build(Map<K, V> map) {
+        public Map<K, V> build() {
             return new TreeMap<>((SortedMap<K, V>) map);
         }
     }

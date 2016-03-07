@@ -35,7 +35,7 @@ public class H2Dialect extends AbstractDialect {
     }
 
     @Override
-    public String rowNumber(String order) {
+    public String rowNumber() {
         return "rownum";
     }
 

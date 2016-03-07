@@ -33,7 +33,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ *
+ * @author enlo
+ */
+@Slf4j
 public class ServiceInjectionUtils {
 
     public static Tag findTag(FromServiceProvider anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -60,9 +66,11 @@ public class ServiceInjectionUtils {
             FromServiceProvider anno = at.getAnnotation(FromServiceProvider.class);
             Tag tag = findTag(anno, at.getAnnotations());
             if (tag == null) {
+                logger.debug("resolveService(class={})", clazz);
                 return resolveService(clazz);
             }
             else {
+                logger.debug("resolveService(class={}, tag={})", clazz, tag);
                 return resolveService(clazz, tag);
             }
         }

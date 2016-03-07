@@ -61,26 +61,6 @@ public class StandardIterationUnits {
         }
     };
 
-    public static final IterationUnit<Integer> INTEGER = new AbstractIterationUnit<Integer>() {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Integer advance(Integer value, long n) {
-            return (int) (value + n);
-        }
-
-        @Override
-        public long doDistance(Integer lhs, Integer rhs) {
-            return rhs - lhs;
-        }
-
-        @Override
-        protected int doCompare(Integer o1, Integer o2) {
-            return o1.compareTo(o2);
-        }
-
-    };
-
     public static final IterationUnit<Double> DOUBLE = new AbstractIterationUnit<Double>() {
         private static final long serialVersionUID = 1L;
 
@@ -131,6 +111,25 @@ public class StandardIterationUnits {
             }
             return sign * n;
         }
+    };
+    public static final IterationUnit<Integer> INTEGER = new AbstractIterationUnit<Integer>() {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Integer advance(Integer value, long n) {
+            return (int) (value + n);
+        }
+
+        @Override
+        public long doDistance(Integer lhs, Integer rhs) {
+            return rhs - lhs;
+        }
+
+        @Override
+        protected int doCompare(Integer o1, Integer o2) {
+            return o1.compareTo(o2);
+        }
+
     };
 
     public static final IterationUnit<Number> NUMBER_TO_LONG = new AbstractIterationUnit<Number>() {

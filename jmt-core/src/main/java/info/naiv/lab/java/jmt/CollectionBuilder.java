@@ -21,34 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.dialect;
+package info.naiv.lab.java.jmt;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-public interface Dialect {
+public abstract class CollectionBuilder<T> {
+
+    protected final Collection<T> collection;
 
     /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
      *
+     * @param collection
+     */
+    public CollectionBuilder(Collection<T> collection) {
+        this.collection = collection;
+    }
+
+    /**
+     * コレクションに値を追加.
+     *
+     * @param value 値.
+     * @return コレクションビルダー
+     */
+    public CollectionBuilder<T> add(T value) {
+        collection.add(value);
+        return this;
+    }
+
+    /**
+     * コレクションに値を追加.
+     *
+     * @param values
      * @return
      */
-    String getKeyword();
+    public CollectionBuilder<T> addAll(T... values) {
+        collection.addAll(Arrays.asList(values));
+        return this;
+    }
 
-    PagingSupportType getPagingSupport();
-
-    /**
-     * 行番号疑似列. rownum または row_number() over () に展開される. 未サポートなら例外.
-     *
-     * @return
-     */
-    String rowNumber();
-
-    /**
-     * 文字列連結記号を取得.
-     *
-     * @return 文字列連結記号.
-     */
-    String getStringConcatenateOperator();
+    public abstract Collection<T> build();
 }

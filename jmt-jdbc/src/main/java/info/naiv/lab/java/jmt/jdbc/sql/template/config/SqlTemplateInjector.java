@@ -80,14 +80,16 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         }
         try {
             if (isBlank(loaderName)) {
+                logger.debug("getBean(SqlTemplateLoader.class)");
                 return beanFactory.getBean(SqlTemplateLoader.class);
             }
             else {
+                logger.debug("getBean('{}', SqlTemplateLoader.class)", loaderName);
                 return beanFactory.getBean(loaderName, SqlTemplateLoader.class);
             }
         }
         catch (BeansException ex) {
-            logger.debug("beanFactory", ex);
+            logger.debug("SqlTemplateLoader not found.", ex);
             return null;
         }
     }
@@ -126,13 +128,16 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
             String name = getName(anno, field);
             String charset = anno.charset();
             if (isNotBlank(charset) && Charset.isSupported(charset)) {
+                logger.debug("load(category={}, name={}, charset={})", category, name, charset);
                 return templ.load(category, name, Charset.forName(charset));
             }
             else {
+                logger.debug("load(category={}, name={})", category, name);
                 return templ.load(category, name);
             }
         }
         else {
+            logger.debug("no template loader.");
             return null;
         }
     }

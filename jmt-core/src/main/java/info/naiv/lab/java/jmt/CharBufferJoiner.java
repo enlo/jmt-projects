@@ -140,7 +140,7 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
 
     /**
      * adder を指定したコンストラクター.
-     * 
+     *
      * @param first 最初の adder
      * @param more 2回目以降の adder
      */
@@ -150,7 +150,8 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
 
     /**
      * キャパシティと adder を指定したコンストラクター.
-     * @param capacity  キャパシティ
+     *
+     * @param capacity キャパシティ
      * @param first 最初の adder
      * @param more 2回目以降の adder
      */
@@ -161,8 +162,8 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
 
     /**
      * キャパシティが変更された CharBufferJoiner を取得.
-     * 
-     * @param newCapacity   新しいキャパシティ.
+     *
+     * @param newCapacity 新しいキャパシティ.
      * @return キャパシティを変更した CharBufferJoiner.
      */
     public CharBufferJoiner newCapacity(int newCapacity) {

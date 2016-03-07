@@ -9,7 +9,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import static java.util.Calendar.*;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -139,6 +141,33 @@ public class ClassicDateUtils {
             base.add(DAY_OF_MONTH, 1);
         }
         return base;
+    }
+
+    /**
+     * weeks 内部にある曜日と一致する基準日より後で、ベース直近の日付を求める.
+     *
+     * @param cal ベースとなる日付
+     * @param weeks ソート済み週リスト.
+     * @param currentTime 基準日
+     * @return 週リスト内の週に一致する直近の日付
+     */
+    public static Calendar computeNextWeekday(Calendar cal, List<Integer> weeks, Calendar currentTime) {
+        Calendar work = (Calendar) cal.clone();
+        do {
+            if (work.compareTo(currentTime) <= 0) {
+                // 同時刻なら次回
+                work.add(Calendar.DAY_OF_MONTH, 1);
+            }
+            for (int i = Calendar.SUNDAY; i <= Calendar.SATURDAY; i++, work.add(Calendar.DAY_OF_MONTH, 1)) {
+                int wod = work.get(Calendar.DAY_OF_WEEK);
+                if (0 <= Collections.binarySearch(weeks, wod)) {
+                    // 値がある.
+                    break;
+                }
+            }
+        }
+        while (work.compareTo(currentTime) <= 0);
+        return work;
     }
 
     /**

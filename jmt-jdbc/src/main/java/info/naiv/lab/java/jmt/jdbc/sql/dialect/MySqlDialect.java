@@ -24,6 +24,9 @@
 package info.naiv.lab.java.jmt.jdbc.sql.dialect;
 
 /**
+ * MySQL Dialect.
+ *
+ * sql_mode に、PIPES_AS_CONCAT の設定必須. row_number は使用不可.
  *
  * @author enlo
  */

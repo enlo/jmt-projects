@@ -57,10 +57,10 @@ public enum PagingSupportType {
      * Oracle11g 以前、SQL Server 2008 以前
      */
     ROWNUM_SUPPORT(
-            "select * from ( select work_query0.*, @{dialect.rowNumber(\"\")} _row_number1"
+            "select * from ( select work_query0.*, @{dialect.rowNumber()} _row_number1"
             + " from( @{originalSql} ) work_query0) where _row_number1 > @{offset}",
-            "select * from ( select work_query0.*, @{dialect.rowNumber(\"\")} _row_number1"
-            + " from( @{originalSql} ) work_query0 where @{dialect.rowNumber(\"\")} <= @{rowSize + offset})"
+            "select * from ( select work_query0.*, @{dialect.rowNumber()} _row_number1"
+            + " from( @{originalSql} ) work_query0 where @{dialect.rowNumber()} <= @{rowSize + offset})"
             + " where _row_number1 > @{offset}"),
     /**
      * サポート無し. 例外を送出.

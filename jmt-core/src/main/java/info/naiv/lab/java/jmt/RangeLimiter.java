@@ -21,34 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.dialect;
+package info.naiv.lab.java.jmt;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-public interface Dialect {
+public interface RangeLimiter<T> {
 
-    /**
-     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
-     *
-     * @return
-     */
-    String getKeyword();
-
-    PagingSupportType getPagingSupport();
-
-    /**
-     * 行番号疑似列. rownum または row_number() over () に展開される. 未サポートなら例外.
-     *
-     * @return
-     */
-    String rowNumber();
-
-    /**
-     * 文字列連結記号を取得.
-     *
-     * @return 文字列連結記号.
-     */
-    String getStringConcatenateOperator();
+    public T limit(T value);
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>info.naiv.lab.java</groupId>
+  <artifactId>jmt-jdbc</artifactId>
+  <version>1.0.3-SNAPSHOT</version>
+  <versioning>
+    <snapshot>
+      <timestamp>20160307.015621</timestamp>
+      <buildNumber>1</buildNumber>
+    </snapshot>
+    <lastUpdated>20160307015621</lastUpdated>
+    <snapshotVersions>
+      <snapshotVersion>
+        <extension>jar</extension>
+        <value>1.0.3-20160307.015621-1</value>
+        <updated>20160307015621</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <extension>pom</extension>
+        <value>1.0.3-20160307.015621-1</value>
+        <updated>20160307015621</updated>
+      </snapshotVersion>
+      <snapshotVersion>
+        <classifier>sources</classifier>
+        <extension>jar</extension>
+        <value>1.0.3-20160307.015621-1</value>
+        <updated>20160307015621</updated>
+      </snapshotVersion>
+    </snapshotVersions>
+  </versioning>
+</metadata>

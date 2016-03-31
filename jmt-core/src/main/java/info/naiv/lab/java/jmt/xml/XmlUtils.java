@@ -94,7 +94,7 @@ public abstract class XmlUtils {
         Result result = new StreamResult(sw);
         Transformer transformer = get(Transformer.class);
         transformer.transform(source, result);
-        return result.toString();
+        return sw.toString();
     }
 
     static <T> T get(Class<T> clazz) {

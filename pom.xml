@@ -23,7 +23,7 @@
         
         <!-- for Dependencies -->
         <powermockito.version>1.6.3</powermockito.version>
-        <lombok.version>1.16.6</lombok.version>
+        <lombok.version>1.16.8</lombok.version>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 
         <!-- for Plugins -->        
@@ -44,6 +44,7 @@
     <modules>
         <module>jmt-core</module>
         <module>jmt-jdbc</module>
+        <module>jmt-pojogen-maven-plugin</module>
     </modules>
     
     <dependencyManagement>
@@ -51,7 +52,7 @@
             <dependency>
                 <groupId>io.spring.platform</groupId>
                 <artifactId>platform-bom</artifactId>
-                <version>2.0.0.RELEASE</version>
+                <version>2.0.3.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -89,7 +90,35 @@
                 <artifactId>powermock-module-junit4-rule</artifactId>
                 <version>${powermockito.version}</version>
                 <scope>test</scope>
-            </dependency>            
+            </dependency>
+            
+            <!-- Maven Plugins -->
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-core</artifactId>
+                <version>3.3.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-artifact</artifactId>
+                <version>3.3.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven</groupId>
+                <artifactId>maven-compat</artifactId>
+                <version>3.3.9</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-tools</groupId>
+                <artifactId>maven-plugin-annotations</artifactId>
+                <version>3.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.plugin-testing</groupId>
+                <artifactId>maven-plugin-testing-harness</artifactId>
+                <version>3.3.0</version>
+            </dependency>
+                                       
         </dependencies>
     </dependencyManagement>
     
@@ -108,7 +137,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.3</version>
+                    <version>3.5.1</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -160,7 +189,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-source-plugin</artifactId>
-                    <version>2.4</version>
+                    <version>3.0.0</version>
                     <executions>
                         <execution>
                             <phase>package</phase>
@@ -174,7 +203,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.4</version>
+                    <version>3.5</version>
                     <configuration>
                         <skipDeploy>true</skipDeploy>
                     </configuration>

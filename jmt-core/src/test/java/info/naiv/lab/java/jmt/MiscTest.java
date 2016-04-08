@@ -175,6 +175,19 @@ public class MiscTest {
     }
 
     /**
+     * Test of concatnate method, of class Misc.
+     */
+    @Test
+    public void testConcatnate() {
+        String nil = null;
+        assertThat(Misc.concatnate(), is(""));
+        assertThat(Misc.concatnate(nil), is(""));
+        assertThat(Misc.concatnate("ABC"), is("ABC"));
+        assertThat(Misc.concatnate("A", "B", "CDEFG"), is("ABCDEFG"));
+        assertThat(Misc.concatnate("A", nil, "B", "CDEFG"), is("ABCDEFG"));
+    }
+
+    /**
      * Test of contains method, of class Misc.
      */
     @Test
@@ -784,7 +797,7 @@ public class MiscTest {
         Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
         Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
         try (InputStream nobomis = nobomres.getInputStream();//
-             InputStream bomis = bomres.getInputStream()) {
+                InputStream bomis = bomres.getInputStream()) {
             String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
             String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
             assertThat(bomtext, is(not(nobomtext)));

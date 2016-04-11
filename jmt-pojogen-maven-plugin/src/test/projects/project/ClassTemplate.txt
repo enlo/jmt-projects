@@ -1,0 +1,52 @@
+/*
+ *  -----------------------------
+ *  advertising management system
+ *  -----------------------------
+ *  Copyright (C) Densan. Co.,Ltd. All rights reserved.
+ *  
+ */
+package @{packageName};
+
+import java.io.Serializable;
+import static jp.co.ndensan.adsj.web.model.Beans.buildKey;
+import lombok.Data;
+import lombok.NonNull;
+import javax.validation.constraints.NotNull;
+import jp.co.ndensan.adsj.web.model.KeyResolvable;
+
+/**
+ * generate from ${originalTableName}
+ *
+ *
+ */
+@{'@'}Data
+@{'@'}Builder
+public class @{beanName} implements @if{hasPKey} KeyResolvable, @end{} Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+
+    @foreach{ field : fields }
+    
+    /**
+     * ${field.originalName} as ${field.originalTypeName}
+     *
+     * ${field}
+     */
+    @if{ field.nonNull }
+    @{'@'}NotNull
+    @{'@'}NonNull
+    @end{}
+    @if{ field.primaryKey }
+    // Key field.
+    @end{}
+    private @{field.typeName} @{field.name};
+
+    @end{}
+
+    @{'@'}Override
+    public String getKey() {
+        return buildKey(@foreach{keyField : keyFields}@{keyField.name}@end{', '});
+    }
+}
+

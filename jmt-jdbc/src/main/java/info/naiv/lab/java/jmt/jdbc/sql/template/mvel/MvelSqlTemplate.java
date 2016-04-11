@@ -68,15 +68,25 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
     }
 
     @Override
-    public SqlQuery merge(Map<String, Object> parameters) {
+    public <T> SqlQuery merge(Map<String, T> parameters) {
+        return mergeMap(parameters);
+    }
+
+    @Override
+    public <T> SqlQuery mergeMap(Map<String, T> parameters) {
         VariableResolverFactory factory = new MapVariableResolverFactory(parameters);
         return createQuery(factory);
     }
 
     @Override
-    public SqlQuery merge(SqlParameterSource parameters) {
+    public SqlQuery mergeParameterSource(SqlParameterSource parameters) {
         VariableResolverFactory factory = new SqlParameterSourceVariableResolverFactory(parameters);
         return createQuery(factory);
+    }
+
+    @Override
+    public SqlQuery merge(SqlParameterSource parameters) {
+        return mergeParameterSource(parameters);
     }
 
     protected SqlQuery createQuery(VariableResolverFactory factory) {
@@ -88,7 +98,13 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
 
     @Override
     public SqlQuery merge(Object bean) {
-        return merge(new BeanPropertySqlParameterSource(bean));
+        if (bean instanceof Map) {
+            return mergeMap((Map<String, Object>) bean);
+        }
+        else if (bean instanceof SqlParameterSource) {
+            return mergeParameterSource((SqlParameterSource) bean);
+        }
+        return mergeParameterSource(new BeanPropertySqlParameterSource(bean));
     }
 
     @Override

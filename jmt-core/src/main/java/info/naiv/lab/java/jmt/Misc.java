@@ -116,43 +116,42 @@ public abstract class Misc {
      * @param items
      * @return
      */
-    public static 
-                            String concatnate(String... items) {
-                                int size = 0;
-                                for (String item : items) {
-                                    if (item != null) {
-                                        size += item.length();
-                                    }
-                                }
-                                CharBuffer buffer = CharBuffer.allocate(size);
-                                for (String item : items) {
-                                    if (item != null) {
-                                        buffer.append(item);
-                                    }
-                                }
-                                buffer.flip();
-                                return buffer.toString();
-                            }
-                            
-                            /**
-                             * コレクションから受け入れ可能なものを取得
-                             *
-                             * @param <T> 要素の型
-                             * @param items コレクションから等価であるものを取得
-                             * @param predicate 検索
-                             * @return 等価な項目があれば true.
-                             */
-                            public static <T> boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
-                                nonNull(predicate, "predicate");
-                                if (items == null) {
-                                    return false;
-                                }
-                                for (T item : items) {
-                                    if (predicate.test(item)) {
-                                        return true;
-                                    }
-                                }
-                                return false;
+    public static String concatnate(String... items) {
+        int size = 0;
+        for (String item : items) {
+            if (item != null) {
+                size += item.length();
+            }
+        }
+        CharBuffer buffer = CharBuffer.allocate(size);
+        for (String item : items) {
+            if (item != null) {
+                buffer.append(item);
+            }
+        }
+        buffer.flip();
+        return buffer.toString();
+    }
+
+    /**
+     * コレクションから受け入れ可能なものを取得
+     *
+     * @param <T> 要素の型
+     * @param items コレクションから等価であるものを取得
+     * @param predicate 検索
+     * @return 等価な項目があれば true.
+     */
+    public static <T> boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
+        nonNull(predicate, "predicate");
+        if (items == null) {
+            return false;
+        }
+        for (T item : items) {
+            if (predicate.test(item)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -163,11 +162,11 @@ public abstract class Misc {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-                            public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
-                                if (items == null) {
-                                    return false;
-                                }
-                                for (T item : items) {
+    public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
+        if (items == null) {
+            return false;
+        }
+        for (T item : items) {
             if (item.compareTo(valueToFind) == 0) {
                 return true;
             }

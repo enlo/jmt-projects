@@ -36,21 +36,23 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author enlo
  */
-public class ExternalDriverLoader {
+@Slf4j
+public class ExternalJdbcDriverLoader {
 
     private final Set<URL> loaded = new HashSet<>();
     private final ClassLoader parentClassLoader;
 
-    public ExternalDriverLoader(ClassLoader parentClassLoader) {
+    public ExternalJdbcDriverLoader(ClassLoader parentClassLoader) {
         this.parentClassLoader = parentClassLoader;
     }
 
-    public ExternalDriverLoader() {
+    public ExternalJdbcDriverLoader() {
         this.parentClassLoader = this.getClass().getClassLoader();
     }
 
@@ -65,10 +67,11 @@ public class ExternalDriverLoader {
     }
 
     protected void listJarFiles(Set<URL> result, Path path) throws IOException {
-        List<Path> found = listPaths(path, "*.jar", 1);
+        List<Path> found = listPaths(path, "**.jar", 1);
         for (Path p : found) {
             URL u = p.toUri().toURL();
             if (!loaded.contains(u)) {
+                logger.debug("add {}", p);
                 result.add(u);
             }
         }

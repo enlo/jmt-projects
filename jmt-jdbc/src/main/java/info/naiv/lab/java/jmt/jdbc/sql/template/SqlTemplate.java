@@ -42,8 +42,37 @@ public interface SqlTemplate {
     @ReturnNonNull
     Query merge();
 
+    /**
+     * テンプレートから {@link SqlQuery } を作成する.<br>
+     * パラメータとして、Map を渡す. <br>
+     *
+     * @param <T>
+     * @param parameters
+     * @return
+     */
     @ReturnNonNull
-    Query merge(Map<String, Object> parameters);
+    <T> Query merge(Map<String, T> parameters);
+
+    /**
+     * テンプレートから {@link SqlQuery } を作成する.<br>
+     * パラメータとして、Map を渡す. <br>
+     *
+     * @param <T>
+     * @param parameters
+     * @return
+     */
+    @ReturnNonNull
+    <T> Query mergeMap(Map<String, T> parameters);
+
+    /**
+     * テンプレートから {@link SqlQuery } を作成する.<br>
+     * パラメータとして、パラメータソースを渡す. <br>
+     *
+     * @param parameters
+     * @return
+     */
+    @ReturnNonNull
+    Query mergeParameterSource(SqlParameterSource parameters);
 
     /**
      * テンプレートから {@link SqlQuery } を作成する.<br>
@@ -57,7 +86,7 @@ public interface SqlTemplate {
 
     /**
      * テンプレートから {@link SqlQuery } を作成する.<br>
-     * パラメータとして、bean を渡す. <br>
+     * パラメータとして、bean, SqlParameterSource, Map を渡す. <br>
      *
      * @param bean.
      * @return クエリ.

@@ -17,8 +17,10 @@ package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
 import info.naiv.lab.java.jmt.Misc;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.io.NIOUtils;
+import info.naiv.lab.java.jmt.jdbc.driver.ExternalJdbcDriverLoader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +29,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.DatabaseMetaData;
+import java.sql.Driver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javax.sql.DataSource;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -63,64 +67,69 @@ import static org.springframework.util.ClassUtils.convertClassNameToResourcePath
         requiresProject = true
 )
 public class PojoGeneratorMojo extends AbstractMojo {
-
+    
     @Parameter(defaultValue = "${project}")
     private MavenProject project;
-
+    
     @Parameter(defaultValue = "${project.build.directory}/generated-sources/jmtPojo")
     protected String outputDirectory;
-
+    
     @Parameter(property = "project.build.sourceEncoding", defaultValue = "UTF-8")
     protected String encoding;
-
+    
     @Parameter
     protected String url;
-
+    
     @Parameter
     protected String schema;
-
+    
     @Parameter
     protected String username;
-
+    
     @Parameter
     protected String password;
-
+    
     @Parameter(required = true)
     protected String packageName;
-
+    
     @Parameter(defaultValue = "")
     protected String classNameSuffix;
-
+    
     @Parameter
     protected String classTemplate;
-
+    
     @Parameter
     protected List<String> excludeTables;
-
+    
+    @Parameter(property = "externalJdbcDriversDir", defaultValue = "")
+    protected String externalJdbcDriversDir;
+    
     public CompiledTemplate getClassTemplate() throws IOException {
         try (InputStream is = Files.newInputStream(Paths.get(classTemplate))) {
             String templ = NIOUtils.toString(is, Charset.forName(encoding));
             return TemplateCompiler.compileTemplate(templ);
         }
     }
-
+    
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         final Log log = getLog();
         try {
+            loadExternalDrivers(log);
+            
             final Path path = buildOutputDirectory();
             if (Files.exists(path)) {
                 // ディレクトリがすでに存在する場合は終了.
                 log.info(path + " is exists.");
                 return;
             }
-
+            
             final DataSource dataSource = new DriverManagerDataSource(url, username, password);
             final Charset charset = Charset.forName(encoding);
             final CompiledTemplate clsTempl = getClassTemplate();
             final PojoGenerator builder = new PojoGenerator(schema, packageName, classNameSuffix, clsTempl);
             final AntPathMatcher matcher = new AntPathMatcher();
-
+            
             Files.createDirectories(path);
             JdbcUtils.extractDatabaseMetaData(dataSource, new DatabaseMetaDataCallback() {
                 @Override
@@ -136,7 +145,7 @@ public class PojoGeneratorMojo extends AbstractMojo {
                     }
                     return null;
                 }
-
+                
                 protected boolean isExcludeTarget(final String tableName) {
                     if (isEmpty(excludeTables)) {
                         return false;
@@ -148,7 +157,7 @@ public class PojoGeneratorMojo extends AbstractMojo {
                         }
                     });
                 }
-
+                
                 protected void writeCode(Path dir, CodeData code) {
                     try {
                         Path file = dir.resolve(code.getClassName() + ".java");
@@ -160,7 +169,7 @@ public class PojoGeneratorMojo extends AbstractMojo {
                         log.error(ex);
                     }
                 }
-
+                
                 protected List<String> getTableNames(DatabaseMetaData dbmd) throws SQLException {
                     List<String> tableNames = new ArrayList<>();
                     try (ResultSet rs = dbmd.getTables(null, schema, "%", new String[]{"TABLE", "VIEW"})) {
@@ -172,28 +181,42 @@ public class PojoGeneratorMojo extends AbstractMojo {
                 }
             });
         }
-        catch (MetaDataAccessException | IOException ex) {
+        catch (MetaDataAccessException | IOException | SQLException ex) {
             log.error(ex);
             throw new MojoFailureException("bean creation failed. ", ex);
         }
-
+        
     }
-
+    
+    protected void loadExternalDrivers(Log log) throws IOException, SQLException {
+        if (isNotBlank(externalJdbcDriversDir)) {
+            Path driversPath = Paths.get(this.externalJdbcDriversDir).normalize();
+            log.info("externalJdbcDriversDir:" + driversPath);
+            if (Files.exists(driversPath)) {
+                ExternalJdbcDriverLoader loader = new ExternalJdbcDriverLoader();
+                Iterable<Driver> drivers = loader.load(Arrays.asList(driversPath));
+                for (Driver driver : drivers) {
+                    log.info("load Driver:" + driver.getClass().getCanonicalName());
+                }
+            }
+        }
+    }
+    
     protected Path buildOutputDirectory() throws IOException {
         final Path outputDir = Paths.get(this.outputDirectory);
         Files.createDirectories(outputDir);
         if (project != null) {
             project.addCompileSourceRoot(outputDir.toString());
         }
-
+        
         final String packagePath = convertClassNameToResourcePath(packageName);
         final Path path = outputDir.resolve(packagePath);
         return path;
     }
-
+    
     @Override
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
+    
 }

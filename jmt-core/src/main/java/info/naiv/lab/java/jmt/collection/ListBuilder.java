@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.collection;
 
 import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.util.ArrayList;

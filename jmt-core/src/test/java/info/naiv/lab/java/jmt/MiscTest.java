@@ -9,6 +9,7 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.monad.Optional;
+import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -687,13 +688,13 @@ public class MiscTest {
      */
     @Test
     public void testNewInstance_Optional() {
-        Optional<Class<String>> clz1 = Optional.of(String.class);
+        Optional<Class<String>> clz1 = OptionalImpl.of(String.class);
         Optional<String> opt1 = Misc.newInstance(clz1);
         assertThat(opt1.isPresent(), is(true));
         assertThat(opt1.get(), is(instanceOf(String.class)));
         assertThat(opt1.get(), is((Object) ""));
 
-        Optional opt2 = Misc.newInstance(Optional.EMPTY);
+        Optional opt2 = Misc.newInstance(OptionalImpl.EMPTY);
         assertThat(opt2.isPresent(), is(false));
     }
 
@@ -832,8 +833,8 @@ public class MiscTest {
         PowerMockito.spy(Class.class);
         PowerMockito.spy(Misc.class);
 
-        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
-        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
+        Optional<Class<?>> clz1 = OptionalImpl.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = OptionalImpl.<Class<?>>of(Integer.class);
         assertThat(Misc.resolveClassName("java.lang.String", false, cl), is(clz1));
         assertThat(Misc.resolveClassName("java.lang.Integer", true, cl), is(clz2));
 
@@ -843,7 +844,7 @@ public class MiscTest {
         PowerMockito.verifyStatic(times(1));
         Class.forName("java.lang.Integer", true, cl);
 
-        assertThat(Misc.resolveClassName("test.Sample", true, cl), is(Optional.EMPTY));
+        assertThat(Misc.resolveClassName("test.Sample", true, cl), is(OptionalImpl.EMPTY));
     }
 
     /**
@@ -851,11 +852,11 @@ public class MiscTest {
      */
     @Test
     public void testResolveClassName_String() {
-        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
-        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
+        Optional<Class<?>> clz1 = OptionalImpl.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = OptionalImpl.<Class<?>>of(Integer.class);
         assertThat(Misc.resolveClassName("java.lang.String"), is(clz1));
         assertThat(Misc.resolveClassName("java.lang.Integer"), is(clz2));
-        assertThat(Misc.resolveClassName("test.Sample"), is(Optional.EMPTY));
+        assertThat(Misc.resolveClassName("test.Sample"), is(OptionalImpl.EMPTY));
     }
 
     /**

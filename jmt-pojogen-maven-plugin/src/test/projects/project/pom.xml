@@ -9,9 +9,6 @@
     <artifactId>jmt-pojo-test</artifactId>
     <packaging>jar</packaging>
     
-    <properties>
-        <jdbclibs>/libs/jdbc</jdbclibs>
-    </properties>
     
     <dependencies>
         <dependency>

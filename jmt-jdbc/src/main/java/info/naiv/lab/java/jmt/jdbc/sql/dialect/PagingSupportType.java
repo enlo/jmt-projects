@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.dialect;
 
-import info.naiv.lab.java.jmt.MapBuilder;
+import info.naiv.lab.java.jmt.collection.MapBuilder;
 import java.util.Map;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;

@@ -8,6 +8,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,7 +58,7 @@ public class PojoGenerator {
                     }
                 }
                 List<Short> order = new ArrayList<>(keyMap.keySet());
-                order.sort(new ComparableComparator<Short>());
+                Collections.sort(order, new ComparableComparator<Short>());
                 for (Short idx : order) {
                     keys.add(keyMap.get(idx));
                 }

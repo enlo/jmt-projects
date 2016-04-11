@@ -16,7 +16,9 @@ import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.monad.Iteratee;
+import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import info.naiv.lab.java.jmt.monad.Optional;
+import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.Character.isSpaceChar;
@@ -31,6 +33,7 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -188,7 +191,7 @@ public abstract class Misc {
 
     @ReturnNonNull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<T> predicate) {
-        return new Iteratee<>(iterable, predicate);
+        return new IterateeImpl<>(iterable, predicate);
     }
 
     @ReturnNonNull
@@ -446,8 +449,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
-    public static
-            <T> boolean isNotEmpty(T[] object) {
+    public static <T> boolean isNotEmpty(T[] object) {
         return !isEmpty(object);
     }
 
@@ -584,6 +586,17 @@ public abstract class Misc {
         }
     }
 
+    /**
+     * ArrayList を作成.
+     *
+     * @param <T>
+     * @param values
+     * @return
+     */
+    public static <T> ArrayList<T> newArrayList(T... values) {
+        return new ArrayList<>(Arrays.asList(values));
+    }
+
     public static <T> T newInstance(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -595,10 +608,10 @@ public abstract class Misc {
 
     public static <T> Optional<T> newInstance(Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
-            return Optional.ofNullable(newInstance(clazz.get()));
+            return OptionalImpl.ofNullable(newInstance(clazz.get()));
         }
         else {
-            return Optional.<T>empty();
+            return OptionalImpl.<T>empty();
         }
     }
 
@@ -735,11 +748,11 @@ public abstract class Misc {
      */
     public static Optional<Class<?>> resolveClassName(String className) {
         try {
-            return Optional.<Class<?>>ofNullable(Class.forName(className));
+            return OptionalImpl.<Class<?>>ofNullable(Class.forName(className));
         }
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. ", ex);
-            return Optional.<Class<?>>empty();
+            return OptionalImpl.<Class<?>>empty();
         }
     }
 
@@ -754,11 +767,11 @@ public abstract class Misc {
     public static Optional<Class<?>> resolveClassName(String className, boolean initialize, ClassLoader classLoader) {
         try {
             Class clz = Class.forName(className, initialize, classLoader);
-            return Optional.<Class<?>>ofNullable(clz);
+            return OptionalImpl.<Class<?>>ofNullable(clz);
         }
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. ", ex);
-            return Optional.<Class<?>>empty();
+            return OptionalImpl.<Class<?>>empty();
         }
     }
 

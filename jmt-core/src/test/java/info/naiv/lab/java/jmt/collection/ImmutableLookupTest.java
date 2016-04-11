@@ -21,14 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.collection;
+
+import org.junit.Test;
 
 /**
  *
  * @author enlo
- * @param <KeyType>
  */
-public interface KeyedValue<KeyType extends Comparable> {
+public class ImmutableLookupTest {
+    
+    public ImmutableLookupTest() {
+    }
 
-    KeyType getKey();
+    /**
+     * Test of containsKey method, of class ImmutableLookup.
+     */
+    @Test
+    public void testContainsKey() {
+    }
+
+    /**
+     * Test of containsValue method, of class ImmutableLookup.
+     */
+    @Test
+    public void testContainsValue() {
+    }
+
+    /**
+     * Test of entries method, of class ImmutableLookup.
+     */
+    @Test
+    public void testEntries() {
+    }
+
+    /**
+     * Test of get method, of class ImmutableLookup.
+     */
+    @Test
+    public void testGet() {
+    }
+
+    /**
+     * Test of size method, of class ImmutableLookup.
+     */
+    @Test
+    public void testSize() {
+    }
+    
 }

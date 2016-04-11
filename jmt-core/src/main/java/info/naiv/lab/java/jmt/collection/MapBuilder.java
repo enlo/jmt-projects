@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.collection;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -38,6 +38,19 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> 値の型
  */
 public abstract class MapBuilder<K, V> {
+
+    /**
+     * ハッシュマップの作成.
+     *
+     * @param <K> キーの型
+     * @param <V> 値の型
+     * @param key キー
+     * @param value 値
+     * @return マップビルダー
+     */
+    public static <K, V> MapBuilder<K, V> begin(K key, V value) {
+        return new HashMapBuilder<K, V>().put(key, value);
+    }
 
     /**
      * 並行ハッシュマップの作成.
@@ -114,6 +127,17 @@ public abstract class MapBuilder<K, V> {
      */
     public MapBuilder<K, V> put(K key, V value) {
         map.put(key, value);
+        return this;
+    }
+
+    /**
+     * マップに値を追加.
+     *
+     * @param other 別のマップ
+     * @return マップビルダー
+     */
+    public MapBuilder<K, V> putAll(Map<K, V> other) {
+        map.putAll(other);
         return this;
     }
 

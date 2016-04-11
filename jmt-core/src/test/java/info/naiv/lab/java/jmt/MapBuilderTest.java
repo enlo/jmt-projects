@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.collection.MapBuilder;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;

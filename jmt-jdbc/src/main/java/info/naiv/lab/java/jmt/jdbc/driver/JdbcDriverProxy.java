@@ -27,16 +27,20 @@ import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
  *
  * @author enlo
  */
-public class JdbcProxyDriver implements Driver {
+@EqualsAndHashCode
+@ToString
+public class JdbcDriverProxy implements Driver {
 
     private final Driver driver;
 
-    public JdbcProxyDriver(Driver driver) {
+    public JdbcDriverProxy(Driver driver) {
         nonNull(driver, "driver");
         this.driver = driver;
     }

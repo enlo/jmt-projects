@@ -43,18 +43,18 @@ import static org.junit.Assert.*;
  *
  * @author enlo
  */
-public class OptionalTest {
+public class OptionalImplTest {
 
-    public OptionalTest() {
+    public OptionalImplTest() {
     }
 
     /**
-     * Test of bind method, of class Optional.
+     * Test of bind method, of class OptionalImpl.
      */
     @Test
     public void testBind() {
         final StringBuilder sb = new StringBuilder();
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         assertThat(opt.bind(new Consumer1<Integer>() {
             @Override
             public void accept(Integer a1) {
@@ -65,89 +65,89 @@ public class OptionalTest {
     }
 
     /**
-     * Test of empty method, of class Optional.
+     * Test of empty method, of class OptionalImpl.
      */
     @Test
     public void testEmpty() {
-        assertThat(Optional.empty(), is(sameInstance((Object) Optional.EMPTY)));
-        assertThat(Optional.empty().isPresent(), is(false));
+        assertThat(OptionalImpl.empty(), is(sameInstance((Object) OptionalImpl.EMPTY)));
+        assertThat(OptionalImpl.empty().isPresent(), is(false));
     }
 
     /**
-     * Test of equals method, of class Optional.
+     * Test of equals method, of class OptionalImpl.
      */
     @Test
     public void testEquals() {
-        Optional<Integer> opt = new Optional(123);
-        assertThat(Optional.of(123), is(opt));
-        assertThat(Optional.of(456), is(not(opt)));
-        assertThat(Optional.<Integer>empty(), is(not(opt)));
-        assertThat(Optional.<Integer>empty(), is(Optional.<Integer>ofNullable(null)));
-        Optional<String> opt2 = new Optional("abc");
+        Optional<Integer> opt = new OptionalImpl(123);
+        assertThat(OptionalImpl.of(123), is(opt));
+        assertThat(OptionalImpl.of(456), is(not(opt)));
+        assertThat(OptionalImpl.<Integer>empty(), is(not(opt)));
+        assertThat(OptionalImpl.<Integer>empty(), is(OptionalImpl.<Integer>ofNullable(null)));
+        OptionalImpl<String> opt2 = new OptionalImpl("abc");
         assertThat(opt.equals(opt2), is(false));
     }
 
     /**
-     * Test of filter method, of class Optional.
+     * Test of filter method, of class OptionalImpl.
      */
     @Test
     public void testFilter() {
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         assertThat(opt.filter(StandardFunctions.equal(123)), is(opt));
-        assertThat(opt.filter(StandardFunctions.equal(456)), is(Optional.EMPTY));
+        assertThat(opt.filter(StandardFunctions.equal(456)), is(OptionalImpl.EMPTY));
     }
 
     /**
-     * Test of flatMap method, of class Optional.
+     * Test of flatMap method, of class OptionalImpl.
      */
     @Test
     public void testFlatMap() {
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         Function1<Integer, Optional<Integer>> fx = new Function1<Integer, Optional<Integer>>() {
             @Override
             public Optional<Integer> apply(Integer a1) {
-                return Optional.of(a1);
+                return OptionalImpl.of(a1);
             }
         };
         assertThat(opt.flatMap(fx), is(opt));
-        assertThat(Optional.<Integer>empty().flatMap(fx), is(Optional.EMPTY));
+        assertThat(OptionalImpl.<Integer>empty().flatMap(fx), is(OptionalImpl.EMPTY));
     }
 
     /**
-     * Test of get method, of class Optional.
+     * Test of get method, of class OptionalImpl.
      */
     @Test
     public void testGet() {
-        assertThat(Optional.of("123").get(), is("123"));
-        assertThat(Optional.of(456).get(), is(456));
+        assertThat(OptionalImpl.of("123").get(), is("123"));
+        assertThat(OptionalImpl.of(456).get(), is(456));
     }
 
     /**
-     * Test of getValue method, of class Optional.
+     * Test of getValue method, of class OptionalImpl.
      */
     @Test
     public void testGetValue() {
-        assertThat(Optional.of(123).getValue(), is(123));
-        assertThat(Optional.empty().getValue(), is(nullValue()));
+        assertThat(OptionalImpl.of(123).get(), is(123));
+        assertThat(OptionalImpl.empty().getValue(), is(nullValue()));
     }
 
     /**
-     * Test of hashCode method, of class Optional.
+     * Test of hashCode method, of class OptionalImpl.
      */
     @Test
     public void testHashCode() {
-        Optional<Integer> opt = new Optional(123);
-        assertThat(Optional.of(123).hashCode(), is(opt.hashCode()));
-        assertThat(Optional.empty().hashCode(), is(Optional.ofNullable(null).hashCode()));
+        OptionalImpl<Integer> opt = new OptionalImpl(123);
+        assertThat(OptionalImpl.of(123).hashCode(), is(opt.hashCode()));
+        assertThat(OptionalImpl.empty().hashCode(), is(OptionalImpl.ofNullable(null).hashCode()));
     }
 
     /**
-     * Test of ifPresent method, of class Optional.
+     * Test of ifPresent method, of class OptionalImpl.
      */
     @Test
     public void testIfPresent() {
         final StringBuilder sb = new StringBuilder();
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         Consumer1<Integer> fx = new Consumer1<Integer>() {
             @Override
             public void accept(Integer a1) {
@@ -159,76 +159,76 @@ public class OptionalTest {
     }
 
     /**
-     * Test of isPresent method, of class Optional.
+     * Test of isPresent method, of class OptionalImpl.
      */
     @Test
     public void testIsPresent() {
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         assertThat(opt.isPresent(), is(true));
     }
 
     /**
-     * Test of iterator method, of class Optional.
+     * Test of iterator method, of class OptionalImpl.
      */
     @Test
     public void testIterator() {
-        assertThat(Optional.of(123), is(contains(123)));
-        assertThat(Optional.empty(), is(emptyIterable()));
+        assertThat(OptionalImpl.of(123), is(contains(123)));
+        assertThat(OptionalImpl.empty(), is(emptyIterable()));
     }
 
     /**
-     * Test of map method, of class Optional.
+     * Test of map method, of class OptionalImpl.
      */
     @Test
     public void testMap() {
-        Optional<Integer> opt = Optional.of(123);
+        Optional<Integer> opt = OptionalImpl.of(123);
         Function1<Integer, String> fx = new Function1<Integer, String>() {
             @Override
             public String apply(Integer a1) {
                 return a1.toString();
             }
         };
-        assertThat(opt.map(fx), is(Optional.of("123")));
-        assertThat(Optional.<Integer>empty().map(fx), is(Optional.EMPTY));
+        assertThat(opt.map(fx), is(OptionalImpl.of("123")));
+        assertThat(OptionalImpl.<Integer>empty().map(fx), is(OptionalImpl.EMPTY));
     }
 
     /**
-     * Test of of method, of class Optional.
+     * Test of of method, of class OptionalImpl.
      */
     @Test
     public void testOf() {
-        assertThat(Optional.of("123"), is(new Optional<>("123")));
+        assertThat(OptionalImpl.of("123"), is((Optional) new OptionalImpl<>("123")));
     }
 
     /**
-     * Test of ofNullable method, of class Optional.
+     * Test of ofNullable method, of class OptionalImpl.
      */
     @Test
     public void testOfNullable() {
-        assertThat(Optional.ofNullable("123"), is(new Optional<>("123")));
-        assertThat(Optional.ofNullable(null), is(Optional.EMPTY));
+        assertThat(OptionalImpl.ofNullable("123"), is((Optional) new OptionalImpl<>("123")));
+        assertThat(OptionalImpl.ofNullable(null), is(OptionalImpl.EMPTY));
     }
 
     /**
-     * Test of of method, of class Optional.
+     * Test of of method, of class OptionalImpl.
      */
     @Test(expected = IllegalArgumentException.class)
     public void testOf_empty() {
-        Optional.of(null);
+        OptionalImpl.of(null);
     }
 
     /**
-     * Test of orElse method, of class Optional.
+     * Test of orElse method, of class OptionalImpl.
      */
     @Test
     public void testOrElse() {
-        assertThat(Optional.of("123").orElse("456"), is("123"));
-        assertThat(Optional.<String>empty().orElse("456"), is("456"));
-        assertThat(Optional.<String>empty().orElse(null), is(nullValue()));
+        assertThat(OptionalImpl.of("123").orElse("456"), is("123"));
+        assertThat(OptionalImpl.<String>empty().orElse("456"), is("456"));
+        assertThat(OptionalImpl.<String>empty().orElse(null), is(nullValue()));
     }
 
     /**
-     * Test of orElseGet method, of class Optional.
+     * Test of orElseGet method, of class OptionalImpl.
      */
     @Test
     public void testOrElseGet() {
@@ -238,12 +238,12 @@ public class OptionalTest {
                 return "456";
             }
         };
-        assertThat(Optional.of("123").orElseGet(fx), is("123"));
-        assertThat(Optional.<String>empty().orElseGet(fx), is("456"));
+        assertThat(OptionalImpl.of("123").orElseGet(fx), is("123"));
+        assertThat(OptionalImpl.<String>empty().orElseGet(fx), is("456"));
     }
 
     /**
-     * Test of orElseThrow method, of class Optional.
+     * Test of orElseThrow method, of class OptionalImpl.
      *
      * @throws java.io.IOException
      */
@@ -255,11 +255,11 @@ public class OptionalTest {
                 return new IOException();
             }
         };
-        assertThat(Optional.of("123").orElseThrow(fx), is("123"));
+        assertThat(OptionalImpl.of("123").orElseThrow(fx), is("123"));
     }
 
     /**
-     * Test of orElseThrow method, of class Optional.
+     * Test of orElseThrow method, of class OptionalImpl.
      *
      * @throws java.io.IOException
      */
@@ -271,24 +271,24 @@ public class OptionalTest {
                 return new IOException();
             }
         };
-        Optional.empty().orElseThrow(fx);
+        OptionalImpl.empty().orElseThrow(fx);
     }
 
     /**
-     * Test of toSet method, of class Optional.
+     * Test of toSet method, of class OptionalImpl.
      */
     @Test
     public void testToSet() {
-        Set<Integer> set = Optional.of(123).toSet();
+        Set<Integer> set = OptionalImpl.of(123).toSet();
         assertThat(set, containsInAnyOrder(123));
     }
 
     /**
-     * Test of toString method, of class Optional.
+     * Test of toString method, of class OptionalImpl.
      */
     @Test
     public void testToString() {
-        Optional<Integer> opt = new Optional(123);
+        OptionalImpl<Integer> opt = new OptionalImpl(123);
         assertThat(opt.toString(), is(not(nullValue())));
     }
 

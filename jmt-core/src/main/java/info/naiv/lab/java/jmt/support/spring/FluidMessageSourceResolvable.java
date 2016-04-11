@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2015 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,57 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.support.spring;
 
-import java.util.Map.Entry;
+import java.util.List;
+import java.util.Locale;
+import lombok.Getter;
+import lombok.Singular;
+import lombok.Builder;
+
+import org.springframework.context.MessageSource;
+import org.springframework.context.MessageSourceResolvable;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-public interface Lookup<TKey, TValue> {
+@Builder
+@Getter
+public final class FluidMessageSourceResolvable implements MessageSourceResolvable {
 
-    /**
-     * キーの有無を検査
-     *
-     * @param key
-     * @return
-     */
-    boolean containsKey(TKey key);
+    @Singular
+    private final List<String> codes;
 
-    /**
-     * 値の有無を検査
-     *
-     * @param value
-     * @return
-     */
-    boolean containsValue(TValue value);
+    private Object[] arguments = null;
 
-    /**
-     *
-     * @return エントリー
-     */
-    Iterable<Entry<TKey, TValue>> entries();
+    private Locale locale = Locale.getDefault();
 
-    /**
-     *
-     * @param key キー
-     * @return キーに対応する値のセット
-     */
-    Iterable<TValue> get(TKey key);
+    private String defaultMessage = "";
 
-    /**
-     *
-     * @param key
-     * @return
-     */
-    TValue getFirst(TKey key);
+    public String getMessage(MessageSource messageSource) {
+        return messageSource.getMessage(this, locale);
+    }
 
-    /**
-     *
-     * @return コレクションのサイズ
-     */
-    int size();
+    @Override
+    public String[] getCodes() {
+        return codes.toArray(new String[codes.size()]);
+    }
+
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.collection;
 
-import java.util.List;
-import java.util.Locale;
-import lombok.Getter;
-import lombok.Singular;
-import lombok.Builder;
-
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceResolvable;
+import java.util.Arrays;
+import java.util.Collection;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-@Builder
-@Getter
-public final class FulidMessageSourceResolvable implements MessageSourceResolvable {
+public abstract class CollectionBuilder<T> {
 
-    @Singular
-    private final List<String> codes;
+    protected final Collection<T> collection;
 
-    private Object[] arguments = null;
-
-    private Locale locale = Locale.getDefault();
-
-    private String defaultMessage = "";
-
-    public String getMessage(MessageSource messageSource) {
-        return messageSource.getMessage(this, locale);
+    /**
+     *
+     * @param collection
+     */
+    public CollectionBuilder(Collection<T> collection) {
+        this.collection = collection;
     }
 
-    @Override
-    public String[] getCodes() {
-        return codes.toArray(new String[codes.size()]);
+    /**
+     * コレクションに値を追加.
+     *
+     * @param value 値.
+     * @return コレクションビルダー
+     */
+    public CollectionBuilder<T> add(T value) {
+        collection.add(value);
+        return this;
     }
 
+    /**
+     * コレクションに値を追加.
+     *
+     * @param values
+     * @return
+     */
+    public CollectionBuilder<T> addAll(T... values) {
+        collection.addAll(Arrays.asList(values));
+        return this;
+    }
+
+    public abstract Collection<T> build();
 }

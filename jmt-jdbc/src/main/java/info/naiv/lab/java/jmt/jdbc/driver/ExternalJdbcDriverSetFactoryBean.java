@@ -21,49 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.jdbc.driver;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import lombok.Setter;
+import org.springframework.beans.factory.config.AbstractFactoryBean;
 
 /**
  *
  * @author enlo
- * @param <T>
  */
-public abstract class CollectionBuilder<T> {
+@Setter
+public class ExternalJdbcDriverSetFactoryBean
+        extends AbstractFactoryBean<ExternalJdbcDriverSet> {
 
-    protected final Collection<T> collection;
+    List<String> classicJdbcDriverNames;
 
-    /**
-     *
-     * @param collection
-     */
-    public CollectionBuilder(Collection<T> collection) {
-        this.collection = collection;
+    List<String> jarDirectories;
+
+    @Override
+    public Class<?> getObjectType() {
+        return ExternalJdbcDriverSet.class;
     }
 
-    /**
-     * コレクションに値を追加.
-     *
-     * @param value 値.
-     * @return コレクションビルダー
-     */
-    public CollectionBuilder<T> add(T value) {
-        collection.add(value);
-        return this;
+    public void setClassicJdbcDriverName(String classicJdbcDriverName) {
+        classicJdbcDriverNames = Arrays.asList(classicJdbcDriverName);
     }
 
-    /**
-     * コレクションに値を追加.
-     *
-     * @param values
-     * @return
-     */
-    public CollectionBuilder<T> addAll(T... values) {
-        collection.addAll(Arrays.asList(values));
-        return this;
+    public void setJarDirectory(String jarDirectory) {
+        jarDirectories = Arrays.asList(jarDirectory);
     }
 
-    public abstract Collection<T> build();
+    @Override
+    protected ExternalJdbcDriverSet createInstance() throws Exception {
+        Set<Path> paths = new HashSet<>();
+        for (String dir : jarDirectories) {
+            paths.add(Paths.get(dir));
+        }
+        Set<String> names = new HashSet<>(classicJdbcDriverNames);
+        return new ExternalJdbcDriverSet(paths, names);
+    }
+
 }

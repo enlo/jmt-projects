@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.jdbc.driver;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -40,9 +41,9 @@ import org.springframework.beans.factory.config.AbstractFactoryBean;
 public class ExternalJdbcDriverSetFactoryBean
         extends AbstractFactoryBean<ExternalJdbcDriverSet> {
 
-    List<String> classicJdbcDriverNames;
+    List<String> classicJdbcDriverNames = Collections.EMPTY_LIST;
 
-    List<String> jarDirectories;
+    List<String> jarDirectories = Collections.EMPTY_LIST;
 
     @Override
     public Class<?> getObjectType() {

@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.driver;
 
+import com.sun.istack.internal.NotNull;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import java.sql.*;
 import java.util.Properties;
@@ -31,6 +32,8 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
+ * 異なる ClassLoader から取得した JDBC Driver を、<br>
+ * 既存の DriverManager で読み込むための仕組み.
  *
  * @author enlo
  */
@@ -38,10 +41,10 @@ import lombok.ToString;
 @ToString
 public class JdbcDriverProxy implements Driver {
 
+    @NotNull
     private final Driver driver;
 
     public JdbcDriverProxy(Driver driver) {
-        nonNull(driver, "driver");
         this.driver = driver;
     }
 

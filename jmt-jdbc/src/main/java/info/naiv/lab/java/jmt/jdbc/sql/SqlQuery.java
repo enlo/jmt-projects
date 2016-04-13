@@ -197,47 +197,47 @@ public class SqlQuery implements Query {
     }
 
     @Override
+    public <T> T queryForBean(JdbcOperations jdbcOperations, Class<T> mappedClass) {
+        return queryForValue(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
+    }
+
+    @Override
     public <T> List<T> queryForBeanList(JdbcOperations jdbcOperations, Class<T> mappedClass) {
         return query(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
     }
 
     @Override
-    public <T> List<T> queryForList(JdbcOperations jdbcOperations, Class<T> elementType) {
-        String q = modifyForQuery(getSql());
-        return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
+    public Map<String, Object> queryForMap(JdbcOperations jdbcOperations) {
+        return queryForValue(jdbcOperations, new ColumnMapRowMapper());
     }
 
     @Override
-    public List<Map<String, Object>> queryForList(JdbcOperations jdbcOperations) {
+    public List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
         return jdbcOperations.query(q, setter, new ColumnMapRowMapper());
     }
 
     @Override
-    public Map<String, Object> queryForMap(JdbcOperations jdbcOperations) {
-        return queryForObject(jdbcOperations, new ColumnMapRowMapper());
-    }
-
-    @Override
-    public <T> T queryForObject(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
-        List<T> results = query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper, 1));
-        return DataAccessUtils.requiredSingleResult(results);
-    }
-
-    @Override
-    public <T> T queryForObject(JdbcOperations jdbcOperations, Class<T> requiredType) {
-        return queryForObject(jdbcOperations, new SingleColumnRowMapper<>(requiredType));
-    }
-
-    @Override
-    public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
+    public  SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
         return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
     }
 
     @Override
-    public <T> T queryForSingleBean(JdbcOperations jdbcOperations, Class<T> mappedClass) {
-        return queryForObject(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
+    public <T> T queryForValue(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
+        List<T> results = query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper, 1));
+        return DataAccessUtils.requiredSingleResult(results);
+    }
+
+    @Override
+    public <T> T queryForValue(JdbcOperations jdbcOperations, Class<T> requiredType) {
+        return queryForValue(jdbcOperations, new SingleColumnRowMapper<>(requiredType));
+    }
+
+    @Override
+    public <T> List<T> queryForValueList(JdbcOperations jdbcOperations, Class<T> elementType) {
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
     }
 
     @Override

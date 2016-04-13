@@ -29,12 +29,18 @@ import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
-import lombok.Getter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import lombok.Setter;
+import lombok.ToString;
 
-@Getter
-@Setter
+/**
+ * JDBC Driver Set
+ * @author enlo
+ */
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ToString(callSuper = true)
 public class ExternalJdbcDriverSet
         extends HashSet<Driver> {
 

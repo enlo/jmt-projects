@@ -105,7 +105,7 @@ public class SqlQueryTest {
     @Test
     public void testBatchUpadate_3args() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         User u = new User();
@@ -132,7 +132,7 @@ public class SqlQueryTest {
         });
         assertArrayEquals(new int[]{1, 1, 1}, affected);
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(103));
     }
 
@@ -142,7 +142,7 @@ public class SqlQueryTest {
     @Test
     public void testBatchUpadate_JdbcOperations_BatchPreparedStatementSetter() {
         Query cq = loader.fromString("select count(*) from Users where Name = 'Jane'").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(0));
 
         User u = new User();
@@ -160,7 +160,7 @@ public class SqlQueryTest {
         int[] affected = query.batchUpadate(jdbcTemplate, batchArgs, columnTypes);
         assertArrayEquals(new int[]{1, 1, 1}, affected);
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(1));
     }
 
@@ -170,7 +170,7 @@ public class SqlQueryTest {
     @Test
     public void testBatchUpadate_JdbcOperations_List() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         User u = new User();
@@ -186,7 +186,7 @@ public class SqlQueryTest {
         int[] affected = query.batchUpadate(jdbcTemplate, batchArgs);
         assertArrayEquals(new int[]{1, 1, 1}, affected);
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(103));
     }
 
@@ -196,7 +196,7 @@ public class SqlQueryTest {
     @Test
     public void testExecute_JdbcOperations() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         User u = new User();
@@ -209,7 +209,7 @@ public class SqlQueryTest {
         Query query = loader.load("C3", "insert1").merge(u);
         query.execute(jdbcTemplate);
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
     }
 
@@ -219,7 +219,7 @@ public class SqlQueryTest {
     @Test
     public void testExecute_JdbcOperations_PreparedStatementCallback() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         User u = new User();
@@ -238,7 +238,7 @@ public class SqlQueryTest {
         });
         assertThat(affected, is(1));
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
     }
 
@@ -307,14 +307,14 @@ public class SqlQueryTest {
     }
 
     /**
-     * Test of queryForList method, of class SqlQuery.
+     * Test of queryForValueList method, of class SqlQuery.
      */
     @Test
     public void testQueryForList_JdbcOperations() {
         User u = new User();
         u.setCountry("Norway");
         Query query = loader.fromString("select * from Users where Country = @bind{country}").merge(u);
-        List<Map<String, Object>> users = query.queryForList(jdbcTemplate);
+        List<Map<String, Object>> users = query.queryForMapList(jdbcTemplate);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(3));
         assertThat(users.get(0), is(aMapWithSize(12)));
@@ -329,14 +329,14 @@ public class SqlQueryTest {
     }
 
     /**
-     * Test of queryForList method, of class SqlQuery.
+     * Test of queryForValueList method, of class SqlQuery.
      */
     @Test
     public void testQueryForList_JdbcOperations_Class() {
         User u = new User();
         u.setCountry("Norway");
         Query query = loader.fromString("select ID from Users where Country = @bind{country} order by id").merge(u);
-        List<Integer> users = query.queryForList(jdbcTemplate, Integer.class);
+        List<Integer> users = query.queryForValueList(jdbcTemplate, Integer.class);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(3));
         assertThat(users, is(contains((Object) 15, 46, 47)));
@@ -357,22 +357,22 @@ public class SqlQueryTest {
     }
 
     /**
-     * Test of queryForObject method, of class SqlQuery.
+     * Test of queryForValue method, of class SqlQuery.
      */
     @Test
     public void testQueryForObject_JdbcOperations_Class() {
         Query query = loader.fromString("select count(*) from Users").merge();
-        int count = query.queryForObject(jdbcTemplate, Integer.class);
+        int count = query.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
     }
 
     /**
-     * Test of queryForObject method, of class SqlQuery.
+     * Test of queryForValue method, of class SqlQuery.
      */
     @Test
     public void testQueryForObject_JdbcOperations_RowMapper() {
         Query query = loader.fromString("select count(*) from Users").merge();
-        int count = query.queryForObject(jdbcTemplate, new RowMapper<Integer>() {
+        int count = query.queryForValue(jdbcTemplate, new RowMapper<Integer>() {
             @Override
             public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
                 return rs.getInt(1);
@@ -399,12 +399,12 @@ public class SqlQueryTest {
     }
 
     /**
-     * Test of queryForSingleBean method, of class SqlQuery.
+     * Test of queryForBean method, of class SqlQuery.
      */
     @Test
     public void testQueryForSingleBean() {
         Query query = loader.fromString("select * from Users order by id LIMIT 1").merge();
-        User u = query.queryForSingleBean(jdbcTemplate, User.class);
+        User u = query.queryForBean(jdbcTemplate, User.class);
         assertThat(u.getId(), is(1));
         assertThat(u.getName(), is("Rowan Chapman"));
         assertThat(u.getEmail(), is("mi.fringilla.mi@NullafacilisisSuspendisse.net"));
@@ -511,12 +511,12 @@ public class SqlQueryTest {
     @Test
     public void testSetMaxRowSize() {
         Query query = loader.fromString("select * from Users order by id").merge();
-        List<Map<String, Object>> list = query.queryForList(jdbcTemplate);
+        List<Map<String, Object>> list = query.queryForMapList(jdbcTemplate);
         assertThat(list, hasSize(100));
 
         query.setMaxRowSize(10);
         assertThat(query.getMaxRowSize(), is(10));
-        list = query.queryForList(jdbcTemplate);
+        list = query.queryForMapList(jdbcTemplate);
         assertThat(list, hasSize(10));
     }
 
@@ -570,7 +570,7 @@ public class SqlQueryTest {
     @Test
     public void testUpdate_JdbcOperations() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         User u = new User();
@@ -584,7 +584,7 @@ public class SqlQueryTest {
         int affected = query.update(jdbcTemplate);
         assertThat(affected, is(1));
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
     }
 
@@ -594,7 +594,7 @@ public class SqlQueryTest {
     @Test
     public void testUpdate_JdbcOperations_KeyHolder() {
         Query cq = loader.fromString("select count(*) from Users").merge();
-        int count = cq.queryForObject(jdbcTemplate, Integer.class);
+        int count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(100));
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -606,7 +606,7 @@ public class SqlQueryTest {
         assertThat(affected, is(1));
         assertThat((int) keyHolder.getKey(), is(greaterThan(100)));
 
-        count = cq.queryForObject(jdbcTemplate, Integer.class);
+        count = cq.queryForValue(jdbcTemplate, Integer.class);
         assertThat(count, is(101));
     }
 

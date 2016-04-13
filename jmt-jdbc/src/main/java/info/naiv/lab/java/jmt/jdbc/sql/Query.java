@@ -41,6 +41,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 public interface Query {
 
     /**
+     * バッチ更新
      *
      * @param jdbcOperations
      * @param batchValues
@@ -64,17 +65,41 @@ public interface Query {
 
     <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor);
 
+    /**
+     * 単一の行を取得し、Bean に詰め替える.
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param mappedClass
+     * @return
+     */
+    <T> T queryForBean(JdbcOperations jdbcOperations, Class<T> mappedClass);
+
+    /**
+     * 複数行を取得し、Bean の List に詰め替える.
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param mappedClass
+     * @return
+     */
     <T> List<T> queryForBeanList(JdbcOperations jdbcOperations, Class<T> mappedClass);
 
-    <T> List<T> queryForList(JdbcOperations jdbcOperations, Class<T> elementType);
-
-    List<Map<String, Object>> queryForList(JdbcOperations jdbcOperations);
-
+    /**
+     * 単一行をMapで取得する.
+     *
+     * @param jdbcOperations
+     * @return 1行のデータ。列名をKey、列の値をValueにセットする.
+     */
     Map<String, Object> queryForMap(JdbcOperations jdbcOperations);
 
-    <T> T queryForObject(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
-
-    <T> T queryForObject(JdbcOperations jdbcOperations, Class<T> requiredType);
+    /**
+     * 複数行を Map の List として取得する.
+     *
+     * @param jdbcOperations
+     * @return
+     */
+    List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations);
 
     /**
      * クエリを実行し、RowSet を取得する.
@@ -84,7 +109,35 @@ public interface Query {
      */
     SqlRowSet queryForRowSet(JdbcOperations jdbcOperations);
 
-    <T> T queryForSingleBean(JdbcOperations jdbcOperations, Class<T> mappedClass);
+    /**
+     * 単一の値を取得する.
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param rowMapper ResultSet から目的の値を取得するための RowMapper.
+     * @return 単一の値
+     */
+    <T> T queryForValue(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
+
+    /**
+     * 単一の値を取得する.
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param requiredType
+     * @return 単一の値
+     */
+    <T> T queryForValue(JdbcOperations jdbcOperations, Class<T> requiredType);
+
+    /**
+     * 1列だけの結果を値のリストとして取得する.
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param elementType
+     * @return
+     */
+    <T> List<T> queryForValueList(JdbcOperations jdbcOperations, Class<T> elementType);
 
     /**
      * 引数を入れ替える. <br>
@@ -104,13 +157,42 @@ public interface Query {
      */
     Query rebind(List<?> args);
 
+    /**
+     * フェッチサイズを設定する.
+     *
+     * @param fetchSize
+     */
     void setFetchSize(int fetchSize);
 
+    /**
+     * 取得する行数を設定する. 設定した行数以上は読み込まない.
+     *
+     * @param maxRowSize
+     */
     void setMaxRowSize(int maxRowSize);
 
+    /**
+     * ページを設定する. 既存のSQLに対してページ指定のSQLを追加する.
+     *
+     * @param offset 開始行
+     * @param size 取得する行数
+     */
     void setPage(int offset, int size);
 
+    /**
+     * 追加・更新クエリを実行する.
+     *
+     * @param jdbcOperations
+     * @return 影響を受けた行数
+     */
     int update(JdbcOperations jdbcOperations);
 
+    /**
+     * 追加・更新クエリを実行する.
+     *
+     * @param jdbcOperations
+     * @param keyHolder
+     * @return 影響を受けた行数
+     */
     int update(JdbcOperations jdbcOperations, KeyHolder keyHolder);
 }

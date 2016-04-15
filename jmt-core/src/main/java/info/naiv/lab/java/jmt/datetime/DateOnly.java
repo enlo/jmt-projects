@@ -21,61 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.driver;
+package info.naiv.lab.java.jmt.datetime;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.sql.Driver;
-import java.sql.SQLException;
-import java.util.HashSet;
-import java.util.Set;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
+import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.createDate;
+import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
+import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
+import java.util.Date;
 
 /**
- * JDBC Driver Set
  *
  * @author enlo
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
-@ToString(callSuper = true)
-public class ExternalJdbcDriverSet
-        extends HashSet<Driver> {
+public class DateOnly extends java.sql.Date {
 
     private static final long serialVersionUID = 1L;
 
-    @NonNull
-    private Set<String> classicDriverNames;
-    @NonNull
-    private Set<Path> paths;
-
-    public ExternalJdbcDriverSet() {
-        paths = new HashSet<>();
-        classicDriverNames = new HashSet<>();
+    public DateOnly() {
+        this(now().getTime());
     }
 
-    public ExternalJdbcDriverSet(Set<Path> paths, Set<String> classicDriverNames) throws IOException, SQLException {
-        this.paths = paths;
-        this.classicDriverNames = classicDriverNames;
-        loadCore();
+    public DateOnly(int year, int month, int day) {
+        super(createDate(year, month, day).getTime());
+    }
+
+    public DateOnly(long date) {
+        this(new Date(date));
+    }
+
+    public DateOnly(Date date) {
+        super(getDatePart(date).getTime());
     }
 
     @Override
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public ExternalJdbcDriverSet clone() {
-        return (ExternalJdbcDriverSet) super.clone();
+    public DateOnly clone() {
+        return (DateOnly) super.clone();
     }
 
-    public void reload() throws IOException, SQLException {
-        clear();
-        loadCore();
+    @Override
+    public void setTime(long date) {
+        Date newValue = new DateOnly(date);
+        super.setTime(newValue.getTime());
     }
 
-    private void loadCore() throws IOException, SQLException {
-        ExternalJdbcDriverLoader loader = new ExternalJdbcDriverLoader();
-        this.addAll(loader.load(paths, classicDriverNames));
-    }
 }

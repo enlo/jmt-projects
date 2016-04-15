@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 定数.
@@ -41,6 +42,10 @@ public class Constants {
      * 改行コード CR+LF
      */
     public static final String CRLF = "\r\n";
+    /**
+     * 1日のミリ秒.
+     */
+    public static final long DAY_IN_MILLS = TimeUnit.DAYS.toMillis(1);
 
     /**
      * 既知の整数型
@@ -58,6 +63,7 @@ public class Constants {
         BigDecimal.class,
         Double.class,
         Float.class,};
+
 
     /**
      * 改行コード LF

@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
+import info.naiv.lab.java.jmt.jdbc.mapping.RowMapperFactory;
+import info.naiv.lab.java.jmt.jdbc.mapping.RowMapperFactoryResultSetExtractor;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -197,8 +199,14 @@ public class SqlQuery implements Query {
     }
 
     @Override
+    public <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new RowMapperFactoryResultSetExtractor<>(rowMapperFactory));
+    }
+
+    @Override
     public <T> T queryForBean(JdbcOperations jdbcOperations, Class<T> mappedClass) {
-        return queryForValue(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
+        return queryForObject(jdbcOperations, BeanPropertyRowMapper.newInstance(mappedClass));
     }
 
     @Override
@@ -208,7 +216,7 @@ public class SqlQuery implements Query {
 
     @Override
     public Map<String, Object> queryForMap(JdbcOperations jdbcOperations) {
-        return queryForValue(jdbcOperations, new ColumnMapRowMapper());
+        return queryForObject(jdbcOperations, new ColumnMapRowMapper());
     }
 
     @Override
@@ -218,26 +226,26 @@ public class SqlQuery implements Query {
     }
 
     @Override
-    public  SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
-        String q = modifyForQuery(getSql());
-        return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
-    }
-
-    @Override
-    public <T> T queryForValue(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
+    public <T> T queryForObject(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
         List<T> results = query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper, 1));
         return DataAccessUtils.requiredSingleResult(results);
     }
 
     @Override
-    public <T> T queryForValue(JdbcOperations jdbcOperations, Class<T> requiredType) {
-        return queryForValue(jdbcOperations, new SingleColumnRowMapper<>(requiredType));
+    public <T> T queryForObject(JdbcOperations jdbcOperations, Class<T> requiredType) {
+        return queryForObject(jdbcOperations, new SingleColumnRowMapper<>(requiredType));
     }
 
     @Override
-    public <T> List<T> queryForValueList(JdbcOperations jdbcOperations, Class<T> elementType) {
+    public <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType) {
         String q = modifyForQuery(getSql());
         return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
+    }
+
+    @Override
+    public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
+        String q = modifyForQuery(getSql());
+        return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
     }
 
     @Override

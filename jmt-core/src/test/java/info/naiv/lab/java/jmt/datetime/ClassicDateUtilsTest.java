@@ -48,7 +48,7 @@ public class ClassicDateUtilsTest {
 
         ServiceProviders.setThreadContainer(null);
 
-        testCalendar = new GregorianCalendar(2015, Calendar.MAY, 14);
+        testCalendar = new GregorianCalendar(2015, Calendar.MAY, 14, 18, 34, 20);
         currentDateProvider = mock(CurrentDateProvider.class);
         when(currentDateProvider.getNow()).thenReturn(testCalendar);
         when(currentDateProvider.getToday()).thenReturn(DateUtils.truncate(testCalendar, Calendar.DAY_OF_MONTH));

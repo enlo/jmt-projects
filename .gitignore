@@ -21,3 +21,4 @@ hs_err_pid*
 /jmt-spring-jdbc/target/
 /jmt-jdbc/target/
 /jmt-pojogen-maven-plugin/target/
+/jmt-jdbc/nbactions.xml

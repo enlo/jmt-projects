@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
+import info.naiv.lab.java.jmt.jdbc.mapping.RowMapperFactory;
 import java.util.List;
 import java.util.Map;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
@@ -63,6 +64,8 @@ public interface Query {
 
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
 
+    <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory);
+
     <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor);
 
     /**
@@ -102,14 +105,6 @@ public interface Query {
     List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations);
 
     /**
-     * クエリを実行し、RowSet を取得する.
-     *
-     * @param jdbcOperations
-     * @return
-     */
-    SqlRowSet queryForRowSet(JdbcOperations jdbcOperations);
-
-    /**
      * 単一の値を取得する.
      *
      * @param <T>
@@ -117,7 +112,7 @@ public interface Query {
      * @param rowMapper ResultSet から目的の値を取得するための RowMapper.
      * @return 単一の値
      */
-    <T> T queryForValue(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
+    <T> T queryForObject(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
 
     /**
      * 単一の値を取得する.
@@ -127,7 +122,7 @@ public interface Query {
      * @param requiredType
      * @return 単一の値
      */
-    <T> T queryForValue(JdbcOperations jdbcOperations, Class<T> requiredType);
+    <T> T queryForObject(JdbcOperations jdbcOperations, Class<T> requiredType);
 
     /**
      * 1列だけの結果を値のリストとして取得する.
@@ -137,7 +132,15 @@ public interface Query {
      * @param elementType
      * @return
      */
-    <T> List<T> queryForValueList(JdbcOperations jdbcOperations, Class<T> elementType);
+    <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType);
+
+    /**
+     * クエリを実行し、RowSet を取得する.
+     *
+     * @param jdbcOperations
+     * @return
+     */
+    SqlRowSet queryForRowSet(JdbcOperations jdbcOperations);
 
     /**
      * 引数を入れ替える. <br>

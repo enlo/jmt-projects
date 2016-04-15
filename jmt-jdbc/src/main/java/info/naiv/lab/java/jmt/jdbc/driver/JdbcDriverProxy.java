@@ -23,12 +23,11 @@
  */
 package info.naiv.lab.java.jmt.jdbc.driver;
 
-import com.sun.istack.internal.NotNull;
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import java.sql.*;
 import java.util.Properties;
 import java.util.logging.Logger;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -41,7 +40,7 @@ import lombok.ToString;
 @ToString
 public class JdbcDriverProxy implements Driver {
 
-    @NotNull
+    @NonNull
     private final Driver driver;
 
     public JdbcDriverProxy(Driver driver) {

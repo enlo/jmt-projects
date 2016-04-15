@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
   <groupId>info.naiv.lab.java</groupId>
-  <artifactId>jmt-jdbc</artifactId>
+  <artifactId>jmt-pojogen-maven-plugin</artifactId>
   <versioning>
+    <latest>1.0.3-SNAPSHOT</latest>
     <versions>
       <version>1.0.3-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20160415075521</lastUpdated>
+    <lastUpdated>20160415075622</lastUpdated>
   </versioning>
 </metadata>

@@ -31,9 +31,11 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.xpath.XPathExpression;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -56,13 +58,22 @@ public class XmlUtilsTest {
     @Autowired
     ApplicationContext context;
 
+    /**
+     *
+     */
     public XmlUtilsTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -125,6 +136,8 @@ public class XmlUtilsTest {
 
     /**
      * Test of toByteArray method, of class XmlUtils.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testToByteArray_DOMSource() throws Exception {
@@ -152,6 +165,8 @@ public class XmlUtilsTest {
 
     /**
      * Test of toByteArray method, of class XmlUtils.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testToByteArray_Document() throws Exception {

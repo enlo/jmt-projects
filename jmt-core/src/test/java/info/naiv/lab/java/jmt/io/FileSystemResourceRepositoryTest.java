@@ -24,8 +24,8 @@
 package info.naiv.lab.java.jmt.io;
 
 import java.io.IOException;
-import org.junit.Test;
 import org.junit.Before;
+import org.junit.Test;
 
 /**
  *
@@ -33,9 +33,16 @@ import org.junit.Before;
  */
 public class FileSystemResourceRepositoryTest {
 
+    /**
+     *
+     */
     public FileSystemResourceRepositoryTest() {
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Before
     public void init() throws IOException {
         SystemTempDirectory dir = new SystemTempDirectory(null);

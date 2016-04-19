@@ -26,8 +26,15 @@ package info.naiv.lab.java.jmt;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ * @author enlo
+ */
 public class StandardIterationUnits {
 
+    /**
+     *
+     */
     public static final IterationUnit<Date> DATE = new AbstractIterationUnit<Date>() {
         private static final long serialVersionUID = 1L;
 
@@ -48,8 +55,14 @@ public class StandardIterationUnits {
 
     };
 
+    /**
+     *
+     */
     public static final IterationUnit<Date> DATE_DAY_NOTRUNC = new DateDayIterationUnit();
 
+    /**
+     *
+     */
     public static final IterationUnit<Date> DATE_DAY_TRUNCATE = new DateDayIterationUnit() {
         private static final long serialVersionUID = 1L;
 
@@ -61,6 +74,9 @@ public class StandardIterationUnits {
         }
     };
 
+    /**
+     *
+     */
     public static final IterationUnit<Double> DOUBLE = new AbstractIterationUnit<Double>() {
         private static final long serialVersionUID = 1L;
 
@@ -112,6 +128,10 @@ public class StandardIterationUnits {
             return sign * n;
         }
     };
+
+    /**
+     *
+     */
     public static final IterationUnit<Integer> INTEGER = new AbstractIterationUnit<Integer>() {
         private static final long serialVersionUID = 1L;
 
@@ -132,6 +152,9 @@ public class StandardIterationUnits {
 
     };
 
+    /**
+     *
+     */
     public static final IterationUnit<Number> NUMBER_TO_LONG = new AbstractIterationUnit<Number>() {
         private static final long serialVersionUID = 1L;
 
@@ -156,6 +179,11 @@ public class StandardIterationUnits {
         }
     };
 
+    /**
+     *
+     * @param step
+     * @return
+     */
     public static final IterationUnit<Integer> step(final int step) {
         return new AbstractIterationUnit<Integer>() {
             private static final long serialVersionUID = 1L;

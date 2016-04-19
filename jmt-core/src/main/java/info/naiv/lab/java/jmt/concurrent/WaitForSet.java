@@ -42,25 +42,47 @@ public class WaitForSet<T> extends AbstractAwaitable {
     private final CountDownLatch cdl = new CountDownLatch(1);
     private T value;
 
+    /**
+     *
+     */
     public WaitForSet() {
     }
 
+    /**
+     *
+     * @return @throws InterruptedException
+     */
     @Override
     public boolean doAwait() throws InterruptedException {
         cdl.await();
         return true;
     }
 
+    /**
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws InterruptedException
+     */
     @Override
     public boolean doAwait(long timeout, TimeUnit unit) throws InterruptedException {
         return cdl.await(timeout, unit);
     }
 
+    /**
+     *
+     * @return
+     */
     public T get() {
         await();
         return value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public void set(T value) {
         this.value = value;
         cdl.countDown();

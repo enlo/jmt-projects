@@ -33,6 +33,13 @@ public class ProxyServiceConnection extends AbstractServiceConnection {
 
     final Holder<?> serviceHolder;
 
+    /**
+     *
+     * @param serviceHolder
+     * @param priority
+     * @param container
+     * @param tag
+     */
     public ProxyServiceConnection(Holder<?> serviceHolder, int priority,
                                   AbstractServiceContainer container, Tag tag) {
         super(priority, container, tag);

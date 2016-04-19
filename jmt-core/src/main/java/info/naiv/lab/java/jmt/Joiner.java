@@ -146,6 +146,13 @@ public abstract class Joiner<T, R> {
      */
     public static interface Adder<T, R> {
 
+        /**
+         *
+         * @param obj
+         * @param value
+         * @param idx
+         * @return
+         */
         R add(R obj, T value, int idx);
     }
 

@@ -35,6 +35,9 @@ import org.junit.Test;
  */
 public class IterationUnitIteratorTest {
 
+    /**
+     *
+     */
     public IterationUnitIteratorTest() {
     }
 

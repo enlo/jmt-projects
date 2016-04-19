@@ -30,5 +30,9 @@ package info.naiv.lab.java.jmt.collection;
  */
 public interface KeyedValue<KeyType extends Comparable> {
 
+    /**
+     *
+     * @return
+     */
     KeyType getKey();
 }

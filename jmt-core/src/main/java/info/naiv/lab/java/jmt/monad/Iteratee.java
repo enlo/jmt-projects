@@ -35,9 +35,15 @@ import java.util.Map;
 /**
  *
  * @author enlo
+ * @param <T>
  */
 public interface Iteratee<T> extends Iterable<T>, Serializable {
 
+    /**
+     *
+     * @param consumer
+     * @return
+     */
     IterateeImpl<T> bind(Consumer1<? super T> consumer);
 
     /**
@@ -75,13 +81,29 @@ public interface Iteratee<T> extends Iterable<T>, Serializable {
     @Override
     Iterator<T> iterator();
 
+    /**
+     *
+     * @param <U>
+     * @param mapper
+     * @return
+     */
     @ReturnNonNull
     <U> IterateeImpl<U> map(Function1<? super T, ? extends U> mapper);
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     List<T> toList();
 
+    /**
+     *
+     * @param <K>
+     * @param keyResolver
+     * @return
+     */
     @ReturnNonNull
     <K> Map<K, T> toMap(Function1<T, K> keyResolver);
-    
+
 }

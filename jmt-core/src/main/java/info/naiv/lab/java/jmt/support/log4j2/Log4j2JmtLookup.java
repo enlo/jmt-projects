@@ -64,14 +64,28 @@ public class Log4j2JmtLookup extends AbstractLookup implements SystemComponent {
         PluginManager.addPackage(Log4j2JmtLookup.class.getPackage().getName());
     }
 
+    /**
+     *
+     * @param properties
+     */
     public static void configure(Properties properties) {
         configure(DEFAULT, properties);
     }
 
+    /**
+     *
+     * @param name
+     * @param properties
+     */
     public static void configure(String name, Properties properties) {
         configureMap(name, new ResolvableProperties(properties).toMap());
     }
 
+    /**
+     *
+     * @param name
+     * @param properties
+     */
     static public void configureMap(String name, ConcurrentMap<String, String> properties) {
         if (DEFAULT.equals(name)) {
             defaultProperties.putAll(properties);

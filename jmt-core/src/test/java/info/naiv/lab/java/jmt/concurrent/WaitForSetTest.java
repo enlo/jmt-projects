@@ -69,6 +69,8 @@ public class WaitForSetTest {
 
     /**
      * Test of doAwait method, of class WaitForSet.
+     *
+     * @throws java.lang.InterruptedException
      */
     @Test
     public void testDoAwait_long_TimeUnit() throws InterruptedException {

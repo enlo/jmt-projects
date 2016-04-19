@@ -34,6 +34,10 @@ import org.junit.Test;
  */
 public class TempDirectoryDupTest {
 
+    /**
+     *
+     * @throws IOException
+     */
     @Test(expected = IOException.class)
     public void testDuplicate1() throws IOException {
         try (TempDirectory temp1 = new SystemTempDirectory();
@@ -42,6 +46,10 @@ public class TempDirectoryDupTest {
         }
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Test
     public void testDuplicate2() throws IOException {
         try (TempDirectory temp1 = new SystemTempDirectory();

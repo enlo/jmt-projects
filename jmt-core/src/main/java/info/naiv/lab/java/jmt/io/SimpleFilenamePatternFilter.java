@@ -28,6 +28,10 @@ import java.nio.file.Path;
 import java.util.Map;
 import org.springframework.core.io.Resource;
 
+/**
+ *
+ * @author enlo
+ */
 public class SimpleFilenamePatternFilter implements FilenamePatternFilter, StringPredicate {
 
     @Override
@@ -49,6 +53,11 @@ public class SimpleFilenamePatternFilter implements FilenamePatternFilter, Strin
         return filter(resource.getFilename(), resource, founds);
     }
 
+    /**
+     *
+     * @param filename
+     * @return
+     */
     @Override
     public boolean test(String filename) {
         return true;

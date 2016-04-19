@@ -57,7 +57,19 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      */
     T prior(T value);
 
+    /**
+     *
+     * @param value
+     * @param n
+     * @return
+     */
     T advance(T value, long n);
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @return
+     */
     long distance(T lhs, T rhs);
 }

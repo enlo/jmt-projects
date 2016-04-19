@@ -41,6 +41,12 @@ public class XPathComponent
         extends AbstractTlsServiceComponent<XPath>
         implements SystemComponent {
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     @ReturnNonNull
     public XPath getContent(Tag tag, ServiceProvider provider) {
@@ -54,6 +60,13 @@ public class XPathComponent
         return XPath.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, XPath> map, Tag tag, ServiceProvider provider) {
         XPathFactory factory = provider.resolveService(XPathFactory.class);

@@ -26,9 +26,10 @@ package info.naiv.lab.java.jmt.text;
 import java.text.BreakIterator;
 import java.util.Iterator;
 import java.util.Locale;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -38,6 +39,9 @@ public class RopeTest {
 
     static final String NULL_STRING = null;
 
+    /**
+     *
+     */
     public RopeTest() {
     }
 

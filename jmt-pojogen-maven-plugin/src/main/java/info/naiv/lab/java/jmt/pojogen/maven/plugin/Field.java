@@ -1,4 +1,3 @@
-
 package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
 import lombok.Data;
@@ -10,7 +9,7 @@ import static org.springframework.jdbc.support.JdbcUtils.convertUnderscoreNameTo
  */
 @Data
 public class Field {
-    
+
     String name;
     String originalName;
     String typeName;

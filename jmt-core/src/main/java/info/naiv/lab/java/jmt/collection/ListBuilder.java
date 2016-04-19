@@ -72,13 +72,25 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
         return new CopyOnWriteArrayListBuilder(values);
     }
 
+    /**
+     *
+     * @param collection
+     */
     public ListBuilder(Collection<T> collection) {
         super(collection);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public abstract List<T> build();
 
+    /**
+     *
+     * @return
+     */
     public List<T> toList() {
         return build();
     }

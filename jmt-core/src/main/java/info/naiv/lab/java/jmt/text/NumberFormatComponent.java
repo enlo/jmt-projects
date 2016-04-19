@@ -45,6 +45,13 @@ public class NumberFormatComponent
         return NumberFormat.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, NumberFormat> map, Tag tag, ServiceProvider provider) {
         Object id = tag.getId();

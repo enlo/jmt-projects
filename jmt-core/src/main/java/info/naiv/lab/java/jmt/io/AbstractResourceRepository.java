@@ -131,8 +131,22 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
         this.parent = parent;
     }
 
+    /**
+     *
+     * @param category
+     * @param name
+     * @return
+     * @throws IOException
+     */
     protected abstract String resolveLocation(String category, String name) throws IOException;
 
+    /**
+     *
+     * @param category
+     * @param globPattern
+     * @return
+     * @throws IOException
+     */
     protected abstract Map<String, String> resolveLocations(String category, String globPattern) throws IOException;
 
 }

@@ -35,10 +35,19 @@ public final class SingleIterator<T> implements Iterator<T> {
     boolean cont = true;
     final T value;
 
+    /**
+     *
+     * @param value
+     */
     public SingleIterator(T value) {
         this(true, value);
     }
 
+    /**
+     *
+     * @param hasNext
+     * @param value
+     */
     public SingleIterator(boolean hasNext, T value) {
         this.value = value;
         this.cont = hasNext;

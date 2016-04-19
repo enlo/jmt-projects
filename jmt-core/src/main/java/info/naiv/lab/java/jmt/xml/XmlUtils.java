@@ -23,6 +23,10 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+/**
+ *
+ * @author enlo
+ */
 public abstract class XmlUtils {
 
     /**
@@ -60,6 +64,12 @@ public abstract class XmlUtils {
         return source;
     }
 
+    /**
+     *
+     * @param source
+     * @return
+     * @throws TransformerException
+     */
     @ReturnNonNull
     public static byte[] toByteArray(DOMSource source) throws TransformerException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -69,6 +79,12 @@ public abstract class XmlUtils {
         return os.toByteArray();
     }
 
+    /**
+     *
+     * @param source
+     * @return
+     * @throws TransformerException
+     */
     @ReturnNonNull
     public static byte[] toByteArray(Document source) throws TransformerException {
         return toByteArray(new DOMSource(source));
@@ -88,6 +104,12 @@ public abstract class XmlUtils {
         return builder.parse(source);
     }
 
+    /**
+     *
+     * @param source
+     * @return
+     * @throws TransformerException
+     */
     @ReturnNonNull
     public static String toString(DOMSource source) throws TransformerException {
         StringWriter sw = new StringWriter();

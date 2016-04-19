@@ -33,8 +33,14 @@ import info.naiv.lab.java.jmt.infrastructure.annotation.ServicePriority;
 import info.naiv.lab.java.jmt.infrastructure.component.ComponentServiceConnection;
 import info.naiv.lab.java.jmt.infrastructure.component.ServiceComponent;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import static java.util.Collections.unmodifiableSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import static java.util.UUID.randomUUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -170,6 +176,10 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return unmodifiableSet(result);
     }
 
+    /**
+     *
+     * @return
+     */
     public ThreadSafeServiceContainer toThreadSafe() {
         return new ThreadSafeServiceContainer(this.defaultProvider, new ArrayList<>(this.connections));
     }
@@ -182,6 +192,13 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         this.connections.addAll(Arrays.asList(a));
     }
 
+    /**
+     *
+     * @param priority
+     * @param service
+     * @param tag
+     * @return
+     */
     @ReturnNonNull
     protected AbstractServiceConnection createConnection(int priority, Object service, Tag tag) {
         if (service instanceof ServiceComponent) {
@@ -205,6 +222,13 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param serviceType
+     * @param tag
+     * @return
+     */
     protected <T> Set<T> find(Class<T> serviceType, Tag tag) {
         Set<T> result = new HashSet<>();
         for (AbstractServiceConnection conn : connections) {
@@ -215,6 +239,13 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return result;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param serviceType
+     * @param tag
+     * @return
+     */
     protected <T> T findFirst(Class<T> serviceType, Tag tag) {
         for (AbstractServiceConnection conn : connections) {
             if (conn.contains(serviceType, tag)) {
@@ -224,6 +255,13 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return null;
     }
 
+    /**
+     *
+     * @param service
+     * @param priority
+     * @param tag
+     * @return
+     */
     protected AbstractServiceConnection getAndUpdate(Object service, int priority, Tag tag) {
         for (AbstractServiceConnection conn : connections) {
             if (conn.getTag().equals(tag) && conn.isSameInstance(service)) {
@@ -234,6 +272,11 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return null;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     protected int getAnnotatedPriority(Object obj) {
         if (obj != null) {
             ServicePriority pa = AnnotationUtils.findAnnotation(obj.getClass(), ServicePriority.class);
@@ -247,6 +290,13 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return 1;
     }
 
+    /**
+     *
+     * @param priority
+     * @param service
+     * @param tag
+     * @return
+     */
     @ReturnNonNull
     protected ServiceConnection internalRegisterService(int priority, Object service, Tag tag) {
         final AbstractServiceConnection conn = createConnection(priority, service, tag);
@@ -254,9 +304,20 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return conn;
     }
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     protected abstract Guard readGuard();
 
+    /**
+     *
+     * @param <T>
+     * @param serviceType
+     * @param tag
+     * @return
+     */
     protected <T> T resolveDefault(Class<T> serviceType, Tag tag) {
         if (defaultProvider != null) {
             return defaultProvider.resolveService(serviceType, tag);
@@ -266,6 +327,14 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param result
+     * @param serviceType
+     * @param tag
+     * @return
+     */
     protected <T> Set<T> resolveDefault(Set<T> result, Class<T> serviceType, Tag tag) {
         if (defaultProvider != null) {
             result.addAll(defaultProvider.resolveServices(serviceType, tag));
@@ -273,6 +342,10 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     protected abstract Guard writeGuard();
 

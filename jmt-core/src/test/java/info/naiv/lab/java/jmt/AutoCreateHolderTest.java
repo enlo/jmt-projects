@@ -27,7 +27,7 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
@@ -45,6 +45,9 @@ import org.junit.runner.RunWith;
 @RunWith(Theories.class)
 public class AutoCreateHolderTest {
 
+    /**
+     *
+     */
     @DataPoints("ctor")
     public static CtorFixture[] ctorParams = new CtorFixture[]{
         new CtorFixture(0, null, Integer.class, StandardFunctions.newInstance(Integer.class, 0)),
@@ -60,9 +63,15 @@ public class AutoCreateHolderTest {
         new CtorFixture(1, null, StandardFunctions.newInstance(Integer.class, 0)),
         new CtorFixture(1, Integer.class, null),};
 
+    /**
+     *
+     */
     @Rule
     public ExpectedException ex = ExpectedException.none();
 
+    /**
+     *
+     */
     @Test
     public void testCtor01() {
         AutoCreateHolder<String> holder = new AutoCreateHolder<>(String.class);
@@ -70,6 +79,10 @@ public class AutoCreateHolderTest {
         assertThat(holder.getContent(), is(new String()));
     }
 
+    /**
+     *
+     * @param f
+     */
     @Theory
     public void testCtor02(@FromDataPoints("ctor") CtorFixture f) {
         AutoCreateHolder<?> holder = new AutoCreateHolder<>(f.object, f.clazz, f.creator);
@@ -77,17 +90,28 @@ public class AutoCreateHolderTest {
         assertThat(holder.getContent(), is(f.expected));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testCtorNull01() {
         Misc.nop(new AutoCreateHolder<>(null));
     }
 
+    /**
+     *
+     * @param f
+     */
     @Theory
     public void testCtorNull02(@FromDataPoints("nullCtor") CtorFixture f) {
         ex.expect(IllegalArgumentException.class);
         Misc.nop(new AutoCreateHolder<>(f.clazz, f.creator));
     }
 
+    /**
+     *
+     * @param f
+     */
     @Theory
     public void testCtorNull03(@FromDataPoints("nullCtor") CtorFixture f) {
         ex.expect(IllegalArgumentException.class);
@@ -113,20 +137,52 @@ public class AutoCreateHolderTest {
         assertThat(instance.getContent(), is("123"));
     }
 
+    /**
+     *
+     * @param <T>
+     */
     @Ignore
     public static class CtorFixture<T> {
 
+        /**
+         *
+         */
         public Class<? extends T> clazz;
+
+        /**
+         *
+         */
         public Function1<T, Class<? extends T>> creator;
+
+        /**
+         *
+         */
         public T expected;
+
+        /**
+         *
+         */
         public T object;
 
+        /**
+         *
+         * @param object
+         * @param clazz
+         * @param creator
+         */
         public CtorFixture(T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
             this.object = object;
             this.clazz = clazz;
             this.creator = creator;
         }
 
+        /**
+         *
+         * @param expected
+         * @param object
+         * @param clazz
+         * @param creator
+         */
         public CtorFixture(T expected, T object, Class<? extends T> clazz, Function1<T, Class<? extends T>> creator) {
             this.expected = expected;
             this.object = object;

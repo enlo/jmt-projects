@@ -41,6 +41,13 @@ import java.util.Objects;
  */
 public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<TKey, TValue> {
 
+    /**
+     *
+     * @param <K>
+     * @param <V>
+     * @param entries
+     * @return
+     */
     public static <K extends Comparable, V> Lookup<K, V> fromEntries(Collection<Entry<K, V>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (Entry<K, V> e : entries) {
@@ -49,6 +56,12 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
         return new ImmutableLookup<>(gb.build());
     }
 
+    /**
+     *
+     * @param <K>
+     * @param entries
+     * @return
+     */
     public static <K extends Comparable> Lookup<K, KeyedValue<K>> fromKeyedValues(Collection<? extends KeyedValue<K>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (KeyedValue<K> e : entries) {
@@ -64,7 +77,7 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
     }
 
     @Override
-    public  boolean containsKey(TKey key) {
+    public boolean containsKey(TKey key) {
         for (Grouping<TKey, TValue> g : values) {
             if (g.getKey().compareTo(key) == 0) {
                 return true;
@@ -74,7 +87,7 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
     }
 
     @Override
-    public  boolean containsValue(TValue value) {
+    public boolean containsValue(TValue value) {
         for (Grouping<TKey, TValue> g : values) {
             for (TValue v : g.getValues()) {
                 if (Objects.equals(v, value)) {
@@ -105,19 +118,35 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
         return values.size();
     }
 
-
+    /**
+     *
+     * @param <TKey>
+     * @param <TValue>
+     */
     public static class GroupBuilder<TKey, TValue> {
 
         final Map<TKey, List<TValue>> values;
 
+        /**
+         *
+         * @param capacity
+         */
         public GroupBuilder(int capacity) {
             values = new HashMap<>(capacity);
         }
 
+        /**
+         *
+         */
         public GroupBuilder() {
             values = new HashMap<>();
         }
 
+        /**
+         *
+         * @param key
+         * @param value
+         */
         public void add(TKey key, TValue value) {
             if (values.containsKey(key)) {
                 values.get(key).add(value);
@@ -127,6 +156,10 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public List<Grouping<TKey, TValue>> build() {
             List<Grouping<TKey, TValue>> result = new ArrayList<>(values.size());
             for (Entry<TKey, List<TValue>> kv : values.entrySet()) {
@@ -135,6 +168,11 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
             return result;
         }
 
+        /**
+         *
+         * @param key
+         * @return
+         */
         public Grouping<TKey, TValue> get(TKey key) {
             List<TValue> list = values.get(key);
             return new ImmutableGrouping<>(key, list);

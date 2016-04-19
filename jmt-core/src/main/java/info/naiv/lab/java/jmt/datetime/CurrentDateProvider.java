@@ -32,9 +32,17 @@ import java.util.Calendar;
  */
 public interface CurrentDateProvider {
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     Calendar getToday();
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     Calendar getNow();
 }

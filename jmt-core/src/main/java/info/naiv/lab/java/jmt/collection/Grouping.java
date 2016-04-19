@@ -33,7 +33,15 @@ import info.naiv.lab.java.jmt.monad.Iteratee;
  */
 public interface Grouping<TKey, TValue> extends Iterable<TValue> {
 
+    /**
+     *
+     * @return
+     */
     TKey getKey();
 
+    /**
+     *
+     * @return
+     */
     Iteratee<TValue> getValues();
 }

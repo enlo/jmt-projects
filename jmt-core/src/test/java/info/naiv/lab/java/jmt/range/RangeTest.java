@@ -36,6 +36,9 @@ import org.junit.Test;
  */
 public class RangeTest {
 
+    /**
+     *
+     */
     public RangeTest() {
     }
 

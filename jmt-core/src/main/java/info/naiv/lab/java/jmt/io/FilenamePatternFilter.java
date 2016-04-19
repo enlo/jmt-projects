@@ -59,7 +59,6 @@ public interface FilenamePatternFilter {
      * @param resource リソース.
      * @param founds フィルターを通ったリソースと名称
      * @return 検索を停止する場合 true. 継続して検索を行う必要がある場合 false.
-     * @return
      */
     boolean filter(Resource resource, Map<String, ? super Resource> founds);
 

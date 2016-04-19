@@ -1,7 +1,7 @@
 package info.naiv.lab.java.jmt.support.spring;
 
-import info.naiv.lab.java.jmt.datetime.CurrentDateProvider;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
+import info.naiv.lab.java.jmt.datetime.CurrentDateProvider;
 import info.naiv.lab.java.jmt.datetime.DefaultCurrentDateProvider;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
@@ -10,8 +10,12 @@ import info.naiv.lab.java.jmt.infrastructure.ThreadSafeServiceContainer;
 import info.naiv.lab.java.jmt.infrastructure.annotation.StringTagOf;
 import info.naiv.lab.java.jmt.support.spring.ServiceInjectorTest.Injectee;
 import java.util.Calendar;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
@@ -24,9 +28,15 @@ import org.springframework.beans.factory.BeanFactory;
  */
 public class ServiceInjectorTest {
 
+    /**
+     *
+     */
     public ServiceInjectorTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setup() {
         ServiceProviders.setThreadContainer(new ThreadSafeServiceContainer());

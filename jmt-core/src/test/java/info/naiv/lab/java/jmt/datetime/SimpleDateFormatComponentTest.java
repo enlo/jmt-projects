@@ -43,9 +43,15 @@ public class SimpleDateFormatComponentTest {
     SimpleDateFormatComponent comp;
     ServiceProvider provider;
 
+    /**
+     *
+     */
     public SimpleDateFormatComponentTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         comp = new SimpleDateFormatComponent();

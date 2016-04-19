@@ -23,8 +23,10 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
@@ -42,8 +44,15 @@ import static org.mockito.Mockito.mock;
 @RunWith(Theories.class)
 public class HoldersTest {
 
+    /**
+     *
+     */
     public static Holder holder;
 
+    /**
+     *
+     * @return
+     */
     @DataPoints("as")
     public static Fixture[] asAsFixtures() {
         Fixture[] fixtures = new Fixture[]{
@@ -54,6 +63,10 @@ public class HoldersTest {
         return fixtures;
     }
 
+    /**
+     *
+     * @return
+     */
     @DataPoints("contentAs")
     public static Fixture[] asContentAsFixtures() {
         Fixture[] fixtures = new Fixture[]{
@@ -64,6 +77,9 @@ public class HoldersTest {
         return fixtures;
     }
 
+    /**
+     *
+     */
     @BeforeClass
     public static void setupClass() {
         holder = mock(Holder.class);
@@ -71,6 +87,9 @@ public class HoldersTest {
         Mockito.when(holder.getContentType()).thenReturn(Integer.class);
     }
 
+    /**
+     *
+     */
     public HoldersTest() {
     }
 
@@ -113,13 +132,32 @@ public class HoldersTest {
         Holders.of(null);
     }
 
+    /**
+     *
+     */
     public static class Fixture {
 
+        /**
+         *
+         */
         public Class<?> clazz;
 
+        /**
+         *
+         */
         public Object expected;
+
+        /**
+         *
+         */
         public Holder<?> holder;
 
+        /**
+         *
+         * @param expected
+         * @param holder
+         * @param clazz
+         */
         public Fixture(Object expected, Holder<?> holder, Class<?> clazz) {
             this.expected = expected;
             this.holder = holder;

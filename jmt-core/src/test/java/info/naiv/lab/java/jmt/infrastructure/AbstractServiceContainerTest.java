@@ -27,9 +27,17 @@ package info.naiv.lab.java.jmt.infrastructure;
 
 import info.naiv.lab.java.jmt.infrastructure.annotation.ServicePriority;
 import java.util.Objects;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.core.annotation.Order;
@@ -40,10 +48,16 @@ import org.springframework.core.annotation.Order;
  */
 public abstract class AbstractServiceContainerTest {
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -403,21 +417,42 @@ public abstract class AbstractServiceContainerTest {
 
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract AbstractServiceContainer createContainer();
 
+    /**
+     *
+     */
     public static interface TestService {
     }
 
+    /**
+     *
+     */
     public static interface TestService1 extends TestService {
     }
 
+    /**
+     *
+     */
     public static interface TestService2 extends TestService {
     }
 
+    /**
+     *
+     */
     public static class AbstractTestService {
 
         private final long id;
 
+        /**
+         *
+         * @param x
+         * @param y
+         */
         public AbstractTestService(int x, int y) {
             id = x * 10 + y;
         }
@@ -447,47 +482,85 @@ public abstract class AbstractServiceContainerTest {
         }
     }
 
+    /**
+     *
+     */
     @ServicePriority(2)
     public static class TestAnnotatedServiceImpl1 extends AbstractTestService implements TestService {
 
+        /**
+         *
+         */
         public TestAnnotatedServiceImpl1() {
             super(1, 1);
         }
     }
 
+    /**
+     *
+     */
     @ServicePriority(1)
     public static class TestAnnotatedServiceImpl2 extends AbstractTestService implements TestService {
 
+        /**
+         *
+         */
         public TestAnnotatedServiceImpl2() {
             super(2, 2);
         }
     }
 
+    /**
+     *
+     */
     @Order(2)
     public static class TestAnnotatedServiceImpl3 extends AbstractTestService implements TestService {
 
+        /**
+         *
+         */
         public TestAnnotatedServiceImpl3() {
             super(1, 1);
         }
     }
 
+    /**
+     *
+     */
     @Order(1)
     public static class TestAnnotatedServiceImpl4 extends AbstractTestService implements TestService {
 
+        /**
+         *
+         */
         public TestAnnotatedServiceImpl4() {
             super(2, 2);
         }
     }
 
+    /**
+     *
+     */
     public static class TestServiceImpl1 extends AbstractTestService implements TestService1 {
 
+        /**
+         *
+         * @param i
+         */
         public TestServiceImpl1(int i) {
             super(1, i);
         }
     }
 
+    /**
+     *
+     */
     public static class TestServiceImpl2 extends AbstractTestService implements TestService2 {
 
+        /**
+         *
+         * @param i
+         */
         public TestServiceImpl2(int i) {
             super(2, i);
         }

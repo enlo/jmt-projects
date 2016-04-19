@@ -62,6 +62,11 @@ public enum DateTimeMask {
                 }
             };
 
+    /**
+     *
+     * @param date
+     * @return
+     */
     @ReturnNonNull
     public abstract Calendar mask(Calendar date);
 

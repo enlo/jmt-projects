@@ -40,6 +40,9 @@ import java.util.Comparator;
  */
 public class ComparableComparator<T extends Comparable<T>> implements Comparator<T> {
 
+    /**
+     *
+     */
     public static final ComparableComparator INSTANCE = new ComparableComparator();
 
     @Override

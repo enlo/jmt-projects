@@ -38,11 +38,20 @@ public class Repeater<T> implements Iterable<T> {
     final int repeatMax;
     final T value;
 
+    /**
+     *
+     * @param repeatMax
+     * @param value
+     */
     public Repeater(int repeatMax, T value) {
         this.repeatMax = repeatMax;
         this.value = value;
     }
 
+    /**
+     *
+     * @return
+     */
     public T getValue() {
         return value;
     }

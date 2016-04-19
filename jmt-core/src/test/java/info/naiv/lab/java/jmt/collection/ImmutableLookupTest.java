@@ -30,7 +30,10 @@ import org.junit.Test;
  * @author enlo
  */
 public class ImmutableLookupTest {
-    
+
+    /**
+     *
+     */
     public ImmutableLookupTest() {
     }
 
@@ -68,5 +71,5 @@ public class ImmutableLookupTest {
     @Test
     public void testSize() {
     }
-    
+
 }

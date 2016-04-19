@@ -44,6 +44,9 @@ import org.junit.Test;
  */
 public class MapBuilderTest {
 
+    /**
+     *
+     */
     public MapBuilderTest() {
     }
 

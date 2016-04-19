@@ -29,6 +29,9 @@ package info.naiv.lab.java.jmt.fx;
  */
 public interface StringPredicate extends Predicate1<String> {
 
+    /**
+     *
+     */
     public static final StringPredicate NO_CHECK = new StringPredicate() {
         @Override
         public boolean test(String obj) {

@@ -43,6 +43,9 @@ import org.junit.Test;
  */
 public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
 
+    /**
+     *
+     */
     public PackageClassPreloaderTest() {
     }
 
@@ -71,6 +74,9 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
 
     }
 
+    /**
+     *
+     */
     @Test
     public void testPreload_2() {
         PackageClassPreloader loader = newConcrete();
@@ -96,6 +102,10 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
         assertThat(loader.getExtractPattern(), is(containsInAnyOrder("a", "b", "c")));
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected PackageClassPreloader newConcrete() {
         return new PackageClassPreloader();

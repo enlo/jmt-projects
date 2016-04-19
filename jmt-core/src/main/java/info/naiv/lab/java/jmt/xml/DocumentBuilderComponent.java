@@ -41,6 +41,12 @@ public class DocumentBuilderComponent
         extends AbstractTlsServiceComponent<DocumentBuilder>
         implements SystemComponent {
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     @ReturnNonNull
     public DocumentBuilder getContent(Tag tag, ServiceProvider provider) {
@@ -54,6 +60,13 @@ public class DocumentBuilderComponent
         return DocumentBuilder.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, DocumentBuilder> map, Tag tag, ServiceProvider provider) {
         try {

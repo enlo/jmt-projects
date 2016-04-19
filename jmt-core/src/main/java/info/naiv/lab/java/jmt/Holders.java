@@ -29,6 +29,13 @@ package info.naiv.lab.java.jmt;
  */
 public abstract class Holders {
 
+    /**
+     *
+     * @param <T>
+     * @param holder
+     * @param clazz
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T> Holder<T> as(Holder<?> holder, Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
@@ -39,6 +46,13 @@ public abstract class Holders {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param holder
+     * @param clazz
+     * @return
+     */
     public static <T> T getContentAs(Holder<?> holder, Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
             return clazz.cast(holder.getContent());
@@ -48,6 +62,12 @@ public abstract class Holders {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param object
+     * @return
+     */
     public static <T> Holder<T> of(T object) {
         return new ImmutableHolder<>(object);
     }

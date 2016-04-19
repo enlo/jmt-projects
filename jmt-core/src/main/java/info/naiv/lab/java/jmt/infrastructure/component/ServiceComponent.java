@@ -41,7 +41,19 @@ public interface ServiceComponent<T> {
     @ReturnNonNull
     Class<? extends T> getContentType();
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     T getContent(Tag tag, ServiceProvider provider);
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     boolean contains(Tag tag, ServiceProvider provider);
 }

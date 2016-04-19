@@ -37,6 +37,12 @@ import java.util.Map;
  */
 public abstract class AbstractServiceComponent<T> implements ServiceComponent<T> {
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     public boolean contains(Tag tag, ServiceProvider provider) {
         Map<Tag, T> map = getComponentMap();
@@ -55,6 +61,12 @@ public abstract class AbstractServiceComponent<T> implements ServiceComponent<T>
         return handleNotFound(map, tag, provider);
     }
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     public T getContent(Tag tag, ServiceProvider provider) {
         Map<Tag, T> map = getComponentMap();
@@ -66,9 +78,20 @@ public abstract class AbstractServiceComponent<T> implements ServiceComponent<T>
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     protected abstract Map<Tag, T> getComponentMap();
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     abstract protected boolean handleNotFound(Map<Tag, T> map, Tag tag, ServiceProvider provider);
 
 }

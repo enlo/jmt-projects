@@ -36,15 +36,31 @@ import org.apache.logging.log4j.core.LoggerContext;
  */
 public class Log4j2JmtConfigurer {
 
+    /**
+     *
+     */
     public static final String LOG4J2_CONFIG_PATH_DEFAULT = "classpath:META-INF/jmt.log4j2.config.xml";
+
+    /**
+     *
+     */
     public static final String LOG4J2_CONFIG_PATH_KEY = "log4j2.config.path";
 
+    /**
+     *
+     * @param jmtProperties
+     */
     public static void configure(Properties jmtProperties) {
         nonNull(jmtProperties, "jmtProperties");
         String location = jmtProperties.getProperty(LOG4J2_CONFIG_PATH_KEY);
         doConfigure(jmtProperties, location);
     }
 
+    /**
+     *
+     * @param jmtProperties
+     * @param resourcePath
+     */
     public static void configure(Properties jmtProperties, String resourcePath) {
         nonNull(jmtProperties, "jmtProperties");
         doConfigure(jmtProperties, resourcePath);

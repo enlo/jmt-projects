@@ -105,6 +105,9 @@ public abstract class MapBuilder<K, V> {
         return new TreeMapBuilder<K, V>(comp).put(key, value);
     }
 
+    /**
+     *
+     */
     protected final Map<K, V> map;
 
     /**
@@ -116,6 +119,10 @@ public abstract class MapBuilder<K, V> {
         this.map = map;
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract Map<K, V> build();
 
     /**

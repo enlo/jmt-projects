@@ -43,6 +43,13 @@ public class XPathFactoryComponent
         return XPathFactory.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, XPathFactory> map, Tag tag, ServiceProvider provider) {
         map.put(tag, XPathFactory.newInstance());

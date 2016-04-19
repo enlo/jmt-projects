@@ -37,5 +37,9 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface ServicePriority {
 
+    /**
+     *
+     * @return
+     */
     int value();
 }

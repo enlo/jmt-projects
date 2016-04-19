@@ -30,10 +30,18 @@ import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import static info.naiv.lab.java.jmt.io.NIOUtils.copyAll;
 import static info.naiv.lab.java.jmt.io.NIOUtils.deleteRecursive;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import java.io.*;
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import static java.lang.Runtime.getRuntime;
-import java.nio.file.*;
-import static java.nio.file.Files.*;
+import static java.nio.file.Files.copy;
+import static java.nio.file.Files.createDirectory;
+import static java.nio.file.Files.createTempFile;
+import static java.nio.file.Files.exists;
+import static java.nio.file.Files.isDirectory;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -49,10 +57,18 @@ import org.springframework.core.io.Resource;
 @Slf4j
 public abstract class TempDirectory implements Closeable {
 
+    /**
+     *
+     */
     public static final String JMT_PREFIX = "jmt";
 
     private static final ConcurrentMap<Path, Path> paths = new ConcurrentHashMap<>();
 
+    /**
+     *
+     * @param prefix
+     * @return
+     */
     @ReturnNonNull
     protected static String checkPrefix(String prefix) {
         if (isBlank(prefix)) {
@@ -93,6 +109,13 @@ public abstract class TempDirectory implements Closeable {
         closed = new AtomicBoolean(false);
     }
 
+    /**
+     *
+     * @param prefix
+     * @param resource
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public Path add(String prefix, Resource resource) throws IOException {
         nonNull(resource, "resource");
@@ -104,11 +127,25 @@ public abstract class TempDirectory implements Closeable {
         return dst;
     }
 
+    /**
+     *
+     * @param prefix
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public Path add(String prefix, File file) throws IOException {
         return add(prefix, file.toPath());
     }
 
+    /**
+     *
+     * @param prefix
+     * @param file
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public Path add(String prefix, Path file) throws IOException {
         Path dir = resolvePrefix(prefix);
@@ -122,6 +159,13 @@ public abstract class TempDirectory implements Closeable {
         return dst;
     }
 
+    /**
+     *
+     * @param prefix
+     * @param is
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public Path add(String prefix, InputStream is) throws IOException {
         Path dir = resolvePrefix(prefix);
@@ -159,6 +203,11 @@ public abstract class TempDirectory implements Closeable {
         }
     }
 
+    /**
+     *
+     * @param shutdown
+     * @throws IOException
+     */
     protected void close(boolean shutdown) throws IOException {
         if (closed.compareAndSet(false, true)) {
             Path p = getPath();

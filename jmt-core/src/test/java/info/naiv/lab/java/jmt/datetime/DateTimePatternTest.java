@@ -5,7 +5,10 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import static info.naiv.lab.java.jmt.datetime.DateTimePattern.*;
+import static info.naiv.lab.java.jmt.datetime.DateTimePattern.DATETIME_PATTERN;
+import static info.naiv.lab.java.jmt.datetime.DateTimePattern.DATE_PATTERN;
+import static info.naiv.lab.java.jmt.datetime.DateTimePattern.DATE_PATTERN_SY;
+import static info.naiv.lab.java.jmt.datetime.DateTimePattern.TIME_PATTERN;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -30,6 +33,9 @@ public class DateTimePatternTest {
     CurrentDateProvider currentDateProvider;
     Calendar testCalendar;
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
 
@@ -44,10 +50,17 @@ public class DateTimePatternTest {
 
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
 
+    /**
+     *
+     * @throws ParseException
+     */
     @Test
     public void testToCalendar() throws ParseException {
         String source = "2015-12-24T12:12:47";
@@ -336,6 +349,11 @@ public class DateTimePatternTest {
         assertThat(result, is(false));
     }
 
+    /**
+     *
+     * @param time
+     * @return
+     */
     public Date timeOf(String time) {
         try {
             return DateUtils.parseDate(time, "HH:mm:ss.SSSZZ", "HH:mm:ss.SSS", "HH:mm:ssZZ", "HH:mm:ss", "HH:mm");

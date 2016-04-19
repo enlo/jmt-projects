@@ -48,10 +48,17 @@ public class PackageClassPreloader extends AbstractClassPreloader {
     @NonNull
     Set<String> extractPattern = new HashSet<>();
 
+    /**
+     *
+     */
     public PackageClassPreloader() {
         this.resolver.getIncludeTypeFilters().add(AnyTypeFilter.INSTANCE);
     }
 
+    /**
+     *
+     * @param extractPattern
+     */
     public void setExtractPattern(Collection<String> extractPattern) {
         this.extractPattern = new HashSet<>(extractPattern);
         Set<TypeFilter> newFilters = new HashSet<>();
@@ -62,6 +69,11 @@ public class PackageClassPreloader extends AbstractClassPreloader {
         resolver.getExcludeTypeFilters().addAll(newFilters);
     }
 
+    /**
+     *
+     * @param scanPackage
+     * @param classSet
+     */
     @Override
     protected void preloadOne(String scanPackage, Set<Class<?>> classSet) {
         try {

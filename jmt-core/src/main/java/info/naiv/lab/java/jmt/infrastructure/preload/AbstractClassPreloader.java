@@ -36,15 +36,28 @@ import lombok.NonNull;
  */
 public abstract class AbstractClassPreloader implements ClassPreloader {
 
+    /**
+     *
+     */
     protected final AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
 
+    /**
+     *
+     */
     @Getter
     @NonNull
     protected Set<String> scanPackages = new HashSet<>();
 
+    /**
+     *
+     */
     public AbstractClassPreloader() {
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Set<Class<?>> preload() {
         Set<Class<?>> classSet = new HashSet<>();
@@ -54,10 +67,19 @@ public abstract class AbstractClassPreloader implements ClassPreloader {
         return classSet;
     }
 
+    /**
+     *
+     * @param scanPackages
+     */
     public void setScanPackages(Collection<String> scanPackages) {
         this.scanPackages = new HashSet<>(scanPackages);
     }
 
+    /**
+     *
+     * @param scanPackage
+     * @param classSet
+     */
     protected abstract void preloadOne(String scanPackage, Set<Class<?>> classSet);
 
 }

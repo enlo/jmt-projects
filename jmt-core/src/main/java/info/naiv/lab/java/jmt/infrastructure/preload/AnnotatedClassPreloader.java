@@ -45,6 +45,11 @@ public class AnnotatedClassPreloader extends AbstractClassPreloader {
         resolver.getIncludeTypeFilters().add(filter);
     }
 
+    /**
+     *
+     * @param scanPackage
+     * @param classSet
+     */
     @Override
     protected void preloadOne(String scanPackage, Set<Class<?>> classSet) {
         try {

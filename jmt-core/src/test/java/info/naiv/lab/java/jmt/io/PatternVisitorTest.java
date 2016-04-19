@@ -25,26 +25,32 @@ package info.naiv.lab.java.jmt.io;
 
 import java.nio.file.Paths;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
  */
 public class PatternVisitorTest {
-    
+
+    /**
+     *
+     */
     public PatternVisitorTest() {
     }
 
+    /**
+     *
+     */
     @Test
     public void testGlobMatcher() {
-        
+
         PatternVisitor pv = new PatternVisitor("**.txt");
         assertThat(pv.matcher.matches(Paths.get("C:/temp/test.txt")), is(true));
         assertThat(pv.matcher.matches(Paths.get("C:/temp/test.pdf")), is(false));
         assertThat(pv.matcher.matches(Paths.get("test.txt")), is(true));
         assertThat(pv.matcher.matches(Paths.get("test.pdf")), is(false));
     }
-    
+
 }

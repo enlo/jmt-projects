@@ -64,7 +64,6 @@ public class Constants {
         Double.class,
         Float.class,};
 
-
     /**
      * 改行コード LF
      */

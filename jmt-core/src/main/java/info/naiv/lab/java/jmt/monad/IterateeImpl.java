@@ -62,11 +62,23 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         return EMPTY;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     @ReturnNonNull
     public static <T> IterateeImpl<T> of(Iterable<T> value) {
         return new IterateeImpl<>(value);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     @ReturnNonNull
     public static <T> IterateeImpl<T> of(T... value) {
         return new IterateeImpl<>(value);
@@ -78,15 +90,28 @@ public final class IterateeImpl<T> implements Iteratee<T> {
     @NonNull
     Iterable<T> value;
 
+    /**
+     *
+     * @param value
+     * @param predicate
+     */
     public IterateeImpl(Iterable<T> value, Predicate1<? super T> predicate) {
         this.predicate = predicate;
         this.value = value;
     }
 
+    /**
+     *
+     * @param value
+     */
     public IterateeImpl(Iterable<T> value) {
         this(value, StandardFunctions.NO_CHECK);
     }
 
+    /**
+     *
+     * @param value
+     */
     public IterateeImpl(T[] value) {
         this(Arrays.asList(value), StandardFunctions.NO_CHECK);
     }
@@ -95,6 +120,11 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         this(Collections.EMPTY_LIST, StandardFunctions.NO_CHECK);
     }
 
+    /**
+     *
+     * @param consumer
+     * @return
+     */
     @Override
     public IterateeImpl<T> bind(Consumer1<? super T> consumer) {
         for (T v : this) {
@@ -121,7 +151,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @return 最初の値.
      */
     @Override
-    public  T first() {
+    public T first() {
         return value.iterator().next();
     }
 
@@ -153,6 +183,12 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         return new FilteringIterator<>(value.iterator(), predicate);
     }
 
+    /**
+     *
+     * @param <U>
+     * @param mapper
+     * @return
+     */
     @ReturnNonNull
     @Override
     public <U> IterateeImpl<U> map(Function1<? super T, ? extends U> mapper) {
@@ -160,6 +196,10 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         return new IterateeImpl<>(it);
     }
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     @Override
     public List<T> toList() {
@@ -170,6 +210,12 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         return result;
     }
 
+    /**
+     *
+     * @param <K>
+     * @param keyResolver
+     * @return
+     */
     @ReturnNonNull
     @Override
     public <K> Map<K, T> toMap(Function1<T, K> keyResolver) {

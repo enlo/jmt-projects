@@ -26,44 +26,108 @@ package info.naiv.lab.java.jmt.range;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
 import info.naiv.lab.java.jmt.IterationUnit;
 
+/**
+ *
+ * @author enlo
+ */
 public class Ranges {
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @return
+     */
     public static <T extends Comparable<T>> Range<T> closedOpenRange(T first, T end) {
         return closedOpenRange(first, end, null);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @param unit
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> closedOpenRange(T first, T end, IterationUnit<? super T> unit) {
         T[] item = arraySort(first, end);
         return new Range(unit, new Bound.ClosedLowerBound<>(item[0]), new Bound.OpenUpperBound<>(item[1]));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @param unit
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> closedRange(T first, T end, IterationUnit<? super T> unit) {
         T[] item = arraySort(first, end);
         return new Range(unit, new Bound.ClosedLowerBound<>(item[0]), new Bound.ClosedUpperBound<>(item[1]));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @return
+     */
     public static <T extends Comparable<T>> Range<T> closedRange(T first, T end) {
         return closedRange(first, end, null);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @return
+     */
     public static <T extends Comparable<T>> Range<T> openClosedRange(T first, T end) {
         return openClosedRange(first, end, null);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @param unit
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> openClosedRange(T first, T end, IterationUnit<? super T> unit) {
         T[] item = arraySort(first, end);
         return new Range(unit, new Bound.OpenLowerBound<>(item[0]), new Bound.ClosedUpperBound<>(item[1]));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @param unit
+     * @return
+     */
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<T>> Range<T> openRange(T first, T end, IterationUnit<? super T> unit) {
         T[] item = arraySort(first, end);
         return new Range(unit, new Bound.OpenLowerBound<>(item[0]), new Bound.OpenUpperBound<>(item[1]));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param first
+     * @param end
+     * @return
+     */
     public static <T extends Comparable<T>> Range<T> openRange(T first, T end) {
         return openRange(first, end, null);
     }

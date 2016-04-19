@@ -34,6 +34,10 @@ public class HolderTag<T> extends Tag implements Holder<T> {
 
     private final Holder<T> hold;
 
+    /**
+     *
+     * @param id
+     */
     public HolderTag(Holder<T> id) {
         super(new Object[]{id});
         hold = id;

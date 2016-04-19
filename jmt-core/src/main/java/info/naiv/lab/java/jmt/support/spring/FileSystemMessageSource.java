@@ -38,11 +38,18 @@ public class FileSystemMessageSource extends ReloadableResourceBundleMessageSour
     Path baseDirectory;
     ResourceLoader localResourceLoader;
 
+    /**
+     *
+     */
     public FileSystemMessageSource() {
         localResourceLoader = new ResourceLoader();
         setResourceLoader(localResourceLoader);
     }
 
+    /**
+     *
+     * @param baseDirectory
+     */
     public void setBaseDirectory(String baseDirectory) {
         if (baseDirectory == null) {
             this.baseDirectory = null;

@@ -36,18 +36,35 @@ public class DateOnly extends java.sql.Date {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     */
     public DateOnly() {
         this(now().getTime());
     }
 
+    /**
+     *
+     * @param year
+     * @param month
+     * @param day
+     */
     public DateOnly(int year, int month, int day) {
         super(createDate(year, month, day).getTime());
     }
 
+    /**
+     *
+     * @param date
+     */
     public DateOnly(long date) {
         this(new Date(date));
     }
 
+    /**
+     *
+     * @param date
+     */
     public DateOnly(Date date) {
         super(getDatePart(date).getTime());
     }

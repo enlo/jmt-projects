@@ -47,6 +47,9 @@ public class DateOnlyTest {
     CurrentDateProvider currentDateProvider;
     Calendar testCalendar;
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         ServiceProviders.setThreadContainer(null);
@@ -57,6 +60,9 @@ public class DateOnlyTest {
         ServiceProviders.getThreadContainer().registerService(currentDateProvider);
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor() {
         Date actual = new DateOnly();
@@ -64,6 +70,9 @@ public class DateOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_date() {
         Date x = new Date();
@@ -72,6 +81,9 @@ public class DateOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_long1() {
         Date actual = new DateOnly(0);
@@ -79,6 +91,9 @@ public class DateOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_long2() {
         long x = 1234567890;
@@ -87,13 +102,16 @@ public class DateOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_ymd() {
         Date actual = new DateOnly(1991, 12, 10);
         Date expected = createDate(1991, 12, 10);
         assertThat(actual, is(expected));
     }
-    
+
     /**
      * Test of setTime method, of class DateOnly.
      */

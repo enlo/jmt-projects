@@ -26,6 +26,10 @@ package info.naiv.lab.java.jmt.infrastructure;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
 
+/**
+ *
+ * @author enlo
+ */
 public class ServiceProviders {
 
     static final ServiceContainer systemContainer = new SystemServiceContainer();
@@ -60,6 +64,10 @@ public class ServiceProviders {
         return threadLocalContainer.get();
     }
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     public static ServiceContainer newServiceContainer() {
         return new SimpleServiceContainer(getSystemContainer());

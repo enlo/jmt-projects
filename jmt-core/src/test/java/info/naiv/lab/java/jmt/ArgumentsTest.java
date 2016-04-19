@@ -5,10 +5,28 @@
  */
 package info.naiv.lab.java.jmt;
 
-import java.util.*;
-import static org.hamcrest.Matchers.*;
-import org.junit.*;
-import static org.junit.Assert.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.arrayWithSize;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.emptyArray;
+import static org.hamcrest.Matchers.emptyIterable;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 /**
  *
@@ -16,21 +34,36 @@ import static org.junit.Assert.*;
  */
 public class ArgumentsTest {
 
+    /**
+     *
+     */
     @BeforeClass
     public static void setUpClass() {
     }
 
+    /**
+     *
+     */
     @AfterClass
     public static void tearDownClass() {
     }
 
+    /**
+     *
+     */
     public ArgumentsTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -48,6 +81,9 @@ public class ArgumentsTest {
         assertThat(Arguments.between(d2, begin, end, "arg"), is(sameInstance(d2)));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_1_2() {
         Calendar begin = new GregorianCalendar(2014, 12, 11);
@@ -56,6 +92,9 @@ public class ArgumentsTest {
         Arguments.between(d1, begin, end, "arg");
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_1_3() {
         Calendar begin = new GregorianCalendar(2014, 12, 11);
@@ -76,6 +115,9 @@ public class ArgumentsTest {
         assertThat(Arguments.between(15L, begin, end, "arg"), is(15L));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_2_2() {
         int begin = 10;
@@ -83,6 +125,9 @@ public class ArgumentsTest {
         Arguments.between(9, begin, end, "arg");
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_2_3() {
         int begin = 10;
@@ -102,6 +147,9 @@ public class ArgumentsTest {
         assertThat(Arguments.between(10.01, begin, end, "arg"), is(10.01));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_3_2() {
         double begin = 10;
@@ -109,6 +157,9 @@ public class ArgumentsTest {
         Arguments.between(9.9999, begin, end, "arg");
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testBetween_4args_3_3() {
         double begin = 10;
@@ -351,11 +402,17 @@ public class ArgumentsTest {
         Arguments.nonEmpty(nonEmpty, varname);
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNonMinus() {
         Arguments.nonMinus(-1, "arg");
     }
 
+    /**
+     *
+     */
     @Test
     public void testNonMinus_2() {
         assertThat(Arguments.nonMinus(0, "arg"), is(0l));
@@ -390,6 +447,9 @@ public class ArgumentsTest {
         Arguments.nonNullAll(args, "args");
     }
 
+    /**
+     *
+     */
     @Test
     public void testNonNullAll_Array() {
         String[] actual;
@@ -402,18 +462,27 @@ public class ArgumentsTest {
         assertThat(actual, is(emptyArray()));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNonNullAll_Array_2() {
         String[] args = {"A", null};
         Arguments.nonNullAll(args, "args");
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNonNullAll_Array_3() {
         String[] args = null;
         Arguments.nonNullAll(args, "arg");
     }
 
+    /**
+     *
+     */
     @Test
     public void testNonNullAll_Iterable() {
         List<String> actual;
@@ -426,12 +495,18 @@ public class ArgumentsTest {
         assertThat(actual, is(emptyIterable()));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNonNullAll_Iterable_2() {
         List<String> args = Arrays.asList("A", null);
         Arguments.nonNullAll(args, "args");
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testNonNullAll_Iterable_3() {
         List<String> args = null;

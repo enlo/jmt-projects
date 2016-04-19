@@ -34,19 +34,32 @@ import org.junit.Before;
  */
 public class SimpleServiceContainerTest extends AbstractServiceContainerTest {
 
+    /**
+     *
+     */
     public SimpleServiceContainerTest() {
     }
 
+    /**
+     *
+     */
     @Before
     @Override
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     @Override
     public void tearDown() {
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected SimpleServiceContainer createContainer() {
         return new SimpleServiceContainer();

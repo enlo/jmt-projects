@@ -23,8 +23,11 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
@@ -48,40 +51,64 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
         }
     };
 
+    /**
+     *
+     */
     public AbstractStringBuilderJoinerTest() {
     }
 
+    /**
+     *
+     */
     @Test
     public void testCreateResult() {
         assertThat(new AbstractStringJoinerImpl(ADDER1).createResult(), is(not(nullValue())));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testCtor01() {
         Misc.nop(new AbstractStringJoinerImpl(null));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testCtor02() {
         Misc.nop(new AbstractStringJoinerImpl(null, null));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testCtor03() {
         Misc.nop(new AbstractStringJoinerImpl(ADDER1, null));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testCtor04() {
         Misc.nop(new AbstractStringJoinerImpl(null, ADDER2));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetFirst() {
         Joiner.Adder<T, StringBuilder> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
         assertThat(addr, sameInstance(ADDER1));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetMore() {
         Joiner.Adder<T, StringBuilder> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();

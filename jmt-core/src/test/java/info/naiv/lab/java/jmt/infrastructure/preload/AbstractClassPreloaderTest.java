@@ -28,8 +28,8 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -37,6 +37,9 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractClassPreloaderTest {
 
+    /**
+     *
+     */
     public AbstractClassPreloaderTest() {
     }
 
@@ -65,6 +68,10 @@ public abstract class AbstractClassPreloaderTest {
         assertThat(instance.getScanPackages(), is(containsInAnyOrder("a", "b", "c")));
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract AbstractClassPreloader newConcrete();
 
 }

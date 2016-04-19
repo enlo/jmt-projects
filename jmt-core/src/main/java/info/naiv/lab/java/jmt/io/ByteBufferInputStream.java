@@ -27,7 +27,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import static java.nio.ByteBuffer.allocate;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 
 /**
  *
@@ -41,10 +44,17 @@ public class ByteBufferInputStream extends InputStream {
     @NonNull
     private ByteBuffer byteBuffer;
 
+    /**
+     *
+     */
     public ByteBufferInputStream() {
         this(NIOUtils.DEFAULT_BUFFER_SIZE);
     }
 
+    /**
+     *
+     * @param bufferSize
+     */
     public ByteBufferInputStream(int bufferSize) {
         this(allocate(bufferSize));
         byteBuffer.flip();

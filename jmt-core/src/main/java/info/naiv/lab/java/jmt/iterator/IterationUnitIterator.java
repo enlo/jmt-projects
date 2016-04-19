@@ -37,6 +37,12 @@ public class IterationUnitIterator<T> implements Iterator<T> {
     final T last;
     final IterationUnit<? super T> unit;
 
+    /**
+     *
+     * @param it
+     * @param last
+     * @param unit
+     */
     public IterationUnitIterator(T it, T last, IterationUnit<? super T> unit) {
         this.it = it;
         this.last = last;

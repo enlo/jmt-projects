@@ -32,6 +32,10 @@ import java.util.Set;
  */
 public interface ClassPreloader {
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     public Set<Class<?>> preload();
 }

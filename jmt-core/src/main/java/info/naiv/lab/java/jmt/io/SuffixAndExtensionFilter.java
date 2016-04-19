@@ -67,6 +67,13 @@ public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implem
     final Pattern filenameNoSuffix;
     final Pattern filenameWithSuffix;
 
+    /**
+     *
+     * @param name
+     * @param suffix
+     * @param extension
+     * @param ignoreCase
+     */
     public SuffixAndExtensionFilter(String name, String suffix, String extension, boolean ignoreCase) {
         StringBuilder partsWithSuffix = new StringBuilder();
         StringBuilder partsNoSuffix = new StringBuilder();
@@ -109,6 +116,11 @@ public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implem
         return test(path.getFileName().toString());
     }
 
+    /**
+     *
+     * @param filename
+     * @return
+     */
     @Override
     public boolean test(String filename) {
         Matcher m = filenameWithSuffix.matcher(filename);

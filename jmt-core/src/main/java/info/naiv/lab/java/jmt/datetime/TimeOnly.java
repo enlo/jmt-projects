@@ -37,14 +37,30 @@ public class TimeOnly extends java.sql.Time {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     */
     public TimeOnly() {
         this(now().getTime());
     }
 
+    /**
+     *
+     * @param hour
+     * @param minute
+     * @param second
+     */
     public TimeOnly(int hour, int minute, int second) {
         this(hour, minute, second, 0);
     }
 
+    /**
+     *
+     * @param hour
+     * @param minute
+     * @param second
+     * @param millisecond
+     */
     public TimeOnly(int hour, int minute, int second, int millisecond) {
         super(0);
         Calendar cal = Calendar.getInstance();
@@ -55,10 +71,18 @@ public class TimeOnly extends java.sql.Time {
         super.setTime(getTimePart(cal).getTime().getTime());
     }
 
+    /**
+     *
+     * @param time
+     */
     public TimeOnly(long time) {
         this(new Date(time));
     }
 
+    /**
+     *
+     * @param time
+     */
     public TimeOnly(Date time) {
         super(getTimePart(time).getTime());
     }

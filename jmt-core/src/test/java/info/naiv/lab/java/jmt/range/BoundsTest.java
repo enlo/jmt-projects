@@ -25,8 +25,8 @@ package info.naiv.lab.java.jmt.range;
 
 import java.util.Date;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -34,6 +34,9 @@ import static org.junit.Assert.*;
  */
 public class BoundsTest {
 
+    /**
+     *
+     */
     public BoundsTest() {
     }
 

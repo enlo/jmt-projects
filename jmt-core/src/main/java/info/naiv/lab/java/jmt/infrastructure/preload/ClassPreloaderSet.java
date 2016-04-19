@@ -35,10 +35,15 @@ public class ClassPreloaderSet extends HashSet<ClassPreloader> implements ClassP
     private static final long serialVersionUID = 1L;
 
     @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
     public Object clone() {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+        return super.clone();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Set<Class<?>> preload() {
         Set<Class<?>> result = new HashSet<>();

@@ -39,6 +39,10 @@ public class RecursiveFileDeleter extends SimpleFileVisitor<Path> {
 
     private final boolean deleteDirectory;
 
+    /**
+     *
+     * @param deleteDirectory
+     */
     public RecursiveFileDeleter(boolean deleteDirectory) {
         this.deleteDirectory = deleteDirectory;
     }

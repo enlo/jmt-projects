@@ -8,12 +8,18 @@ package info.naiv.lab.java.jmt.closeable;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.concurrent.locks.Lock;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 /**
  *
@@ -21,10 +27,16 @@ import static org.mockito.Mockito.*;
  */
 public class CloseablesTest {
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -53,6 +65,9 @@ public class CloseablesTest {
         assertThat(Closeables.close(ac), is(instanceOf(Exception.class)));
     }
 
+    /**
+     *
+     */
     @Test
     public void testLock_Lock() {
         Lock lock = mock(Lock.class);
@@ -62,6 +77,9 @@ public class CloseablesTest {
         verify(lock, times(1)).lock();
     }
 
+    /**
+     *
+     */
     @Test
     public void testLock_Lock_Boolean() {
         Lock lock = mock(Lock.class);
@@ -71,6 +89,9 @@ public class CloseablesTest {
         verify(lock, times(1)).lock();
     }
 
+    /**
+     *
+     */
     @Test
     public void testLock_Lock_Boolean_2() {
         Lock lock = mock(Lock.class);
@@ -80,12 +101,18 @@ public class CloseablesTest {
         verify(lock, times(1)).lock();
     }
 
+    /**
+     *
+     */
     @Test
     public void testLock_Lock_Boolean_3() {
         ACS<Lock> cl = Closeables.lock(null, true);
         assertThat(cl, is(instanceOf(DummyCloseable.class)));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testLock_Lock_Boolean_4() {
         Closeables.lock(null, false);

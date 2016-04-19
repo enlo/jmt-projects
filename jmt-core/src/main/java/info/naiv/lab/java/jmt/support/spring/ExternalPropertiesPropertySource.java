@@ -36,6 +36,10 @@ import org.springframework.core.env.PropertySource;
 @Slf4j
 public class ExternalPropertiesPropertySource extends PropertySource<ResolvableProperties> {
 
+    /**
+     *
+     * @param name
+     */
     public ExternalPropertiesPropertySource(String name) {
         super(name, new ResolvableProperties());
     }
@@ -45,14 +49,29 @@ public class ExternalPropertiesPropertySource extends PropertySource<ResolvableP
         return source.getProperty(name);
     }
 
+    /**
+     *
+     * @param location
+     * @throws IOException
+     */
     public final void load(String location) throws IOException {
         source.loadFromResource(location);
     }
 
+    /**
+     *
+     * @param location
+     * @param charset
+     * @throws IOException
+     */
     public final void load(String location, Charset charset) throws IOException {
         source.loadFromResource(location, charset);
     }
 
+    /**
+     *
+     * @param location
+     */
     public final void loadOptional(String location) {
         try {
             source.loadFromResource(location);
@@ -62,6 +81,11 @@ public class ExternalPropertiesPropertySource extends PropertySource<ResolvableP
         }
     }
 
+    /**
+     *
+     * @param location
+     * @param charset
+     */
     public final void loadOptional(String location, Charset charset) {
         try {
             source.loadFromResource(location, charset);

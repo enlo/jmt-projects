@@ -60,6 +60,10 @@ public class AnnotationMetadataSetResolver {
 
     static final AntPathMatcher matcher = new AntPathMatcher("/");
 
+    /**
+     *
+     * @return
+     */
     public static AnnotationMetadataSetResolver newAnyType() {
         AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
         resolver.includeTypeFilters.add(AnyTypeFilter.INSTANCE);
@@ -80,10 +84,23 @@ public class AnnotationMetadataSetResolver {
     @NonNull
     private ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
 
+    /**
+     *
+     * @param basePackage
+     * @return
+     * @throws IOException
+     */
     public Set<AnnotationMetadata> resolve(String basePackage) throws IOException {
         return resolve(basePackage, null);
     }
 
+    /**
+     *
+     * @param basePackage
+     * @param predicate
+     * @return
+     * @throws IOException
+     */
     public Set<AnnotationMetadata> resolve(String basePackage, Predicate1<AnnotationMetadata> predicate) throws IOException {
         String packageSearchPath = arrayToString(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX,
                                                  resolveBasePackage(basePackage), "/", this.resourcePattern);
@@ -108,6 +125,12 @@ public class AnnotationMetadataSetResolver {
         return metadataSet;
     }
 
+    /**
+     *
+     * @param metadataReader
+     * @return
+     * @throws IOException
+     */
     protected boolean isTarget(MetadataReader metadataReader) throws IOException {
         List<TypeFilter> filters = getExcludeTypeFilters();
         MetadataReaderFactory factory = getMetadataReaderFactory();
@@ -125,6 +148,11 @@ public class AnnotationMetadataSetResolver {
         return false;
     }
 
+    /**
+     *
+     * @param basePackage
+     * @return
+     */
     protected String resolveBasePackage(String basePackage) {
         if (propertyResolver != null) {
             basePackage = propertyResolver.resolveRequiredPlaceholders(basePackage);

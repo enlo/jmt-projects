@@ -32,6 +32,13 @@ public class SimpleServiceConnection extends AbstractServiceConnection {
     final Object service;
     final Class<?> serviceType;
 
+    /**
+     *
+     * @param service
+     * @param priority
+     * @param container
+     * @param tag
+     */
     public SimpleServiceConnection(Object service, int priority,
                                    AbstractServiceContainer container, Tag tag) {
         super(priority, container, tag);

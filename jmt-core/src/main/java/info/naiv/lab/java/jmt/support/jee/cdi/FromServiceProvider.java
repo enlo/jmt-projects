@@ -25,7 +25,10 @@ package info.naiv.lab.java.jmt.support.jee.cdi;
 
 import info.naiv.lab.java.jmt.infrastructure.annotation.TagOf;
 import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
@@ -43,6 +46,10 @@ import javax.inject.Qualifier;
 @TagOf
 public @interface FromServiceProvider {
 
+    /**
+     *
+     * @return
+     */
     @Nonbinding
     String value() default "";
 }

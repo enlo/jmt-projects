@@ -41,6 +41,7 @@ import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -52,8 +53,9 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import static org.mockito.Mockito.*;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
@@ -77,11 +79,17 @@ public class MiscTest {
 
     ClassPathXmlApplicationContext context;
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         context = new ClassPathXmlApplicationContext("/META-INF/test-application-context.xml");
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
         context.close();
@@ -238,6 +246,9 @@ public class MiscTest {
         assertThat(Misc.containsCompareEquals(list, new BigDecimal("2")), is(false));
     }
 
+    /**
+     *
+     */
     @Test
     public void testContains_Collection_Predicate1() {
         final BigDecimal bd = BigDecimal.ZERO;
@@ -341,6 +352,9 @@ public class MiscTest {
         assertThat(Misc.getFirst(null, pred), is(nullValue()));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetKeySetByValue() {
         Map<String, Integer> map = new HashMap<>();
@@ -354,6 +368,9 @@ public class MiscTest {
         assertThat(Misc.getKeySetByValue(map, 4), is(empty()));
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testGetKeySetByValue_2() {
         Misc.getKeySetByValue(null, null);
@@ -675,6 +692,28 @@ public class MiscTest {
     }
 
     /**
+     * Test of newArrayList method, of class Misc.
+     */
+    @Test
+    public void testNewArrayList1() {
+        ArrayList<Object> list1 = Misc.newArrayList();
+        assertThat(list1, is(empty()));
+        list1.add(new Object());
+        assertThat(list1, hasSize(1));
+    }
+
+    /**
+     * Test of newArrayList method, of class Misc.
+     */
+    @Test
+    public void testNewArrayList2() {
+        ArrayList<Integer> list1 = Misc.newArrayList(1, 2, 3);
+        assertThat(list1, is(contains(1, 2, 3)));
+        list1.add(4);
+        assertThat(list1, is(contains(1, 2, 3, 4)));
+    }
+
+    /**
      * Test of newInstance method, of class Misc.
      */
     @Test
@@ -798,7 +837,7 @@ public class MiscTest {
         Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
         Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
         try (InputStream nobomis = nobomres.getInputStream();//
-                InputStream bomis = bomres.getInputStream()) {
+             InputStream bomis = bomres.getInputStream()) {
             String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
             String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
             assertThat(bomtext, is(not(nobomtext)));
@@ -882,6 +921,32 @@ public class MiscTest {
         assertThat(Misc.toBigDecimal("12", BigDecimal.ONE), is(BigDecimal.valueOf(12)));
         assertThat(Misc.toBigDecimal("12.5", BigDecimal.ONE), is(BigDecimal.valueOf(12.5)));
         assertThat(Misc.toBigDecimal("0.0000", BigDecimal.ONE), is(new BigDecimal("0.0000")));
+    }
+
+    /**
+     * Test of toBoolean method, of class Misc.
+     */
+    @Test
+    public void testToBoolean_Boolean_boolean() {
+        Boolean nil = null;
+        assertThat(Misc.toBoolean(nil, true), is(true));
+        assertThat(Misc.toBoolean(nil, false), is(false));
+        assertThat(Misc.toBoolean(Boolean.FALSE, true), is(false));
+        assertThat(Misc.toBoolean(Boolean.TRUE, false), is(true));
+    }
+
+    /**
+     * Test of toBoolean method, of class Misc.
+     */
+    @Test
+    public void testToBoolean_Number_boolean() {
+    }
+
+    /**
+     * Test of toBoolean method, of class Misc.
+     */
+    @Test
+    public void testToBoolean_String_boolean() {
     }
 
     /**

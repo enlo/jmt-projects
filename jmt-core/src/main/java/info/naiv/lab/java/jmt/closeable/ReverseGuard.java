@@ -34,6 +34,11 @@ public class ReverseGuard extends Guard {
 
     private final Guard g;
 
+    /**
+     *
+     * @param g
+     * @param doEnter
+     */
     public ReverseGuard(Guard g, boolean doEnter) {
         nonNull(g, "g");
         this.g = g;
@@ -42,11 +47,17 @@ public class ReverseGuard extends Guard {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void enter() {
         g.leave();
     }
 
+    /**
+     *
+     */
     @Override
     public void leave() {
         g.enter();

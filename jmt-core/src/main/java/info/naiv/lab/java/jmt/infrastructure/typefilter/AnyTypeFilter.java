@@ -34,6 +34,9 @@ import org.springframework.core.type.filter.TypeFilter;
  */
 public class AnyTypeFilter implements TypeFilter {
 
+    /**
+     *
+     */
     public static TypeFilter INSTANCE = new AnyTypeFilter();
 
     @Override

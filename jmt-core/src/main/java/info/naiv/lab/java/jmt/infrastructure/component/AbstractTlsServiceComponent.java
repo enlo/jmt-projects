@@ -41,6 +41,10 @@ public abstract class AbstractTlsServiceComponent<T> extends AbstractServiceComp
         }
     };
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Map<Tag, T> getComponentMap() {
         return tls.get();

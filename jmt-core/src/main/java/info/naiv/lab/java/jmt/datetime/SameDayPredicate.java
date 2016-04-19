@@ -37,10 +37,19 @@ public class SameDayPredicate implements Predicate1<Calendar> {
 
     Calendar value;
 
+    /**
+     *
+     * @param value
+     */
     public SameDayPredicate(Calendar value) {
         this.value = value;
     }
 
+    /**
+     *
+     * @param a1
+     * @return
+     */
     @Override
     @ReturnNonNull
     public boolean test(Calendar a1) {

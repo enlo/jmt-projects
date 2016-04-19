@@ -27,8 +27,8 @@ import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,6 +39,9 @@ import static org.mockito.Mockito.when;
  */
 public class ComparableComparatorTest {
 
+    /**
+     *
+     */
     public ComparableComparatorTest() {
     }
 

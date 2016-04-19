@@ -26,9 +26,9 @@ package info.naiv.lab.java.jmt;
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -48,9 +48,15 @@ public class ResolvablePropertiesTest {
 
     ResolvableProperties testTarget;
 
+    /**
+     *
+     */
     public ResolvablePropertiesTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setup() {
         prop = new Properties();

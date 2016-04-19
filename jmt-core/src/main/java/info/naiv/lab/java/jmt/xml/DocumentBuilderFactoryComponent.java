@@ -23,10 +23,10 @@
  */
 package info.naiv.lab.java.jmt.xml;
 
-import info.naiv.lab.java.jmt.infrastructure.component.AbstractTlsServiceComponent;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
-import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
+import info.naiv.lab.java.jmt.infrastructure.component.AbstractTlsServiceComponent;
+import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 

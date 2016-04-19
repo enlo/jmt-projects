@@ -38,10 +38,21 @@ public class DelegatingAutoCloseable<T> extends ImmutableHolder<T> implements AC
 
     final Consumer1<T> closeMethod;
 
+    /**
+     *
+     * @param object
+     * @throws IllegalArgumentException
+     */
     public DelegatingAutoCloseable(T object) throws IllegalArgumentException {
         this(object, new ReflectClose<>(object));
     }
 
+    /**
+     *
+     * @param object
+     * @param closeMethod
+     * @throws IllegalArgumentException
+     */
     public DelegatingAutoCloseable(T object, Consumer1<T> closeMethod) throws IllegalArgumentException {
         super(object);
         this.closeMethod = nonNull(closeMethod, "closeMethod");

@@ -30,8 +30,15 @@ import static java.lang.Integer.parseInt;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ *
+ * @author enlo
+ */
 public class StandardFunctions {
 
+    /**
+     *
+     */
     public static final Predicate1 NON_NULL = new Predicate1<Object>() {
         @Override
         public boolean test(Object obj) {
@@ -39,6 +46,9 @@ public class StandardFunctions {
         }
     };
 
+    /**
+     *
+     */
     public static Predicate1 NO_CHECK = new Predicate1() {
         @Override
         public boolean test(Object obj) {
@@ -46,6 +56,11 @@ public class StandardFunctions {
         }
     };
 
+    /**
+     *
+     * @param pattern
+     * @return
+     */
     @ReturnNonNull
     public static StringPredicate byRegex(final String pattern) {
         final Pattern p = Pattern.compile(pattern);
@@ -57,6 +72,12 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     @ReturnNonNull
     public static <T extends Comparable<T>> Predicate1<T> compareEqual(final T value) {
         return new Predicate1<T>() {
@@ -67,6 +88,11 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param defaultValue
+     * @return
+     */
     @ReturnNonNull
     public static Function1<String, Integer> convertStringToInt(final int defaultValue) {
         return new Function1<String, Integer>() {
@@ -86,6 +112,11 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param suffix
+     * @return
+     */
     @ReturnNonNull
     public static StringPredicate endsWith(final String suffix) {
         return new StringPredicate() {
@@ -96,6 +127,12 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     @ReturnNonNull
     public static <T> Predicate1<T> equal(final T value) {
         return new Predicate1<T>() {
@@ -106,6 +143,12 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
     @ReturnNonNull
     public static <T> Function1<Holder<T>, T> getContent(Class<T> clazz) {
         return new Function1<Holder<T>, T>() {
@@ -117,6 +160,12 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
     @ReturnNonNull
     public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz) {
         return new Function1<Class<? extends T>, T>() {
@@ -132,6 +181,13 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @param initialValue
+     * @return
+     */
     @ReturnNonNull
     public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz, final T initialValue) {
         return new Function1<Class<? extends T>, T>() {
@@ -142,11 +198,21 @@ public class StandardFunctions {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @return
+     */
     @ReturnNonNull
     public static <T> Predicate1<T> noCheck() {
         return NO_CHECK;
     }
 
+    /**
+     *
+     * @param <T>
+     * @return
+     */
     @ReturnNonNull
     public static <T> Predicate1<T> nonNull() {
         return NON_NULL;

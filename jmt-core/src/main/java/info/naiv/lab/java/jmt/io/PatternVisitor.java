@@ -37,18 +37,36 @@ public class PatternVisitor extends AbstractFileVisitor {
 
     final PathMatcher matcher;
 
+    /**
+     *
+     * @param matcher
+     */
     public PatternVisitor(PathMatcher matcher) {
         this.matcher = matcher;
     }
 
+    /**
+     *
+     */
     public PatternVisitor() {
         this.matcher = NIOUtils.anyPathMatcher();
     }
 
+    /**
+     *
+     * @param pattern
+     */
     public PatternVisitor(String pattern) {
         this(FileSystems.getDefault().getPathMatcher("glob:" + pattern));
     }
 
+    /**
+     *
+     * @param entry
+     * @param attrs
+     * @return
+     * @throws IOException
+     */
     @Override
     protected boolean accept(Path entry, BasicFileAttributes attrs) throws IOException {
         return matcher.matches(entry);

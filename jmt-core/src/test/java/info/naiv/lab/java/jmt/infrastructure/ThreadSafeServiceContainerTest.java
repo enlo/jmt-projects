@@ -31,9 +31,16 @@ package info.naiv.lab.java.jmt.infrastructure;
  */
 public class ThreadSafeServiceContainerTest extends AbstractServiceContainerTest {
 
+    /**
+     *
+     */
     public ThreadSafeServiceContainerTest() {
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected AbstractServiceContainer createContainer() {
         return new ThreadSafeServiceContainer();

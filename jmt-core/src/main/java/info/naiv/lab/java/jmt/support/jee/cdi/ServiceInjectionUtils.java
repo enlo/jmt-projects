@@ -42,6 +42,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ServiceInjectionUtils {
 
+    /**
+     *
+     * @param anno
+     * @param annotations
+     * @return
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
     public static Tag findTag(FromServiceProvider anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (isNotEmpty(anno.value())) {
             return Tag.of(anno.value());
@@ -60,6 +70,13 @@ public class ServiceInjectionUtils {
         return null;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @param ip
+     * @return
+     */
     public static <T> T getService(Class<T> clazz, InjectionPoint ip) {
         try {
             Annotated at = ip.getAnnotated();

@@ -32,19 +32,34 @@ import info.naiv.lab.java.jmt.closeable.Guard;
  */
 public class SimpleServiceContainer extends AbstractServiceContainer {
 
+    /**
+     *
+     */
     public SimpleServiceContainer() {
         this(null);
     }
 
+    /**
+     *
+     * @param defaultProvider
+     */
     public SimpleServiceContainer(ServiceProvider defaultProvider) {
         super(defaultProvider);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Guard readGuard() {
         return Guard.EMPTY;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Guard writeGuard() {
         return Guard.EMPTY;

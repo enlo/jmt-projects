@@ -31,8 +31,16 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
  */
 public interface IntegerEnum {
 
+    /**
+     *
+     * @return
+     */
     int getValue();
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     String getName();
 

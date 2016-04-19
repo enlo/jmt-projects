@@ -43,6 +43,13 @@ public class TransformerFactoryComponent
         return TransformerFactory.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, TransformerFactory> map, Tag tag, ServiceProvider provider) {
         map.put(tag, TransformerFactory.newInstance());

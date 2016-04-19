@@ -63,6 +63,10 @@ public class NIOUtils {
 
     static final int DEFAULT_BUFFER_SIZE = 0x2000;
 
+    /**
+     *
+     * @return
+     */
     public static DirectoryStream.Filter<Path> anyPathFilter() {
         return new DirectoryStream.Filter<Path>() {
             @Override
@@ -72,6 +76,10 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @return
+     */
     public static PathMatcher anyPathMatcher() {
         return new PathMatcher() {
             @Override
@@ -81,6 +89,13 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @return
+     * @throws IOException
+     */
     public static long copy(InputStream from, OutputStream to) throws IOException {
         nonNull(from, "from");
         nonNull(to, "to");
@@ -97,6 +112,13 @@ public class NIOUtils {
         return size;
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @return
+     * @throws IOException
+     */
     public static long copy(Readable from, Appendable to) throws IOException {
         nonNull(from, "from");
         nonNull(to, "to");
@@ -132,6 +154,14 @@ public class NIOUtils {
         walkFileTree(directory, new RecursiveFileDeleter(deleteDirectory));
     }
 
+    /**
+     *
+     * @param list
+     * @param name
+     * @param suffix
+     * @param extension
+     * @return
+     */
     public static Path findByFilenameWithSuffixAndExtention(Set<String> list, String name, String suffix, String extension) {
         return findByFilenameWithSuffixAndExtention(list, name, suffix, extension, false);
     }
@@ -159,6 +189,14 @@ public class NIOUtils {
         return Misc.getFirst(founds.values());
     }
 
+    /**
+     *
+     * @param list
+     * @param name
+     * @param suffix
+     * @param extension
+     * @return
+     */
     public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension) {
         return listByFilenameWithSuffixAndExtention(list, name, suffix, extension, false);
     }
@@ -184,6 +222,14 @@ public class NIOUtils {
         return founds.values();
     }
 
+    /**
+     *
+     * @param directory
+     * @param pattern
+     * @param depth
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public static List<String> listFiles(Path directory, String pattern, int depth) throws IOException {
         final List<String> result = new ArrayList<>();
@@ -201,6 +247,14 @@ public class NIOUtils {
         return result;
     }
 
+    /**
+     *
+     * @param directory
+     * @param pattern
+     * @param depth
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     public static List<Path> listPaths(Path directory, String pattern, int depth) throws IOException {
         final List<Path> result = new ArrayList<>();
@@ -218,12 +272,24 @@ public class NIOUtils {
         return result;
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static byte[] toByteArray(InputStream is) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         copy(is, os);
         return os.toByteArray();
     }
 
+    /**
+     *
+     * @param is
+     * @return
+     * @throws IOException
+     */
     public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
         if (is instanceof FileInputStream) {
             FileChannel fch = ((FileInputStream) is).getChannel();
@@ -240,6 +306,11 @@ public class NIOUtils {
         }
     }
 
+    /**
+     *
+     * @param pathMatcher
+     * @return
+     */
     public static DirectoryStream.Filter<Path> toPathFilter(final PathMatcher pathMatcher) {
         if (pathMatcher == null) {
             return anyPathFilter();
@@ -252,6 +323,11 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @param pattern
+     * @return
+     */
     public static DirectoryStream.Filter<Path> toPathFilter(final Pattern pattern) {
         if (pattern == null) {
             return anyPathFilter();
@@ -264,6 +340,11 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @param pattern
+     * @return
+     */
     public static PathMatcher toPathMatcher(final Pattern pattern) {
         if (pattern == null) {
             return anyPathMatcher();
@@ -276,6 +357,12 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @param pattern
+     * @param pathMatcher
+     * @return
+     */
     public static PathMatcher toPathMatcher(final String pattern, final org.springframework.util.PathMatcher pathMatcher) {
         nonNull(pathMatcher, "spring PathMatcher");
         if (pattern == null) {
@@ -289,6 +376,13 @@ public class NIOUtils {
         };
     }
 
+    /**
+     *
+     * @param is
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     public static String toString(InputStream is, Charset charset) throws IOException {
         return charset.decode(toByteBuffer(is)).toString();
     }

@@ -40,15 +40,27 @@ public abstract class SingletonMapSupport<TKey, TValue> {
 
     final ConcurrentMap<TKey, TValue> map;
 
+    /**
+     *
+     */
     public SingletonMapSupport() {
         this(new ConcurrentHashMap<TKey, TValue>());
     }
 
+    /**
+     *
+     * @param map
+     */
     public SingletonMapSupport(ConcurrentMap<TKey, TValue> map) {
         assert map != null;
         this.map = map;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     protected TValue internalGet(TKey key) {
         TValue value = map.get(key);
         if (value == null) {
@@ -61,5 +73,10 @@ public abstract class SingletonMapSupport<TKey, TValue> {
         return value;
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     protected abstract TValue newValue(TKey key);
 }

@@ -39,6 +39,9 @@ import static org.junit.Assert.assertThat;
  */
 public class AnnotatedClassPreloaderTest extends AbstractClassPreloaderTest {
 
+    /**
+     *
+     */
     public AnnotatedClassPreloaderTest() {
     }
 
@@ -56,6 +59,10 @@ public class AnnotatedClassPreloaderTest extends AbstractClassPreloaderTest {
                                                   TestClass6.class)));
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected AnnotatedClassPreloader newConcrete() {
         return new AnnotatedClassPreloader();

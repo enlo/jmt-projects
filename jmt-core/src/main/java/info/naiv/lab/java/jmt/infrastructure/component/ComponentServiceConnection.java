@@ -35,6 +35,13 @@ public class ComponentServiceConnection extends AbstractServiceConnection {
 
     final ServiceComponent<?> serviceHolder;
 
+    /**
+     *
+     * @param serviceHolder
+     * @param priority
+     * @param container
+     * @param tag
+     */
     public ComponentServiceConnection(ServiceComponent<?> serviceHolder, int priority, AbstractServiceContainer container, Tag tag) {
         super(priority, container, tag);
         this.serviceHolder = serviceHolder;

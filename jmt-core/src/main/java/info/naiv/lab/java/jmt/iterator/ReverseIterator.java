@@ -41,6 +41,10 @@ public class ReverseIterator<T> implements Iterator<T> {
     @NonNull
     final List<T> source;
 
+    /**
+     *
+     * @param source
+     */
     public ReverseIterator(@NonNull List<T> source) {
         this.source = source;
         this.i = source.size();

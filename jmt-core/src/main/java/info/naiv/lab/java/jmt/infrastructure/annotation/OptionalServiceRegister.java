@@ -51,10 +51,19 @@ public class OptionalServiceRegister {
     @Getter
     final AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
 
+    /**
+     *
+     */
     public OptionalServiceRegister() {
         resolver.getIncludeTypeFilters().add(filter);
     }
 
+    /**
+     *
+     * @param container
+     * @param scanPackage
+     * @return
+     */
     public List<ServiceConnection> register(ServiceContainer container, String scanPackage) {
         List<ServiceConnection> result = new ArrayList<>();
         try {
@@ -77,10 +86,20 @@ public class OptionalServiceRegister {
         return result;
     }
 
+    /**
+     *
+     * @param scanPackage
+     * @return
+     */
     public List<ServiceConnection> register(String scanPackage) {
         return register(ServiceProviders.getSystemContainer(), scanPackage);
     }
 
+    /**
+     *
+     * @param depends
+     * @return
+     */
     protected boolean checkLoadable(String[] depends) {
         if (depends != null) {
             for (String depend : depends) {

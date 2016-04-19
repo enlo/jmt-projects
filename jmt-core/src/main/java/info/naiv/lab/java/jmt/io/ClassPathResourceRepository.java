@@ -46,15 +46,26 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
 
     final ResourcePatternResolver resolver;
 
+    /**
+     *
+     */
     public ClassPathResourceRepository() {
         resolver = new PathMatchingResourcePatternResolver();
     }
 
+    /**
+     *
+     * @param location
+     */
     public ClassPathResourceRepository(String location) {
         resolver = new PathMatchingResourcePatternResolver();
         rootPath = location;
     }
 
+    /**
+     *
+     * @param location
+     */
     public final void setRootPath(String location) {
         rootPath = location;
     }
@@ -67,11 +78,24 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
         return resolver.getResources(pattern);
     }
 
+    /**
+     *
+     * @param category
+     * @param name
+     * @return
+     */
     @Override
     protected String resolveLocation(String category, String name) {
         return joiner.join(new String[]{rootPath, category, name}).toString();
     }
 
+    /**
+     *
+     * @param category
+     * @param globPattern
+     * @return
+     * @throws IOException
+     */
     @Override
     protected Map<String, String> resolveLocations(String category, String globPattern) throws IOException {
         Map<String, String> result = new HashMap<>();

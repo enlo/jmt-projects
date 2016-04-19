@@ -1,27 +1,57 @@
 package info.naiv.lab.java.jmt.datetime;
 
-import static info.naiv.lab.java.jmt.Arguments.*;
+import static info.naiv.lab.java.jmt.Arguments.between;
+import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Constants;
-import static info.naiv.lab.java.jmt.Misc.*;
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import static info.naiv.lab.java.jmt.Misc.toCalendar;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import static java.util.Calendar.*;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.DAY_OF_WEEK;
+import static java.util.Calendar.DAY_OF_YEAR;
+import static java.util.Calendar.ERA;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.JANUARY;
+import static java.util.Calendar.MILLISECOND;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
+import static java.util.Calendar.YEAR;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
+/**
+ *
+ * @author enlo
+ */
 public class ClassicDateUtils {
 
+    /**
+     *
+     */
     public static final int[] DATE_PART_FIELDS = {YEAR, MONTH, DAY_OF_MONTH};
 
+    /**
+     *
+     */
     public static final Calendar EPOC_CALENDAR;
+
+    /**
+     *
+     */
     public static final Date EPOC_DATE;
 
+    /**
+     *
+     */
     public static final int[] TIME_PART_FIELDS = {HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND};
 
     static {
@@ -274,6 +304,12 @@ public class ClassicDateUtils {
         return createCalendar(year, month, day).getTime();
     }
 
+    /**
+     *
+     * @param from
+     * @param to
+     * @return
+     */
     @ReturnNonNull
     public static Date createRandomDate(Date from, Date to) {
         final long n = to.getTime() - from.getTime();
@@ -355,6 +391,12 @@ public class ClassicDateUtils {
         return copyFields(newCal, cal, TIME_PART_FIELDS);
     }
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @return
+     */
     public static boolean isSameDay(Calendar lhs, Calendar rhs) {
         if (lhs == rhs) {
             return true;
@@ -376,6 +418,19 @@ public class ClassicDateUtils {
     @ReturnNonNull
     public static Calendar now() {
         return getCurrentDateProvider().getNow();
+    }
+
+    /**
+     * 現在時刻をナノ秒まで含めて取得.
+     *
+     * @return 現在のタイムスタンプ.
+     */
+    public static Timestamp nowTimestamp() {
+        Calendar cal = now();
+        long timeInNanos = System.nanoTime();
+        Timestamp ts = new Timestamp(cal.getTime().getTime());
+        ts.setNanos((int) (timeInNanos % 1000000000));
+        return ts;
     }
 
     /**

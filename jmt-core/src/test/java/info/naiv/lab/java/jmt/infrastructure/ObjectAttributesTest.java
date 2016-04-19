@@ -3,8 +3,13 @@ package info.naiv.lab.java.jmt.infrastructure;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.hasEntry;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.TypeMismatchException;
@@ -18,18 +23,27 @@ public class ObjectAttributesTest {
     private Attributes attrs;
     private TestObject2 to2;
 
+    /**
+     *
+     */
     @Before
     public void beforeTest() {
         to2 = new TestObject2();
         attrs = new ObjectAttributes(to2);
     }
 
+    /**
+     *
+     */
     @Test
     public void testContains() {
         assertThat(attrs.contains("ok"), is(true));
         assertThat(attrs.contains("object"), is(false));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCopyTo() {
         Map<String, Object> actual = new HashMap<>();
@@ -40,6 +54,9 @@ public class ObjectAttributesTest {
         assertThat(actual, hasEntry("number", (Object) to2.getNumber()));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAttrbiute_String_Class() {
         assertThat(attrs.getAttribute("ok", Boolean.class), is(to2.isOk()));
@@ -48,6 +65,9 @@ public class ObjectAttributesTest {
         assertThat(attrs.getAttribute("object", String.class), is(nullValue()));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAttrbute_String() {
         assertThat(attrs.getAttribute("ok"), is((Object) to2.isOk()));
@@ -56,6 +76,9 @@ public class ObjectAttributesTest {
         assertThat(attrs.getAttribute("object"), is(nullValue()));
     }
 
+    /**
+     *
+     */
     @Test
     public void testGetAttributeNames() {
         Set<String> actual = attrs.getAttributeNames();
@@ -64,6 +87,9 @@ public class ObjectAttributesTest {
         assertThat(actual, hasItems("ok", "name", "number", "class"));
     }
 
+    /**
+     *
+     */
     @Test(expected = TypeMismatchException.class)
     public void testTypemismatch() {
         attrs.getAttribute("ok", int.class);

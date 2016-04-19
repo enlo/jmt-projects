@@ -34,10 +34,17 @@ public class WaitForZero extends AbstractAwaitable {
 
     final Phaser count;
 
+    /**
+     *
+     */
     public WaitForZero() {
         this(0);
     }
 
+    /**
+     *
+     * @param initialValue
+     */
     public WaitForZero(int initialValue) {
         this.count = new Phaser(initialValue + 1) {
             @Override
@@ -47,20 +54,37 @@ public class WaitForZero extends AbstractAwaitable {
         };
     }
 
+    /**
+     *
+     */
     public void countDown() {
         this.count.arriveAndDeregister();
     }
 
+    /**
+     *
+     */
     public void countUp() {
         this.count.register();
     }
 
+    /**
+     *
+     * @return @throws Exception
+     */
     @Override
     protected boolean doAwait() throws Exception {
         count.awaitAdvanceInterruptibly(count.arrive());
         return true;
     }
 
+    /**
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws Exception
+     */
     @Override
     protected boolean doAwait(long timeout, TimeUnit unit) throws Exception {
         count.awaitAdvanceInterruptibly(count.arrive(), timeout, unit);

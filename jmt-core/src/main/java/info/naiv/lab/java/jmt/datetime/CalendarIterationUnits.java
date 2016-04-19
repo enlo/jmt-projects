@@ -34,26 +34,89 @@ import java.util.concurrent.TimeUnit;
  */
 public enum CalendarIterationUnits implements IterationUnit<Calendar> {
 
+    /**
+     *
+     */
     MILLSEC1(Calendar.MILLISECOND, 1),
+    /**
+     *
+     */
     MILLSEC10(Calendar.MILLISECOND, 10),
+    /**
+     *
+     */
     MILLSEC100(Calendar.MILLISECOND, 100),
+    /**
+     *
+     */
     MILLSEC500(Calendar.MILLISECOND, 500),
+    /**
+     *
+     */
     SEC1(Calendar.SECOND, TimeUnit.SECONDS.toMillis(1)),
+    /**
+     *
+     */
     SEC10(Calendar.SECOND, TimeUnit.SECONDS.toMillis(10)),
+    /**
+     *
+     */
     SEC30(Calendar.SECOND, TimeUnit.SECONDS.toMillis(30)),
+    /**
+     *
+     */
     MIN1(Calendar.MINUTE, TimeUnit.MINUTES.toMillis(1)),
+    /**
+     *
+     */
     MIN5(Calendar.MINUTE, TimeUnit.MINUTES.toMillis(5)),
+    /**
+     *
+     */
     MIN10(Calendar.MINUTE, TimeUnit.MINUTES.toMillis(10)),
+    /**
+     *
+     */
     MIN15(Calendar.MINUTE, TimeUnit.MINUTES.toMillis(15)),
+    /**
+     *
+     */
     MIN30(Calendar.MINUTE, TimeUnit.MINUTES.toMillis(30)),
+    /**
+     *
+     */
     HOUR1(Calendar.HOUR, TimeUnit.HOURS.toMillis(1)),
+    /**
+     *
+     */
     HOUR2(Calendar.HOUR, TimeUnit.HOURS.toMillis(2)),
+    /**
+     *
+     */
     HOUR3(Calendar.HOUR, TimeUnit.HOURS.toMillis(3)),
+    /**
+     *
+     */
     HOUR4(Calendar.HOUR, TimeUnit.HOURS.toMillis(4)),
+    /**
+     *
+     */
     HOUR6(Calendar.HOUR, TimeUnit.HOURS.toMillis(6)),
+    /**
+     *
+     */
     HOUR8(Calendar.HOUR, TimeUnit.HOURS.toMillis(8)),
+    /**
+     *
+     */
     HOUR12(Calendar.HOUR, TimeUnit.HOURS.toMillis(12)),
+    /**
+     *
+     */
     DAY1(Calendar.DAY_OF_MONTH, TimeUnit.DAYS.toMillis(1)),
+    /**
+     *
+     */
     WEEK1(Calendar.WEEK_OF_MONTH, 1) {
 
                 @Override
@@ -72,6 +135,9 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
                 }
 
             },
+    /**
+     *
+     */
     WEEK4(Calendar.WEEK_OF_MONTH, 4) {
 
                 @Override
@@ -90,6 +156,9 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
                 }
 
             },
+    /**
+     *
+     */
     WEEK6(Calendar.WEEK_OF_MONTH, 6) {
 
                 @Override
@@ -108,6 +177,9 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
                 }
 
             },
+    /**
+     *
+     */
     MONTH1(Calendar.MONTH, 1) {
 
                 @Override
@@ -125,6 +197,9 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
                     return distanceMonth(x, y, multi);
                 }
             },
+    /**
+     *
+     */
     MONTH3(Calendar.MONTH, 3) {
 
                 @Override
@@ -142,6 +217,9 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
                     return distanceMonth(x, y, multi);
                 }
             },
+    /**
+     *
+     */
     MONTH6(Calendar.MONTH, 6) {
 
                 @Override
@@ -168,22 +246,46 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         this.multi = multi;
     }
 
+    /**
+     *
+     * @param c
+     * @param x
+     * @return
+     */
     protected Calendar advanceCore(Calendar c, long x) {
         return ClassicDateUtils.add(c, multi * x, TimeUnit.MILLISECONDS);
     }
 
+    /**
+     *
+     * @param c
+     * @param x
+     * @return
+     */
     protected static Calendar advanceWeek(Calendar c, long x) {
         int w = c.get(Calendar.WEEK_OF_YEAR);
         c.set(Calendar.WEEK_OF_YEAR, (int) (w + x));
         return c;
     }
 
+    /**
+     *
+     * @param c
+     * @param x
+     * @return
+     */
     protected static Calendar advanceMonth(Calendar c, long x) {
         int w = c.get(Calendar.MONTH);
         c.set(Calendar.MONTH, (int) (w + x));
         return c;
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @return
+     */
     protected long distanceCore(Calendar x, Calendar y) {
         long d = y.getTimeInMillis() - x.getTimeInMillis();
         long r = d / multi + (d % multi != 0 ? 1 : 0);
@@ -195,20 +297,43 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return truncateCore((Calendar) cal.clone());
     }
 
+    /**
+     *
+     * @param cal
+     * @return
+     */
     protected Calendar truncateCore(Calendar cal) {
         return truncateMills(cal, multi);
     }
 
+    /**
+     *
+     * @param cal
+     * @param x
+     * @return
+     */
     protected static Calendar truncateMills(Calendar cal, long x) {
         cal.setTimeInMillis((cal.getTimeInMillis() / x) * x);
         return cal;
     }
 
+    /**
+     *
+     * @param cal
+     * @param x
+     * @return
+     */
     protected static Calendar truncateDays(Calendar cal, long x) {
         truncateMills(cal, TimeUnit.DAYS.toMillis(x));
         return cal;
     }
 
+    /**
+     *
+     * @param cal
+     * @param x
+     * @return
+     */
     protected static Calendar truncateWeek(Calendar cal, long x) {
         cal = truncateDays(cal, 1);
         int year = cal.get(Calendar.YEAR);
@@ -217,6 +342,12 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return cal;
     }
 
+    /**
+     *
+     * @param cal
+     * @param x
+     * @return
+     */
     protected static Calendar truncateMonth(Calendar cal, long x) {
         cal = truncateDays(cal, 1);
         int month = (int) ((cal.get(Calendar.MONTH) / x) * x);
@@ -225,6 +356,13 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return cal;
     }
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @param x
+     * @return
+     */
     protected static long distanceWeek(Calendar lhs, Calendar rhs, long x) {
         if (lhs.equals(rhs)) {
             return 0;
@@ -234,6 +372,13 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return (dist / x) + (dist % x != 0 ? 1 : 0);
     }
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @param x
+     * @return
+     */
     protected static long distanceMonth(Calendar lhs, Calendar rhs, long x) {
         if (lhs.equals(rhs)) {
             return 0;
@@ -246,6 +391,12 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return ((dist / x) + (dist % x != 0 ? 1 : 0)) * minus;
     }
 
+    /**
+     *
+     * @param cal
+     * @param x
+     * @return
+     */
     @Override
     public final Calendar advance(Calendar cal, long x) {
         Calendar c = truncate(cal);
@@ -262,6 +413,12 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         return advance(value, -1);
     }
 
+    /**
+     *
+     * @param lhs
+     * @param rhs
+     * @return
+     */
     @Override
     public final long distance(Calendar lhs, Calendar rhs) {
         Calendar x = truncate(lhs);

@@ -111,11 +111,17 @@ public class ExternalJdbcDriverLoader {
             catch (ClassNotFoundException ex) {
                 try {
                     Class<?> driverClass = Class.forName(classicDriverName, true, loader);
+                    // 読み込んだクラスがJDBCドライバーとして扱えるかどうかチェックする.
+                    // クラスローダーが別だったり、JDBCドライバーではないクラスであった場合、
+                    // 登録処理は行わない.
                     if (Driver.class.isAssignableFrom(driverClass)) {
                         Driver driver = (Driver) driverClass.newInstance();
                         registerDriver(new JdbcDriverProxy(driver));
                         result.add(driver);
                         logger.info("Load JDBC Driver. {}", driver);
+                    }
+                    else {
+                        logger.warn("{} is not JDBC Driver. ", driverClass);
                     }
                 }
                 catch (ClassNotFoundException | InstantiationException | IllegalAccessException | ClassCastException ex1) {

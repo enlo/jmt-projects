@@ -40,10 +40,17 @@ public class ThreadSafeServiceContainer extends AbstractServiceContainer {
 
     final ReadWriteLock rwl = new ReentrantReadWriteLock();
 
+    /**
+     *
+     */
     public ThreadSafeServiceContainer() {
         super(getSystemContainer());
     }
 
+    /**
+     *
+     * @param defaultProvider
+     */
     public ThreadSafeServiceContainer(ServiceProvider defaultProvider) {
         super(defaultProvider);
     }
@@ -53,11 +60,19 @@ public class ThreadSafeServiceContainer extends AbstractServiceContainer {
         super(defaultProvider, connections);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Guard readGuard() {
         return new LockGuard(this.rwl.readLock(), true);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected Guard writeGuard() {
         return new LockGuard(this.rwl.readLock(), true);

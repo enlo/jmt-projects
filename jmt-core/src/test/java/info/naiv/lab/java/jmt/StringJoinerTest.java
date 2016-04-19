@@ -27,7 +27,7 @@ import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.Matchers.is;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,13 +37,22 @@ import org.junit.Test;
  */
 public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
 
+    /**
+     *
+     */
     public StringJoinerTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -56,6 +65,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,b,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_GenericType_2() {
         StringJoiner joiner = StringJoiner.valueOf(",");
@@ -64,6 +76,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_GenericType_3() {
         StringJoiner joiner = StringJoiner.valueOf(",");
@@ -72,6 +87,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_GenericType_4() {
         StringJoiner joiner = new StringJoiner();
@@ -88,6 +106,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,b,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_Iterable_2() {
         StringJoiner joiner = StringJoiner.valueOf(",");
@@ -96,6 +117,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_Iterable_3() {
         StringJoiner joiner = StringJoiner.valueOf(",");
@@ -104,6 +128,9 @@ public class StringJoinerTest extends AbstractStringBuilderJoinerTest<String> {
         assertThat(actual, is("a,,c"));
     }
 
+    /**
+     *
+     */
     @Test
     public void testJoin_Iterable_4() {
         StringJoiner joiner = new StringJoiner();

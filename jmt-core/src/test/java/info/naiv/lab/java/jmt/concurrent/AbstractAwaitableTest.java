@@ -38,6 +38,9 @@ import static org.mockito.Mockito.when;
  */
 public class AbstractAwaitableTest {
 
+    /**
+     *
+     */
     public AbstractAwaitableTest() {
     }
 

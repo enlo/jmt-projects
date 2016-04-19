@@ -38,6 +38,7 @@ import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.InterruptibleBatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -128,23 +129,54 @@ public class SqlQuery implements Query {
     @Override
     public int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter) {
         String q = getSql();
-        return jdbcOperations.batchUpdate(q, new BatchPreparedStatementSetter() {
 
-            @Override
-            public int getBatchSize() {
-                return batchStatementSetter.getBatchSize() + 1;
-            }
+        BatchPreparedStatementSetter bpss;
+        if (batchStatementSetter instanceof InterruptibleBatchPreparedStatementSetter) {
+            final InterruptibleBatchPreparedStatementSetter ibpss = (InterruptibleBatchPreparedStatementSetter) batchStatementSetter;
+            bpss = new InterruptibleBatchPreparedStatementSetter() {
 
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                if (i == 0) {
-                    setter.setValues(ps);
+                @Override
+                public int getBatchSize() {
+                    return ibpss.getBatchSize();
                 }
-                else {
-                    batchStatementSetter.setValues(ps, i - 1);
+
+                @Override
+                public boolean isBatchExhausted(int i) {
+                    return ibpss.isBatchExhausted(i);
                 }
-            }
-        });
+
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    if (i == 0) {
+                        setter.setValues(ps);
+                    }
+                    else {
+                        batchStatementSetter.setValues(ps, i - 1);
+                    }
+                }
+            };
+        }
+        else {
+            bpss = new BatchPreparedStatementSetter() {
+
+                @Override
+                public int getBatchSize() {
+                    return batchStatementSetter.getBatchSize() + 1;
+                }
+
+                @Override
+                public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    if (i == 0) {
+                        setter.setValues(ps);
+                    }
+                    else {
+                        batchStatementSetter.setValues(ps, i - 1);
+                    }
+                }
+            };
+        }
+
+        return jdbcOperations.batchUpdate(q, bpss);
     }
 
     @Override
@@ -193,7 +225,7 @@ public class SqlQuery implements Query {
     }
 
     @Override
-    public <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor) {
+    public <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor) {
         String q = modifyForQuery(getSql());
         return jdbcOperations.query(q, setter, resultSetExtractor);
     }

@@ -25,7 +25,7 @@ package info.naiv.lab.java.jmt;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
@@ -34,6 +34,9 @@ import org.junit.Test;
  */
 public class ImmutableHolderTest {
 
+    /**
+     *
+     */
     public ImmutableHolderTest() {
     }
 

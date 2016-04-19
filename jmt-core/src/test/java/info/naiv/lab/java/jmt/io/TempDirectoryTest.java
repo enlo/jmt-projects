@@ -46,6 +46,9 @@ public abstract class TempDirectoryTest {
 
     private final ResourceLoader loader = new DefaultResourceLoader();
 
+    /**
+     *
+     */
     public TempDirectoryTest() {
     }
 
@@ -252,8 +255,18 @@ public abstract class TempDirectoryTest {
         assertThat(temp.toString(), is(containsString(temp.getPath().toString())));
     }
 
+    /**
+     *
+     * @return @throws IOException
+     */
     protected abstract TempDirectory newConcrete() throws IOException;
 
+    /**
+     *
+     * @param prefix
+     * @return
+     * @throws IOException
+     */
     protected abstract TempDirectory newConcrete(String prefix) throws IOException;
 
 }

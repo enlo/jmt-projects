@@ -23,9 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
-import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 
 /**
  *

@@ -423,7 +423,7 @@ public class SqlQueryTest {
         u.setName("Phillip");
         Query query = loader.fromString("select * from Users where Name like @bind{name + ' %'}").merge(u);
         RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
-        List<User> users = query.query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
+        List<User> users = query.<List<User>>query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(2));
@@ -454,13 +454,13 @@ public class SqlQueryTest {
         u.setName("Phillip");
         Query query = loader.fromString("select * from Users where Name like @bind{name + ' %'}").merge(u);
         RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
-        List<User> users = query.query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
+        List<User> users = query.query(jdbcTemplate, rowMapper);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(2));
 
         Query query2 = query.rebind(Arrays.asList("Rowan %"));
-        users = query2.query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
+        users = query2.query(jdbcTemplate, rowMapper);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(1));
@@ -475,13 +475,13 @@ public class SqlQueryTest {
         u.setName("Phillip");
         Query query = loader.fromString("select * from Users where Name like @bind{name + ' %'}").merge(u);
         RowMapper<User> rowMapper = BeanPropertyRowMapper.newInstance(User.class);
-        List<User> users = query.query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
+        List<User> users = query.query(jdbcTemplate, rowMapper);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(2));
 
         Query query2 = query.rebind(new ArgumentPreparedStatementSetter(new String[]{"Rowan %"}));
-        users = query2.query(jdbcTemplate, new RowMapperResultSetExtractor(rowMapper));
+        users = query2.query(jdbcTemplate, rowMapper);
         assertThat(users, is(notNullValue()));
         assertThat(users, hasSize(1));
         assertThat(users.get(0).id, is(1));

@@ -34,11 +34,19 @@ import java.util.Calendar;
 public class DefaultCurrentDateProvider
         implements CurrentDateProvider, SystemComponent {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Calendar getNow() {
         return Calendar.getInstance();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public Calendar getToday() {
         Calendar cal = Calendar.getInstance();

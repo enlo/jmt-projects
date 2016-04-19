@@ -31,6 +31,10 @@ import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *
+ * @author enlo
+ */
 @Slf4j
 public class Closeables {
 
@@ -51,6 +55,12 @@ public class Closeables {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param list
+     * @return
+     */
     @SuppressWarnings("ThrowableResultIgnored")
     public static <T extends AutoCloseable> Map<T, Exception> closeAll(Iterable<T> list) {
         Map<T, Exception> result = new HashMap<>();
@@ -92,6 +102,10 @@ public class Closeables {
         }
     }
 
+    /**
+     *
+     * @param object
+     */
     public static void nonThrowClose(AutoCloseable object) {
         Exception e = close(object);
         if (e != null) {
@@ -99,6 +113,12 @@ public class Closeables {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param object
+     * @return
+     */
     @ReturnNonNull
     public static <T> ACS<T> of(final T object) {
         if (object == null) {
@@ -124,6 +144,13 @@ public class Closeables {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param object
+     * @param closeMethod
+     * @return
+     */
     @ReturnNonNull
     public static <T> ACS<T> of(T object, Consumer1<T> closeMethod) {
         return new DelegatingAutoCloseable<>(object, closeMethod);

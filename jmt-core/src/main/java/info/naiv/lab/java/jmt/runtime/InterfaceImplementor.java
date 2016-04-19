@@ -38,6 +38,13 @@ import java.security.AccessController;
  */
 public class InterfaceImplementor {
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @param handler
+     * @return
+     */
     @ReturnNonNull
     public static <T> T getInterface(Class<T> clazz, InvocationHandler handler) {
         isInterface(clazz, "clazz");
@@ -47,6 +54,13 @@ public class InterfaceImplementor {
         return clazz.cast(proxy);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @param externalRunner
+     * @return
+     */
     @ReturnNonNull
     public static <T> T getInterface(Class<T> clazz, Function2<Method, Object[], ? extends Object> externalRunner) {
         isInterface(clazz, "clazz");
@@ -55,6 +69,12 @@ public class InterfaceImplementor {
         return getInterface(clazz, handler);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
     @ReturnNonNull
     public static <T> T getInterface(Class<T> clazz) {
         return getInterface(clazz, (Function2<Method, Object[], ? extends Object>) null);

@@ -27,8 +27,8 @@ import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getCurrentDateProvider;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.io.IOException;
-import java.nio.file.*;
 import static java.nio.file.Files.getLastModifiedTime;
+import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Calendar;
@@ -44,6 +44,11 @@ public class DaysVisitor extends AbstractFileVisitor {
     final long border;
     final Predicate1<FileTime> comp;
 
+    /**
+     *
+     * @param comp
+     * @param days
+     */
     public DaysVisitor(Comparator<Long> comp, int days) {
         Calendar today = getCurrentDateProvider().getToday();
         if (days < 0) {
@@ -56,6 +61,13 @@ public class DaysVisitor extends AbstractFileVisitor {
         }
     }
 
+    /**
+     *
+     * @param entry
+     * @param attrs
+     * @return
+     * @throws IOException
+     */
     @Override
     protected boolean accept(Path entry, BasicFileAttributes attrs) throws IOException {
         return comp.test(getLastModifiedTime(entry));

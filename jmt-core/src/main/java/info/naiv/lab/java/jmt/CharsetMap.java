@@ -70,6 +70,11 @@ public final class CharsetMap extends SingletonMapSupport<String, Charset> {
         return cs.name().equals(name) || cs.aliases().contains(name);
     }
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     @Override
     @ReturnNonNull
     protected Charset newValue(String key) {

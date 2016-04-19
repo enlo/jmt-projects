@@ -33,6 +33,9 @@ import java.util.Collection;
  */
 public abstract class CollectionBuilder<T> {
 
+    /**
+     *
+     */
     protected final Collection<T> collection;
 
     /**
@@ -65,5 +68,9 @@ public abstract class CollectionBuilder<T> {
         return this;
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract Collection<T> build();
 }

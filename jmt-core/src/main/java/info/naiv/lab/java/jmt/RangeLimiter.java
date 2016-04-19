@@ -30,5 +30,10 @@ package info.naiv.lab.java.jmt;
  */
 public interface RangeLimiter<T> {
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     public T limit(T value);
 }

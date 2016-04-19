@@ -50,6 +50,10 @@ public class CloseableLock extends ImmutableHolder<Lock> implements Lock, ACS<Lo
         return lck;
     }
 
+    /**
+     *
+     * @param lock
+     */
     public CloseableLock(Lock lock) {
         super(nonNull(lock, "lock"), Lock.class);
     }

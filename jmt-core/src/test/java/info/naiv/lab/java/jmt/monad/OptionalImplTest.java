@@ -36,8 +36,8 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -45,6 +45,9 @@ import static org.junit.Assert.*;
  */
 public class OptionalImplTest {
 
+    /**
+     *
+     */
     public OptionalImplTest() {
     }
 

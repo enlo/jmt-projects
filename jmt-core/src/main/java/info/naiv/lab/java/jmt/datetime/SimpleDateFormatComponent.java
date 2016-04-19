@@ -30,24 +30,29 @@ import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Map;
-import org.slf4j.Logger;
-import static org.slf4j.LoggerFactory.getLogger;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author enlo
  */
+@Slf4j
 public class SimpleDateFormatComponent
         extends AbstractTlsServiceComponent<SimpleDateFormat>
         implements SystemComponent {
-
-    private static final Logger logger = getLogger(SimpleDateFormatComponent.class);
 
     @Override
     public Class<? extends SimpleDateFormat> getContentType() {
         return SimpleDateFormat.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, SimpleDateFormat> map, Tag tag, ServiceProvider provider) {
         Serializable id = tag.getId();

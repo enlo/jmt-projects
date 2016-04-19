@@ -30,5 +30,9 @@ package info.naiv.lab.java.jmt.fx;
  */
 public interface Consumer1<A1> {
 
+    /**
+     *
+     * @param a1
+     */
     void accept(A1 a1);
 }

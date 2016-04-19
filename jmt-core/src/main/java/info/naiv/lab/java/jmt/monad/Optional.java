@@ -39,8 +39,16 @@ import java.util.Set;
  */
 public interface Optional<T> extends Iterable<T>, Serializable {
 
+    /**
+     *
+     */
     Optional EMPTY = new OptionalImpl(null);
 
+    /**
+     *
+     * @param consumer
+     * @return
+     */
     Optional<T> bind(Consumer1<? super T> consumer);
 
     /**
@@ -69,6 +77,10 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      */
     T get();
 
+    /**
+     *
+     * @param consumer
+     */
     void ifPresent(Consumer1<? super T> consumer);
 
     /**
@@ -81,18 +93,45 @@ public interface Optional<T> extends Iterable<T>, Serializable {
     @Override
     Iterator<T> iterator();
 
+    /**
+     *
+     * @param <U>
+     * @param mapper
+     * @return
+     */
     @ReturnNonNull
     <U> Optional<U> map(Function1<? super T, ? extends U> mapper);
 
+    /**
+     *
+     * @param other
+     * @return
+     */
     @ReturnNonNull
     T orElse(T other);
 
+    /**
+     *
+     * @param other
+     * @return
+     */
     @ReturnNonNull
     T orElseGet(Supplier<? extends T> other);
 
+    /**
+     *
+     * @param <X>
+     * @param exceptionSupplier
+     * @return
+     * @throws X
+     */
     @ReturnNonNull
     <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     Set<T> toSet();
 

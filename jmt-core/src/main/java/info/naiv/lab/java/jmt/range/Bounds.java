@@ -23,20 +23,48 @@
  */
 package info.naiv.lab.java.jmt.range;
 
+/**
+ *
+ * @author enlo
+ */
 public class Bounds {
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     public static <T extends Comparable<T>> Bound.ClosedLowerBound<T> closedLo(T value) {
         return new Bound.ClosedLowerBound<>(value);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     public static <T extends Comparable<T>> Bound.ClosedUpperBound<T> closedUp(T value) {
         return new Bound.ClosedUpperBound<>(value);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     public static <T extends Comparable<T>> Bound.OpenLowerBound<T> openLo(T value) {
         return new Bound.OpenLowerBound<>(value);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param value
+     * @return
+     */
     public static <T extends Comparable<T>> Bound.OpenUpperBound<T> openUp(T value) {
         return new Bound.OpenUpperBound<>(value);
     }

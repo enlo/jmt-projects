@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.support.spring;
 
 import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.ElementType.FIELD;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import java.lang.annotation.Target;
@@ -38,5 +38,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface InjectService {
 
+    /**
+     *
+     * @return
+     */
     String value() default "";
 }

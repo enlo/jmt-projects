@@ -31,6 +31,9 @@ import info.naiv.lab.java.jmt.mark.ReturnNonNull;
  */
 public class Guard implements ACS<Guard> {
 
+    /**
+     *
+     */
     public static final Guard EMPTY = new Guard();
 
     @Override
@@ -38,6 +41,9 @@ public class Guard implements ACS<Guard> {
         leave();
     }
 
+    /**
+     *
+     */
     public void enter() {
     }
 
@@ -52,6 +58,9 @@ public class Guard implements ACS<Guard> {
         return this.getClass();
     }
 
+    /**
+     *
+     */
     public void leave() {
     }
 

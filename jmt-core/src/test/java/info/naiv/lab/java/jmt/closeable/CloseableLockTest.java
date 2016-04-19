@@ -8,11 +8,20 @@ package info.naiv.lab.java.jmt.closeable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
-import static org.hamcrest.Matchers.*;
-import org.junit.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
+import org.junit.After;
+import org.junit.AfterClass;
+import static org.junit.Assert.assertThat;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
 
 /**
@@ -21,10 +30,16 @@ import org.mockito.MockitoAnnotations;
  */
 public class CloseableLockTest {
 
+    /**
+     *
+     */
     @BeforeClass
     public static void setUpClass() {
     }
 
+    /**
+     *
+     */
     @AfterClass
     public static void tearDownClass() {
     }
@@ -32,14 +47,23 @@ public class CloseableLockTest {
     @Mock(name = "lockmock")
     Lock lock;
 
+    /**
+     *
+     */
     public CloseableLockTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -56,6 +80,9 @@ public class CloseableLockTest {
         verify(lock, times(1)).unlock();
     }
 
+    /**
+     *
+     */
     @Test()
     public void testCtor() {
         CloseableLock lck = new CloseableLock(lock);
@@ -84,6 +111,9 @@ public class CloseableLockTest {
         verify(lock, times(1)).lockInterruptibly();
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testLock_NullArg() {
         CloseableLock.lock(null);
@@ -102,6 +132,9 @@ public class CloseableLockTest {
         assertThat(instance.newCondition(), is(sameInstance(mockCond)));
     }
 
+    /**
+     *
+     */
     @Test
     public void testStaticLock() {
         CloseableLock lck = CloseableLock.lock(lock);

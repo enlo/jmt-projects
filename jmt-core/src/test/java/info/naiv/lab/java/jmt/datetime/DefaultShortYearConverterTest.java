@@ -8,7 +8,7 @@ package info.naiv.lab.java.jmt.datetime;
 import java.util.Calendar;
 import static org.hamcrest.Matchers.is;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,9 +21,15 @@ public class DefaultShortYearConverterTest {
     private Calendar baseDate;
     private ShortYearConverter instance;
 
+    /**
+     *
+     */
     public DefaultShortYearConverterTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         baseDate = Calendar.getInstance();
@@ -31,6 +37,9 @@ public class DefaultShortYearConverterTest {
         instance = new DefaultShortYearConverter();
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }
@@ -60,6 +69,9 @@ public class DefaultShortYearConverterTest {
 
     }
 
+    /**
+     *
+     */
     @Test(expected = IllegalArgumentException.class)
     public void testConvert_2() {
         instance.convert(-1, baseDate);

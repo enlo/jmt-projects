@@ -29,7 +29,13 @@ package info.naiv.lab.java.jmt.range;
  */
 public enum BoundType {
 
+    /**
+     *
+     */
     CLOSED("[", "<=", "]", ">="),
+    /**
+     *
+     */
     OPEN("(", "<", ")", ">"),;
 
     private BoundType(String l, String lop, String r, String rop) {
@@ -44,18 +50,34 @@ public enum BoundType {
     private final String r;
     private final String rop;
 
+    /**
+     *
+     * @return
+     */
     public String left() {
         return l;
     }
 
+    /**
+     *
+     * @return
+     */
     public String leftOperator() {
         return lop;
     }
 
+    /**
+     *
+     * @return
+     */
     public String right() {
         return r;
     }
 
+    /**
+     *
+     * @return
+     */
     public String rightOperator() {
         return rop;
     }

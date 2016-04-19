@@ -43,6 +43,10 @@ public abstract class AbstractOptionalSystemComponent implements OptionalSystemC
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     protected final String checkClass() {
         String found = null;
         for (String fqdn : getTargetClasses()) {
@@ -57,6 +61,11 @@ public abstract class AbstractOptionalSystemComponent implements OptionalSystemC
         return found;
     }
 
+    /**
+     *
+     * @param className
+     * @return
+     */
     protected final SystemComponent createComponent(String className) {
         String realClassName = resolveClassName(className);
         if (realClassName == null) {
@@ -65,12 +74,26 @@ public abstract class AbstractOptionalSystemComponent implements OptionalSystemC
         return createInstance(realClassName);
     }
 
+    /**
+     *
+     * @param className
+     * @return
+     */
     protected SystemComponent createInstance(String className) {
         return (SystemComponent) Misc.newInstance(className).orElse(null);
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract Iterable<String> getTargetClasses();
 
+    /**
+     *
+     * @param className
+     * @return
+     */
     protected String resolveClassName(String className) {
         return className;
     }

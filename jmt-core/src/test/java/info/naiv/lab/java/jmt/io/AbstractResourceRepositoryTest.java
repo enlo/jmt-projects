@@ -26,8 +26,8 @@ package info.naiv.lab.java.jmt.io;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -35,9 +35,16 @@ import static org.junit.Assert.*;
  */
 public abstract class AbstractResourceRepositoryTest {
 
+    /**
+     *
+     */
     public AbstractResourceRepositoryTest() {
     }
 
+    /**
+     *
+     * @return
+     */
     public abstract AbstractResourceRepository newConcrete();
 
     /**
@@ -51,6 +58,8 @@ public abstract class AbstractResourceRepositoryTest {
 
     /**
      * Test of getResource method, of class AbstractResourceRepository.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetResource() throws Exception {
@@ -69,6 +78,8 @@ public abstract class AbstractResourceRepositoryTest {
 
     /**
      * Test of getResources method, of class AbstractResourceRepository.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetResources_String() throws Exception {
@@ -78,6 +89,8 @@ public abstract class AbstractResourceRepositoryTest {
 
     /**
      * Test of getResources method, of class AbstractResourceRepository.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testGetResources_String_String() throws Exception {

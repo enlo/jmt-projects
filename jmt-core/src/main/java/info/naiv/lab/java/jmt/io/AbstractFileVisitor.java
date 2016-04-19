@@ -2,9 +2,12 @@ package info.naiv.lab.java.jmt.io;
 
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.FileVisitResult;
 import static java.nio.file.FileVisitResult.CONTINUE;
 import static java.nio.file.Files.readAttributes;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 
 /**
@@ -31,8 +34,22 @@ public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implem
         return CONTINUE;
     }
 
+    /**
+     *
+     * @param entry
+     * @param attrs
+     * @return
+     * @throws IOException
+     */
     protected abstract boolean accept(Path entry, BasicFileAttributes attrs) throws IOException;
 
+    /**
+     *
+     * @param file
+     * @param attrs
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     protected FileVisitResult onTarget(Path file, BasicFileAttributes attrs) throws IOException {
         return CONTINUE;

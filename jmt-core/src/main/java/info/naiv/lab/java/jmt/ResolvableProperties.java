@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Properties;
@@ -35,6 +36,10 @@ import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
 
+/**
+ *
+ * @author enlo
+ */
 public class ResolvableProperties extends Properties {
 
     /**
@@ -54,6 +59,9 @@ public class ResolvableProperties extends Properties {
         this(defaultHelper, other);
     }
 
+    /**
+     *
+     */
     public ResolvableProperties() {
         this.helper = defaultHelper;
     }
@@ -114,6 +122,13 @@ public class ResolvableProperties extends Properties {
         return this;
     }
 
+    /**
+     *
+     * @param uriLocation
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     public ResolvableProperties loadFromResource(String uriLocation, Charset charset) throws IOException {
         String path = eval(uriLocation);
         Resource r = (new DefaultResourceLoader()).getResource(path);
@@ -122,6 +137,23 @@ public class ResolvableProperties extends Properties {
         return this;
     }
 
+    /**
+     *
+     * @param propertyName
+     * @param value
+     * @return
+     */
+    public ResolvableProperties setPropertyIfValueNotBlank(String propertyName, String value) {
+        if (isNotBlank(value)) {
+            setProperty(propertyName, value);
+        }
+        return this;
+    }
+
+    /**
+     *
+     * @return
+     */
     public ConcurrentMap<String, String> toMap() {
         ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
         for (String key : this.stringPropertyNames()) {
@@ -175,6 +207,11 @@ public class ResolvableProperties extends Properties {
         });
     }
 
+    /**
+     *
+     * @param propertyName
+     * @return
+     */
     protected String resolveProperty(String propertyName) {
         String value = getPropertyCore(propertyName, null);
         if (value == null) {

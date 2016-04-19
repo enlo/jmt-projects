@@ -33,12 +33,36 @@ import info.naiv.lab.java.jmt.mark.ThreadSafety;
 @ThreadSafety
 public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
 
+    /**
+     *
+     */
     public static final StringJoiner COMMADELIMITED = new StringJoiner(",");
+
+    /**
+     *
+     */
     public static final StringJoiner DOTTED = new StringJoiner(".");
+
+    /**
+     *
+     */
     public static final StringJoiner HYPHENATED = new StringJoiner("-");
+
+    /**
+     *
+     */
     public static final StringJoiner SIMPLE = new StringJoiner();
+
+    /**
+     *
+     */
     public static final StringJoiner SLASHED = new StringJoiner("/");
 
+    /**
+     *
+     * @param delim
+     * @return
+     */
     public static StringJoiner valueOf(String delim) {
         if (delim == null) {
             return SIMPLE;
@@ -57,6 +81,10 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
         }
     }
 
+    /**
+     *
+     * @param delim
+     */
     public StringJoiner(final String delim) {
         super(new SimpleAdder(), new Adder<Object, StringBuilder>() {
             @Override
@@ -66,6 +94,9 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
         });
     }
 
+    /**
+     *
+     */
     public StringJoiner() {
         super(new SimpleAdder());
     }

@@ -45,18 +45,33 @@ public class ByteBufferOutputStream extends OutputStream {
     @NonNull
     private ByteBuffer byteBuffer;
 
+    /**
+     *
+     */
     public ByteBufferOutputStream() {
         this(NIOUtils.DEFAULT_BUFFER_SIZE);
     }
 
+    /**
+     *
+     * @param initialSize
+     */
     public ByteBufferOutputStream(int initialSize) {
         byteBuffer = allocate(initialSize);
     }
 
+    /**
+     *
+     * @return
+     */
     public synchronized ByteBuffer copyBuffer() {
         return byteBuffer.duplicate();
     }
 
+    /**
+     *
+     * @return
+     */
     public ByteBuffer flip() {
         return (ByteBuffer) byteBuffer.flip();
     }

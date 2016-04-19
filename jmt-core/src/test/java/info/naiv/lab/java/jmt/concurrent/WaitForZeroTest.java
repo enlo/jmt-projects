@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
@@ -38,6 +38,9 @@ import static org.junit.Assert.*;
  */
 public class WaitForZeroTest {
 
+    /**
+     *
+     */
     public WaitForZeroTest() {
     }
 
@@ -63,6 +66,9 @@ public class WaitForZeroTest {
         assertThat(w4z.await(), is(true));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor() {
         WaitForZero w4z = new WaitForZero();

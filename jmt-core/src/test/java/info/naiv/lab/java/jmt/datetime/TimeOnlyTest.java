@@ -30,9 +30,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import org.apache.commons.lang3.time.DateUtils;
 import static org.hamcrest.Matchers.is;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -45,6 +45,9 @@ public class TimeOnlyTest {
     CurrentDateProvider currentDateProvider;
     Calendar testCalendar;
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         ServiceProviders.setThreadContainer(null);
@@ -56,6 +59,9 @@ public class TimeOnlyTest {
         ServiceProviders.getThreadContainer().registerService(currentDateProvider);
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor() {
         Date actual = new TimeOnly();
@@ -64,6 +70,9 @@ public class TimeOnlyTest {
         assertThat(actual, is(expected.getTime()));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_hms() {
         Date actual = new TimeOnly(16, 24, 30);
@@ -76,6 +85,9 @@ public class TimeOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_hmsi() {
         Date actual = new TimeOnly(16, 24, 30, 123);
@@ -88,6 +100,9 @@ public class TimeOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_long1() {
         Date actual = new TimeOnly(0);
@@ -95,6 +110,9 @@ public class TimeOnlyTest {
         assertThat(actual, is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testCtor_long2() {
         long x = 1234567890;

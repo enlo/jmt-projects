@@ -36,6 +36,9 @@ import org.junit.Test;
  */
 public class DateTimeMaskTest {
 
+    /**
+     *
+     */
     @Test
     public void testDATE_MASK_between() {
         Calendar x1 = ClassicDateUtils.createCalendar(2015, 1, 17, 20, 19, 19);
@@ -56,6 +59,9 @@ public class DateTimeMaskTest {
         assertThat(DateTimeMask.DATE_MASK.between(x7, from, to), is(true));
     }
 
+    /**
+     *
+     */
     @Test
     public void testDATE_MASK_mask() {
         Calendar in = ClassicDateUtils.createCalendar(2015, 1, 17, 18, 19, 20);
@@ -63,6 +69,9 @@ public class DateTimeMaskTest {
         assertThat(DateTimeMask.DATE_MASK.mask(in), is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testNO_MASK_between() {
         Calendar x1 = ClassicDateUtils.createCalendar(2015, 1, 17, 20, 19, 19);
@@ -83,6 +92,9 @@ public class DateTimeMaskTest {
         assertThat(DateTimeMask.NO_MASK.between(x7, from, to), is(false));
     }
 
+    /**
+     *
+     */
     @Test
     public void testNO_MASK_mask() {
         Calendar in = ClassicDateUtils.createCalendar(2015, 1, 17, 18, 19, 20);
@@ -90,6 +102,9 @@ public class DateTimeMaskTest {
         assertThat(DateTimeMask.NO_MASK.mask(in), is(expected));
     }
 
+    /**
+     *
+     */
     @Test
     public void testTIME_MASK_between() {
         Calendar x1 = ClassicDateUtils.createCalendar(2015, 1, 17, 20, 19, 19);
@@ -110,6 +125,9 @@ public class DateTimeMaskTest {
         assertThat(DateTimeMask.TIME_MASK.between(x7, from, to), is(false));
     }
 
+    /**
+     *
+     */
     @Test
     public void testTIME_MASK_mask() {
         Calendar in = ClassicDateUtils.createCalendar(2015, 1, 17, 18, 19, 20);

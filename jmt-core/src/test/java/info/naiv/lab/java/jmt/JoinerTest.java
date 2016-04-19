@@ -28,9 +28,14 @@ import org.junit.Test;
 /**
  *
  * @author enlo
+ * @param <R>
+ * @param <T>
  */
 public abstract class JoinerTest<R, T> {
 
+    /**
+     *
+     */
     public JoinerTest() {
     }
 

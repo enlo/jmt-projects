@@ -53,6 +53,9 @@ import org.junit.Test;
  */
 public class ClassicArrayUtilsTest {
 
+    /**
+     *
+     */
     public ClassicArrayUtilsTest() {
     }
 

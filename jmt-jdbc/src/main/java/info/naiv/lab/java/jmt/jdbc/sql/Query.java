@@ -66,7 +66,7 @@ public interface Query {
 
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory);
 
-    <T> List<T> query(JdbcOperations jdbcOperations, ResultSetExtractor<List<T>> resultSetExtractor);
+    <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor);
 
     /**
      * 単一の行を取得し、Bean に詰め替える.

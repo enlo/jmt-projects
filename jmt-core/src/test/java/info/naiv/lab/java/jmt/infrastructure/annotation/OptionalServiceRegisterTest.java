@@ -48,6 +48,9 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  */
 public class OptionalServiceRegisterTest {
 
+    /**
+     *
+     */
     public OptionalServiceRegisterTest() {
     }
 
@@ -89,6 +92,10 @@ public class OptionalServiceRegisterTest {
         assertThat(container.resolveService(OptionalTestClass6.class), is(notNullValue()));
     }
 
+    /**
+     *
+     * @return
+     */
     protected OptionalServiceRegister newInstance() {
         OptionalServiceRegister instance = new OptionalServiceRegister();
         ResourcePatternResolver res = new PathMatchingResourcePatternResolver();

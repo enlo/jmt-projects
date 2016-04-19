@@ -1,4 +1,3 @@
-
 package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
 import info.naiv.lab.java.jmt.ComparableComparator;
@@ -22,7 +21,7 @@ import org.springframework.jdbc.support.JdbcUtils;
  * @author enlo
  */
 public class PojoGenerator {
-    
+
     final String schema;
     final String packageName;
     final String classNameSuffix;

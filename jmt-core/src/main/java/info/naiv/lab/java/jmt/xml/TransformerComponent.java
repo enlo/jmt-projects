@@ -18,6 +18,12 @@ public class TransformerComponent
         extends AbstractTlsServiceComponent<Transformer>
         implements SystemComponent {
 
+    /**
+     *
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     @ReturnNonNull
     public Transformer getContent(Tag tag, ServiceProvider provider) {
@@ -31,6 +37,13 @@ public class TransformerComponent
         return Transformer.class;
     }
 
+    /**
+     *
+     * @param map
+     * @param tag
+     * @param provider
+     * @return
+     */
     @Override
     protected boolean handleNotFound(Map<Tag, Transformer> map, Tag tag, ServiceProvider provider) {
         try {

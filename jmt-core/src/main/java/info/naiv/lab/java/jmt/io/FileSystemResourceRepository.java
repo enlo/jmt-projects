@@ -55,10 +55,18 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
     @NonNull
     Path rootDirectory;
 
+    /**
+     *
+     */
     public FileSystemResourceRepository() {
         setResourceLoader(new FileSystemResourceLoader());
     }
 
+    /**
+     *
+     * @param filePattern
+     * @param rootDirectory
+     */
     public FileSystemResourceRepository(String filePattern, Path rootDirectory) {
         this();
         this.rootDirectory = rootDirectory;
@@ -92,6 +100,13 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
         }
     }
 
+    /**
+     *
+     * @param target
+     * @param globPattern
+     * @return
+     * @throws IOException
+     */
     protected Iterable<Path> listPath(Path target, String globPattern) throws IOException {
         if (globPattern == null || "*".equals(globPattern)) {
             return Files.newDirectoryStream(target);
@@ -101,12 +116,25 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
         }
     }
 
+    /**
+     *
+     * @param category
+     * @param name
+     * @return
+     */
     @Override
     protected String resolveLocation(String category, String name) {
         Path path = getCategoryPath(category).resolve(name);
         return path.toString();
     }
 
+    /**
+     *
+     * @param category
+     * @param globPattern
+     * @return
+     * @throws IOException
+     */
     @Override
     protected Map<String, String> resolveLocations(String category, String globPattern) throws IOException {
         Map<String, String> result = new HashMap<>();

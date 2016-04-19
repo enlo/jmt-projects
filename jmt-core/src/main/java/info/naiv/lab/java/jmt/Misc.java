@@ -1,7 +1,5 @@
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.iterator.FlatIterableIterator;
-import info.naiv.lab.java.jmt.iterator.MappingIterator;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
@@ -13,6 +11,8 @@ import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.io.NIOUtils;
+import info.naiv.lab.java.jmt.iterator.FlatIterableIterator;
+import info.naiv.lab.java.jmt.iterator.MappingIterator;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.monad.Iteratee;
@@ -48,6 +48,10 @@ import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
+/**
+ *
+ * @author enlo
+ */
 @Slf4j
 public abstract class Misc {
 
@@ -71,6 +75,13 @@ public abstract class Misc {
         return list.add(obj);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param iter
+     * @param n
+     * @return
+     */
     public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
         for (int i = 0; i < n && iter.hasNext(); i++) {
             iter.next();
@@ -189,11 +200,24 @@ public abstract class Misc {
         return (lhs == rhs) || ((lhs != null) && lhs.equals(rhs));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param iterable
+     * @param predicate
+     * @return
+     */
     @ReturnNonNull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<T> predicate) {
         return new IterateeImpl<>(iterable, predicate);
     }
 
+    /**
+     *
+     * @param <T>
+     * @param items
+     * @return
+     */
     @ReturnNonNull
     public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
         return new Iterable<T>() {
@@ -489,6 +513,14 @@ public abstract class Misc {
         return dest;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param <U>
+     * @param iter
+     * @param mapper
+     * @return
+     */
     @ReturnNonNull
     public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
         return new Iterable<U>() {
@@ -597,6 +629,12 @@ public abstract class Misc {
         return new ArrayList<>(Arrays.asList(values));
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
     public static <T> T newInstance(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -606,6 +644,12 @@ public abstract class Misc {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
     public static <T> Optional<T> newInstance(Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
             return OptionalImpl.ofNullable(newInstance(clazz.get()));
@@ -615,6 +659,11 @@ public abstract class Misc {
         }
     }
 
+    /**
+     *
+     * @param className
+     * @return
+     */
     public static Optional<Object> newInstance(String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
         return newInstance((Optional) clazz);
@@ -819,6 +868,42 @@ public abstract class Misc {
         return defaultValue;
     }
 
+    /**
+     *
+     * @param source
+     * @param defaultValue
+     * @return
+     */
+    public static boolean toBoolean(Boolean source, boolean defaultValue) {
+        return source != null ? source : defaultValue;
+    }
+
+    /**
+     *
+     * @param source
+     * @param defaultValue
+     * @return
+     */
+    public static boolean toBoolean(String source, boolean defaultValue) {
+        return source != null ? Boolean.parseBoolean(source) : defaultValue;
+    }
+
+    /**
+     *
+     * @param source
+     * @param defaultValue
+     * @return
+     */
+    public static boolean toBoolean(Number source, boolean defaultValue) {
+        return source != null ? source.doubleValue() != 0 : defaultValue;
+    }
+
+    /**
+     *
+     * @param text
+     * @param charset
+     * @return
+     */
     @ReturnNonNull
     public static byte[] toByteArray(String text, String charset) {
         if (text == null) {
@@ -828,6 +913,11 @@ public abstract class Misc {
         return text.getBytes(cs);
     }
 
+    /**
+     *
+     * @param resource
+     * @return
+     */
     @ReturnNonNull
     public static byte[] toByteArray(Resource resource) {
         if (resource == null) {
@@ -899,6 +989,12 @@ public abstract class Misc {
         return defaultValue;
     }
 
+    /**
+     *
+     * @param source
+     * @param defaultValue
+     * @return
+     */
     public static Double toDoubleNum(Number source, Double defaultValue) {
         if (source != null) {
             return source.doubleValue();
@@ -908,6 +1004,12 @@ public abstract class Misc {
         }
     }
 
+    /**
+     *
+     * @param source
+     * @param defaultValue
+     * @return
+     */
     public static Float toFloatNum(Number source, Float defaultValue) {
         if (source != null) {
             return source.floatValue();

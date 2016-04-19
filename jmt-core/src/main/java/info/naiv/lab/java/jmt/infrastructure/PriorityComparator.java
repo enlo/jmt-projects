@@ -31,6 +31,9 @@ import java.util.Comparator;
  */
 public class PriorityComparator implements Comparator<ServiceConnection> {
 
+    /**
+     *
+     */
     public static final PriorityComparator INSTANCE = new PriorityComparator();
 
     @Override

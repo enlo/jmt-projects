@@ -66,8 +66,19 @@ public abstract class AbstractAwaitable implements Awaitable {
         return lastException.get();
     }
 
+    /**
+     *
+     * @return @throws Exception
+     */
     protected abstract boolean doAwait() throws Exception;
 
+    /**
+     *
+     * @param timeout
+     * @param unit
+     * @return
+     * @throws Exception
+     */
     protected abstract boolean doAwait(long timeout, TimeUnit unit) throws Exception;
 
 }

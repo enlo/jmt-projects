@@ -27,9 +27,10 @@ package info.naiv.lab.java.jmt.datetime;
 
 import java.util.Calendar;
 import org.apache.commons.lang3.ArrayUtils;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.arrayContaining;
+import static org.hamcrest.Matchers.is;
 import org.junit.After;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,14 +42,23 @@ public class WeekSettingsTest {
 
     WeekSettings weekSettings;
 
+    /**
+     *
+     */
     public WeekSettingsTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void setUp() {
         weekSettings = new WeekSettings(Calendar.MONDAY, Calendar.WEDNESDAY, new int[]{Calendar.FRIDAY});
     }
 
+    /**
+     *
+     */
     @After
     public void tearDown() {
     }

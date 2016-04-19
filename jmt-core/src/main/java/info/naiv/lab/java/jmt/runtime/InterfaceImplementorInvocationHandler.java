@@ -38,16 +38,31 @@ import lombok.Setter;
  */
 public class InterfaceImplementorInvocationHandler implements InvocationHandler {
 
+    /**
+     *
+     */
     protected final AccessControlContext accCtrlContext;
 
+    /**
+     *
+     */
     @Getter
     @Setter
     protected Function2<Method, Object[], ? extends Object> externalRunner;
 
+    /**
+     *
+     * @param accCtrlContext
+     */
     public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext) {
         this(accCtrlContext, null);
     }
 
+    /**
+     *
+     * @param accCtrlContext
+     * @param externalRunner
+     */
     public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext, Function2<Method, Object[], ? extends Object> externalRunner) {
         this.accCtrlContext = accCtrlContext;
         this.externalRunner = externalRunner;
@@ -65,14 +80,32 @@ public class InterfaceImplementorInvocationHandler implements InvocationHandler 
         return convertResult(method, result);
     }
 
+    /**
+     *
+     * @param method
+     * @param args
+     * @return
+     */
     protected Object[] convertArguments(Method method, Object[] args) {
         return args;
     }
 
+    /**
+     *
+     * @param method
+     * @param result
+     * @return
+     */
     protected Object convertResult(Method method, Object result) {
         return result;
     }
 
+    /**
+     *
+     * @param method
+     * @param args
+     * @return
+     */
     protected Object internalInvoke(Method method, Object[] args) {
         if (externalRunner != null) {
             return externalRunner.apply(method, args);

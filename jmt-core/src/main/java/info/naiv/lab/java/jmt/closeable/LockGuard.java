@@ -33,6 +33,11 @@ public class LockGuard extends Guard {
 
     private final Lock lock;
 
+    /**
+     *
+     * @param lock
+     * @param doLock
+     */
     public LockGuard(Lock lock, boolean doLock) {
         this.lock = lock;
         if (doLock) {
@@ -40,11 +45,17 @@ public class LockGuard extends Guard {
         }
     }
 
+    /**
+     *
+     */
     @Override
     public void enter() {
         lock.lock();
     }
 
+    /**
+     *
+     */
     @Override
     public void leave() {
         lock.unlock();

@@ -33,16 +33,22 @@ import java.util.Calendar;
 public interface CurrentDateProvider {
 
     /**
-     *
-     * @return
+     * @see Calendar#getInstance()
+     * @return 本日の日付.
      */
     @ReturnNonNull
     Calendar getToday();
 
     /**
-     *
-     * @return
+     * @see Calendar#getInstance()
+     * @return 現在の日時.
      */
     @ReturnNonNull
     Calendar getNow();
+
+    /**
+     * @see System#nanoTime()
+     * @return ナノ秒
+     */
+    long getNanoTime();
 }

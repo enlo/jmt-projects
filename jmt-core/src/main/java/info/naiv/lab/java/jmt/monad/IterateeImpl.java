@@ -38,13 +38,14 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import lombok.NonNull;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  * @param <T>
  */
+@Value
 public final class IterateeImpl<T> implements Iteratee<T> {
 
     private static final IterateeImpl EMPTY = new IterateeImpl();
@@ -84,10 +85,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         return new IterateeImpl<>(value);
     }
 
-    @NonNull
     Predicate1<? super T> predicate;
-
-    @NonNull
     Iterable<T> value;
 
     /**
@@ -96,8 +94,8 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param predicate
      */
     public IterateeImpl(Iterable<T> value, Predicate1<? super T> predicate) {
-        this.predicate = predicate;
-        this.value = value;
+        this.predicate = predicate != null ? predicate : StandardFunctions.NO_CHECK;
+        this.value = value != null ? value : Collections.EMPTY_LIST;
     }
 
     /**
@@ -105,7 +103,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param value
      */
     public IterateeImpl(Iterable<T> value) {
-        this(value, StandardFunctions.NO_CHECK);
+        this(value, null);
     }
 
     /**
@@ -117,7 +115,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
     }
 
     IterateeImpl() {
-        this(Collections.EMPTY_LIST, StandardFunctions.NO_CHECK);
+        this(null, null);
     }
 
     /**

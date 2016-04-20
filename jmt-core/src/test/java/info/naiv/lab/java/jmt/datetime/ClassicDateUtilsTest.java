@@ -6,6 +6,7 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -19,6 +20,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import org.junit.After;
 import static org.junit.Assert.assertThat;
@@ -36,6 +38,10 @@ public class ClassicDateUtilsTest {
     static final Calendar NULL_CALENDAR = null;
 
     CurrentDateProvider currentDateProvider;
+
+    /**
+     * 2015, Calendar.MAY, 14 18:34:20.987654321;
+     */
     Calendar testCalendar;
 
     /**
@@ -65,9 +71,13 @@ public class ClassicDateUtilsTest {
         ServiceProviders.setThreadContainer(null);
 
         testCalendar = new GregorianCalendar(2015, Calendar.MAY, 14, 18, 34, 20);
+        // 下のナノ秒とあわせること.
+        testCalendar.set(Calendar.MILLISECOND, 987);
+        long nanos = testCalendar.getTimeInMillis() * 1000000L + 654321L;
         currentDateProvider = mock(CurrentDateProvider.class);
         when(currentDateProvider.getNow()).thenReturn(testCalendar);
         when(currentDateProvider.getToday()).thenReturn(DateUtils.truncate(testCalendar, Calendar.DAY_OF_MONTH));
+        when(currentDateProvider.getNanoTime()).thenReturn(nanos);
 
         ServiceProviders.getThreadContainer().registerService(currentDateProvider);
     }
@@ -863,5 +873,44 @@ public class ClassicDateUtilsTest {
         assertThat(ix, actual, is(notNullValue()));
         assertThat(ix, actual, is(not(sameInstance(in))));
         assertThat(ix, actual, is(comparesEqualTo(expected)));
+    }
+
+    /**
+     * Test of nowTimestamp method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testNowTimestamp() {
+        Timestamp ts = ClassicDateUtils.nowTimestamp();
+        assertThat(ts, is(notNullValue()));
+        assertThat(ts.getTime(), is(testCalendar.getTimeInMillis()));
+        assertThat(ts.getNanos(), is(987654321));
+    }
+
+    /**
+     * Test of format method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testFormat_Date_String() {
+        Date d = null;
+        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
+        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
+        d = testCalendar.getTime();
+        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
+        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
+        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
+    }
+
+    /**
+     * Test of format method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testFormat_Calendar_String() {
+        Calendar d = null;
+        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
+        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
+        d = testCalendar;
+        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
+        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
+        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
     }
 }

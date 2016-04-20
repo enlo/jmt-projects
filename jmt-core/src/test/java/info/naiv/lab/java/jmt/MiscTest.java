@@ -8,6 +8,7 @@ package info.naiv.lab.java.jmt;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
+import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
@@ -298,6 +299,30 @@ public class MiscTest {
             }
         });
         assertThat(a1, is(contains(2, 4, 4, 8)));
+    }
+
+    /**
+     * Test of filter method, of class Misc.
+     */
+    @Test
+    public void testFilter2() {
+        List<Integer> list = Arrays.asList(1, 2, 3, 3, 4, 4, 5, 8);
+        Iterable<Integer> a1 = Misc.filter(list, null);
+        assertThat(a1, is(contains(1, 2, 3, 3, 4, 4, 5, 8)));
+    }
+
+    /**
+     * Test of filter method, of class Misc.
+     */
+    @Test
+    public void testFilter3() {
+        Iterable<Integer> a1 = Misc.filter(null, new Predicate1<Integer>() {
+            @Override
+            public boolean test(Integer obj) {
+                return obj % 2 == 0;
+            }
+        });
+        assertThat(a1, is(emptyIterable()));
     }
 
     /**
@@ -695,7 +720,7 @@ public class MiscTest {
      * Test of newArrayList method, of class Misc.
      */
     @Test
-    public void testNewArrayList1() {
+    public void testNewArrayList() {
         ArrayList<Object> list1 = Misc.newArrayList();
         assertThat(list1, is(empty()));
         list1.add(new Object());
@@ -1258,4 +1283,22 @@ public class MiscTest {
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
     }
+
+    /**
+     * Test of filterNonNull method, of class Misc.
+     */
+    @Test
+    public void testFilterNonNull() {
+        Iteratee<Object> iter1 = Misc.filterNonNull(null);
+        assertThat(iter1, is(emptyIterable()));
+
+        List<String> list1 = Arrays.asList();
+        Iteratee<String> iter2 = Misc.filterNonNull(list1);
+        assertThat(iter2, is(emptyIterable()));
+
+        List<String> list2 = Arrays.asList(null, "123", null, "456", null);
+        Iteratee<String> iter3 = Misc.filterNonNull(list2);
+        assertThat(iter3, is(contains("123", "456")));
+    }
+
 }

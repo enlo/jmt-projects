@@ -5,9 +5,12 @@ import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Constants;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static info.naiv.lab.java.jmt.Misc.toCalendar;
+import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
+import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -426,8 +429,9 @@ public class ClassicDateUtils {
      * @return 現在のタイムスタンプ.
      */
     public static Timestamp nowTimestamp() {
-        Calendar cal = now();
-        long timeInNanos = System.nanoTime();
+        CurrentDateProvider p = getCurrentDateProvider();
+        Calendar cal = p.getNow();
+        long timeInNanos = p.getNanoTime();
         Timestamp ts = new Timestamp(cal.getTime().getTime());
         ts.setNanos((int) (timeInNanos % 1000000000));
         return ts;
@@ -496,6 +500,28 @@ public class ClassicDateUtils {
             conv = new DefaultShortYearConverter();
         }
         return conv;
+    }
+
+    public static String format(Date date, String format) {
+        if (date == null) {
+            return null;
+        }
+        if(format == null) {
+            return date.toString();
+        }
+        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
+        return fmt.format(date);
+    }
+
+    public static String format(Calendar date, String format) {
+        if (date == null) {
+            return null;
+        }
+        if(format == null) {
+            return date.toString();
+        }
+        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
+        return fmt.format(date.getTime());
     }
 
     private ClassicDateUtils() {

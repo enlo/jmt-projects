@@ -39,6 +39,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  *
  * @author enlo
  */
+@Deprecated
 public final class CharsetMap extends SingletonMapSupport<String, Charset> {
 
     private static final CharsetMap instance;

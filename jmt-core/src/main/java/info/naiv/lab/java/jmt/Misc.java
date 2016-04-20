@@ -7,6 +7,7 @@ import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
@@ -202,6 +203,8 @@ public abstract class Misc {
 
     /**
      *
+     * フィルター
+     *
      * @param <T>
      * @param iterable
      * @param predicate
@@ -210,6 +213,19 @@ public abstract class Misc {
     @ReturnNonNull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<T> predicate) {
         return new IterateeImpl<>(iterable, predicate);
+    }
+
+    /**
+     *
+     * null を排除したフィルター
+     *
+     * @param <T>
+     * @param iterable
+     * @return
+     */
+    @ReturnNonNull
+    public static <T> Iteratee<T> filterNonNull(Iterable<T> iterable) {
+        return new IterateeImpl<>(iterable, StandardFunctions.<T>nonNull());
     }
 
     /**

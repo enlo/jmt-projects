@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,69 +21,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.iterator;
+package info.naiv.lab.java.jmt.iteration;
 
-import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.IterationUnit;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-import lombok.NonNull;
 
 /**
  *
  * @author enlo
  * @param <T>
  */
-public final class FilteringIterator<T> implements Iterator<T> {
+public class IterationUnitIterator<T> implements Iterator<T> {
 
-    @NonNull
-    private final Iterator<T> baseIterator;
-    private boolean cont;
-    @NonNull
-    private final Predicate1<? super T> filter;
-
-    private T nextElement;
+    T it;
+    final T last;
+    final IterationUnit<? super T> unit;
 
     /**
-     * コンストラクター.
      *
-     * @param iterator 基本となる反復子
-     * @param filter フィルター
+     * @param it
+     * @param last
+     * @param unit
      */
-    public FilteringIterator(Iterator<T> iterator, Predicate1<? super T> filter) {
-        this.baseIterator = iterator;
-        this.filter = filter;
-        doNext();
+    public IterationUnitIterator(T it, T last, IterationUnit<? super T> unit) {
+        this.it = it;
+        this.last = last;
+        this.unit = unit;
     }
 
     @Override
     public boolean hasNext() {
-        return cont;
+        return unit.compare(it, last) <= 0;
     }
 
     @Override
     public T next() {
-        if (!cont) {
-            throw new NoSuchElementException();
-        }
-        return doNext();
+        T val = it;
+        it = (T) unit.next(it);
+        return val;
     }
 
     @Override
     public void remove() {
-        baseIterator.remove();
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private T doNext() {
-        T result = nextElement;
-        while (baseIterator.hasNext()) {
-            T v = baseIterator.next();
-            if (filter.test(v)) {
-                cont = true;
-                nextElement = v;
-                return result;
-            }
-        }
-        cont = false;
-        return result;
-    }
 }

@@ -21,49 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.iterator;
-
-import info.naiv.lab.java.jmt.IterationUnit;
-import java.util.Iterator;
+package info.naiv.lab.java.jmt.iteration;
 
 /**
  *
  * @author enlo
- * @param <T>
  */
-public class IterationUnitIterator<T> implements Iterator<T> {
-
-    T it;
-    final T last;
-    final IterationUnit<? super T> unit;
+public class ContinueException extends RuntimeException {
 
     /**
      *
-     * @param it
-     * @param last
-     * @param unit
      */
-    public IterationUnitIterator(T it, T last, IterationUnit<? super T> unit) {
-        this.it = it;
-        this.last = last;
-        this.unit = unit;
-    }
-
-    @Override
-    public boolean hasNext() {
-        return unit.compare(it, last) <= 0;
-    }
-
-    @Override
-    public T next() {
-        T val = it;
-        it = (T) unit.next(it);
-        return val;
-    }
-
-    @Override
-    public void remove() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public ContinueException() {
+        super("do continue");
     }
 
 }

@@ -3,21 +3,23 @@ package info.naiv.lab.java.jmt;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
+import info.naiv.lab.java.jmt.iteration.BreakException;
+import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
+import info.naiv.lab.java.jmt.fx.Consumer1;
+import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.io.NIOUtils;
-import info.naiv.lab.java.jmt.iterator.FlatIterableIterator;
-import info.naiv.lab.java.jmt.iterator.MappingIterator;
+import info.naiv.lab.java.jmt.iteration.IterationUtils;
+import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.monad.Iteratee;
-import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
@@ -84,10 +86,7 @@ public abstract class Misc {
      * @return
      */
     public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
-        for (int i = 0; i < n && iter.hasNext(); i++) {
-            iter.next();
-        }
-        return iter;
+        return IterationUtils.advance(iter, n);
     }
 
     /**
@@ -156,17 +155,8 @@ public abstract class Misc {
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean contains(Iterable<? extends T> items, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (predicate.test(item)) {
-                return true;
-            }
-        }
-        return false;
+    public static <T> boolean contains(Iterable<T> items, Predicate1<? super T> predicate) {
+        return IterationUtils.contains(items, predicate);
     }
 
     /**
@@ -178,15 +168,7 @@ public abstract class Misc {
      * @return 等価な項目があれば true.
      */
     public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
-        if (items == null) {
-            return false;
-        }
-        for (T item : items) {
-            if (item.compareTo(valueToFind) == 0) {
-                return true;
-            }
-        }
-        return false;
+        return IterationUtils.containsCompareEquals(items, valueToFind);
     }
 
     /**
@@ -211,8 +193,8 @@ public abstract class Misc {
      * @return
      */
     @ReturnNonNull
-    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<T> predicate) {
-        return new IterateeImpl<>(iterable, predicate);
+    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
+        return IterationUtils.filter(iterable, predicate);
     }
 
     /**
@@ -225,7 +207,7 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static <T> Iteratee<T> filterNonNull(Iterable<T> iterable) {
-        return new IterateeImpl<>(iterable, StandardFunctions.<T>nonNull());
+        return IterationUtils.filterNonNull(iterable);
     }
 
     /**
@@ -236,12 +218,31 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
-        return new Iterable<T>() {
-            @Override
-            public Iterator<T> iterator() {
-                return new FlatIterableIterator<>(items);
-            }
-        };
+        return IterationUtils.flat(items);
+    }
+
+    /**
+     * ForEach. Java8では不要. <br>
+     * 処理の途中で{@link BreakException}を投げると break と同じ効果があり、<br>
+     * 処理の途中で{@link ContinueException}を投げると break と同じ効果.
+     *
+     * @param <T>
+     * @param iter
+     * @param action
+     */
+    public static <T> void forEach(Iterable<T> iter, Consumer1<? super T> action) {
+        IterationUtils.forEach(iter, action);
+    }
+
+    /**
+     * ForEach. Java8では不要.
+     *
+     * @param <T>
+     * @param iter
+     * @param action
+     */
+    public static <T> void forEach(Iterable<T> iter, Consumer2<? super T, LoopCondition> action) {
+        IterationUtils.forEach(iter, action);
     }
 
     /**
@@ -268,12 +269,7 @@ public abstract class Misc {
      * @return 最初の項目. 空なら null.
      */
     public static <T> T getFirst(Iterable<T> iterable) {
-        if (iterable != null) {
-            for (T i : iterable) {
-                return i;
-            }
-        }
-        return null;
+        return IterationUtils.getFirst(iterable);
     }
 
     /**
@@ -284,16 +280,8 @@ public abstract class Misc {
      * @param predicate
      * @return
      */
-    public static <T> T getFirst(Iterable<T> iterable, Predicate1<T> predicate) {
-        nonNull(predicate, "predicate");
-        if (iterable != null) {
-            for (T i : iterable) {
-                if (predicate.test(i)) {
-                    return i;
-                }
-            }
-        }
-        return null;
+    public static <T> T getFirst(Iterable<T> iterable, Predicate1<? super T> predicate) {
+        return IterationUtils.getFirst(iterable, predicate);
     }
 
     /**
@@ -357,13 +345,13 @@ public abstract class Misc {
      * @return 空ならば true.
      */
     public static boolean isEmpty(Iterable<?> object) {
-        if (object == null) {
-            return true;
+        if (object instanceof Collection) {
+            return ((Collection) object).isEmpty();
         }
-        else {
-            Iterator<?> it = object.iterator();
-            return it == null || !it.hasNext();
+        else if (object instanceof Map) {
+            return ((Map) object).isEmpty();
         }
+        return IterationUtils.isEmpty(object);
     }
 
     /**
@@ -539,12 +527,7 @@ public abstract class Misc {
      */
     @ReturnNonNull
     public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
-        return new Iterable<U>() {
-            @Override
-            public Iterator<U> iterator() {
-                return new MappingIterator<>(iter.iterator(), mapper);
-            }
-        };
+        return IterationUtils.map(iter, mapper);
     }
 
     /**
@@ -1233,8 +1216,7 @@ public abstract class Misc {
     }
 
     /**
-     * バイト列から文字列を作成する. {@link Charset#forName(java.lang.String)}
-     * は、1つのキャッシュだけを持つため、 頻繁に文字コードを変えるような場合はこちらを利用する.
+     * バイト列から文字列を作成する.
      *
      * @param bytes
      * @param offset

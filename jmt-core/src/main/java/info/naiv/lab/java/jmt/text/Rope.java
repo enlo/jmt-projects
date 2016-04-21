@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.text;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
-import info.naiv.lab.java.jmt.iterator.MappingIterator;
+import info.naiv.lab.java.jmt.iteration.MappingIterator;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;

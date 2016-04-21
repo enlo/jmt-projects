@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.monad;
 
-import info.naiv.lab.java.jmt.iterator.SingleIterator;
+import info.naiv.lab.java.jmt.iteration.SingleIterator;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Supplier;

@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.iterator;
+package info.naiv.lab.java.jmt.iteration;
 
 import info.naiv.lab.java.jmt.StandardIterationUnits;
+import info.naiv.lab.java.jmt.iteration.IterationUnitIterator;
 import java.util.Iterator;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

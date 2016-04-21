@@ -5,9 +5,14 @@
  */
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.fx.Consumer1;
+import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
+import info.naiv.lab.java.jmt.iteration.BreakException;
+import info.naiv.lab.java.jmt.iteration.ContinueException;
+import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
@@ -34,6 +39,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.commons.io.IOUtils;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.contains;
@@ -323,6 +329,23 @@ public class MiscTest {
             }
         });
         assertThat(a1, is(emptyIterable()));
+    }
+
+    /**
+     * Test of filterNonNull method, of class Misc.
+     */
+    @Test
+    public void testFilterNonNull() {
+        Iteratee<Object> iter1 = Misc.filterNonNull(null);
+        assertThat(iter1, is(emptyIterable()));
+
+        List<String> list1 = Arrays.asList();
+        Iteratee<String> iter2 = Misc.filterNonNull(list1);
+        assertThat(iter2, is(emptyIterable()));
+
+        List<String> list2 = Arrays.asList(null, "123", null, "456", null);
+        Iteratee<String> iter3 = Misc.filterNonNull(list2);
+        assertThat(iter3, is(contains("123", "456")));
     }
 
     /**
@@ -1285,20 +1308,109 @@ public class MiscTest {
     }
 
     /**
-     * Test of filterNonNull method, of class Misc.
+     * Test of forEach method, of class Misc.
      */
     @Test
-    public void testFilterNonNull() {
-        Iteratee<Object> iter1 = Misc.filterNonNull(null);
-        assertThat(iter1, is(emptyIterable()));
+    public void testForEach_Iterable_Consumer1() {
+        final AtomicInteger ai = new AtomicInteger();
+        Consumer1<Integer> x = new Consumer1<Integer>() {
+            @Override
+            public void accept(Integer a1) {
+                ai.addAndGet(a1);
+            }
+        };
 
-        List<String> list1 = Arrays.asList();
-        Iteratee<String> iter2 = Misc.filterNonNull(list1);
-        assertThat(iter2, is(emptyIterable()));
+        ai.set(0);
+        Misc.forEach(null, x);
+        assertThat(ai.get(), is(0));
 
-        List<String> list2 = Arrays.asList(null, "123", null, "456", null);
-        Iteratee<String> iter3 = Misc.filterNonNull(list2);
-        assertThat(iter3, is(contains("123", "456")));
+        ai.set(0);
+        Misc.forEach(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), x);
+        assertThat(ai.get(), is(55));
+
+    }
+
+    /**
+     * Test of forEach method, of class Misc.
+     */
+    @Test
+    public void testForEach_Iterable_Consumer1_2() {
+        final AtomicInteger ai = new AtomicInteger();
+        Consumer1<Integer> x = new Consumer1<Integer>() {
+            @Override
+            public void accept(Integer a1) {
+                if (a1 == 6) {
+                    throw new ContinueException();
+                }
+                if (a1 == 9) {
+                    throw new BreakException();
+                }
+                ai.addAndGet(a1);
+            }
+        };
+
+        ai.set(0);
+        Misc.forEach(null, x);
+        assertThat(ai.get(), is(0));
+
+        ai.set(0);
+        Misc.forEach(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), x);
+        assertThat(ai.get(), is(30));
+
+    }
+
+    /**
+     * Test of forEach method, of class Misc.
+     */
+    @Test
+    public void testForEach_Iterable_Consumer2() {
+        final AtomicInteger ai = new AtomicInteger();
+        Consumer2<Integer, LoopCondition> x = new Consumer2<Integer, LoopCondition>() {
+
+            @Override
+            public void accept(Integer a1, LoopCondition a2) {
+                assertThat(a2.index(), is(a1 - 1));
+                ai.addAndGet(a1);
+            }
+        };
+
+        ai.set(0);
+        Misc.forEach(null, x);
+        assertThat(ai.get(), is(0));
+
+        ai.set(0);
+        Misc.forEach(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), x);
+        assertThat(ai.get(), is(55));
+    }
+
+    /**
+     * Test of forEach method, of class Misc.
+     */
+    @Test
+    public void testForEach_Iterable_Consumer2_2() {
+        final AtomicInteger ai = new AtomicInteger();
+        Consumer2<Integer, LoopCondition> x = new Consumer2<Integer, LoopCondition>() {
+
+            @Override
+            public void accept(Integer a1, LoopCondition a2) {
+                if (a1 == 6) {
+                    a2.doContinue();
+                }
+                if (a1 == 9) {
+                    a2.doBreak();
+                }
+                ai.addAndGet(a1);
+            }
+        };
+
+        ai.set(0);
+        Misc.forEach(null, x);
+        assertThat(ai.get(), is(0));
+
+        ai.set(0);
+        Misc.forEach(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10), x);
+        assertThat(ai.get(), is(30));
+
     }
 
 }

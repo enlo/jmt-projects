@@ -25,11 +25,15 @@ package info.naiv.lab.java.jmt.monad;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
+import info.naiv.lab.java.jmt.iteration.BreakException;
+import info.naiv.lab.java.jmt.iteration.ContinueException;
+import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.fx.Consumer1;
+import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
-import info.naiv.lab.java.jmt.iterator.FilteringIterator;
+import info.naiv.lab.java.jmt.iteration.FilteringIterator;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -224,4 +228,25 @@ public final class IterateeImpl<T> implements Iteratee<T> {
         }
         return result;
     }
+
+    /**
+     * ForEach.  <br>
+     * 処理の途中で{@link BreakException}を投げると break と同じ効果があり、<br>
+     * 処理の途中で{@link ContinueException}を投げると break と同じ効果.
+     *
+     * @param action
+     */
+    public void each(Consumer1<? super T> action) {
+        Misc.forEach(value, action);
+    }
+
+    /**
+     * ForEach.
+     *
+     * @param action
+     */
+    public void each(Consumer2<? super T, LoopCondition> action) {
+        Misc.forEach(value, action);
+    }
+
 }

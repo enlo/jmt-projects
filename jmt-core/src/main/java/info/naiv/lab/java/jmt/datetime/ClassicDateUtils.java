@@ -10,7 +10,6 @@ import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadCo
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -330,6 +329,28 @@ public class ClassicDateUtils {
         return new Date(from.getTime() + val);
     }
 
+    public static String format(Date date, String format) {
+        if (date == null) {
+            return null;
+        }
+        if (format == null) {
+            return date.toString();
+        }
+        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
+        return fmt.format(date);
+    }
+
+    public static String format(Calendar date, String format) {
+        if (date == null) {
+            return null;
+        }
+        if (format == null) {
+            return date.toString();
+        }
+        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
+        return fmt.format(date.getTime());
+    }
+
     /**
      * @return 日付取得器を取得.
      */
@@ -500,28 +521,6 @@ public class ClassicDateUtils {
             conv = new DefaultShortYearConverter();
         }
         return conv;
-    }
-
-    public static String format(Date date, String format) {
-        if (date == null) {
-            return null;
-        }
-        if(format == null) {
-            return date.toString();
-        }
-        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
-        return fmt.format(date);
-    }
-
-    public static String format(Calendar date, String format) {
-        if (date == null) {
-            return null;
-        }
-        if(format == null) {
-            return date.toString();
-        }
-        SimpleDateFormat fmt = ServiceProviders.resolveService(SimpleDateFormat.class, Tag.of(format));
-        return fmt.format(date.getTime());
     }
 
     private ClassicDateUtils() {

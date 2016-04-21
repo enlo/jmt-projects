@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.iterator;
+package info.naiv.lab.java.jmt.iteration;
 
 import info.naiv.lab.java.jmt.fx.Function1;
 import java.util.Iterator;

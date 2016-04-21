@@ -645,6 +645,34 @@ public class ClassicDateUtilsTest {
     }
 
     /**
+     * Test of format method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testFormat_Calendar_String() {
+        Calendar d = null;
+        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
+        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
+        d = testCalendar;
+        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
+        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
+        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
+    }
+
+    /**
+     * Test of format method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testFormat_Date_String() {
+        Date d = null;
+        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
+        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
+        d = testCalendar.getTime();
+        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
+        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
+        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
+    }
+
+    /**
      * Test of getCurrentDateProvider method, of class ClassicDateUtils.
      */
     @Test
@@ -722,6 +750,17 @@ public class ClassicDateUtilsTest {
     public void testNow() {
         Calendar actual = ClassicDateUtils.now();
         assertThat(actual, is(testCalendar));
+    }
+
+    /**
+     * Test of nowTimestamp method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testNowTimestamp() {
+        Timestamp ts = ClassicDateUtils.nowTimestamp();
+        assertThat(ts, is(notNullValue()));
+        assertThat(ts.getTime(), is(testCalendar.getTimeInMillis()));
+        assertThat(ts.getNanos(), is(987654321));
     }
 
     /**
@@ -873,44 +912,5 @@ public class ClassicDateUtilsTest {
         assertThat(ix, actual, is(notNullValue()));
         assertThat(ix, actual, is(not(sameInstance(in))));
         assertThat(ix, actual, is(comparesEqualTo(expected)));
-    }
-
-    /**
-     * Test of nowTimestamp method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testNowTimestamp() {
-        Timestamp ts = ClassicDateUtils.nowTimestamp();
-        assertThat(ts, is(notNullValue()));
-        assertThat(ts.getTime(), is(testCalendar.getTimeInMillis()));
-        assertThat(ts.getNanos(), is(987654321));
-    }
-
-    /**
-     * Test of format method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testFormat_Date_String() {
-        Date d = null;
-        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
-        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
-        d = testCalendar.getTime();
-        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
-        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
-        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
-    }
-
-    /**
-     * Test of format method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testFormat_Calendar_String() {
-        Calendar d = null;
-        assertThat(ClassicDateUtils.format(d, null), is(nullValue()));
-        assertThat(ClassicDateUtils.format(d, "yyyy/MM/dd"), is(nullValue()));
-        d = testCalendar;
-        assertThat(ClassicDateUtils.format(d, null), is(d.toString()));
-        assertThat(ClassicDateUtils.format(d, "yyyyMMdd"), is("20150514"));
-        assertThat(ClassicDateUtils.format(d, "yyyy-MM-dd"), is("2015-05-14"));
     }
 }

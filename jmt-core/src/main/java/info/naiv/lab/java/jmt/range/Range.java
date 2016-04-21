@@ -26,7 +26,7 @@ package info.naiv.lab.java.jmt.range;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.ComparableComparator;
 import info.naiv.lab.java.jmt.IterationUnit;
-import info.naiv.lab.java.jmt.iterator.IterationUnitIterator;
+import info.naiv.lab.java.jmt.iteration.IterationUnitIterator;
 import java.io.Serializable;
 import java.util.Iterator;
 import lombok.EqualsAndHashCode;

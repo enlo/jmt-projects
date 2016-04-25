@@ -329,6 +329,12 @@ public class ClassicDateUtils {
         return new Date(from.getTime() + val);
     }
 
+    /**
+     *
+     * @param date
+     * @param format
+     * @return
+     */
     public static String format(Date date, String format) {
         if (date == null) {
             return null;
@@ -340,6 +346,12 @@ public class ClassicDateUtils {
         return fmt.format(date);
     }
 
+    /**
+     *
+     * @param date
+     * @param format
+     * @return
+     */
     public static String format(Calendar date, String format) {
         if (date == null) {
             return null;

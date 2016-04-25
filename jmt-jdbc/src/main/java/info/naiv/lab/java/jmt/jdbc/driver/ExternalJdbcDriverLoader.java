@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.jdbc.driver;
 
-import static info.naiv.lab.java.jmt.io.NIOUtils.listPaths;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import info.naiv.lab.java.jmt.runtime.URLClassLoaderBuilder;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -35,7 +35,6 @@ import static java.sql.DriverManager.registerDriver;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 import lombok.extern.slf4j.Slf4j;
@@ -47,7 +46,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ExternalJdbcDriverLoader {
 
-    private final Set<URL> loadedUrl = new HashSet<>();
     private final ClassLoader parentClassLoader;
 
     public ExternalJdbcDriverLoader(ClassLoader parentClassLoader) {
@@ -78,17 +76,6 @@ public class ExternalJdbcDriverLoader {
         loadClassicJdbcDrivers(classicDriverNames, loader, result);
 
         return result;
-    }
-
-    protected void listJarFiles(Set<URL> result, Path path) throws IOException {
-        List<Path> found = listPaths(path, "**.jar", 1);
-        for (Path p : found) {
-            URL u = p.toUri().toURL();
-            if (!loadedUrl.contains(u)) {
-                logger.debug("add {}", p);
-                result.add(u);
-            }
-        }
     }
 
     /**
@@ -133,14 +120,12 @@ public class ExternalJdbcDriverLoader {
 
     @ReturnNonNull
     protected URLClassLoader newClassLoader(Iterable<Path> paths) throws IOException {
-        Set<URL> urls = new HashSet<>();
+        URLClassLoaderBuilder builder = URLClassLoaderBuilder.builder();
+        builder.setParentClassLoader(parentClassLoader);
         for (Path p : paths) {
-            listJarFiles(urls, p);
+            builder.addDirectory(p);
         }
-        URL[] array = new URL[urls.size()];
-        ClassLoader p = this.parentClassLoader;
-        URLClassLoader cl = URLClassLoader.newInstance(urls.toArray(array), p);
-        loadedUrl.addAll(urls);
+        URLClassLoader cl = builder.build();
         return cl;
     }
 

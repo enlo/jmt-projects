@@ -16,6 +16,10 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ *
+ * @author enlo
+ */
 public class IterationUtils {
 
     /**
@@ -116,6 +120,12 @@ public class IterationUtils {
         };
     }
 
+    /**
+     *
+     * @param <T>
+     * @param iter
+     * @param action
+     */
     public static <T> void forEach(Iterable<T> iter, final Consumer1<? super T> action) {
         forEach(iter, new LoopAction<T>() {
             @Override
@@ -125,6 +135,12 @@ public class IterationUtils {
         });
     }
 
+    /**
+     *
+     * @param <T>
+     * @param iter
+     * @param action
+     */
     public static <T> void forEach(Iterable<T> iter, Consumer2<? super T, LoopCondition> action) {
         if (iter != null) {
             LoopConditionImpl c = new LoopConditionImpl();
@@ -145,6 +161,14 @@ public class IterationUtils {
         }
     }
 
+    /**
+     *
+     * @param <T>
+     * @param <R>
+     * @param iter
+     * @param func
+     * @return
+     */
     public static <T, R> List<R> forEach(Iterable<T> iter, final Function1<? super T, R> func) {
         return forEach(iter, new LoopFunction<T, R>() {
             @Override
@@ -154,6 +178,14 @@ public class IterationUtils {
         });
     }
 
+    /**
+     *
+     * @param <T>
+     * @param <R>
+     * @param iter
+     * @param func
+     * @return
+     */
     public static <T, R> List<R> forEach(Iterable<T> iter, final Function2<? super T, LoopCondition, R> func) {
         final List<R> result;
         if (iter instanceof Collection) {
@@ -264,6 +296,9 @@ public class IterationUtils {
         public void next() {
             index++;
         }
+    }
+
+    private IterationUtils() {
     }
 
 }

@@ -32,9 +32,10 @@ import java.net.URLClassLoader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashSet;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -46,12 +47,21 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class URLClassLoaderBuilder {
 
-    final Set<URL> jarFiles = new HashSet<>();
+    final Set<URL> jarFiles = new CopyOnWriteArraySet<>();
 
     ClassLoader parentClassLoader = this.getClass().getClassLoader();
 
+    /**
+     * 
+     * @return URLClassLoaderBuilder instance.
+     */
     public static URLClassLoaderBuilder builder() {
         return new URLClassLoaderBuilder();
+    }
+
+    public URLClassLoaderBuilder setParentClassLoader(ClassLoader parentClassLoader) {
+        this.parentClassLoader = parentClassLoader;
+        return this;
     }
 
     public URLClassLoaderBuilder addDirectory(String directory) throws IOException {
@@ -94,6 +104,11 @@ public class URLClassLoaderBuilder {
             URL u = p.toUri().toURL();
             jarFiles.add(u);
         }
+    }
+
+    public URLClassLoaderBuilder removeJars(Collection<URL> paths) {
+        jarFiles.removeAll(paths);
+        return this;
     }
 
     @ReturnNonNull

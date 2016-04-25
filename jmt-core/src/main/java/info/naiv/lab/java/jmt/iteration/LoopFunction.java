@@ -28,6 +28,7 @@ import info.naiv.lab.java.jmt.fx.Function2;
 /**
  *
  * @author enlo
+ * @param <T>
  * @param <R>
  */
 public interface LoopFunction<T, R> extends Function2<T, LoopCondition, R> {

@@ -26,13 +26,13 @@ package info.naiv.lab.java.jmt.jdbc.driver;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.runtime.URLClassLoaderBuilder;
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.sql.Driver;
 import java.sql.DriverManager;
 import static java.sql.DriverManager.registerDriver;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.ServiceLoader;
@@ -56,14 +56,44 @@ public class ExternalJdbcDriverLoader {
         this.parentClassLoader = this.getClass().getClassLoader();
     }
 
+    /**
+     * 指定されたディレクトリにあるドライバーを読み込む.
+     *
+     * @param paths JDBCドライバーがあるディレクトリのリスト.
+     * @return 読み込んだJDBCドライバー
+     * @throws IOException
+     * @throws SQLException
+     */
     @ReturnNonNull
-    public synchronized Set<Driver> load(Iterable<Path> paths) throws IOException, SQLException {
+    public Set<Driver> load(Collection<Path> paths) throws IOException, SQLException {
         return load(paths, Collections.EMPTY_LIST);
     }
 
+    /**
+     * 指定されたディレクトリにあるドライバーを読み込み、古い形式のドライバーをロードする.
+     *
+     * @param paths JDBCドライバーがあるディレクトリのリスト.
+     * @param classicDriverNames 古いドライバーのクラス名.
+     * @return 読み込んだJDBCドライバー
+     * @throws IOException
+     * @throws SQLException
+     */
     @ReturnNonNull
-    public synchronized Set<Driver> load(Iterable<Path> paths, Iterable<String> classicDriverNames) throws IOException, SQLException {
+    public Set<Driver> load(Collection<Path> paths, Iterable<String> classicDriverNames) throws IOException, SQLException {
         URLClassLoader loader = newClassLoader(paths);
+        return load(loader, classicDriverNames);
+    }
+
+    /**
+     * 指定されたクラスローダー内にあるドライバーを読み込み、古い形式のドライバーをロードする.
+     *
+     * @param loader クラスローダー
+     * @param classicDriverNames 古いドライバーのクラス名.
+     * @return 読み込んだJDBCドライバー
+     * @throws SQLException
+     */
+    @ReturnNonNull
+    public synchronized Set<Driver> load(ClassLoader loader, Iterable<String> classicDriverNames) throws SQLException {
         ServiceLoader<Driver> drivers = ServiceLoader.load(Driver.class, loader);
         Set<Driver> result = new HashSet<>();
         for (Driver drv : drivers) {
@@ -90,7 +120,7 @@ public class ExternalJdbcDriverLoader {
      * @param result
      * @throws SQLException
      */
-    protected void loadClassicJdbcDrivers(Iterable<String> classicDriverNames, URLClassLoader loader, Set<Driver> result) throws SQLException {
+    protected void loadClassicJdbcDrivers(Iterable<String> classicDriverNames, ClassLoader loader, Set<Driver> result) throws SQLException {
         for (String classicDriverName : classicDriverNames) {
             try {
                 Class.forName(classicDriverName);
@@ -119,7 +149,7 @@ public class ExternalJdbcDriverLoader {
     }
 
     @ReturnNonNull
-    protected URLClassLoader newClassLoader(Iterable<Path> paths) throws IOException {
+    protected URLClassLoader newClassLoader(Collection<Path> paths) throws IOException {
         URLClassLoaderBuilder builder = URLClassLoaderBuilder.builder();
         builder.setParentClassLoader(parentClassLoader);
         for (Path p : paths) {

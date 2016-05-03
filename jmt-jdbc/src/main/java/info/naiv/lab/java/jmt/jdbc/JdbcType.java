@@ -231,6 +231,11 @@ public enum JdbcType implements IntegerEnum {
             String.class,
             tie(String.class)),;
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     @ReturnNonNull
     public static JdbcType valueOf(int value) {
         for (JdbcType jt : values()) {
@@ -241,6 +246,11 @@ public enum JdbcType implements IntegerEnum {
         return JdbcType.UNKNOWN;
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     @ReturnNonNull
     public static JdbcType valueOf(Class<?> type) {
         int jdbcType = StatementCreatorUtils.javaTypeToSqlParameterType(type);
@@ -254,6 +264,11 @@ public enum JdbcType implements IntegerEnum {
         return valueOf(jdbcType);
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     public static Object wrap(Object obj) {
         if (obj == null) {
             return null;
@@ -286,6 +301,11 @@ public enum JdbcType implements IntegerEnum {
         return this.name();
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public boolean isAssignableFrom(final Class<?> type) {
         return arrayContains(compatibleTypes, new Predicate1<Class<?>>() {
             @Override
@@ -295,18 +315,37 @@ public enum JdbcType implements IntegerEnum {
         });
     }
 
+    /**
+     *
+     * @param type
+     * @return
+     */
     public boolean matchType(Class<?> type) {
         return arrayContains(compatibleTypes, type);
     }
 
+    /**
+     *
+     * @return
+     */
     public SqlParameter toSqlParameter() {
         return new SqlParameter(value);
     }
 
+    /**
+     *
+     * @param scale
+     * @return
+     */
     public SqlParameter toSqlParameter(int scale) {
         return new SqlParameter(value, scale);
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     public SqlParameterValue toSqlParameterValue(Object obj) {
         return new SqlParameterValue(value, obj);
     }

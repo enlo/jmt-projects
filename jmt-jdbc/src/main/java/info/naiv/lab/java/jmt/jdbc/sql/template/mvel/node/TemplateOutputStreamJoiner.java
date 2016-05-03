@@ -50,16 +50,38 @@ public abstract class TemplateOutputStreamJoiner<T> extends Joiner<T, TemplateOu
 
     TemplateOutputStream output;
 
+    /**
+     *
+     * @param output
+     */
     public TemplateOutputStreamJoiner(TemplateOutputStream output) {
         this.output = output;
     }
 
+    /**
+     *
+     * @param output
+     * @param value
+     * @return
+     */
     protected abstract TemplateOutputStream append(TemplateOutputStream output, T value);
 
+    /**
+     *
+     * @param output
+     * @param value
+     * @return
+     */
     protected TemplateOutputStream appendFirst(TemplateOutputStream output, T value) {
         return append(output, value);
     }
 
+    /**
+     *
+     * @param output
+     * @param value
+     * @return
+     */
     protected TemplateOutputStream appendMore(TemplateOutputStream output, T value) {
         return append(output, value);
     }

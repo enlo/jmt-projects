@@ -26,7 +26,6 @@ package info.naiv.lab.java.jmt.io;
 import static info.naiv.lab.java.jmt.Arguments.lessThan;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -212,7 +211,11 @@ public class NIOUtils {
      * @param ignoreCase 大文字小文字の区別
      * @return
      */
-    public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension, boolean ignoreCase) {
+    public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list,
+                                                                        String name,
+                                                                        String suffix,
+                                                                        String extension,
+                                                                        boolean ignoreCase) {
         SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, suffix, extension, ignoreCase);
         Map<String, Path> founds = new HashMap<>();
         for (String item : list) {
@@ -238,8 +241,9 @@ public class NIOUtils {
                      depth,
                      new PatternVisitor(pattern) {
                          @Override
-                         protected FileVisitResult onTarget(Path file,
-                                                            BasicFileAttributes attrs) throws IOException {
+                         protected FileVisitResult
+                         onTarget(Path file,
+                                  BasicFileAttributes attrs) throws IOException {
                              result.add(file.toString());
                              return super.onTarget(file, attrs);
                          }
@@ -263,8 +267,9 @@ public class NIOUtils {
                      depth,
                      new PatternVisitor(pattern) {
                          @Override
-                         protected FileVisitResult onTarget(Path file,
-                                                            BasicFileAttributes attrs) throws IOException {
+                         protected FileVisitResult
+                         onTarget(Path file,
+                                  BasicFileAttributes attrs) throws IOException {
                              result.add(file);
                              return super.onTarget(file, attrs);
                          }
@@ -363,7 +368,8 @@ public class NIOUtils {
      * @param pathMatcher
      * @return
      */
-    public static PathMatcher toPathMatcher(final String pattern, final org.springframework.util.PathMatcher pathMatcher) {
+    public static PathMatcher toPathMatcher(final String pattern,
+                                            final org.springframework.util.PathMatcher pathMatcher) {
         nonNull(pathMatcher, "spring PathMatcher");
         if (pattern == null) {
             return anyPathMatcher();
@@ -385,32 +391,6 @@ public class NIOUtils {
      */
     public static String toString(InputStream is, Charset charset) throws IOException {
         return charset.decode(toByteBuffer(is)).toString();
-    }
-
-    private static void buildPatterns(String name, StringBuilder partsWithSuffix, StringBuilder partsNoSuffix, String suffix, String extension) {
-        if (isNotBlank(name)) {
-            partsWithSuffix.append("^(").append(name).append(")");
-            partsNoSuffix.append("^(").append(name).append(")");
-        }
-        if (isNotBlank(suffix)) {
-            partsWithSuffix.append("\\.").append(suffix);
-        }
-        if (isNotBlank(extension)) {
-            partsWithSuffix.append("\\.").append(extension);
-            partsNoSuffix.append("\\.").append(extension);
-        }
-        partsWithSuffix.append("$");
-        partsNoSuffix.append("$");
-    }
-
-    private static Pattern makePattern(StringBuilder parts, boolean ignoreCase) {
-        String regex = parts.toString();
-        if (ignoreCase) {
-            return Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-        }
-        else {
-            return Pattern.compile(regex);
-        }
     }
 
     private NIOUtils() {

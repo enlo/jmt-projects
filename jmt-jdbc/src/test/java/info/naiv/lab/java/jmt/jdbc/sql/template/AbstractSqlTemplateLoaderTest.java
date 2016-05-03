@@ -40,11 +40,20 @@ import static org.mockito.Mockito.when;
  */
 public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplateLoader> {
 
+    /**
+     *
+     */
     protected T instance;
 
+    /**
+     *
+     */
     public AbstractSqlTemplateLoaderTest() {
     }
 
+    /**
+     *
+     */
     @Before
     public void init() {
         instance = newConcrete();
@@ -114,12 +123,23 @@ public abstract class AbstractSqlTemplateLoaderTest<T extends AbstractSqlTemplat
         assertThat(instance.getSuffix(), is("postgres"));
     }
 
+    /**
+     *
+     * @return
+     */
     protected String defaultSuffix() {
         return "";
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract T newConcrete();
 
+    /**
+     *
+     */
     protected void onInit() {
     }
 

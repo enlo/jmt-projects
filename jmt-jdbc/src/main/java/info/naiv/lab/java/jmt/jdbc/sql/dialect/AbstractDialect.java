@@ -31,10 +31,19 @@ import info.naiv.lab.java.jmt.CharBufferJoiner;
  */
 public abstract class AbstractDialect implements Dialect {
 
+    /**
+     *
+     * @param items
+     * @return
+     */
     protected static String build(CharSequence... items) {
         return CharBufferJoiner.SIMPLE.joinItems(items).toString();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.SQLSTD;

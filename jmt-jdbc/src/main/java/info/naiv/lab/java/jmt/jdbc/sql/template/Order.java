@@ -29,6 +29,13 @@ package info.naiv.lab.java.jmt.jdbc.sql.template;
  */
 public enum Order {
 
-    ASC, DESC;
+    /**
+     *
+     */
+    ASC,
+    /**
+     *
+     */
+    DESC;
 
 }

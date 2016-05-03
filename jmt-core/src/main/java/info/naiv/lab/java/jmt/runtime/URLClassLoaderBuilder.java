@@ -52,7 +52,7 @@ public class URLClassLoaderBuilder {
     ClassLoader parentClassLoader = this.getClass().getClassLoader();
 
     /**
-     * 
+     *
      * @return URLClassLoaderBuilder instance.
      */
     public static URLClassLoaderBuilder builder() {

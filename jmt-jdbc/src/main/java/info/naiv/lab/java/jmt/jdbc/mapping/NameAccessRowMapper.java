@@ -36,8 +36,16 @@ import org.springframework.jdbc.core.RowMapper;
 @Slf4j
 public abstract class NameAccessRowMapper<T> implements RowMapper<T> {
 
+    /**
+     *
+     */
     protected final ResultSetAccessor accessor;
 
+    /**
+     *
+     * @param rs
+     * @throws SQLException
+     */
     public NameAccessRowMapper(ResultSet rs) throws SQLException {
         accessor = new ResultSetAccessor(rs);
     }

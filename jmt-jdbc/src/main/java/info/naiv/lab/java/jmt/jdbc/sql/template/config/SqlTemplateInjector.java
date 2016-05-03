@@ -66,6 +66,12 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         this.beanFactory = beanFactory;
     }
 
+    /**
+     *
+     * @param anno
+     * @param categoryAnno
+     * @return
+     */
     protected String getCategory(InjectSql anno, SqlTemplateCategoryOf categoryAnno) {
         String category = anno.category();
         if (isBlank(category) && categoryAnno != null) {
@@ -74,6 +80,12 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         return category;
     }
 
+    /**
+     *
+     * @param loaderName
+     * @return
+     * @throws BeansException
+     */
     protected SqlTemplateLoader getLoaderFromBeanFactory(String loaderName) throws BeansException {
         if (beanFactory == null) {
             return null;
@@ -94,6 +106,12 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         }
     }
 
+    /**
+     *
+     * @param loaderName
+     * @return
+     * @throws BeansException
+     */
     protected SqlTemplateLoader getLoaderFromServiceProvider(String loaderName) throws BeansException {
         if (isBlank(loaderName)) {
             return ServiceProviders.resolveService(SqlTemplateLoader.class);
@@ -103,6 +121,12 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         }
     }
 
+    /**
+     *
+     * @param anno
+     * @param field
+     * @return
+     */
     protected String getName(InjectSql anno, Field field) {
         String name = anno.name();
         if (isBlank(name)) {
@@ -111,6 +135,11 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         return name;
     }
 
+    /**
+     *
+     * @param anno
+     * @return
+     */
     protected SqlTemplateLoader getSqlTemplateLoader(InjectSql anno) {
         String loaderName = anno.loader();
         SqlTemplateLoader loader;
@@ -121,6 +150,13 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
         return loader;
     }
 
+    /**
+     *
+     * @param anno
+     * @param categoryAnno
+     * @param field
+     * @return
+     */
     protected SqlTemplate getTemplate(InjectSql anno, SqlTemplateCategoryOf categoryAnno, Field field) {
         SqlTemplateLoader templ = getSqlTemplateLoader(anno);
         if (templ != null) {

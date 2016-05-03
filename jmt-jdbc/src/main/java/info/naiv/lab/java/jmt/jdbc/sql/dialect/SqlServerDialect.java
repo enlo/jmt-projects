@@ -34,6 +34,10 @@ public class SqlServerDialect extends AbstractDialect {
         return "sqlserver";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.UNDEFINED;

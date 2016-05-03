@@ -41,6 +41,9 @@ import static org.junit.Assert.assertThat;
 public class FileSystemResourceMvelSqlTemplateLoaderTest
         extends AbstractFileSystemResourceSqlTemplateLoaderTest<FileSystemResourceMvelSqlTemplateLoader> {
 
+    /**
+     *
+     */
     public FileSystemResourceMvelSqlTemplateLoaderTest() {
     }
 
@@ -93,6 +96,10 @@ public class FileSystemResourceMvelSqlTemplateLoaderTest
         assertThat(new String(templ.getTemplate().getTemplate()), is("select top(1) * from Emploee where id = @bind{id}"));
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected FileSystemResourceMvelSqlTemplateLoader newConcrete() {
         return new FileSystemResourceMvelSqlTemplateLoader();

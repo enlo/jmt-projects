@@ -50,10 +50,18 @@ public class ExternalJdbcDriverSetFactoryBean
         return ExternalJdbcDriverSet.class;
     }
 
+    /**
+     *
+     * @param classicJdbcDriverName
+     */
     public void setClassicJdbcDriverName(String classicJdbcDriverName) {
         classicJdbcDriverNames = Arrays.asList(classicJdbcDriverName);
     }
 
+    /**
+     *
+     * @param jarDirectory
+     */
     public void setJarDirectory(String jarDirectory) {
         jarDirectories = Arrays.asList(jarDirectory);
     }

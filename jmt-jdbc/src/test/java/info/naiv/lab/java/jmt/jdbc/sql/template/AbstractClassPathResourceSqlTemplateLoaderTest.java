@@ -26,8 +26,8 @@ package info.naiv.lab.java.jmt.jdbc.sql.template;
 import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.sameInstance;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 
 /**

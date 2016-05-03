@@ -36,6 +36,10 @@ public interface Dialect {
      */
     String getKeyword();
 
+    /**
+     *
+     * @return
+     */
     PagingSupportType getPagingSupport();
 
     /**

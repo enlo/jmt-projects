@@ -31,7 +31,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.jdbc.core.ArgumentPreparedStatementSetter;
@@ -57,6 +60,9 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
  *
  * @author enlo
  */
+@ToString
+@EqualsAndHashCode
+@Slf4j
 public class SqlQuery implements Query {
 
     final SqlQueryContext context;
@@ -176,7 +182,17 @@ public class SqlQuery implements Query {
             };
         }
 
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.batchUpdate(q, bpss);
+    }
+
+    boolean debugLogging;
+
+    @Override
+    public void enableDebugLogging(boolean flag) {
+        debugLogging = flag;
     }
 
     @Override
@@ -196,6 +212,9 @@ public class SqlQuery implements Query {
     @Override
     public <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.execute(q, new PreparedStatementCallback<T>() {
             @Override
             public T doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
@@ -227,12 +246,18 @@ public class SqlQuery implements Query {
     @Override
     public <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.query(q, setter, resultSetExtractor);
     }
 
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.query(q, setter, new RowMapperFactoryResultSetExtractor<>(rowMapperFactory));
     }
 
@@ -254,6 +279,9 @@ public class SqlQuery implements Query {
     @Override
     public List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.query(q, setter, new ColumnMapRowMapper());
     }
 
@@ -271,12 +299,18 @@ public class SqlQuery implements Query {
     @Override
     public <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
     }
 
     @Override
     public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
     }
 
@@ -308,15 +342,22 @@ public class SqlQuery implements Query {
     @Override
     public int update(JdbcOperations jdbcOperations) {
         String q = modifyForUpdate(getSql());
+        if (this.debugLogging) {
+            logger.debug("batchUpdate Sql={}", q);
+        }
         return jdbcOperations.update(q, setter);
     }
 
     @Override
     public int update(JdbcOperations jdbcOperations, KeyHolder keyHolder) {
+        final boolean db = debugLogging;
         return jdbcOperations.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 String q = modifyForUpdate(getSql());
+                if (db) {
+                    logger.debug("batchUpdate Sql={}", q);
+                }
                 PreparedStatement ps = con.prepareStatement(q);
                 setter.setValues(ps);
                 return ps;

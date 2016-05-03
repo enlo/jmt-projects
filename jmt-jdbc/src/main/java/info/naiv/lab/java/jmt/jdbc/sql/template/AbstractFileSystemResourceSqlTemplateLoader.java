@@ -39,14 +39,25 @@ public abstract class AbstractFileSystemResourceSqlTemplateLoader
     @Setter
     private FileSystemResourceRepository resourceRepository;
 
+    /**
+     *
+     */
     public AbstractFileSystemResourceSqlTemplateLoader() {
         this(new FileSystemResourceRepository());
     }
 
+    /**
+     *
+     * @param resourceRepository
+     */
     public AbstractFileSystemResourceSqlTemplateLoader(FileSystemResourceRepository resourceRepository) {
         this.resourceRepository = resourceRepository;
     }
 
+    /**
+     *
+     * @param rootDirectory
+     */
     public void setRootDirectory(String rootDirectory) {
         getResourceRepository().setRootDirectory(Paths.get(rootDirectory));
     }

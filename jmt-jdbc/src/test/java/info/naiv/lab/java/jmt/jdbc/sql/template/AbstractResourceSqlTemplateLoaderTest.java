@@ -36,6 +36,9 @@ import org.junit.Test;
 public abstract class AbstractResourceSqlTemplateLoaderTest<T extends AbstractResourceSqlTemplateLoader>
         extends AbstractSqlTemplateLoaderTest<T> {
 
+    /**
+     *
+     */
     public AbstractResourceSqlTemplateLoaderTest() {
     }
 
@@ -67,6 +70,10 @@ public abstract class AbstractResourceSqlTemplateLoaderTest<T extends AbstractRe
         assertThat(instance.getExtension(), is("txt"));
     }
 
+    /**
+     *
+     * @return
+     */
     protected String defaultExntension() {
         return "sql";
     }

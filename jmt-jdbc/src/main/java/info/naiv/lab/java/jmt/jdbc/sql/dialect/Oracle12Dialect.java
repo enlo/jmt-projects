@@ -34,6 +34,10 @@ public class Oracle12Dialect extends OracleDialect implements Dialect {
         return "oracle12";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.SQLSTD;

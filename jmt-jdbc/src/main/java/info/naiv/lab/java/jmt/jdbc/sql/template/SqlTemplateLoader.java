@@ -32,8 +32,15 @@ import java.nio.charset.Charset;
  */
 public interface SqlTemplateLoader {
 
+    /**
+     *
+     */
     static final String DEFAULT_SUFFIX = "";
 
+    /**
+     *
+     * @param parentLoader
+     */
     void setParent(SqlTemplateLoader parentLoader);
 
     /**

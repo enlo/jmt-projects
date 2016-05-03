@@ -38,5 +38,9 @@ import java.lang.annotation.Target;
 @Documented
 public @interface SqlTemplateCategoryOf {
 
+    /**
+     *
+     * @return
+     */
     String value();
 }

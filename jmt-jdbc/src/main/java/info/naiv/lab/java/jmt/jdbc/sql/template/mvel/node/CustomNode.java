@@ -40,16 +40,36 @@ public abstract class CustomNode extends Node {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     */
     protected Serializable ce;
 
+    /**
+     *
+     */
     public CustomNode() {
     }
 
+    /**
+     *
+     * @param terminatingNode
+     * @param template
+     * @return
+     */
     @Override
     public boolean demarcate(Node terminatingNode, char[] template) {
         return false;
     }
 
+    /**
+     *
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     * @return
+     */
     @Override
     public final Object eval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
         Object value = MVEL.executeExpression(ce, ctx, factory);
@@ -59,6 +79,10 @@ public abstract class CustomNode extends Node {
         return next != null ? next.eval(runtime, appender, ctx, factory) : null;
     }
 
+    /**
+     *
+     * @param contents
+     */
     @Override
     public void setContents(char[] contents) {
         super.setContents(contents);
@@ -73,5 +97,13 @@ public abstract class CustomNode extends Node {
 
     }
 
+    /**
+     *
+     * @param value
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     */
     protected abstract void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory);
 }

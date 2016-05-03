@@ -31,5 +31,11 @@ import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
  */
 public interface SqlModifier {
 
+    /**
+     *
+     * @param sql
+     * @param dialect
+     * @return
+     */
     String modify(String sql, Dialect dialect);
 }

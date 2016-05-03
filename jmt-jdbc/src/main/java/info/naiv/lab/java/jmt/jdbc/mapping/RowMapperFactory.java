@@ -34,5 +34,11 @@ import org.springframework.jdbc.core.RowMapper;
  */
 public interface RowMapperFactory<T> {
 
+    /**
+     *
+     * @param rs
+     * @return
+     * @throws SQLException
+     */
     RowMapper<T> createRowMapper(ResultSet rs) throws SQLException;
 }

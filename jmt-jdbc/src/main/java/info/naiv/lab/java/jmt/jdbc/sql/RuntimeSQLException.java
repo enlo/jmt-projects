@@ -48,10 +48,19 @@ public class RuntimeSQLException extends RuntimeException {
         super(msg);
     }
 
+    /**
+     *
+     * @param cause
+     */
     public RuntimeSQLException(Throwable cause) {
         super(cause);
     }
 
+    /**
+     *
+     * @param message
+     * @param cause
+     */
     public RuntimeSQLException(String message, Throwable cause) {
         super(message, cause);
     }

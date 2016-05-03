@@ -40,12 +40,24 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 @Slf4j
 public class SqlParameterSourceVariableResolverFactory extends BaseVariableResolverFactory {
 
+    /**
+     *
+     */
     protected final SqlParameterSource parameterSource;
 
+    /**
+     *
+     * @param parameterSource
+     */
     public SqlParameterSourceVariableResolverFactory(SqlParameterSource parameterSource) {
         this(parameterSource, null);
     }
 
+    /**
+     *
+     * @param parameterSource
+     * @param nextFactory
+     */
     public SqlParameterSourceVariableResolverFactory(SqlParameterSource parameterSource, VariableResolverFactory nextFactory) {
         this.parameterSource = parameterSource;
         this.nextFactory = nextFactory;

@@ -53,6 +53,10 @@ public class SqlTemplateInjectorTest {
 
     SqlTemplateInjector instance;
 
+    /**
+     *
+     * @throws IOException
+     */
     @Before
     public void setUp() throws IOException {
         instance = new SqlTemplateInjector();

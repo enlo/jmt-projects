@@ -116,21 +116,52 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
         return itr;
     }
 
+    /**
+     *
+     * @param parentLoader
+     */
     @Override
     public void setParent(SqlTemplateLoader parentLoader) {
         this.parentLoader = parentLoader;
     }
 
+    /**
+     *
+     * @param name
+     * @param template
+     * @return
+     */
     protected abstract SqlTemplate doFromString(String name, String template);
 
+    /**
+     *
+     * @param category
+     * @param name
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     protected abstract SqlTemplate doLoad(String category, String name, Charset charset) throws IOException;
 
+    /**
+     *
+     * @param category
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     protected abstract Iterable<SqlTemplate> doLoadCategory(String category, Charset charset) throws IOException;
 
+    /**
+     *
+     */
     protected void initialize() {
 
     }
 
+    /**
+     *
+     */
     protected void needInitialize() {
         if (initialized.compareAndSet(false, true)) {
             initialize();

@@ -50,22 +50,75 @@ public interface Query {
      */
     int[] batchUpadate(JdbcOperations jdbcOperations, List<Object[]> batchValues);
 
+    /**
+     *
+     * @param jdbcOperations
+     * @param batchValues
+     * @param columnTypes
+     * @return
+     */
     int[] batchUpadate(JdbcOperations jdbcOperations, final List<Object[]> batchValues, final int[] columnTypes);
 
+    /**
+     *
+     * @param jdbcOperations
+     * @param batchStatementSetter
+     * @return
+     */
     int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter);
 
+    /**
+     *
+     * @param jdbcOperations
+     */
     void execute(JdbcOperations jdbcOperations);
 
+    /**
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param action
+     * @return
+     */
     <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action);
 
+    /**
+     *
+     * @return
+     */
     int getFetchSize();
 
+    /**
+     *
+     * @return
+     */
     int getMaxRowSize();
 
+    /**
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param rowMapper
+     * @return
+     */
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper);
 
+    /**
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param rowMapperFactory
+     * @return
+     */
     <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory);
 
+    /**
+     *
+     * @param <T>
+     * @param jdbcOperations
+     * @param resultSetExtractor
+     * @return
+     */
     <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor);
 
     /**
@@ -159,6 +212,13 @@ public interface Query {
      * @return
      */
     Query rebind(List<?> args);
+
+    /**
+     * デバッグログを有効にするか.
+     *
+     * @param flag
+     */
+    void enableDebugLogging(boolean flag);
 
     /**
      * フェッチサイズを設定する.

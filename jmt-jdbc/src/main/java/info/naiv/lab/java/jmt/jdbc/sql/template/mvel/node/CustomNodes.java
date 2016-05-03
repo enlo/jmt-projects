@@ -33,6 +33,9 @@ import org.mvel2.templates.res.Node;
  */
 public class CustomNodes {
 
+    /**
+     *
+     */
     public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
 
     static {

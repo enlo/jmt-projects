@@ -39,7 +39,11 @@ import org.springframework.core.io.Resource;
  */
 public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implements DirectoryStream.Filter<Path>, PathMatcher {
 
-    private static void buildPatterns(String name, StringBuilder partsWithSuffix, StringBuilder partsNoSuffix, String suffix, String extension) {
+    private static void buildPatterns(String name,
+                                      StringBuilder partsWithSuffix,
+                                      StringBuilder partsNoSuffix,
+                                      String suffix,
+                                      String extension) {
         if (isNotBlank(name)) {
             partsWithSuffix.append("^(").append(name).append(")");
             partsNoSuffix.append("^(").append(name).append(")");

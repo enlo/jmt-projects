@@ -29,6 +29,10 @@ package info.naiv.lab.java.jmt.jdbc.sql.dialect;
  */
 public class SqlServer2012Dialect extends SqlServerDialect {
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.SQLSTD;

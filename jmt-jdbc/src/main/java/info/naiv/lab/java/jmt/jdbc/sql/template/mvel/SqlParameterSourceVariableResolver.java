@@ -37,12 +37,23 @@ public class SqlParameterSourceVariableResolver implements VariableResolver {
     private final String name;
     private final SqlParameterSource parameterSource;
 
+    /**
+     *
+     * @param parameterSource
+     * @param name
+     */
     public SqlParameterSourceVariableResolver(SqlParameterSource parameterSource, String name) {
         this.name = name;
         this.knownType = resolveType(parameterSource, name);
         this.parameterSource = parameterSource;
     }
 
+    /**
+     *
+     * @param parameterSource
+     * @param name
+     * @param knownType
+     */
     public SqlParameterSourceVariableResolver(SqlParameterSource parameterSource, String name, Class<?> knownType) {
         this.name = name;
         this.knownType = knownType;
@@ -69,6 +80,10 @@ public class SqlParameterSourceVariableResolver implements VariableResolver {
         return parameterSource.getValue(name);
     }
 
+    /**
+     *
+     * @param type
+     */
     @Override
     public void setStaticType(Class type) {
         throw new UnsupportedOperationException("Not supported yet.");

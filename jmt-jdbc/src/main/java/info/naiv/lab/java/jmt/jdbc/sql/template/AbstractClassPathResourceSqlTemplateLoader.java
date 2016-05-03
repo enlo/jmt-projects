@@ -28,6 +28,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ *
+ * @author enlo
+ */
 @Slf4j
 public abstract class AbstractClassPathResourceSqlTemplateLoader
         extends AbstractResourceSqlTemplateLoader {
@@ -36,15 +40,26 @@ public abstract class AbstractClassPathResourceSqlTemplateLoader
     @Setter
     private ClassPathResourceRepository resourceRepository;
 
+    /**
+     *
+     */
     public AbstractClassPathResourceSqlTemplateLoader() {
         this(new ClassPathResourceRepository());
     }
 
+    /**
+     *
+     * @param resourceRepository
+     */
     public AbstractClassPathResourceSqlTemplateLoader(ClassPathResourceRepository resourceRepository) {
         this.resourceRepository = resourceRepository;
         this.resourceRepository.setRootPath("SQL");
     }
 
+    /**
+     *
+     * @param rootPackage
+     */
     public void setRootPackage(String rootPackage) {
         this.resourceRepository.setRootPath(rootPackage);
     }

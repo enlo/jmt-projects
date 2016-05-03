@@ -48,10 +48,17 @@ public class ExternalJdbcDriverLoader {
 
     private final ClassLoader parentClassLoader;
 
+    /**
+     *
+     * @param parentClassLoader
+     */
     public ExternalJdbcDriverLoader(ClassLoader parentClassLoader) {
         this.parentClassLoader = parentClassLoader;
     }
 
+    /**
+     *
+     */
     public ExternalJdbcDriverLoader() {
         this.parentClassLoader = this.getClass().getClassLoader();
     }
@@ -148,6 +155,12 @@ public class ExternalJdbcDriverLoader {
         }
     }
 
+    /**
+     *
+     * @param paths
+     * @return
+     * @throws IOException
+     */
     @ReturnNonNull
     protected URLClassLoader newClassLoader(Collection<Path> paths) throws IOException {
         URLClassLoaderBuilder builder = URLClassLoaderBuilder.builder();

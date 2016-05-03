@@ -34,6 +34,10 @@ public class PostgreSqlDialect extends AbstractDialect {
         return "postgres";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.MYSQL_LIKE;

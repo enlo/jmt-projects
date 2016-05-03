@@ -37,8 +37,16 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
  */
 public interface SqlTemplate {
 
+    /**
+     *
+     * @return
+     */
     String getName();
 
+    /**
+     *
+     * @return
+     */
     @ReturnNonNull
     Query merge();
 

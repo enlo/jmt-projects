@@ -37,8 +37,20 @@ import org.mvel2.templates.util.TemplateOutputStream;
 public class OrderByNode extends CustomNode {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     *
+     */
     protected static final String ORDER_BY_PREFIX = " order by ";
 
+    /**
+     *
+     * @param value
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     */
     @Override
     public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
         if (value instanceof Iterable) {
@@ -64,6 +76,11 @@ public class OrderByNode extends CustomNode {
         }
     }
 
+    /**
+     *
+     * @param appender
+     * @param ord
+     */
     protected void appendOrder(TemplateOutputStream appender, OrderBy ord) {
         appender.append(ord.getOrderItem()).append(" ").append(ord.getOrder().name());
     }

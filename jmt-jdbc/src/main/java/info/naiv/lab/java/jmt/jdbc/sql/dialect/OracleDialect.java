@@ -34,6 +34,10 @@ public class OracleDialect extends AbstractDialect {
         return "oracle";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public PagingSupportType getPagingSupport() {
         return PagingSupportType.ROWNUM_SUPPORT;

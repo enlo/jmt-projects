@@ -44,8 +44,24 @@ public abstract class AbstractResourceSqlTemplateLoader extends AbstractSqlTempl
     @Setter
     private String extension = "sql";
 
+    /**
+     *
+     * @param name
+     * @param resource
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     protected abstract SqlTemplate createSqlTemplateFromResource(String name, Resource resource, Charset charset) throws IOException;
 
+    /**
+     *
+     * @param category
+     * @param name
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     @Override
     protected SqlTemplate doLoad(String category, String name, Charset charset) throws IOException {
         SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, getSuffix(), getExtension(), true);
@@ -58,6 +74,13 @@ public abstract class AbstractResourceSqlTemplateLoader extends AbstractSqlTempl
         }
     }
 
+    /**
+     *
+     * @param category
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     @Override
     protected Iterable<SqlTemplate> doLoadCategory(String category, Charset charset) throws IOException {
         SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter("[^.]+", getSuffix(), getExtension(), true);
@@ -72,6 +95,10 @@ public abstract class AbstractResourceSqlTemplateLoader extends AbstractSqlTempl
         return result;
     }
 
+    /**
+     *
+     * @return
+     */
     protected abstract ResourceRepository getResourceRepository();
 
 }

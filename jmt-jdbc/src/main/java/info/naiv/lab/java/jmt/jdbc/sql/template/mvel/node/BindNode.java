@@ -36,6 +36,14 @@ public class BindNode extends CustomNode {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     * @param value
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     */
     @Override
     public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
         ctx.addParameter(value);

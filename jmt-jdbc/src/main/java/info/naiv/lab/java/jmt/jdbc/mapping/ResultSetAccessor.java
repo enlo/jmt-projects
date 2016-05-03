@@ -58,6 +58,11 @@ public class ResultSetAccessor {
     private final Map<String, Integer> columnMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
     private final ResultSetMetaData metaData;
 
+    /**
+     *
+     * @param rs
+     * @throws SQLException
+     */
     public ResultSetAccessor(@NonNull ResultSet rs) throws SQLException {
         metaData = rs.getMetaData();
         int columns = metaData.getColumnCount();
@@ -67,6 +72,13 @@ public class ResultSetAccessor {
         }
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Array getArray(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -75,6 +87,13 @@ public class ResultSetAccessor {
         return rs.getArray(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public InputStream getAsciiStream(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -83,6 +102,13 @@ public class ResultSetAccessor {
         return rs.getAsciiStream(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public BigDecimal getBigDecimal(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -91,6 +117,13 @@ public class ResultSetAccessor {
         return rs.getBigDecimal(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public InputStream getBinaryStream(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -99,6 +132,13 @@ public class ResultSetAccessor {
         return rs.getBinaryStream(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Blob getBlob(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -107,6 +147,13 @@ public class ResultSetAccessor {
         return rs.getBlob(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Boolean getBoolean(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -115,6 +162,13 @@ public class ResultSetAccessor {
         return rs.getBoolean(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Byte getByte(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -123,6 +177,13 @@ public class ResultSetAccessor {
         return rs.getByte(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public byte[] getBytes(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -131,6 +192,13 @@ public class ResultSetAccessor {
         return rs.getBytes(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Reader getCharacterStream(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -139,6 +207,13 @@ public class ResultSetAccessor {
         return rs.getCharacterStream(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Clob getClob(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -147,6 +222,13 @@ public class ResultSetAccessor {
         return rs.getClob(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Date getDate(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -155,6 +237,13 @@ public class ResultSetAccessor {
         return rs.getDate(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Double getDouble(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -163,6 +252,13 @@ public class ResultSetAccessor {
         return rs.getDouble(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Float getFloat(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -171,6 +267,13 @@ public class ResultSetAccessor {
         return rs.getFloat(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Integer getInteger(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -179,6 +282,13 @@ public class ResultSetAccessor {
         return rs.getInt(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Long getLong(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -187,6 +297,13 @@ public class ResultSetAccessor {
         return rs.getLong(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Reader getNCharacterStream(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -195,6 +312,13 @@ public class ResultSetAccessor {
         return rs.getNCharacterStream(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public NClob getNClob(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -203,6 +327,13 @@ public class ResultSetAccessor {
         return rs.getNClob(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public String getNString(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -211,6 +342,13 @@ public class ResultSetAccessor {
         return rs.getNString(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Object getObject(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -219,6 +357,13 @@ public class ResultSetAccessor {
         return rs.getObject(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Ref getRef(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -227,6 +372,13 @@ public class ResultSetAccessor {
         return rs.getRef(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public RowId getRowId(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -235,6 +387,13 @@ public class ResultSetAccessor {
         return rs.getRowId(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public SQLXML getSQLXML(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -243,6 +402,13 @@ public class ResultSetAccessor {
         return rs.getSQLXML(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Short getShort(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -251,6 +417,13 @@ public class ResultSetAccessor {
         return rs.getShort(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public String getString(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -259,6 +432,13 @@ public class ResultSetAccessor {
         return rs.getString(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Time getTime(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -267,6 +447,13 @@ public class ResultSetAccessor {
         return rs.getTime(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public Timestamp getTimestamp(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -275,6 +462,13 @@ public class ResultSetAccessor {
         return rs.getTimestamp(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public URL getURL(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {
@@ -283,6 +477,13 @@ public class ResultSetAccessor {
         return rs.getURL(columnIndex);
     }
 
+    /**
+     *
+     * @param rs
+     * @param columnName
+     * @return
+     * @throws SQLException
+     */
     public InputStream getUnicodeStream(ResultSet rs, String columnName) throws SQLException {
         Integer columnIndex = columnMap.get(columnName);
         if (columnIndex == null) {

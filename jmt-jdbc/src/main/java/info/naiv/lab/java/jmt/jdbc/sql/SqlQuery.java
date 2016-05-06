@@ -66,6 +66,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 public class SqlQuery implements Query {
 
     final SqlQueryContext context;
+    boolean debugLogging;
 
     int fetchSize = -1;
     int maxRowSize = -1;
@@ -182,14 +183,13 @@ public class SqlQuery implements Query {
             };
         }
 
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.batchUpdate(q, bpss);
     }
 
-    boolean debugLogging;
-
+    
     @Override
     public void enableDebugLogging(boolean flag) {
         debugLogging = flag;
@@ -212,7 +212,7 @@ public class SqlQuery implements Query {
     @Override
     public <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.execute(q, new PreparedStatementCallback<T>() {
@@ -225,7 +225,7 @@ public class SqlQuery implements Query {
     }
 
     @Override
-    public int getFetchSize() {
+    public  int getFetchSize() {
         return fetchSize;
     }
 
@@ -238,6 +238,10 @@ public class SqlQuery implements Query {
         return sql;
     }
 
+    public boolean isDebugLogging() {
+        return debugLogging || logger.isDebugEnabled();
+    }
+
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapper<T> rowMapper) {
         return query(jdbcOperations, new RowMapperResultSetExtractor<>(rowMapper));
@@ -246,7 +250,7 @@ public class SqlQuery implements Query {
     @Override
     public <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.query(q, setter, resultSetExtractor);
@@ -255,7 +259,7 @@ public class SqlQuery implements Query {
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new RowMapperFactoryResultSetExtractor<>(rowMapperFactory));
@@ -279,7 +283,7 @@ public class SqlQuery implements Query {
     @Override
     public List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new ColumnMapRowMapper());
@@ -299,7 +303,7 @@ public class SqlQuery implements Query {
     @Override
     public <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
@@ -308,7 +312,7 @@ public class SqlQuery implements Query {
     @Override
     public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
@@ -342,7 +346,7 @@ public class SqlQuery implements Query {
     @Override
     public int update(JdbcOperations jdbcOperations) {
         String q = modifyForUpdate(getSql());
-        if (this.debugLogging) {
+        if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
         return jdbcOperations.update(q, setter);
@@ -350,7 +354,7 @@ public class SqlQuery implements Query {
 
     @Override
     public int update(JdbcOperations jdbcOperations, KeyHolder keyHolder) {
-        final boolean db = debugLogging;
+        final boolean db = isDebugLogging();
         return jdbcOperations.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {

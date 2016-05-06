@@ -284,6 +284,9 @@ public class IterationUtils {
         };
     }
 
+    private IterationUtils() {
+    }
+
     private static class LoopConditionImpl extends LoopCondition {
 
         int index = 0;
@@ -296,9 +299,6 @@ public class IterationUtils {
         public void next() {
             index++;
         }
-    }
-
-    private IterationUtils() {
     }
 
 }

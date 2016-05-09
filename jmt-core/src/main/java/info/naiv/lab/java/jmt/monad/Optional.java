@@ -124,8 +124,6 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param exceptionSupplier
      * @return
      * @throws X
-     * @throws X
-     * @throws X
      */
     @ReturnNonNull
     <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;

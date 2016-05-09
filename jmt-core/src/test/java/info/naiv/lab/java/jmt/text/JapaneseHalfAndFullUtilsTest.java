@@ -34,6 +34,9 @@ import org.junit.Test;
  */
 public class JapaneseHalfAndFullUtilsTest {
 
+    /**
+     *
+     */
     public JapaneseHalfAndFullUtilsTest() {
     }
 

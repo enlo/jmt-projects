@@ -26,7 +26,8 @@ package info.naiv.lab.java.jmt.text;
 import java.nio.IntBuffer;
 
 /**
- * 伝統的な半角全角処理.
+ * 伝統的な半角全角処理. <br>
+ * 本来なら ICU を使用して変換を行うべき.
  *
  * @author enlo
  */
@@ -407,12 +408,12 @@ public class JapaneseHalfAndFullUtils {
         return valueCode;
     }
 
+    private JapaneseHalfAndFullUtils() {
+    }
+
     private static interface ConvertCallback {
 
         int convert(IntBuffer buf, int prev, int ch);
-    }
-
-    private JapaneseHalfAndFullUtils() {
     }
 
 }

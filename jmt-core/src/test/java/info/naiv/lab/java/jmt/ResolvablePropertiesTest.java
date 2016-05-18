@@ -23,6 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -41,7 +44,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  * @author enlo
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({System.class, ResolvableProperties.class})
+@PrepareForTest({System.class, ResolvableProperties.class, PropertiesPlaceholderResolver.class})
 public class ResolvablePropertiesTest {
 
     Properties prop;
@@ -68,7 +71,6 @@ public class ResolvablePropertiesTest {
         PowerMockito.mockStatic(System.class);
         when(System.getProperty("itemNameSys")).thenReturn("@systemProp");
         when(System.getenv("itemNameEnv")).thenReturn("@env");
-
         testTarget = spy(new ResolvableProperties(prop));
 
     }
@@ -151,4 +153,14 @@ public class ResolvablePropertiesTest {
         assertThat(p.getProperty("itemNameOther", "${itemName3}"), is(""));
     }
 
+    @Test
+    public void testSerialize() throws IOException {
+
+        ResolvableProperties resProps = new ResolvableProperties();
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        try (ObjectOutputStream os = new ObjectOutputStream(stream)) {
+            os.writeObject(resProps);
+        }
+
+    }
 }

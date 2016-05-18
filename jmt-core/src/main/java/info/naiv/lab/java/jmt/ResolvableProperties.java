@@ -42,13 +42,12 @@ import org.springframework.util.PropertyPlaceholderHelper;
  */
 public class ResolvableProperties extends Properties {
 
-    /**
-     * Placeholder Helper.
-     */
-    private static final PropertyPlaceholderHelper defaultHelper = new PropertyPlaceholderHelper("${", "}");
-    private static final long serialVersionUID = -1903901302631713092L;
+    private static final PropertiesPlaceholderResolver defaultResolver = PropertiesPlaceholderResolver.DEFAULT;
 
-    private final PropertyPlaceholderHelper helper;
+    /**
+     * Placeholder resolver.
+     */
+    private final PropertiesPlaceholderResolver resolver;
 
     /**
      * コピーコンストラクター
@@ -56,14 +55,14 @@ public class ResolvableProperties extends Properties {
      * @param other もとのプロパティ
      */
     public ResolvableProperties(Properties other) {
-        this(defaultHelper, other);
+        this(defaultResolver, other);
     }
 
     /**
      *
      */
     public ResolvableProperties() {
-        this.helper = defaultHelper;
+        this.resolver = defaultResolver;
     }
 
     /**
@@ -72,9 +71,9 @@ public class ResolvableProperties extends Properties {
      * @param helper プレイホルダーヘルパー
      * @param defaultProps 既定のプロパティ
      */
-    protected ResolvableProperties(PropertyPlaceholderHelper helper, Properties defaultProps) {
+    protected ResolvableProperties(PropertiesPlaceholderResolver helper, Properties defaultProps) {
         super(defaultProps);
-        this.helper = nonNull(helper, "helper");
+        this.resolver = nonNull(helper, "helper");
     }
 
     @Override
@@ -184,14 +183,6 @@ public class ResolvableProperties extends Properties {
         }
     }
 
-    private String onPropertyNotFound(String propertyName) {
-        String value = System.getProperty(propertyName);
-        if (value == null) {
-            value = System.getenv(propertyName);
-        }
-        return value;
-    }
-
     /**
      * プレイスホルダーを実際の値に変換し、戻す.
      *
@@ -199,24 +190,7 @@ public class ResolvableProperties extends Properties {
      * @return プレイスホルダー評価後の値
      */
     protected String eval(String value) {
-        return helper.replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
-            @Override
-            public String resolvePlaceholder(String placeholderName) {
-                return resolveProperty(placeholderName);
-            }
-        });
+        return resolver.resolve(this, value);
     }
 
-    /**
-     *
-     * @param propertyName
-     * @return
-     */
-    protected String resolveProperty(String propertyName) {
-        String value = getPropertyCore(propertyName, null);
-        if (value == null) {
-            value = onPropertyNotFound(propertyName);
-        }
-        return value;
-    }
 }

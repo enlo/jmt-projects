@@ -135,7 +135,7 @@ public class SqlQuery implements Query {
 
     @Override
     public int[] batchUpadate(JdbcOperations jdbcOperations, final BatchPreparedStatementSetter batchStatementSetter) {
-        String q = getSql();
+        String q = getMergedSql();
 
         BatchPreparedStatementSetter bpss;
         if (batchStatementSetter instanceof InterruptibleBatchPreparedStatementSetter) {
@@ -189,7 +189,6 @@ public class SqlQuery implements Query {
         return jdbcOperations.batchUpdate(q, bpss);
     }
 
-    
     @Override
     public void enableDebugLogging(boolean flag) {
         debugLogging = flag;
@@ -197,7 +196,7 @@ public class SqlQuery implements Query {
 
     @Override
     public void execute(JdbcOperations jdbcOperations) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         jdbcOperations.execute(q, new PreparedStatementCallback<Void>() {
 
             @Override
@@ -211,7 +210,7 @@ public class SqlQuery implements Query {
 
     @Override
     public <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -225,7 +224,7 @@ public class SqlQuery implements Query {
     }
 
     @Override
-    public  int getFetchSize() {
+    public int getFetchSize() {
         return fetchSize;
     }
 
@@ -234,7 +233,8 @@ public class SqlQuery implements Query {
         return maxRowSize;
     }
 
-    public String getSql() {
+    @Override
+    public String getMergedSql() {
         return sql;
     }
 
@@ -249,7 +249,7 @@ public class SqlQuery implements Query {
 
     @Override
     public <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -258,7 +258,7 @@ public class SqlQuery implements Query {
 
     @Override
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -282,7 +282,7 @@ public class SqlQuery implements Query {
 
     @Override
     public List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -302,7 +302,7 @@ public class SqlQuery implements Query {
 
     @Override
     public <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -311,7 +311,7 @@ public class SqlQuery implements Query {
 
     @Override
     public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
-        String q = modifyForQuery(getSql());
+        String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -320,12 +320,12 @@ public class SqlQuery implements Query {
 
     @Override
     public SqlQuery rebind(PreparedStatementSetter newSetter) {
-        return new SqlQuery(getSql(), context, newSetter);
+        return new SqlQuery(getMergedSql(), context, newSetter);
     }
 
     @Override
     public SqlQuery rebind(List<?> args) {
-        return new SqlQuery(getSql(), context, args.toArray());
+        return new SqlQuery(getMergedSql(), context, args.toArray());
     }
 
     @Override
@@ -345,7 +345,7 @@ public class SqlQuery implements Query {
 
     @Override
     public int update(JdbcOperations jdbcOperations) {
-        String q = modifyForUpdate(getSql());
+        String q = modifyForUpdate(getMergedSql());
         if (isDebugLogging()) {
             logger.debug("batchUpdate Sql={}", q);
         }
@@ -358,7 +358,7 @@ public class SqlQuery implements Query {
         return jdbcOperations.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
-                String q = modifyForUpdate(getSql());
+                String q = modifyForUpdate(getMergedSql());
                 if (db) {
                     logger.debug("batchUpdate Sql={}", q);
                 }

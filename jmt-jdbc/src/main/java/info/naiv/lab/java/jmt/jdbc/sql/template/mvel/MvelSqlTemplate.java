@@ -75,13 +75,13 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
     @Override
     public <T> SqlQuery mergeMap(Map<String, T> parameters) {
         VariableResolverFactory factory = new MapVariableResolverFactory(parameters);
-        return createQuery(factory);
+        return createQuery(factory, parameters);
     }
 
     @Override
     public SqlQuery mergeParameterSource(SqlParameterSource parameters) {
         VariableResolverFactory factory = new SqlParameterSourceVariableResolverFactory(parameters);
-        return createQuery(factory);
+        return createQuery(factory, parameters);
     }
 
     @Override
@@ -89,9 +89,10 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
         return mergeParameterSource(parameters);
     }
 
-    protected SqlQuery createQuery(VariableResolverFactory factory) {
+    protected SqlQuery createQuery(VariableResolverFactory factory, Object sourceBean) {
         factory.createVariable("dialect", dialect, Dialect.class);
         SqlQueryContext context = new SqlQueryContext(dialect);
+        context.setParameterSource(sourceBean);
         String sql = (String) TemplateRuntime.execute(template, context, factory);
         return new SqlQuery(sql, context);
     }
@@ -103,6 +104,9 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
         }
         else if (bean instanceof SqlParameterSource) {
             return mergeParameterSource((SqlParameterSource) bean);
+        }
+        else if (bean instanceof VariableResolverFactory) {
+            return createQuery((VariableResolverFactory) bean, bean);
         }
         return mergeParameterSource(new BeanPropertySqlParameterSource(bean));
     }

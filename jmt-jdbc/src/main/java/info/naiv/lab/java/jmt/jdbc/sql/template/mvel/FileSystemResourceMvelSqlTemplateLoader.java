@@ -40,6 +40,12 @@ import org.springframework.core.io.Resource;
 public class FileSystemResourceMvelSqlTemplateLoader
         extends AbstractFileSystemResourceSqlTemplateLoader {
 
+    /**
+     *
+     * @param name
+     * @param template
+     * @return
+     */
     protected MvelSqlTemplate compile(String name, String template) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
         return new MvelSqlTemplate(name, ct, getDialect());

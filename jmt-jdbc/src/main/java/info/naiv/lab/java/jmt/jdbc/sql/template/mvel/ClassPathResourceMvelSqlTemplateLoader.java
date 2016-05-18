@@ -40,13 +40,26 @@ import org.springframework.core.io.Resource;
 public class ClassPathResourceMvelSqlTemplateLoader
         extends AbstractClassPathResourceSqlTemplateLoader {
 
+    /**
+     *
+     */
     public ClassPathResourceMvelSqlTemplateLoader() {
     }
 
+    /**
+     *
+     * @param rootPackage
+     */
     public ClassPathResourceMvelSqlTemplateLoader(String rootPackage) {
         setRootPackage(rootPackage);
     }
 
+    /**
+     *
+     * @param name
+     * @param template
+     * @return
+     */
     protected MvelSqlTemplate compile(String name, String template) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
         return new MvelSqlTemplate(name, ct, getDialect());

@@ -42,6 +42,9 @@ import org.mvel2.templates.TemplateRuntime;
  */
 public class OrderByNodeTest {
 
+    /**
+     *
+     */
     public OrderByNodeTest() {
     }
 
@@ -157,6 +160,12 @@ public class OrderByNodeTest {
         assertThat(node.toString(), is(startsWith("OrderByNode")));
     }
 
+    /**
+     *
+     * @param template
+     * @param map
+     * @return
+     */
     protected String makeSql(String template, Map<String, Object> map) {
         CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
         SqlQueryContext ctx = new SqlQueryContext(null);

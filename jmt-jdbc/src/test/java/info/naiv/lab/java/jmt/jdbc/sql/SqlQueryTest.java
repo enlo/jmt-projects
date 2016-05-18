@@ -275,7 +275,7 @@ public class SqlQueryTest {
     @Test
     public void testGetSql() {
         Query query = loader.fromString("select count(*) from Users").merge();
-        assertThat(((SqlQuery) query).getSql(), is("select count(*) from Users"));
+        assertThat(((SqlQuery) query).getMergedSql(), is("select count(*) from Users"));
     }
 
     /**

@@ -38,6 +38,9 @@ import static org.mockito.Mockito.mock;
 public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends AbstractClassPathResourceSqlTemplateLoader>
         extends AbstractResourceSqlTemplateLoaderTest<T> {
 
+    /**
+     *
+     */
     public AbstractClassPathResourceSqlTemplateLoaderTest() {
     }
 
@@ -63,6 +66,10 @@ public abstract class AbstractClassPathResourceSqlTemplateLoaderTest<T extends A
         assertThat(instance.getResourceRepository().getRootPath(), is("test"));
     }
 
+    /**
+     *
+     * @return
+     */
     protected String defaultRootPackage() {
         return "SQL";
     }

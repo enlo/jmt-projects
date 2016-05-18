@@ -42,6 +42,9 @@ import org.mvel2.templates.TemplateRuntime;
  */
 public class BindManyNodeTest {
 
+    /**
+     *
+     */
     public BindManyNodeTest() {
     }
 

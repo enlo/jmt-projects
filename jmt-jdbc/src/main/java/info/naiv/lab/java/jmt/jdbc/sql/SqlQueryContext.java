@@ -37,6 +37,8 @@ import lombok.Data;
 @Data
 public class SqlQueryContext {
 
+    Object parameterSource;
+
     List<Object> parameters;
 
     Dialect dialect;

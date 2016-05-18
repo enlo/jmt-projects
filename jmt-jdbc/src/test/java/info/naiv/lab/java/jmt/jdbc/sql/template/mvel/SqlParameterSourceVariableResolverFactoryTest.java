@@ -49,7 +49,7 @@ public class SqlParameterSourceVariableResolverFactoryTest {
     @Test
     public void test001() {
         MvelSqlTemplate t = build("@if{ name != empty }@{name}@end{}");
-        String result = t.merge(Cond.builder().name("ABCD").build()).getSql();
+        String result = t.merge(Cond.builder().name("ABCD").build()).getMergedSql();
         assertThat(result, is("ABCD"));
     }
 
@@ -64,9 +64,9 @@ public class SqlParameterSourceVariableResolverFactoryTest {
                 + "@else{}"
                 + "@{ name + '%' }"
                 + "@end{}");
-        String result1 = t.merge(Cond.builder().name("ABCD").build()).getSql();
+        String result1 = t.merge(Cond.builder().name("ABCD").build()).getMergedSql();
         assertThat(result1, is("ABCD%"));
-        String result2 = t.merge(Cond.builder().name("*ABCD").build()).getSql();
+        String result2 = t.merge(Cond.builder().name("*ABCD").build()).getMergedSql();
         assertThat(result2, is("%ABCD%"));
     }
 

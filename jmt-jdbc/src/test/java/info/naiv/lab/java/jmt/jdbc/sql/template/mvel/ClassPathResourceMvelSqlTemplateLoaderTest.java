@@ -41,6 +41,9 @@ import static org.junit.Assert.assertThat;
 public class ClassPathResourceMvelSqlTemplateLoaderTest
         extends AbstractClassPathResourceSqlTemplateLoaderTest<ClassPathResourceMvelSqlTemplateLoader> {
 
+    /**
+     *
+     */
     public ClassPathResourceMvelSqlTemplateLoaderTest() {
     }
 

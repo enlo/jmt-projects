@@ -258,4 +258,10 @@ public interface Query {
      * @return 影響を受けた行数
      */
     int update(JdbcOperations jdbcOperations, KeyHolder keyHolder);
+
+    /**
+     *
+     * @return マージ後実際のSQL
+     */
+    String getMergedSql();
 }

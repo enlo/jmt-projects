@@ -23,28 +23,34 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import org.mvel2.templates.res.Node;
+import info.naiv.lab.java.jmt.jdbc.sql.Query;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
+import info.naiv.lab.java.jmt.jdbc.sql.template.SqlTemplate;
+import info.naiv.lab.java.jmt.jdbc.sql.template.mvel.MvelSqlTemplate;
+import org.mvel2.integration.VariableResolverFactory;
+import org.mvel2.templates.CompiledTemplate;
+import org.mvel2.templates.TemplateRuntime;
+import org.mvel2.templates.util.TemplateOutputStream;
 
 /**
  *
  * @author enlo
  */
-public class CustomNodes {
+public class IncludeTemplateNode extends CustomNode {
 
-    /**
-     *
-     */
-    public static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
-
-    static {
-        NODES.put("bind", BindNode.class);
-        NODES.put("bindMany", BindManyNode.class);
-        NODES.put("orderBy", OrderByNode.class);
-        NODES.put("includeTemplate", IncludeTemplateNode.class);
+    @Override
+    protected void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
+        if (value instanceof MvelSqlTemplate) {
+            MvelSqlTemplate templ = (MvelSqlTemplate) value;
+            CompiledTemplate ct = templ.getTemplate();
+            String compiled = (String) TemplateRuntime.execute(ct, ctx, factory);
+            appender.append(compiled);
+        }
+        else if (value instanceof SqlTemplate) {
+            SqlTemplate templ = (SqlTemplate) value;
+            Query ct = templ.merge(ctx.getParameterSource());
+            appender.append(ct.getMergedSql());
+        }
     }
 
-    private CustomNodes() {
-    }
 }

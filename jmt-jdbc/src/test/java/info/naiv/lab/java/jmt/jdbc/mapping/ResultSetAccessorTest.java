@@ -61,9 +61,16 @@ public class ResultSetAccessorTest {
     private ResultSetAccessor accessor;
     private ResultSet mockResultSet;
 
+    /**
+     *
+     */
     public ResultSetAccessorTest() {
     }
 
+    /**
+     *
+     * @throws SQLException
+     */
     @Before
     public void setUp() throws SQLException {
         mockResultSet = mock(ResultSet.class);

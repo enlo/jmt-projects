@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
+import info.naiv.lab.java.jmt.jdbc.sql.NamedParameterBinder;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasEntry;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.mvel2.templates.CompiledTemplate;
@@ -78,4 +80,39 @@ public class BindManyNodeTest {
 
     }
 
+    /**
+     * Test of eval method, of class BindManyNode.
+     */
+    @Test
+    public void testEvalNamed() {
+
+        String template
+                = "select * from Users where category = @bind{ category }"
+                + " and (name in (@bindMany{ names }))";
+
+        int category = 1;
+        List<String> names = Arrays.asList("jone", "doe", "mike");
+
+        String expectedSql
+                = "select * from Users where category = :param0"
+                + " and (name in (:param1, :param2, :param3))";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("category", category);
+        map.put("names", names);
+
+        CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
+        SqlQueryContext ctx = new SqlQueryContext(null);
+        NamedParameterBinder binder = new NamedParameterBinder(":");
+        ctx.setParameterBinder(binder);
+        String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
+
+        assertThat(actualSql, is(expectedSql));
+
+        Map<String, Object> named = binder.getNamedParameters();
+        assertThat(named, hasEntry(":param0", (Object) category));
+        assertThat(named, hasEntry(":param1", (Object) names.get(0)));
+        assertThat(named, hasEntry(":param2", (Object) names.get(1)));
+        assertThat(named, hasEntry(":param3", (Object) names.get(2)));
+    }
 }

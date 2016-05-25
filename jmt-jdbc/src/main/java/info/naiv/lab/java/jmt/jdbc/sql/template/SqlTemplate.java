@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.jdbc.sql.template;
 
 import info.naiv.lab.java.jmt.jdbc.sql.Query;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQuery;
+import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -63,27 +64,6 @@ public interface SqlTemplate {
 
     /**
      * テンプレートから {@link SqlQuery } を作成する.<br>
-     * パラメータとして、Map を渡す. <br>
-     *
-     * @param <T>
-     * @param parameters
-     * @return
-     */
-    @ReturnNonNull
-    <T> Query mergeMap(Map<String, T> parameters);
-
-    /**
-     * テンプレートから {@link SqlQuery } を作成する.<br>
-     * パラメータとして、パラメータソースを渡す. <br>
-     *
-     * @param parameters
-     * @return
-     */
-    @ReturnNonNull
-    Query mergeParameterSource(SqlParameterSource parameters);
-
-    /**
-     * テンプレートから {@link SqlQuery } を作成する.<br>
      * パラメータとして、パラメータソースを渡す. <br>
      *
      * @param parameters
@@ -102,4 +82,33 @@ public interface SqlTemplate {
      */
     @ReturnNonNull
     Query merge(Object bean);
+
+    /**
+     *
+     * @param context
+     * @return
+     */
+    @ReturnNonNull
+    Query mergeContext(SqlQueryContext context);
+
+    /**
+     * テンプレートから {@link SqlQuery } を作成する.<br>
+     * パラメータとして、Map を渡す. <br>
+     *
+     * @param <T>
+     * @param parameters
+     * @return
+     */
+    @ReturnNonNull
+    <T> Query mergeMap(Map<String, T> parameters);
+
+    /**
+     * テンプレートから {@link SqlQuery } を作成する.<br>
+     * パラメータとして、パラメータソースを渡す. <br>
+     *
+     * @param parameters
+     * @return
+     */
+    @ReturnNonNull
+    Query mergeParameterSource(SqlParameterSource parameters);
 }

@@ -65,6 +65,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 @Slf4j
 public class SqlQuery implements Query {
 
+    @Getter
     final SqlQueryContext context;
     boolean debugLogging;
 
@@ -74,6 +75,7 @@ public class SqlQuery implements Query {
     @Getter
     PagingOption pagingOption;
 
+    @Getter
     final InternalPreparedStatementSetter setter;
     final String sql;
 

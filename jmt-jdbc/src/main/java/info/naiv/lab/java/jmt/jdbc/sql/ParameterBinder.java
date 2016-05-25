@@ -23,54 +23,25 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
-import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import lombok.Data;
-import lombok.NonNull;
-
 /**
  *
  * @author enlo
  */
-@Data
-public class SqlQueryContext {
+public interface ParameterBinder {
 
-    Object parameterSource;
+    /**
+     *
+     * @param value
+     * @param context
+     * @return
+     */
+    String bind(Object value, SqlQueryContext context);
 
-    List<Object> parameters;
-
-    Dialect dialect;
-
-    @NonNull
-    private ParameterBinder parameterBinder = new DefaultParameterBinder();
-
-    public SqlQueryContext(Dialect dialect) {
-        this.parameters = new ArrayList<>();
-        this.dialect = dialect;
-    }
-
-    public void addParameter(Object parameter) {
-        this.parameters.add(parameter);
-    }
-
-    public int addParameters(Collection<?> parameters) {
-        this.parameters.addAll(parameters);
-        return parameters.size();
-    }
-
-    public int addParameters(Object[] parameters) {
-        return addParameters(Arrays.asList(parameters));
-    }
-
-    public int addParameters(Iterable<?> parameters) {
-        int count = 0;
-        for (Object parameter : parameters) {
-            addParameter(parameter);
-            count++;
-        }
-        return count;
-    }
+    /**
+     *
+     * @param value
+     * @param context
+     * @return
+     */
+    String bindMany(Object value, SqlQueryContext context);
 }

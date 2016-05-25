@@ -23,11 +23,8 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
-import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
-import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.StringJoiner;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
-import java.util.Collection;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.util.TemplateOutputStream;
@@ -52,26 +49,8 @@ public class BindManyNode extends CustomNode {
      */
     @Override
     public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
-        int count;
-        if (value instanceof Collection) {
-            Collection list = (Collection) value;
-            count = ctx.addParameters(list);
-        }
-        else if (value instanceof Iterable) {
-            Iterable<?> iter = (Iterable<?>) value;
-            count = ctx.addParameters(iter);
-        }
-        else {
-            Object[] arr = asObjectArray(value);
-            if (arr != null) {
-                count = ctx.addParameters(arr);
-            }
-            else {
-                ctx.addParameter(value);
-                count = 1;
-            }
-        }
-        appender.append(joiner.join(Misc.repeat(count, "?")));
+        String bound = ctx.getParameterBinder().bindMany(value, ctx);
+        appender.append(bound);
     }
 
 }

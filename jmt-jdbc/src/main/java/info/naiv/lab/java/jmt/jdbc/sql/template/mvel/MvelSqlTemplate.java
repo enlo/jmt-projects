@@ -47,10 +47,10 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 public class MvelSqlTemplate implements SqlTemplate, Serializable {
 
     private static final long serialVersionUID = 1L;
+    private final Dialect dialect;
 
     String name;
     CompiledTemplate template;
-    Dialect dialect;
 
     public MvelSqlTemplate(String name, CompiledTemplate template, Dialect dialect) {
         this.name = name;
@@ -58,18 +58,58 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
         this.dialect = dialect;
     }
 
-    public String getTemplateText() {
-        return new String(template.getTemplate());
-    }
-
     @Override
     public String getName() {
         return name;
     }
 
+    public String getTemplateText() {
+        return new String(template.getTemplate());
+    }
+
     @Override
     public <T> SqlQuery merge(Map<String, T> parameters) {
         return mergeMap(parameters);
+    }
+
+    @Override
+    public SqlQuery merge(SqlParameterSource parameters) {
+        return mergeParameterSource(parameters);
+    }
+
+    private VariableResolverFactory createFactory(Object value) {
+        if (value instanceof Map) {
+            return new MapVariableResolverFactory((Map) value);
+        }
+        else if (value instanceof SqlParameterSource) {
+            return new SqlParameterSourceVariableResolverFactory((SqlParameterSource) value);
+        }
+        else if (value instanceof VariableResolverFactory) {
+            return (VariableResolverFactory) value;
+        }
+        else {
+            SqlParameterSource ps = new BeanPropertySqlParameterSource(value);
+            return new SqlParameterSourceVariableResolverFactory(ps);
+        }
+    }
+
+    @Override
+    public SqlQuery merge(Object bean) {
+        VariableResolverFactory factory = createFactory(bean);
+        return createQuery(factory, bean);
+    }
+
+    @Override
+    public Query merge() {
+        return merge(new HashMap<>());
+    }
+
+    @Override
+    public Query mergeContext(SqlQueryContext context) {
+        VariableResolverFactory factory = createFactory(context.getParameterSource());
+        factory.createVariable("dialect", context.getDialect(), Dialect.class);
+        String sql = (String) TemplateRuntime.execute(template, context, factory);
+        return new SqlQuery(sql, context);
     }
 
     @Override
@@ -84,36 +124,12 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
         return createQuery(factory, parameters);
     }
 
-    @Override
-    public SqlQuery merge(SqlParameterSource parameters) {
-        return mergeParameterSource(parameters);
-    }
-
     protected SqlQuery createQuery(VariableResolverFactory factory, Object sourceBean) {
         factory.createVariable("dialect", dialect, Dialect.class);
         SqlQueryContext context = new SqlQueryContext(dialect);
         context.setParameterSource(sourceBean);
         String sql = (String) TemplateRuntime.execute(template, context, factory);
         return new SqlQuery(sql, context);
-    }
-
-    @Override
-    public SqlQuery merge(Object bean) {
-        if (bean instanceof Map) {
-            return mergeMap((Map<String, Object>) bean);
-        }
-        else if (bean instanceof SqlParameterSource) {
-            return mergeParameterSource((SqlParameterSource) bean);
-        }
-        else if (bean instanceof VariableResolverFactory) {
-            return createQuery((VariableResolverFactory) bean, bean);
-        }
-        return mergeParameterSource(new BeanPropertySqlParameterSource(bean));
-    }
-
-    @Override
-    public Query merge() {
-        return merge(new HashMap<>());
     }
 
 }

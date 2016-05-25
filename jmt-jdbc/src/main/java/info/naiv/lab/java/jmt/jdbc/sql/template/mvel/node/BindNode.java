@@ -46,8 +46,8 @@ public class BindNode extends CustomNode {
      */
     @Override
     public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
-        ctx.addParameter(value);
-        appender.append("?");
+        String bound = ctx.getParameterBinder().bind(value, ctx);
+        appender.append(bound);
     }
 
 }

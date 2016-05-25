@@ -46,7 +46,7 @@ public class IncludeTemplateNode extends CustomNode {
             String compiled = (String) TemplateRuntime.execute(ct, ctx, factory);
             appender.append(compiled);
         }
-        else if (value instanceof SqlTemplate) {
+        else if (value instanceof SqlTemplate) {            
             SqlTemplate templ = (SqlTemplate) value;
             Query ct = templ.merge(ctx.getParameterSource());
             appender.append(ct.getMergedSql());

@@ -23,54 +23,47 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql;
 
-import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
-import java.util.ArrayList;
-import java.util.Arrays;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
+import info.naiv.lab.java.jmt.Misc;
+import info.naiv.lab.java.jmt.StringJoiner;
 import java.util.Collection;
-import java.util.List;
-import lombok.Data;
-import lombok.NonNull;
 
 /**
  *
  * @author enlo
  */
-@Data
-public class SqlQueryContext {
+public class DefaultParameterBinder implements ParameterBinder {
 
-    Object parameterSource;
+    private static final StringJoiner joiner = StringJoiner.valueOf(", ");
 
-    List<Object> parameters;
-
-    Dialect dialect;
-
-    @NonNull
-    private ParameterBinder parameterBinder = new DefaultParameterBinder();
-
-    public SqlQueryContext(Dialect dialect) {
-        this.parameters = new ArrayList<>();
-        this.dialect = dialect;
+    @Override
+    public String bind(Object value, SqlQueryContext context) {
+        context.addParameter(value);
+        return "?";
     }
 
-    public void addParameter(Object parameter) {
-        this.parameters.add(parameter);
-    }
-
-    public int addParameters(Collection<?> parameters) {
-        this.parameters.addAll(parameters);
-        return parameters.size();
-    }
-
-    public int addParameters(Object[] parameters) {
-        return addParameters(Arrays.asList(parameters));
-    }
-
-    public int addParameters(Iterable<?> parameters) {
-        int count = 0;
-        for (Object parameter : parameters) {
-            addParameter(parameter);
-            count++;
+    @Override
+    public String bindMany(Object value, SqlQueryContext context) {
+        int count;
+        if (value instanceof Collection) {
+            Collection list = (Collection) value;
+            count = context.addParameters(list);
         }
-        return count;
+        else if (value instanceof Iterable) {
+            Iterable<?> iter = (Iterable<?>) value;
+            count = context.addParameters(iter);
+        }
+        else {
+            Object[] arr = asObjectArray(value);
+            if (arr != null) {
+                count = context.addParameters(arr);
+            }
+            else {
+                context.addParameter(value);
+                count = 1;
+            }
+        }
+        return joiner.join(Misc.repeat(count, "?")).toString();
     }
+
 }

@@ -21,55 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt.tquery;
 
-import org.junit.Test;
+import info.naiv.lab.java.jmt.tquery.parameter.QueryBundleParameter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Data;
 
 /**
  *
  * @author enlo
  */
-public class ImmutableLookupTest {
+@Data
+public class QueryBundle implements Serializable {
 
-    /**
-     *
-     */
-    public ImmutableLookupTest() {
+    String query;
+
+    List<QueryBundleParameter> parameters;
+
+    public QueryBundle(String query, List<QueryBundleParameter> parameters) {
+        this.query = query;
+        this.parameters = parameters;
     }
 
-    /**
-     * Test of containsKey method, of class ImmutableLookup.
-     */
-    @Test
-    public void testContainsKey() {
+    public List<Object> getParameterValues() {
+        List<Object> result = new ArrayList<>(parameters.size());
+        for (QueryBundleParameter p : parameters) {
+            result.add(p.getValue());
+        }
+        return result;
     }
 
-    /**
-     * Test of containsValue method, of class ImmutableLookup.
-     */
-    @Test
-    public void testContainsValue() {
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public QueryBundleParameter clone() {
+        try {
+            return (QueryBundleParameter) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
     }
-
-    /**
-     * Test of entries method, of class ImmutableLookup.
-     */
-    @Test
-    public void testEntries() {
-    }
-
-    /**
-     * Test of get method, of class ImmutableLookup.
-     */
-    @Test
-    public void testGet() {
-    }
-
-    /**
-     * Test of size method, of class ImmutableLookup.
-     */
-    @Test
-    public void testSize() {
-    }
-
 }

@@ -45,6 +45,7 @@
         <module>jmt-core</module>
         <module>jmt-jdbc</module>
         <module>jmt-pojogen-maven-plugin</module>
+        <module>jmt-tquery</module>
     </modules>
     
     <dependencyManagement>

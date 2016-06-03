@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
+import java.util.Map.Entry;
+
 /**
  *
  * @author enlo
@@ -40,25 +42,17 @@ public interface Lookup<TKey, TValue> {
     boolean containsKey(TKey key);
 
     /**
-     * 値の有無を検査
-     *
-     * @param value
-     * @return
-     */
-    boolean containsValue(TValue value);
-
-    /**
      *
      * @return エントリー
      */
-    Iterable<Grouping<TKey, TValue>> entries();
+    Iterable<Entry<TKey, TValue>> entries();
 
     /**
      *
      * @param key キー
-     * @return キーに対応する値のセット
+     * @return キーに対応する値
      */
-    Iterable<TValue> get(TKey key);
+    TValue get(TKey key);
 
     /**
      *

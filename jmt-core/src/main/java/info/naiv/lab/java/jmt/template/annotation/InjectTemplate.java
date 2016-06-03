@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.template.annotation;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import java.lang.annotation.Documented;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import java.lang.annotation.Retention;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import java.lang.annotation.Target;
+import javax.inject.Qualifier;
 
 /**
+ * カテゴリーとテンプレート名称から、{@link SqlTemplate} をDIするたの注釈型.
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+@Qualifier
+@Retention(RUNTIME)
+@Target({FIELD, METHOD})
+@Documented
+public @interface InjectTemplate {
 
-    @Setter
-    boolean fixProperties = true;
+    /**
+     * SqlTemplateLoader の名前. 通常は NULL.
+     *
+     * @return SqlTemplateLoader の名前.
+     */
+    String loader() default "";
 
-    @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
-    }
+    /**
+     * カテゴリー
+     *
+     * @return カテゴリー
+     */
+    String category() default "";
+
+    /**
+     * テンプレート名称
+     *
+     * @return テンプレート名称
+     */
+    String name() default "";
+
+    /**
+     * 文字コード.
+     *
+     * @return
+     */
+    String charset() default "";
 }

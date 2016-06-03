@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Objects;
 
 /**
  *
@@ -39,7 +38,7 @@ import java.util.Objects;
  * @param <TKey>
  * @param <TValue>
  */
-public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<TKey, TValue> {
+public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implements MultiValueLookup<TKey, TValue> {
 
     /**
      *
@@ -48,12 +47,12 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
      * @param entries
      * @return
      */
-    public static <K extends Comparable, V> Lookup<K, V> fromEntries(Collection<Entry<K, V>> entries) {
+    public static <K extends Comparable, V> MultiValueLookup<K, V> fromEntries(Collection<Entry<K, V>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (Entry<K, V> e : entries) {
             gb.add(e.getKey(), e.getValue());
         }
-        return new ImmutableLookup<>(gb.build());
+        return new ImmutableMutiValueLookup<>(gb.build());
     }
 
     /**
@@ -62,17 +61,17 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
      * @param entries
      * @return
      */
-    public static <K extends Comparable> Lookup<K, KeyedValue<K>> fromKeyedValues(Collection<? extends KeyedValue<K>> entries) {
+    public static <K extends Comparable> MultiValueLookup<K, KeyedValue<K>> fromKeyedValues(Collection<? extends KeyedValue<K>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (KeyedValue<K> e : entries) {
             gb.add(e.getKey(), e);
         }
-        return new ImmutableLookup<>(gb.build());
+        return new ImmutableMutiValueLookup<>(gb.build());
     }
 
     private final List<Grouping<TKey, TValue>> values;
 
-    private ImmutableLookup(List<Grouping<TKey, TValue>> values) {
+    private ImmutableMutiValueLookup(List<Grouping<TKey, TValue>> values) {
         this.values = values;
     }
 
@@ -81,18 +80,6 @@ public class ImmutableLookup<TKey extends Comparable, TValue> implements Lookup<
         for (Grouping<TKey, TValue> g : values) {
             if (g.getKey().compareTo(key) == 0) {
                 return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean containsValue(TValue value) {
-        for (Grouping<TKey, TValue> g : values) {
-            for (TValue v : g.getValues()) {
-                if (Objects.equals(v, value)) {
-                    return true;
-                }
             }
         }
         return false;

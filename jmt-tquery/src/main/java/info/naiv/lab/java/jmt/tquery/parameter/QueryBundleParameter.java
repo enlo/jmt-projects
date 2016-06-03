@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.tquery.parameter;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import java.io.Serializable;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+@Value
+public class QueryBundleParameter implements Serializable, Cloneable {
 
-    @Setter
-    boolean fixProperties = true;
+    private String key;
+
+    private Object value;
+
+    public QueryBundleParameter(int index, Object value) {
+        this.key = "p" + index;
+        this.value = value;
+    }
+
+    public QueryBundleParameter(String key, Object value) {
+        this.key = key;
+        this.value = value;
+    }
 
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public QueryBundleParameter clone() {
+        try {
+            return (QueryBundleParameter) super.clone();
         }
-        else {
-            return new Properties(rp);
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
         }
     }
+
 }

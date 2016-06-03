@@ -34,7 +34,6 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
-import org.springframework.util.PropertyPlaceholderHelper;
 
 /**
  *
@@ -83,9 +82,9 @@ public class ResolvableProperties extends Properties {
     }
 
     /**
-     * プロパティの内容を固定化する.
+     * プロパティの内容を固定化したものを戻す.
      *
-     * @return プロパティ.
+     * @return 固定したプロパティ.
      */
     public Properties fix() {
         Properties props = new Properties();

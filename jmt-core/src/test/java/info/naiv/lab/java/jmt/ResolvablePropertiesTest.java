@@ -153,6 +153,10 @@ public class ResolvablePropertiesTest {
         assertThat(p.getProperty("itemNameOther", "${itemName3}"), is(""));
     }
 
+    /**
+     *
+     * @throws IOException
+     */
     @Test
     public void testSerialize() throws IOException {
 

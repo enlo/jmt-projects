@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,65 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.collection;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author enlo
+ * @param <TKey>
+ * @param <TValue>
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue> {
 
-    @Setter
-    boolean fixProperties = true;
+    final Map<TKey, TValue> map;
+
+    /**
+     *
+     * @param map
+     */
+    public MutableLookup(Map<TKey, TValue> map) {
+        this.map = map;
+    }
+
+    /**
+     *
+     */
+    public MutableLookup() {
+        this(new HashMap<TKey, TValue>());
+    }
 
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    public boolean containsKey(TKey key) {
+        return map.containsKey(key);
     }
+
+    @Override
+    public Iterable<Map.Entry<TKey, TValue>> entries() {
+        return map.entrySet();
+    }
+
+    @Override
+    public TValue get(TKey key) {
+        return map.get(key);
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public MutableLookup<TKey, TValue> put(TKey key, TValue value) {
+        map.put(key, value);
+        return this;
+    }
+
+    @Override
+    public int size() {
+        return map.size();
+    }
+
 }

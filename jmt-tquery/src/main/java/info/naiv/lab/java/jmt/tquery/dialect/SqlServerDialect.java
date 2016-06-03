@@ -21,27 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.jee.cdi;
-
-import javax.enterprise.context.Dependent;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
+package info.naiv.lab.java.jmt.tquery.dialect;
 
 /**
  *
  * @author enlo
  */
-@Dependent
-public class DependentServiceInjector {
+public class SqlServerDialect extends AbstractDialect {
+
+    @Override
+    public String getKeyword() {
+        return "sqlserver";
+    }
 
     /**
      *
-     * @param ip
      * @return
      */
-    @Produces
-    @FromServiceProvider
-    public Object getService(InjectionPoint ip) {
-        return ServiceInjectionUtils.getService(ip.getBean().getBeanClass(), ip);
+    @Override
+    public PagingSupportType getPagingSupport() {
+        return PagingSupportType.UNDEFINED;
     }
+
+    @Override
+    public String getStringConcatenateOperator() {
+        return "+";
+    }
+
 }

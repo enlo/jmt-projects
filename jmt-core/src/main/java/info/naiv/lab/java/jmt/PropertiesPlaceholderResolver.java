@@ -33,16 +33,33 @@ import org.springframework.util.PropertyPlaceholderHelper;
  */
 public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper implements Serializable {
 
+    /**
+     *
+     */
     public static final PropertiesPlaceholderResolver DEFAULT = new PropertiesPlaceholderResolver();
 
+    /**
+     *
+     */
     public PropertiesPlaceholderResolver() {
         this("${", "}");
     }
 
+    /**
+     *
+     * @param placeholderPrefix
+     * @param placeholderSuffix
+     */
     public PropertiesPlaceholderResolver(String placeholderPrefix, String placeholderSuffix) {
         super(placeholderPrefix, placeholderSuffix);
     }
 
+    /**
+     *
+     * @param props
+     * @param value
+     * @return
+     */
     public String resolve(final Properties props, String value) {
         return replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
             @Override
@@ -50,6 +67,19 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
                 return resolveProperty(props, placeholderName);
             }
         });
+    }
+
+    /**
+     *
+     * @param propertyName
+     * @return
+     */
+    protected String onPropertyNotFound(String propertyName) {
+        String value = System.getProperty(propertyName);
+        if (value == null) {
+            value = System.getenv(propertyName);
+        }
+        return value;
     }
 
     /**
@@ -62,14 +92,6 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
         String value = props.getProperty(propertyName, null);
         if (value == null) {
             value = onPropertyNotFound(propertyName);
-        }
-        return value;
-    }
-
-    protected String onPropertyNotFound(String propertyName) {
-        String value = System.getProperty(propertyName);
-        if (value == null) {
-            value = System.getenv(propertyName);
         }
         return value;
     }

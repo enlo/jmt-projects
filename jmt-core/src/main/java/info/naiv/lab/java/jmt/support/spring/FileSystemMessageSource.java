@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.support.spring;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -66,7 +67,10 @@ public class FileSystemMessageSource extends ReloadableResourceBundleMessageSour
             if (path != null && baseDirectory != null) {
                 Path p = Paths.get(path);
                 if (!p.isAbsolute()) {
-                    path = baseDirectory.resolve(p).toString();
+                    p = baseDirectory.resolve(p);
+                }
+                if (Files.exists(p)) {
+                    path = p.toString();
                 }
             }
             return super.getResourceByPath(path);

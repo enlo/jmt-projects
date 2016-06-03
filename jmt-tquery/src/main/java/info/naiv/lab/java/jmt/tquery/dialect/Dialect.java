@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
-
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+package info.naiv.lab.java.jmt.tquery.dialect;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public interface Dialect {
 
-    @Setter
-    boolean fixProperties = true;
+    /**
+     * SqlTemplateLoader の解決等で使用するキーワード. 必ず小文字で戻る.
+     *
+     * @return
+     */
+    String getKeyword();
 
-    @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
-    }
+    /**
+     *
+     * @return
+     */
+    PagingSupportType getPagingSupport();
+
+    /**
+     * 行番号疑似列. rownum または row_number() over () に展開される. 未サポートなら例外.
+     *
+     * @return
+     */
+    String rowNumber();
+
+    /**
+     * 文字列連結記号を取得.
+     *
+     * @return 文字列連結記号.
+     */
+    String getStringConcatenateOperator();
 }

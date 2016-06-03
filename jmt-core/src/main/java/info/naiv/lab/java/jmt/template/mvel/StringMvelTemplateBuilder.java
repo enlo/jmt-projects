@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.template.mvel;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import info.naiv.lab.java.jmt.template.Template;
+import info.naiv.lab.java.jmt.template.TemplateBuilder;
+import org.mvel2.templates.TemplateCompiler;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public class StringMvelTemplateBuilder implements TemplateBuilder<String> {
 
-    @Setter
-    boolean fixProperties = true;
-
+    /**
+     *
+     * @param name
+     * @param template
+     * @return
+     */
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    public Template<String> build(String name, String template) {
+        return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
     }
+
 }

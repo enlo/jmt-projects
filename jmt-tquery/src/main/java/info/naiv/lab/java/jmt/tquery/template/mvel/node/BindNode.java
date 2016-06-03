@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import info.naiv.lab.java.jmt.tquery.QueryContext;
+import org.mvel2.integration.VariableResolverFactory;
+import org.mvel2.templates.TemplateRuntime;
+import org.mvel2.templates.util.TemplateOutputStream;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public class BindNode extends CustomNode {
 
-    @Setter
-    boolean fixProperties = true;
+    private static final long serialVersionUID = 1L;
 
+    /**
+     *
+     * @param value
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     */
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, QueryContext ctx, VariableResolverFactory factory) {
+        String bound = ctx.getParameterBinder().bind(value, ctx);
+        appender.append(bound);
     }
+
 }

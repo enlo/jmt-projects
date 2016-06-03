@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.collection;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import org.junit.Test;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public class ImmutableMutiValueLookupTest {
 
-    @Setter
-    boolean fixProperties = true;
-
-    @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    /**
+     *
+     */
+    public ImmutableMutiValueLookupTest() {
     }
+
+    /**
+     * Test of containsKey method, of class ImmutableLookup.
+     */
+    @Test
+    public void testContainsKey() {
+    }
+
+    /**
+     * Test of containsValue method, of class ImmutableLookup.
+     */
+    @Test
+    public void testContainsValue() {
+    }
+
+    /**
+     * Test of entries method, of class ImmutableLookup.
+     */
+    @Test
+    public void testEntries() {
+    }
+
+    /**
+     * Test of get method, of class ImmutableLookup.
+     */
+    @Test
+    public void testGet() {
+    }
+
+    /**
+     * Test of size method, of class ImmutableLookup.
+     */
+    @Test
+    public void testSize() {
+    }
+
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.tquery.dialect;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import info.naiv.lab.java.jmt.CharBufferJoiner;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public abstract class AbstractDialect implements Dialect {
 
-    @Setter
-    boolean fixProperties = true;
+    /**
+     *
+     * @param items
+     * @return
+     */
+    protected static String build(CharSequence... items) {
+        return CharBufferJoiner.SIMPLE.joinItems(items).toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public PagingSupportType getPagingSupport() {
+        return PagingSupportType.SQLSTD;
+    }
 
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    public String getStringConcatenateOperator() {
+        return "||";
     }
+
+    @Override
+    public String rowNumber() {
+        return " row_number() over() ";
+    }
+
 }

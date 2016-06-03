@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.tquery;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
-import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
+import java.io.Serializable;
+import java.nio.CharBuffer;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+@Value
+public class OrderBy implements Serializable {
 
-    @Setter
-    boolean fixProperties = true;
+    private static final long serialVersionUID = 1L;
+
+    public static final OrderBy asc(String orderItem) {
+        return new OrderBy(orderItem, Order.ASC);
+    }
+
+    public static final OrderBy desc(String orderItem) {
+        return new OrderBy(orderItem, Order.DESC);
+    }
+
+    private final Order order;
+    private final String orderItem;
+
+    public OrderBy(String orderItem, Order order) {
+        this.orderItem = orderItem;
+        this.order = order;
+    }
+
+    public boolean isAsc() {
+        return Order.ASC.equals(order);
+    }
+
+    public boolean isDesc() {
+        return Order.DESC.equals(order);
+    }
 
     @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    public String toString() {
+        int size = orderItem.length() + order.name().length() + 1;
+        CharBuffer cs = CharBuffer.allocate(size);
+        cs.put(orderItem).put(' ').put(order.name());
+        return cs.flip().toString();
     }
 }

@@ -35,10 +35,6 @@ import java.nio.charset.CoderResult;
  */
 public class StringByteLimitter {
 
-    private static boolean isLimitOver(CharsetEncoder encoder, int length, int limitBytes) {
-        return (limitBytes < encoder.maxBytesPerChar() * length);
-    }
-
     /**
      *
      * @param source
@@ -80,6 +76,10 @@ public class StringByteLimitter {
             encoder.flush(out);
         }
         return (CharBuffer) source.flip();
+    }
+
+    private static boolean isLimitOver(CharsetEncoder encoder, int length, int limitBytes) {
+        return (limitBytes < encoder.maxBytesPerChar() * length);
     }
 
     private StringByteLimitter() {

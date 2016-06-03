@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2016 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.template;
 
-import info.naiv.lab.java.jmt.ResolvableProperties;
-import java.io.IOException;
-import java.util.Properties;
+import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
+import lombok.Getter;
 import lombok.Setter;
-import org.springframework.beans.factory.FactoryBean;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 
 /**
  *
  * @author enlo
+ * @param <TResult>
  */
-public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
+public abstract class AbstractClasspathResourceTemplateLoader<TResult> extends AbstractResourceTemplateLoader<TResult> {
 
+    @Getter
     @Setter
-    boolean fixProperties = true;
+    private ClassPathResourceRepository resourceRepository;
 
-    @Override
-    protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
-        ResolvableProperties rp = new ResolvableProperties(p);
-        if (fixProperties) {
-            return rp.fix();
-        }
-        else {
-            return new Properties(rp);
-        }
+    /**
+     *
+     */
+    public AbstractClasspathResourceTemplateLoader() {
+        this(new ClassPathResourceRepository());
+    }
+
+    /**
+     *
+     * @param resourceRepository
+     */
+    public AbstractClasspathResourceTemplateLoader(ClassPathResourceRepository resourceRepository) {
+        this.resourceRepository = resourceRepository;
+    }
+
+    /**
+     *
+     * @param rootPackage
+     */
+    public void setRootPackage(String rootPackage) {
+        this.resourceRepository.setRootPath(rootPackage);
     }
 }

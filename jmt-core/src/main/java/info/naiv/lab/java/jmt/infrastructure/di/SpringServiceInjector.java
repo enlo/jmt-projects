@@ -21,12 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.infrastructure.di;
 
 import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
+import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
 import info.naiv.lab.java.jmt.infrastructure.annotation.TagOf;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
@@ -49,7 +50,7 @@ import static org.springframework.util.ReflectionUtils.makeAccessible;
  * @author enlo
  */
 @Slf4j
-public class ServiceInjector implements BeanPostProcessor, BeanFactoryAware {
+public class SpringServiceInjector implements BeanPostProcessor, BeanFactoryAware {
 
     BeanFactory beanFactory;
 
@@ -70,28 +71,10 @@ public class ServiceInjector implements BeanPostProcessor, BeanFactoryAware {
         beanFactory = bf;
     }
 
-    Tag findTag(InjectService anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        if (isNotEmpty(anno.value())) {
-            return Tag.of(anno.value());
-        }
-        for (Annotation a : annotations) {
-            TagOf tagOf = a.annotationType().getAnnotation(TagOf.class);
-            if (tagOf != null) {
-                Class<? extends Annotation> annoType = a.annotationType();
-                Method method = annoType.getMethod(tagOf.value());
-                if (Serializable.class.isAssignableFrom(method.getReturnType())) {
-                    Serializable val = (Serializable) method.invoke(a);
-                    return Tag.of(val);
-                }
-            }
-        }
-        return null;
-    }
-
     Object getService(InjectService anno, Annotation[] annotations, Class<?> clazz) throws IllegalAccessException, IllegalArgumentException {
         try {
             Object obj;
-            Tag tag = findTag(anno, asList(annotations));
+            Tag tag = ServiceInjectionUtils.findTag(anno, asList(annotations));
             if (tag == null) {
                 logger.debug("resolveService(class={})", clazz);
                 obj = getServiceProvider().resolveService(clazz);

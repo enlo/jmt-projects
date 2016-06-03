@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.jee.cdi;
+package info.naiv.lab.java.jmt.infrastructure.di;
 
 import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.resolveService;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
+import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
 import info.naiv.lab.java.jmt.infrastructure.annotation.TagOf;
 import java.io.Serializable;
 import java.lang.annotation.Annotation;
@@ -52,10 +53,11 @@ public class ServiceInjectionUtils {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException
      */
-    public static Tag findTag(FromServiceProvider anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static Tag findTag(InjectService anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (isNotEmpty(anno.value())) {
             return Tag.of(anno.value());
         }
+        Tag result = null;
         for (Annotation a : annotations) {
             TagOf tagOf = a.annotationType().getAnnotation(TagOf.class);
             if (tagOf != null) {
@@ -63,11 +65,20 @@ public class ServiceInjectionUtils {
                 Method method = annoType.getMethod(tagOf.value());
                 if (Serializable.class.isAssignableFrom(method.getReturnType())) {
                     Serializable val = (Serializable) method.invoke(a);
-                    return Tag.of(val);
+                    if (val != null) {
+                        if (annoType == InjectService.class) {
+                            if (!"".equals(val)) {
+                                result = Tag.of(val);
+                            }
+                        }
+                        else {
+                            return Tag.of(val);
+                        }
+                    }
                 }
             }
         }
-        return null;
+        return result;
     }
 
     /**
@@ -80,7 +91,7 @@ public class ServiceInjectionUtils {
     public static <T> T getService(Class<T> clazz, InjectionPoint ip) {
         try {
             Annotated at = ip.getAnnotated();
-            FromServiceProvider anno = at.getAnnotation(FromServiceProvider.class);
+            InjectService anno = at.getAnnotation(InjectService.class);
             Tag tag = findTag(anno, at.getAnnotations());
             if (tag == null) {
                 logger.debug("resolveService(class={})", clazz);

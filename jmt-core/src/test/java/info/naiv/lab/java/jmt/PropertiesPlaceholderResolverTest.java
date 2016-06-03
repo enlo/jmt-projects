@@ -25,9 +25,9 @@ package info.naiv.lab.java.jmt;
 
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
-import org.junit.Test;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 import org.junit.Before;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -43,11 +43,14 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest({System.class, PropertiesPlaceholderResolver.class})
 public class PropertiesPlaceholderResolverTest {
 
-    public PropertiesPlaceholderResolverTest() {
-    }
-
     Properties prop;
     PropertiesPlaceholderResolver testTarget;
+
+    /**
+     *
+     */
+    public PropertiesPlaceholderResolverTest() {
+    }
 
     /**
      *
@@ -82,7 +85,6 @@ public class PropertiesPlaceholderResolverTest {
         assertThat(testTarget.resolve(prop, "${itemNameOther}"), is(""));
         assertThat(testTarget.resolve(prop, "${itemName3}"), is(""));
         assertThat(testTarget.resolve(prop, "itemName3"), is("itemName3"));
-
     }
 
 }

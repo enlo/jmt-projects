@@ -1,4 +1,4 @@
-package info.naiv.lab.java.jmt.support.spring;
+package info.naiv.lab.java.jmt.infrastructure.di;
 
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import info.naiv.lab.java.jmt.datetime.CurrentDateProvider;
@@ -7,8 +7,9 @@ import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.ThreadSafeServiceContainer;
+import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
 import info.naiv.lab.java.jmt.infrastructure.annotation.StringTagOf;
-import info.naiv.lab.java.jmt.support.spring.ServiceInjectorTest.Injectee;
+import info.naiv.lab.java.jmt.infrastructure.di.SpringServiceInjectorTest.Injectee;
 import java.util.Calendar;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
@@ -26,12 +27,12 @@ import org.springframework.beans.factory.BeanFactory;
  *
  * @author enlo
  */
-public class ServiceInjectorTest {
+public class SpringServiceInjectorTest {
 
     /**
      *
      */
-    public ServiceInjectorTest() {
+    public SpringServiceInjectorTest() {
     }
 
     /**
@@ -43,24 +44,26 @@ public class ServiceInjectorTest {
     }
 
     /**
-     * Test of postProcessAfterInitialization method, of class ServiceInjector.
+     * Test of postProcessAfterInitialization method, of class
+     * SpringServiceInjector.
      */
     @Test
     public void testPostProcessAfterInitialization() {
         Object o = new String();
-        ServiceInjector instance = new ServiceInjector();
+        SpringServiceInjector instance = new SpringServiceInjector();
         Object result = instance.postProcessAfterInitialization(o, "");
         assertThat(result, is(sameInstance(o)));
     }
 
     /**
-     * Test of postProcessBeforeInitialization method, of class ServiceInjector.
+     * Test of postProcessBeforeInitialization method, of class
+     * SpringServiceInjector.
      */
     @Test
     public void testPostProcessBeforeInitialization() {
         Injectee o = new Injectee();
         assertThat(o.provider, is(nullValue()));
-        ServiceInjector instance = new ServiceInjector();
+        SpringServiceInjector instance = new SpringServiceInjector();
         Object result = instance.postProcessBeforeInitialization(o, "");
         assertThat(result, is(sameInstance((Object) o)));
         assertThat(o.provider, is(not(nullValue())));
@@ -68,12 +71,12 @@ public class ServiceInjectorTest {
     }
 
     /**
-     * Test of setBeanFactory method, of class ServiceInjector.
+     * Test of setBeanFactory method, of class SpringServiceInjector.
      */
     @Test
     public void testSetBeanFactory() {
 
-        ServiceInjector instance = new ServiceInjector();
+        SpringServiceInjector instance = new SpringServiceInjector();
         Injectee2 o = new Injectee2();
 
         Object result = instance.postProcessBeforeInitialization(o, "");

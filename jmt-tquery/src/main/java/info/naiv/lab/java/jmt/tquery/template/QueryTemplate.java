@@ -21,35 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.support.jee.cdi;
+package info.naiv.lab.java.jmt.tquery.template;
 
-import info.naiv.lab.java.jmt.infrastructure.annotation.TagOf;
-import java.lang.annotation.Documented;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import java.lang.annotation.Retention;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import java.lang.annotation.Target;
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
+import info.naiv.lab.java.jmt.template.Template;
+import info.naiv.lab.java.jmt.tquery.QueryBundle;
 
 /**
+ * SqlTemplate
  *
  * @author enlo
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target({FIELD, PARAMETER, METHOD, TYPE})
-@Documented
-@TagOf
-public @interface FromServiceProvider {
+public interface QueryTemplate extends Template<QueryBundle> {
 
-    /**
-     *
-     * @return
-     */
-    @Nonbinding
-    String value() default "";
 }

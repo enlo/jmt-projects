@@ -23,8 +23,6 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
-import java.util.Map.Entry;
-
 /**
  *
  * @author enlo
@@ -43,20 +41,9 @@ public interface Lookup<TKey, TValue> {
 
     /**
      *
-     * @return エントリー
-     */
-    Iterable<Entry<TKey, TValue>> entries();
-
-    /**
-     *
      * @param key キー
      * @return キーに対応する値
      */
     TValue get(TKey key);
 
-    /**
-     *
-     * @return コレクションのサイズ
-     */
-    int size();
 }

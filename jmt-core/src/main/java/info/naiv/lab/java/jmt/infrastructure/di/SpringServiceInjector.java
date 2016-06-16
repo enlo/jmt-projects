@@ -23,18 +23,14 @@
  */
 package info.naiv.lab.java.jmt.infrastructure.di;
 
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
-import info.naiv.lab.java.jmt.infrastructure.annotation.TagOf;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import static java.util.Arrays.asList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;

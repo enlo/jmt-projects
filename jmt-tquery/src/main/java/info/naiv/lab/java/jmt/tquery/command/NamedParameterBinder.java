@@ -21,11 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.parameter;
+package info.naiv.lab.java.jmt.tquery.command;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
 import info.naiv.lab.java.jmt.StringJoiner;
-import info.naiv.lab.java.jmt.tquery.QueryBundleParametersBuilder;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +56,7 @@ public class NamedParameterBinder implements ParameterBinder {
     @Override
     public String bindMany(Object value, QueryContext context) {
         List<String> keys;
-        QueryBundleParametersBuilder builder = context.getParametersBuilder();
+        CommandParametersBuilder builder = context.getParametersBuilder();
         if (value instanceof Iterable) {
             keys = addParameters((Iterable) value, builder);
         }
@@ -73,7 +72,7 @@ public class NamedParameterBinder implements ParameterBinder {
         return joiner.join(keys).toString();
     }
 
-    public List<String> addParameters(Iterable<?> items, QueryBundleParametersBuilder builder) {
+    public List<String> addParameters(Iterable<?> items, CommandParametersBuilder builder) {
         List<String> keys = new ArrayList<>();
         for (Object item : items) {
             String key = builder.addValueWithPrefix(prefix, item);

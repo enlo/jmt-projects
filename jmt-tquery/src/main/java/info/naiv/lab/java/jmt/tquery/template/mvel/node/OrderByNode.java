@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
-import info.naiv.lab.java.jmt.tquery.OrderBy;
+import info.naiv.lab.java.jmt.tquery.command.OrderBy;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;

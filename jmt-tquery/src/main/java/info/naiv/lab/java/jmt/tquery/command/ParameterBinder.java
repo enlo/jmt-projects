@@ -21,46 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery;
+package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.tquery.parameter.QueryBundleParameter;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import lombok.Data;
+import info.naiv.lab.java.jmt.tquery.QueryContext;
 
 /**
  *
  * @author enlo
  */
-@Data
-public class QueryBundle implements Serializable {
+public interface ParameterBinder {
 
-    String query;
+    /**
+     *
+     * @param value
+     * @param context
+     * @return
+     */
+    String bind(Object value, QueryContext context);
 
-    List<QueryBundleParameter> parameters;
-
-    public QueryBundle(String query, List<QueryBundleParameter> parameters) {
-        this.query = query;
-        this.parameters = parameters;
-    }
-
-    public List<Object> getParameterValues() {
-        List<Object> result = new ArrayList<>(parameters.size());
-        for (QueryBundleParameter p : parameters) {
-            result.add(p.getValue());
-        }
-        return result;
-    }
-
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public QueryBundleParameter clone() {
-        try {
-            return (QueryBundleParameter) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
-    }
+    /**
+     *
+     * @param value
+     * @param context
+     * @return
+     */
+    String bindMany(Object value, QueryContext context);
 }

@@ -21,21 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery;
+package info.naiv.lab.java.jmt.tquery.command;
+
+import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.Data;
 
 /**
  *
  * @author enlo
  */
-public enum Order {
+@Data
+public class Command implements Serializable {
 
-    /**
-     *
-     */
-    ASC,
-    /**
-     *
-     */
-    DESC;
+    String query;
 
+    List<CommandParameter> parameters;
+
+    public Command(String query, List<CommandParameter> parameters) {
+        this.query = query;
+        this.parameters = parameters;
+    }
+
+    public List<Object> getParameterValues() {
+        List<Object> result = new ArrayList<>(parameters.size());
+        for (CommandParameter p : parameters) {
+            result.add(p.getValue());
+        }
+        return result;
+    }
+
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public CommandParameter clone() {
+        try {
+            return (CommandParameter) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
 }

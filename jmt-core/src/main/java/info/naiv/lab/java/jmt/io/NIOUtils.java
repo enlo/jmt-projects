@@ -27,15 +27,19 @@ import static info.naiv.lab.java.jmt.Arguments.lessThan;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
 import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
@@ -308,6 +312,22 @@ public class NIOUtils {
             ByteArrayOutputStream baos = new ByteArrayOutputStream(DEFAULT_BUFFER_SIZE);
             copy(is, baos);
             return ByteBuffer.wrap(baos.toByteArray());
+        }
+    }
+
+    public static CharBuffer toCharBuffer(InputStream is, Charset charset) throws IOException {
+        if (is instanceof FileInputStream) {
+            FileChannel fch = ((FileInputStream) is).getChannel();
+            long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
+            CharsetDecoder decorder = charset.newDecoder();
+            ByteBuffer bb = fch.map(FileChannel.MapMode.READ_ONLY, 0, size);
+            return decorder.decode(bb);
+        }
+        else {
+            Reader reader = new BufferedReader(new InputStreamReader(is, charset));
+            StringBuilder builder = new StringBuilder(DEFAULT_BUFFER_SIZE);
+            copy(reader, builder);
+            return CharBuffer.wrap(builder);
         }
     }
 

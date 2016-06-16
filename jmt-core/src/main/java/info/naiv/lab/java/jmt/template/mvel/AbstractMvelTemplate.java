@@ -43,6 +43,11 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
     String name;
     CompiledTemplate template;
 
+    /**
+     *
+     * @param name
+     * @param template
+     */
     public AbstractMvelTemplate(String name, CompiledTemplate template) {
         this.name = name;
         this.template = template;
@@ -89,8 +94,19 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
         return createResult(result, context);
     }
 
+    /**
+     *
+     * @param factory
+     * @param source
+     * @return
+     */
     protected abstract TContext createContext(VariableResolverFactory factory, Object source);
 
+    /**
+     *
+     * @param value
+     * @return
+     */
     protected VariableResolverFactory createFactory(Object value) {
         if (value instanceof Map) {
             return new MapVariableResolverFactory((Map) value);
@@ -107,6 +123,12 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
         }
     }
 
+    /**
+     *
+     * @param result
+     * @param context
+     * @return
+     */
     protected abstract TResult createResult(Object result, TContext context);
 
 }

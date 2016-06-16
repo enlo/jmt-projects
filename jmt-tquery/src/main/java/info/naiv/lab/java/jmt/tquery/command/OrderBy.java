@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.parameter;
+package info.naiv.lab.java.jmt.tquery.command;
 
 import java.io.Serializable;
+import java.nio.CharBuffer;
 import lombok.Value;
 
 /**
@@ -31,31 +32,39 @@ import lombok.Value;
  * @author enlo
  */
 @Value
-public class QueryBundleParameter implements Serializable, Cloneable {
+public class OrderBy implements Serializable {
 
-    private String key;
+    private static final long serialVersionUID = 1L;
 
-    private Object value;
-
-    public QueryBundleParameter(int index, Object value) {
-        this.key = "p" + index;
-        this.value = value;
+    public static final OrderBy asc(String orderItem) {
+        return new OrderBy(orderItem, Order.ASC);
     }
 
-    public QueryBundleParameter(String key, Object value) {
-        this.key = key;
-        this.value = value;
+    public static final OrderBy desc(String orderItem) {
+        return new OrderBy(orderItem, Order.DESC);
+    }
+
+    private final Order order;
+    private final String orderItem;
+
+    public OrderBy(String orderItem, Order order) {
+        this.orderItem = orderItem;
+        this.order = order;
+    }
+
+    public boolean isAsc() {
+        return Order.ASC.equals(order);
+    }
+
+    public boolean isDesc() {
+        return Order.DESC.equals(order);
     }
 
     @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public QueryBundleParameter clone() {
-        try {
-            return (QueryBundleParameter) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
+    public String toString() {
+        int size = orderItem.length() + order.name().length() + 1;
+        CharBuffer cs = CharBuffer.allocate(size);
+        cs.put(orderItem).put(' ').put(order.name());
+        return cs.flip().toString();
     }
-
 }

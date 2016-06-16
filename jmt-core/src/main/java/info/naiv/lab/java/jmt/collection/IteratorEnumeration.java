@@ -21,50 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery;
+package info.naiv.lab.java.jmt.collection;
 
-import java.io.Serializable;
-import java.nio.CharBuffer;
+import java.util.Enumeration;
+import java.util.Iterator;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
  *
  * @author enlo
+ * @param <E>
  */
 @Value
-public class OrderBy implements Serializable {
+public class IteratorEnumeration<E> implements Enumeration<E> {
 
-    private static final long serialVersionUID = 1L;
+    @NonNull
+    Iterator<E> iterator;
 
-    public static final OrderBy asc(String orderItem) {
-        return new OrderBy(orderItem, Order.ASC);
-    }
-
-    public static final OrderBy desc(String orderItem) {
-        return new OrderBy(orderItem, Order.DESC);
-    }
-
-    private final Order order;
-    private final String orderItem;
-
-    public OrderBy(String orderItem, Order order) {
-        this.orderItem = orderItem;
-        this.order = order;
-    }
-
-    public boolean isAsc() {
-        return Order.ASC.equals(order);
-    }
-
-    public boolean isDesc() {
-        return Order.DESC.equals(order);
+    @Override
+    public boolean hasMoreElements() {
+        return iterator.hasNext();
     }
 
     @Override
-    public String toString() {
-        int size = orderItem.length() + order.name().length() + 1;
-        CharBuffer cs = CharBuffer.allocate(size);
-        cs.put(orderItem).put(' ').put(order.name());
-        return cs.flip().toString();
+    public E nextElement() {
+        return iterator.next();
     }
+
 }

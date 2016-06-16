@@ -66,6 +66,11 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
         this.beanFactory = beanFactory;
     }
 
+    /**
+     *
+     * @param loaderName
+     * @return
+     */
     @Override
     protected TemplateLoader getTemplateLoaderCore(String loaderName) {
         if (beanFactory == null) {

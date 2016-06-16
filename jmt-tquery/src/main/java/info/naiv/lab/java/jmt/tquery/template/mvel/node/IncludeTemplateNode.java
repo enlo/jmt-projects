@@ -25,7 +25,7 @@ package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.mvel.MvelTemplate;
-import info.naiv.lab.java.jmt.tquery.QueryBundle;
+import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
 import java.util.Objects;
@@ -50,7 +50,7 @@ public class IncludeTemplateNode extends CustomNode {
         }
         else if (value instanceof QueryTemplate) {
             QueryTemplate templ = (QueryTemplate) value;
-            QueryBundle ct = templ.mergeBean(ctx.getSource());
+            Command ct = templ.mergeBean(ctx.getSource());
             appendable = ct.getQuery();
         }
         else if (value instanceof Template) {

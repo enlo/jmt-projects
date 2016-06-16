@@ -104,6 +104,11 @@ public abstract class AbstractTemplateInjector {
         return loader;
     }
 
+    /**
+     *
+     * @param loaderName
+     * @return
+     */
     protected abstract TemplateLoader getTemplateLoaderCore(String loaderName);
 
 }

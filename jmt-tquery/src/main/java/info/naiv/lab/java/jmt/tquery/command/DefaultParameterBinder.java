@@ -1,9 +1,8 @@
-package info.naiv.lab.java.jmt.tquery.parameter;
+package info.naiv.lab.java.jmt.tquery.command;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.StringJoiner;
-import info.naiv.lab.java.jmt.tquery.QueryBundleParametersBuilder;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,7 +15,7 @@ public class DefaultParameterBinder implements ParameterBinder {
 
     private static final StringJoiner joiner = StringJoiner.valueOf(", ");
 
-    public int addParameters(Iterable<?> items, QueryBundleParametersBuilder builder) {
+    public int addParameters(Iterable<?> items, CommandParametersBuilder builder) {
         int count = 0;
         for (Object item : items) {
             builder.addValue(item);
@@ -25,7 +24,7 @@ public class DefaultParameterBinder implements ParameterBinder {
         return count;
     }
 
-    public int addParameters(Collection<?> items, QueryBundleParametersBuilder builder) {
+    public int addParameters(Collection<?> items, CommandParametersBuilder builder) {
         int count = 0;
         builder.addCapacity(items.size());
         for (Object item : items) {
@@ -44,7 +43,7 @@ public class DefaultParameterBinder implements ParameterBinder {
     @Override
     public String bindMany(Object value, QueryContext context) {
         int count;
-        QueryBundleParametersBuilder builder = context.getParametersBuilder();
+        CommandParametersBuilder builder = context.getParametersBuilder();
         if (value instanceof Collection) {
             Collection list = (Collection) value;
             builder.addCapacity(list.size());

@@ -25,7 +25,11 @@ package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.TemplateBuilder;
+import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.mvel2.templates.TemplateCompiler;
+import org.mvel2.templates.res.Node;
 
 /**
  *
@@ -33,15 +37,41 @@ import org.mvel2.templates.TemplateCompiler;
  */
 public class StringMvelTemplateBuilder implements TemplateBuilder<String> {
 
-    /**
-     *
-     * @param name
-     * @param template
-     * @return
-     */
+    @Getter
+    @Setter
+    MvelCustomNodesProvider customNodesProvider;
+
     @Override
     public Template<String> build(String name, String template) {
-        return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
+        if (customNodesProvider != null) {
+            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
+        }
+        else {
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
+        }
+    }
+
+    @Override
+    public Template<String> build(String name, CharSequence template) {
+        if (customNodesProvider != null) {
+            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
+        }
+        else {
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
+        }
+    }
+
+    @Override
+    public Template<String> build(String name, char[] template) {
+        if (customNodesProvider != null) {
+            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
+        }
+        else {
+            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
+        }
     }
 
 }

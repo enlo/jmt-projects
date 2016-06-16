@@ -21,39 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template;
+package info.naiv.lab.java.jmt.tquery.command;
+
+import java.io.Serializable;
+import lombok.Value;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public interface TemplateBuilder<TResult> {
+@Value
+public class CommandParameter implements Serializable, Cloneable {
 
-    /**
-     * 文字列からテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, String template);
+    private String key;
 
-    /**
-     * 文字のシーケンスからテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, CharSequence template);
+    private Object value;
 
-    /**
-     * 文字配列からテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, char[] template);
+    public CommandParameter(int index, Object value) {
+        this.key = "p" + index;
+        this.value = value;
+    }
+
+    public CommandParameter(String key, Object value) {
+        this.key = key;
+        this.value = value;
+    }
+
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public CommandParameter clone() {
+        try {
+            return (CommandParameter) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
 }

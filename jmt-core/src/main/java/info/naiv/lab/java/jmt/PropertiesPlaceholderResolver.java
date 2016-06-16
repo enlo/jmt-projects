@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import java.io.Serializable;
 import java.util.Properties;
 import org.springframework.util.PropertyPlaceholderHelper;
@@ -61,6 +62,9 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
      * @return
      */
     public String resolve(final Properties props, String value) {
+        if (isEmpty(value)) {
+            return value;
+        }
         return replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
             @Override
             public String resolvePlaceholder(String placeholderName) {

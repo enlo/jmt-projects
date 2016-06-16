@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery;
+package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.tquery.parameter.QueryBundleParameter;
+import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -34,21 +34,21 @@ import lombok.NonNull;
  *
  * @author enlo
  */
-public class QueryBundleParametersBuilder implements Iterable<QueryBundleParameter> {
+public class CommandParametersBuilder implements Iterable<CommandParameter> {
 
     static final int DEFAULT_CAPACITY = 20;
 
-    final ArrayList<QueryBundleParameter> impl;
+    final ArrayList<CommandParameter> impl;
 
-    public QueryBundleParametersBuilder() {
+    public CommandParametersBuilder() {
         this(DEFAULT_CAPACITY);
     }
 
-    public QueryBundleParametersBuilder(int capacity) {
+    public CommandParametersBuilder(int capacity) {
         impl = new ArrayList<>(capacity);
     }
 
-    public QueryBundleParametersBuilder(@NonNull List<QueryBundleParameter> impl) {
+    public CommandParametersBuilder(@NonNull List<CommandParameter> impl) {
         this.impl = new ArrayList<>(impl);
     }
 
@@ -57,14 +57,14 @@ public class QueryBundleParametersBuilder implements Iterable<QueryBundleParamet
     }
 
     public String addNamedValue(String name, Object value) {
-        QueryBundleParameter p = new QueryBundleParameter(name, value);
+        CommandParameter p = new CommandParameter(name, value);
         impl.add(p);
         return p.getKey();
     }
 
     public String addValue(Object value) {
         int index = impl.size();
-        QueryBundleParameter p = new QueryBundleParameter(index, value);
+        CommandParameter p = new CommandParameter(index, value);
         impl.add(p);
         return p.getKey();
     }
@@ -75,23 +75,16 @@ public class QueryBundleParametersBuilder implements Iterable<QueryBundleParamet
         return addNamedValue(name, value);
     }
 
-    public String addValues(Collection<Object> value) {
-        int index = impl.size();
-        QueryBundleParameter p = new QueryBundleParameter(index, value);
-        impl.add(p);
-        return p.getKey();
-    }
-
     public void ensureCapacity(int minCapacity) {
         impl.ensureCapacity(minCapacity);
     }
 
     @Override
-    public Iterator<QueryBundleParameter> iterator() {
+    public Iterator<CommandParameter> iterator() {
         return impl.iterator();
     }
 
-    public List<QueryBundleParameter> toList() {
+    public List<CommandParameter> toList() {
         return new ArrayList<>(impl);
     }
 }

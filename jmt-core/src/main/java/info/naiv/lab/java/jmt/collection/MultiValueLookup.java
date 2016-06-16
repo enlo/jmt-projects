@@ -41,20 +41,9 @@ public interface MultiValueLookup<TKey, TValue> {
 
     /**
      *
-     * @return エントリー
-     */
-    Iterable<Grouping<TKey, TValue>> entries();
-
-    /**
-     *
      * @param key キー
      * @return キーに対応する値のセット
      */
     Iterable<TValue> get(TKey key);
 
-    /**
-     *
-     * @return コレクションのサイズ
-     */
-    int size();
 }

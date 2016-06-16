@@ -21,29 +21,51 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.parameter;
+package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.tquery.QueryContext;
+import info.naiv.lab.java.jmt.collection.IteratorEnumeration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Properties;
 
 /**
  *
  * @author enlo
  */
-public interface ParameterBinder {
+public class SortedProperties extends Properties {
 
     /**
-     *
-     * @param value
-     * @param context
-     * @return
+     * デフォルトコンストラクター
      */
-    String bind(Object value, QueryContext context);
+    public SortedProperties() {
+        super();
+    }
 
     /**
+     * コンストラクター
      *
-     * @param value
-     * @param context
-     * @return
+     * @param defaults 既定の値
      */
-    String bindMany(Object value, QueryContext context);
+    public SortedProperties(Properties defaults) {
+        super(defaults);
+    }
+
+    @Override
+    public synchronized Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public synchronized Enumeration<Object> keys() {
+        Enumeration<?> keysEnum = super.keys();
+        List<String> keyList = new ArrayList<>();
+        while (keysEnum.hasMoreElements()) {
+            keyList.add((String) keysEnum.nextElement());
+        }
+        Collections.sort(keyList);
+        return new IteratorEnumeration(keyList.iterator());
+    }
 }

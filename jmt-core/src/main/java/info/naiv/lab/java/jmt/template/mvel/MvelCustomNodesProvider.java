@@ -21,39 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template;
+package info.naiv.lab.java.jmt.template.mvel;
+
+import java.util.Map;
+import org.mvel2.templates.res.Node;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public interface TemplateBuilder<TResult> {
+public interface MvelCustomNodesProvider {
 
     /**
-     * 文字列からテンプレートを作成する.
+     * Mvel 用独自ノードを取得する.
      *
-     * @param name
-     * @param template
      * @return
      */
-    Template<TResult> build(String name, String template);
-
-    /**
-     * 文字のシーケンスからテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, CharSequence template);
-
-    /**
-     * 文字配列からテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, char[] template);
+    Map<String, Class<? extends Node>> getCustomNodes();
 }

@@ -28,6 +28,7 @@ import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -38,7 +39,7 @@ import java.util.Map.Entry;
  * @param <TKey>
  * @param <TValue>
  */
-public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implements MultiValueLookup<TKey, TValue> {
+public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implements MultiValueLookup<TKey, TValue>, Iterable<Grouping<TKey, TValue>> {
 
     /**
      *
@@ -86,11 +87,6 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
     }
 
     @Override
-    public Iterable<Grouping<TKey, TValue>> entries() {
-        return values;
-    }
-
-    @Override
     public Iterable<TValue> get(TKey key) {
         for (Grouping<TKey, TValue> g : values) {
             if (g.getKey().compareTo(key) == 0) {
@@ -101,6 +97,10 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
     }
 
     @Override
+    public Iterator<Grouping<TKey, TValue>> iterator() {
+        return values.iterator();
+    }
+
     public int size() {
         return values.size();
     }

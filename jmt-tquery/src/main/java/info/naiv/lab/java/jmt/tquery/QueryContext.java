@@ -23,10 +23,9 @@
  */
 package info.naiv.lab.java.jmt.tquery;
 
-import info.naiv.lab.java.jmt.tquery.parameter.ParameterBinder;
-import info.naiv.lab.java.jmt.tquery.parameter.DefaultParameterBinder;
-import java.util.ArrayList;
-import java.util.List;
+import info.naiv.lab.java.jmt.tquery.command.CommandParametersBuilder;
+import info.naiv.lab.java.jmt.tquery.command.ParameterBinder;
+import info.naiv.lab.java.jmt.tquery.command.DefaultParameterBinder;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -41,27 +40,27 @@ public class QueryContext {
     ParameterBinder parameterBinder;
 
     @NonNull
-    QueryBundleParametersBuilder parametersBuilder;
+    CommandParametersBuilder parametersBuilder;
 
     Object source;
 
     public QueryContext() {
         this.parameterBinder = new DefaultParameterBinder();
-        this.parametersBuilder = new QueryBundleParametersBuilder();
+        this.parametersBuilder = new CommandParametersBuilder();
     }
 
     public QueryContext(@NonNull ParameterBinder parameterBinder) {
         this.parameterBinder = parameterBinder;
-        this.parametersBuilder = new QueryBundleParametersBuilder();
+        this.parametersBuilder = new CommandParametersBuilder();
     }
 
-    public QueryContext(@NonNull QueryBundleParametersBuilder bundleParametersBuilder) {
+    public QueryContext(@NonNull CommandParametersBuilder bundleParametersBuilder) {
         this.parameterBinder = new DefaultParameterBinder();
         this.parametersBuilder = bundleParametersBuilder;
     }
 
     public QueryContext(@NonNull ParameterBinder parameterBinder,
-                        @NonNull QueryBundleParametersBuilder bundleParametersBuilder) {
+                        @NonNull CommandParametersBuilder bundleParametersBuilder) {
         this.parameterBinder = parameterBinder;
         this.parametersBuilder = bundleParametersBuilder;
     }

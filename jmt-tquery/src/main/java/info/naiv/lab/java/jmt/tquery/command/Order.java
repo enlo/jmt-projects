@@ -21,39 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template;
+package info.naiv.lab.java.jmt.tquery.command;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public interface TemplateBuilder<TResult> {
+public enum Order {
 
     /**
-     * 文字列からテンプレートを作成する.
      *
-     * @param name
-     * @param template
-     * @return
      */
-    Template<TResult> build(String name, String template);
-
+    ASC,
     /**
-     * 文字のシーケンスからテンプレートを作成する.
      *
-     * @param name
-     * @param template
-     * @return
      */
-    Template<TResult> build(String name, CharSequence template);
+    DESC;
 
-    /**
-     * 文字配列からテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, char[] template);
 }

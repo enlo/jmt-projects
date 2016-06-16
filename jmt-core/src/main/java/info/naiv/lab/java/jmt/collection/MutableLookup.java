@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.collection;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -32,7 +33,7 @@ import java.util.Map;
  * @param <TKey>
  * @param <TValue>
  */
-public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue> {
+public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterable<Map.Entry<TKey, TValue>> {
 
     final Map<TKey, TValue> map;
 
@@ -57,13 +58,13 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue> {
     }
 
     @Override
-    public Iterable<Map.Entry<TKey, TValue>> entries() {
-        return map.entrySet();
+    public TValue get(TKey key) {
+        return map.get(key);
     }
 
     @Override
-    public TValue get(TKey key) {
-        return map.get(key);
+    public Iterator<Map.Entry<TKey, TValue>> iterator() {
+        return map.entrySet().iterator();
     }
 
     /**
@@ -77,7 +78,6 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue> {
         return this;
     }
 
-    @Override
     public int size() {
         return map.size();
     }

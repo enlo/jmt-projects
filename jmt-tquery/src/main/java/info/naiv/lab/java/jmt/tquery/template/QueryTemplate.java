@@ -24,13 +24,13 @@
 package info.naiv.lab.java.jmt.tquery.template;
 
 import info.naiv.lab.java.jmt.template.Template;
-import info.naiv.lab.java.jmt.tquery.QueryBundle;
+import info.naiv.lab.java.jmt.tquery.command.Command;
 
 /**
  * SqlTemplate
  *
  * @author enlo
  */
-public interface QueryTemplate extends Template<QueryBundle> {
+public interface QueryTemplate extends Template<Command> {
 
 }

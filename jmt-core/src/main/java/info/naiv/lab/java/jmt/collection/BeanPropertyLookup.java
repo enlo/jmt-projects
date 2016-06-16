@@ -24,9 +24,10 @@
 package info.naiv.lab.java.jmt.collection;
 
 import java.beans.PropertyDescriptor;
-import java.util.HashMap;
+import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.Iterator;
+import java.util.Map.Entry;
 import java.util.Set;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -35,7 +36,7 @@ import org.springframework.beans.BeanWrapperImpl;
  *
  * @author enlo
  */
-public class BeanPropertyLookup implements Lookup<String, Object> {
+public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entry<String, Object>> {
 
     final BeanWrapper beanWrapper;
     final Set<String> propertyNames;
@@ -61,21 +62,20 @@ public class BeanPropertyLookup implements Lookup<String, Object> {
     }
 
     @Override
-    public Iterable<Map.Entry<String, Object>> entries() {
-        Map<String, Object> result = new HashMap<>(propertyNames.size());
-        for (String name : propertyNames) {
-            result.put(name, get(name));
-        }
-        return result.entrySet();
-    }
-
-    @Override
     public Object get(String key) {
         Object value = beanWrapper.getPropertyValue(key);
         return value;
     }
 
     @Override
+    public Iterator<Entry<String, Object>> iterator() {
+        Set<Entry<String, Object>> result = new HashSet<>(propertyNames.size());
+        for (String name : propertyNames) {
+            result.add(new SimpleImmutableEntry<>(name, get(name)));
+        }
+        return result.iterator();
+    }
+
     public int size() {
         return beanWrapper.getPropertyDescriptors().length;
     }

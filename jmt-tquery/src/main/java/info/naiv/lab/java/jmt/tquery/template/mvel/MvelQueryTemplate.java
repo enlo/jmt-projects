@@ -24,9 +24,9 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel;
 
 import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplate;
-import info.naiv.lab.java.jmt.tquery.QueryBundle;
+import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
-import info.naiv.lab.java.jmt.tquery.parameter.QueryBundleParameter;
+import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
 import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
 import java.util.List;
 import org.mvel2.integration.VariableResolverFactory;
@@ -36,7 +36,7 @@ import org.mvel2.templates.CompiledTemplate;
  *
  * @author enlo
  */
-public class MvelQueryTemplate extends AbstractMvelTemplate<QueryBundle, QueryContext> implements QueryTemplate {
+public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContext> implements QueryTemplate {
 
     public MvelQueryTemplate(String name, CompiledTemplate template) {
         super(name, template);
@@ -50,9 +50,9 @@ public class MvelQueryTemplate extends AbstractMvelTemplate<QueryBundle, QueryCo
     }
 
     @Override
-    protected QueryBundle createResult(Object result, QueryContext context) {
-        List<QueryBundleParameter> parameters = context.getParametersBuilder().toList();
-        QueryBundle query = new QueryBundle((String) result, parameters);
+    protected Command createResult(Object result, QueryContext context) {
+        List<CommandParameter> parameters = context.getParametersBuilder().toList();
+        Command query = new Command((String) result, parameters);
         return query;
     }
 

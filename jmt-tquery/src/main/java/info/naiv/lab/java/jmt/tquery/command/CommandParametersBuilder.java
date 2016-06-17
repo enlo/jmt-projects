@@ -23,10 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 import lombok.NonNull;
 
@@ -34,57 +30,70 @@ import lombok.NonNull;
  *
  * @author enlo
  */
-public class CommandParametersBuilder implements Iterable<CommandParameter> {
+public class CommandParametersBuilder {
 
     static final int DEFAULT_CAPACITY = 20;
 
-    final ArrayList<CommandParameter> impl;
+    final CommandParameters impl;
 
     public CommandParametersBuilder() {
         this(DEFAULT_CAPACITY);
     }
 
     public CommandParametersBuilder(int capacity) {
-        impl = new ArrayList<>(capacity);
+        impl = new CommandParameters(capacity);
     }
 
-    public CommandParametersBuilder(@NonNull List<CommandParameter> impl) {
-        this.impl = new ArrayList<>(impl);
+    public CommandParametersBuilder addCapacity(int capacity) {
+        impl.addCapacity(capacity);
+        return this;
     }
 
-    public void addCapacity(int capacity) {
-        ensureCapacity(impl.size() + capacity);
+    public CommandParametersBuilder addNamedValue(String name, Object value) {
+        impl.addNamedValue(name, value);
+        return this;
     }
 
-    public String addNamedValue(String name, Object value) {
-        CommandParameter p = new CommandParameter(name, value);
-        impl.add(p);
-        return p.getKey();
+    public CommandParametersBuilder addValue(Object value) {
+        impl.addValue(value);
+        return this;
     }
 
-    public String addValue(Object value) {
-        int index = impl.size();
-        CommandParameter p = new CommandParameter(index, value);
-        impl.add(p);
-        return p.getKey();
+    public CommandParametersBuilder addValueWithPrefix(String prefix, Object value) {
+        impl.addValueWithPrefix(prefix, value);
+        return this;
     }
 
-    public String addValueWithPrefix(String prefix, Object value) {
-        int index = impl.size();
-        String name = prefix + index;
-        return addNamedValue(name, value);
-    }
-
-    public void ensureCapacity(int minCapacity) {
+    public CommandParametersBuilder ensureCapacity(int minCapacity) {
         impl.ensureCapacity(minCapacity);
+        return this;
     }
 
-    @Override
-    public Iterator<CommandParameter> iterator() {
-        return impl.iterator();
+    /**
+     * コマンドパラメーターリストを生成する.
+     *
+     * @return コマンドパラメーターリスト
+     */
+    public CommandParameters build() {
+        return new CommandParameters(impl);
     }
 
-    public List<CommandParameter> toList() {
-        return new ArrayList<>(impl);
+    /**
+     * コマンドパラメーターリストを生成する.
+     *
+     * @return コマンドパラメーターリスト
+     */
+    public CommandParameters toList() {
+        return build();
     }
+
+    /**
+     * コマンドパラメーター配列を生成する.
+     *
+     * @return コマンドパラメーターリスト
+     */
+    public CommandParameter[] toArray() {
+        return impl.toArray();
+    }
+
 }

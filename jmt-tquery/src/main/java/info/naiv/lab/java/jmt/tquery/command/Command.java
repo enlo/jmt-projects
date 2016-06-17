@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ import lombok.Data;
  * @author enlo
  */
 @Data
-public class Command implements Serializable {
+public class Command implements Serializable, Cloneable {
 
     String query;
 
@@ -55,9 +54,11 @@ public class Command implements Serializable {
 
     @Override
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public CommandParameter clone() {
+    public Command clone() {
         try {
-            return (CommandParameter) super.clone();
+            Command cmd = (Command) super.clone();
+            cmd.parameters = new CommandParameters(this.parameters);
+            return cmd;
         }
         catch (CloneNotSupportedException ex) {
             throw new InternalError(ex.getMessage());

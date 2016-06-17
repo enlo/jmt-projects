@@ -15,20 +15,20 @@ public class DefaultParameterBinder implements ParameterBinder {
 
     private static final StringJoiner joiner = StringJoiner.valueOf(", ");
 
-    public int addParameters(Iterable<?> items, CommandParametersBuilder builder) {
+    public int addParameters(Iterable<?> items, CommandParameters params) {
         int count = 0;
         for (Object item : items) {
-            builder.addValue(item);
+            params.addValue(item);
             count++;
         }
         return count;
     }
 
-    public int addParameters(Collection<?> items, CommandParametersBuilder builder) {
+    public int addParameters(Collection<?> items, CommandParameters params) {
         int count = 0;
-        builder.addCapacity(items.size());
+        params.addCapacity(items.size());
         for (Object item : items) {
-            builder.addValue(item);
+            params.addValue(item);
             count++;
         }
         return count;
@@ -36,30 +36,30 @@ public class DefaultParameterBinder implements ParameterBinder {
 
     @Override
     public String bind(Object value, QueryContext context) {
-        context.getParametersBuilder().addValue(value);
+        context.getParameters().addValue(value);
         return "?";
     }
 
     @Override
     public String bindMany(Object value, QueryContext context) {
         int count;
-        CommandParametersBuilder builder = context.getParametersBuilder();
+        CommandParameters params = context.getParameters();
         if (value instanceof Collection) {
             Collection list = (Collection) value;
-            builder.addCapacity(list.size());
-            count = addParameters(list, builder);
+            params.addCapacity(list.size());
+            count = addParameters(list, params);
         }
         else if (value instanceof Iterable) {
             Iterable<?> iter = (Iterable<?>) value;
-            count = addParameters(iter, builder);
+            count = addParameters(iter, params);
         }
         else {
             Object[] arr = asObjectArray(value);
             if (arr != null) {
-                count = addParameters(Arrays.asList(arr), builder);
+                count = addParameters(Arrays.asList(arr), params);
             }
             else {
-                builder.addValue(value);
+                params.addValue(value);
                 count = 1;
             }
         }

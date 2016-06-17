@@ -51,7 +51,7 @@ public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContex
 
     @Override
     protected Command createResult(Object result, QueryContext context) {
-        List<CommandParameter> parameters = context.getParametersBuilder().toList();
+        List<CommandParameter> parameters = context.getParameters().clone();
         Command query = new Command((String) result, parameters);
         return query;
     }

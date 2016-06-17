@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.template.annotation;
 
+import info.naiv.lab.java.jmt.template.TemplateLoader;
 import java.lang.annotation.Documented;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -48,6 +49,13 @@ public @interface InjectTemplate {
      * @return SqlTemplateLoader の名前.
      */
     String loader() default "";
+
+    /**
+     * TemplateLoader クラス指定.
+     *
+     * @return
+     */
+    Class<? extends TemplateLoader> loaderClass() default TemplateLoader.class;
 
     /**
      * カテゴリー

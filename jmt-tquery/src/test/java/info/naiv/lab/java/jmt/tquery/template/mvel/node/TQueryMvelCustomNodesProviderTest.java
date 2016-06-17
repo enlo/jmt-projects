@@ -21,31 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.dialect;
+package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+
+import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
+import java.util.Map;
+import static org.hamcrest.Matchers.is;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
  */
-public class SqlServerDialect extends AbstractDialect {
+public class TQueryMvelCustomNodesProviderTest {
 
-    @Override
-    public String getKeyword() {
-        return "sqlserver";
+    public TQueryMvelCustomNodesProviderTest() {
     }
 
     /**
-     *
-     * @return
+     * Test of getCustomNodes method, of class TQueryMvelCustomNodesProvider.
      */
-    @Override
-    public PagingSupportType getPagingSupport() {
-        return PagingSupportType.UNDEFINED;
-    }
-
-    @Override
-    public String getStringConcatenateOperator() {
-        return "+";
+    @Test
+    public void testGetCustomNodes() {
+        MvelCustomNodesProvider provider = new TQueryMvelCustomNodesProvider();
+        assertThat(provider.getCustomNodes(), is((Map) CustomNodes.NODES));
     }
 
 }

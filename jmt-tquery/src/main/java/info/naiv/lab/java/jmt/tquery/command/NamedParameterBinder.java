@@ -28,9 +28,7 @@ import info.naiv.lab.java.jmt.StringJoiner;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import lombok.Data;
 
 /**
@@ -50,32 +48,32 @@ public class NamedParameterBinder implements ParameterBinder {
 
     @Override
     public String bind(Object value, QueryContext context) {
-        return context.getParametersBuilder().addValueWithPrefix(prefix, value);
+        return context.getParameters().addValueWithPrefix(prefix, value);
     }
 
     @Override
     public String bindMany(Object value, QueryContext context) {
         List<String> keys;
-        CommandParametersBuilder builder = context.getParametersBuilder();
+        CommandParameters params = context.getParameters();
         if (value instanceof Iterable) {
-            keys = addParameters((Iterable) value, builder);
+            keys = addParameters((Iterable) value, params);
         }
         else {
             Object[] arr = asObjectArray(value);
             if (arr != null) {
-                keys = addParameters(Arrays.asList(arr), builder);
+                keys = addParameters(Arrays.asList(arr), params);
             }
             else {
-                keys = addParameters(Arrays.asList(value), builder);
+                keys = addParameters(Arrays.asList(value), params);
             }
         }
         return joiner.join(keys).toString();
     }
 
-    public List<String> addParameters(Iterable<?> items, CommandParametersBuilder builder) {
+    public List<String> addParameters(Iterable<?> items, CommandParameters params) {
         List<String> keys = new ArrayList<>();
         for (Object item : items) {
-            String key = builder.addValueWithPrefix(prefix, item);
+            String key = params.addValueWithPrefix(prefix, item);
             keys.add(key);
         }
         return keys;

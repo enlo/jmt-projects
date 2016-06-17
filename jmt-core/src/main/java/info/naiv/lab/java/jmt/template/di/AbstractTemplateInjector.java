@@ -35,15 +35,16 @@ public abstract class AbstractTemplateInjector {
 
     /**
      *
+     * @param loaderClass
      * @param loaderName
      * @return
      */
-    protected TemplateLoader getLoaderFromServiceProvider(String loaderName) {
+    protected TemplateLoader getLoaderFromServiceProvider(String loaderName, Class<? extends TemplateLoader> loaderClass) {
         if (isBlank(loaderName)) {
-            return ServiceProviders.resolveService(TemplateLoader.class);
+            return ServiceProviders.resolveService(loaderClass);
         }
         else {
-            return ServiceProviders.resolveService(TemplateLoader.class, Tag.of(loaderName));
+            return ServiceProviders.resolveService(loaderClass, Tag.of(loaderName));
         }
     }
 
@@ -97,18 +98,20 @@ public abstract class AbstractTemplateInjector {
     protected TemplateLoader getTemplateLoader(InjectTemplate anno) {
         String loaderName = anno.loader();
         TemplateLoader loader;
-        loader = getTemplateLoaderCore(loaderName);
+        loader = getTemplateLoaderCore(loaderName, anno.loaderClass());
         if (loader == null) {
-            loader = getLoaderFromServiceProvider(loaderName);
+            loader = getLoaderFromServiceProvider(loaderName, anno.loaderClass());
         }
         return loader;
     }
 
     /**
+     * TemplateLoader 読み込み.
      *
-     * @param loaderName
+     * @param loaderName ローダー名
+     * @param loaderClass ローダークラス
      * @return
      */
-    protected abstract TemplateLoader getTemplateLoaderCore(String loaderName);
+    protected abstract TemplateLoader getTemplateLoaderCore(String loaderName, Class<? extends TemplateLoader> loaderClass);
 
 }

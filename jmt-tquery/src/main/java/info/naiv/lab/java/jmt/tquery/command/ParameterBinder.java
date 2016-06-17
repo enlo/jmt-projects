@@ -24,12 +24,13 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import info.naiv.lab.java.jmt.tquery.QueryContext;
+import java.io.Serializable;
 
 /**
  *
  * @author enlo
  */
-public interface ParameterBinder {
+public interface ParameterBinder extends Serializable {
 
     /**
      *

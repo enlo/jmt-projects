@@ -61,13 +61,8 @@ public class CdiDependentTemplateInjector extends AbstractTemplateInjector {
         }
     }
 
-    /**
-     *
-     * @param loaderName
-     * @return
-     */
     @Override
-    protected TemplateLoader getTemplateLoaderCore(String loaderName) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    protected TemplateLoader getTemplateLoaderCore(String loaderName, Class<? extends TemplateLoader> loaderClass) {
+        return null;
     }
 }

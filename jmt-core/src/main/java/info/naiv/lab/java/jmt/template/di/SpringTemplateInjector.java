@@ -66,24 +66,19 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
         this.beanFactory = beanFactory;
     }
 
-    /**
-     *
-     * @param loaderName
-     * @return
-     */
     @Override
-    protected TemplateLoader getTemplateLoaderCore(String loaderName) {
+    protected TemplateLoader getTemplateLoaderCore(String loaderName, Class<? extends TemplateLoader> loaderClass) {
         if (beanFactory == null) {
             return null;
         }
         try {
             if (isBlank(loaderName)) {
                 logger.debug("getBean(TemplateLoader.class)");
-                return beanFactory.getBean(TemplateLoader.class);
+                return beanFactory.getBean(loaderClass);
             }
             else {
                 logger.debug("getBean('{}', TemplateLoader.class)", loaderName);
-                return beanFactory.getBean(loaderName, TemplateLoader.class);
+                return beanFactory.getBean(loaderName, loaderClass);
             }
         }
         catch (BeansException ex) {
@@ -114,7 +109,6 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
 
         @Override
         public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 

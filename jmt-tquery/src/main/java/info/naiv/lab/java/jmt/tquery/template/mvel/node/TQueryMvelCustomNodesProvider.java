@@ -21,25 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.dialect;
+package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+
+import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
+import java.util.Map;
+import org.mvel2.templates.res.Node;
 
 /**
  *
  * @author enlo
  */
-public class Oracle12Dialect extends OracleDialect implements Dialect {
+public class TQueryMvelCustomNodesProvider implements MvelCustomNodesProvider {
 
     @Override
-    public String getKeyword() {
-        return "oracle12";
+    public Map<String, Class<? extends Node>> getCustomNodes() {
+        return CustomNodes.NODES;
     }
-
-    /**
-     *
-     * @return
-     */
-    @Override
-    public PagingSupportType getPagingSupport() {
-        return PagingSupportType.SQLSTD;
-    }
+    
 }

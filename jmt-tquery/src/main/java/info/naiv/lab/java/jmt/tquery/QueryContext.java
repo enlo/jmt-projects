@@ -23,9 +23,12 @@
  */
 package info.naiv.lab.java.jmt.tquery;
 
+import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.CommandParametersBuilder;
 import info.naiv.lab.java.jmt.tquery.command.ParameterBinder;
 import info.naiv.lab.java.jmt.tquery.command.DefaultParameterBinder;
+import java.util.HashMap;
+import java.util.Map;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -40,29 +43,35 @@ public class QueryContext {
     ParameterBinder parameterBinder;
 
     @NonNull
-    CommandParametersBuilder parametersBuilder;
+    CommandParameters parameters;
 
     Object source;
+    
+    Map<String, Object> attributes;
 
     public QueryContext() {
         this.parameterBinder = new DefaultParameterBinder();
-        this.parametersBuilder = new CommandParametersBuilder();
+        this.parameters = new CommandParameters();
+        this.attributes = new HashMap<>();
     }
 
     public QueryContext(@NonNull ParameterBinder parameterBinder) {
         this.parameterBinder = parameterBinder;
-        this.parametersBuilder = new CommandParametersBuilder();
+        this.parameters = new CommandParameters();
+        this.attributes = new HashMap<>();
     }
 
     public QueryContext(@NonNull CommandParametersBuilder bundleParametersBuilder) {
         this.parameterBinder = new DefaultParameterBinder();
-        this.parametersBuilder = bundleParametersBuilder;
+        this.parameters = bundleParametersBuilder.build();
+        this.attributes = new HashMap<>();
     }
 
     public QueryContext(@NonNull ParameterBinder parameterBinder,
                         @NonNull CommandParametersBuilder bundleParametersBuilder) {
         this.parameterBinder = parameterBinder;
-        this.parametersBuilder = bundleParametersBuilder;
+        this.parameters = bundleParametersBuilder.build();
+        this.attributes = new HashMap<>();
     }
 
 }

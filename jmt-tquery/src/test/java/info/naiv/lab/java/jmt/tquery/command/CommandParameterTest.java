@@ -23,41 +23,53 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.collection.KeyedValue;
-import java.io.Serializable;
-import java.util.Map;
-import lombok.Value;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.sameInstance;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
  */
-@Value
-public class CommandParameter implements Serializable, Cloneable, KeyedValue<String> {
+public class CommandParameterTest {
 
-    private String key;
-
-    private Object value;
-
-    public CommandParameter(int index, Object value) {
-        this.key = "p" + index;
-        this.value = value;
+    public CommandParameterTest() {
     }
 
-    public CommandParameter(String key, Object value) {
-        this.key = key;
-        this.value = value;
+    /**
+     * Test of clone method, of class CommandParameter.
+     */
+    @Test
+    public void testClone() {
+        CommandParameter p1 = new CommandParameter("A", 123);
+        CommandParameter p2 = p1.clone();
+
+        assertThat(p2, is(not(sameInstance(p1))));
+        assertThat(p2, is(p1));
     }
 
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public CommandParameter clone() {
-        try {
-            return (CommandParameter) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
+    /**
+     * Test of getKey method, of class CommandParameter.
+     */
+    @Test
+    public void testGetKey() {
+        CommandParameter p1 = new CommandParameter("A", 123);
+        CommandParameter p2 = new CommandParameter("B", 456);
+        assertThat(p1.getKey(), is("A"));
+        assertThat(p2.getKey(), is("B"));
+    }
+
+    /**
+     * Test of getValue method, of class CommandParameter.
+     */
+    @Test
+    public void testGetValue() {
+        CommandParameter p1 = new CommandParameter("A", 123);
+        CommandParameter p2 = new CommandParameter("B", 456);
+        assertThat(p1.getValue(), is((Object) 123));
+        assertThat(p2.getValue(), is((Object) 456));
     }
 
 }

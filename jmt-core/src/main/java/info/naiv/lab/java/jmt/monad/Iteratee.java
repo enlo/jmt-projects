@@ -26,11 +26,11 @@ package info.naiv.lab.java.jmt.monad;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -52,7 +52,7 @@ public interface Iteratee<T> extends Iterable<T>, Serializable {
      * @param predicate 述語オブジェクト
      * @return predicate が true を戻したオブジェクトのみを戻す.
      */
-    @ReturnNonNull
+    @Nonnull
     IterateeImpl<T> filter(Predicate1<? super T> predicate);
 
     /**
@@ -69,7 +69,7 @@ public interface Iteratee<T> extends Iterable<T>, Serializable {
      * @param mapper 変換オブジェクト
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <U> IterateeImpl<U> flatMap(Function1<? super T, IterateeImpl<U>> mapper);
 
     /**
@@ -87,14 +87,14 @@ public interface Iteratee<T> extends Iterable<T>, Serializable {
      * @param mapper
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <U> IterateeImpl<U> map(Function1<? super T, ? extends U> mapper);
 
     /**
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     List<T> toList();
 
     /**
@@ -103,7 +103,7 @@ public interface Iteratee<T> extends Iterable<T>, Serializable {
      * @param keyResolver
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <K> Map<K, T> toMap(Function1<T, K> keyResolver);
 
 }

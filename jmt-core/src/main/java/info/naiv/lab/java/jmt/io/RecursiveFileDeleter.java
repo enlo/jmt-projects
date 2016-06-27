@@ -23,13 +23,13 @@
  */
 package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import static java.nio.file.Files.deleteIfExists;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -48,7 +48,7 @@ public class RecursiveFileDeleter extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
         if (deleteDirectory) {
             deleteIfExists(dir);
@@ -57,7 +57,7 @@ public class RecursiveFileDeleter extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         deleteIfExists(file);
         return super.visitFile(file, attrs);

@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *

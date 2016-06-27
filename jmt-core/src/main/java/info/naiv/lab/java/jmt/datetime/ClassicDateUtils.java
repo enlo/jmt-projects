@@ -8,7 +8,6 @@ import static info.naiv.lab.java.jmt.Misc.toCalendar;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,6 +28,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -69,7 +69,7 @@ public class ClassicDateUtils {
      * @param timeUnit 単位
      * @return 結果
      */
-    @ReturnNonNull
+    @Nonnull
     public static Date add(Date date, long amount, TimeUnit timeUnit) {
         nonNull(date, "date");
         nonNull(timeUnit, "timeUnit");
@@ -84,7 +84,7 @@ public class ClassicDateUtils {
      * @param timeUnit 単位
      * @return 結果
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar add(Calendar cal, long amount, TimeUnit timeUnit) {
         nonNull(cal, "cal");
         nonNull(timeUnit, "timeUnit");
@@ -103,7 +103,7 @@ public class ClassicDateUtils {
      * @param settings 設定.
      * @return 営業日分だけ加算した値.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar addWorkingDays(Calendar cal, int days, WorkingDaySettings settings) {
         nonNull(cal, "cal");
         nonNull(settings, "settings");
@@ -127,7 +127,7 @@ public class ClassicDateUtils {
      * @param cal カレンダー
      * @return 入力されたカレンダー
      */
-    @ReturnNonNull
+    @Nonnull
     static public Calendar clearDatePart(Calendar cal) {
         nonNull(cal, "cal");
         cal.set(YEAR, 1970);
@@ -142,7 +142,7 @@ public class ClassicDateUtils {
      * @param cal カレンダー
      * @return 入力されたカレンダー
      */
-    @ReturnNonNull
+    @Nonnull
     static public Calendar clearTimePart(Calendar cal) {
         nonNull(cal, "cal");
         cal.set(HOUR_OF_DAY, 0);
@@ -159,7 +159,7 @@ public class ClassicDateUtils {
      * @param settings 営業日情報.
      * @return 週の最初の営業日.
      */
-    @ReturnNonNull
+    @Nonnull
     static public Calendar computeFirstBizDayOfWeek(Calendar cal, WorkingDaySettings settings) {
         nonNull(cal, "cal");
         nonNull(settings, "holidaySettings");
@@ -210,7 +210,7 @@ public class ClassicDateUtils {
      * @param copyFields コピーするフィールド.
      * @return dest.
      */
-    @ReturnNonNull
+    @Nonnull
     static public Calendar copyFields(Calendar dest, Calendar src, int... copyFields) throws IllegalArgumentException {
         nonNull(dest, "dest");
         nonNull(src, "src");
@@ -229,7 +229,7 @@ public class ClassicDateUtils {
      * @return 日付オブジェクト
      * @throws IllegalArgumentException 年、月、日の範囲が不正.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar createCalendar(int year, int month, int day) throws IllegalArgumentException {
         return createCalendar(year, month, day, 0, 0, 0, 0);
     }
@@ -248,7 +248,7 @@ public class ClassicDateUtils {
      * @return 日付オブジェクト
      * @throws IllegalArgumentException 年、月、日、時、分、秒の範囲が不正.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar createCalendar(int year, int month, int day, int hourOfDay, int minute, int second) throws IllegalArgumentException {
         return createCalendar(year, month, day, hourOfDay, minute, second, 0);
     }
@@ -268,7 +268,7 @@ public class ClassicDateUtils {
      * @return 日付オブジェクト
      * @throws IllegalArgumentException 年、月、日、時、分、秒、ミリ秒の範囲が不正.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar createCalendar(int year, int month, int day, int hourOfDay, int minute, int second, int millisecond) throws IllegalArgumentException {
 
         between(month, 1, 12, "month");
@@ -301,7 +301,7 @@ public class ClassicDateUtils {
      * @return 日付オブジェクト
      * @throws IllegalArgumentException 年、月、日の範囲が不正.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Date createDate(int year, int month, int day) throws IllegalArgumentException {
         return createCalendar(year, month, day).getTime();
     }
@@ -312,7 +312,7 @@ public class ClassicDateUtils {
      * @param to
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static Date createRandomDate(Date from, Date to) {
         final long n = to.getTime() - from.getTime();
         final Random r = new Random();
@@ -366,7 +366,7 @@ public class ClassicDateUtils {
     /**
      * @return 日付取得器を取得.
      */
-    @ReturnNonNull
+    @Nonnull
     public static CurrentDateProvider getCurrentDateProvider() {
         CurrentDateProvider dp = get(CurrentDateProvider.class);
         if (dp == null) {
@@ -381,7 +381,7 @@ public class ClassicDateUtils {
      * @param date 日付型
      * @return 日付部分のみを取り出した日付型
      */
-    @ReturnNonNull
+    @Nonnull
     public static Date getDatePart(Date date) {
         nonNull(date, "date");
         return getDatePart(toCalendar(date, null)).getTime();
@@ -393,7 +393,7 @@ public class ClassicDateUtils {
      * @param cal 日付型
      * @return 日付部分のみを取り出した日付型
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar getDatePart(Calendar cal) {
         nonNull(cal, "cal");
         Calendar newCal = (Calendar) cal.clone();
@@ -407,7 +407,7 @@ public class ClassicDateUtils {
      * @param date 日付型
      * @return 時刻部分のみを取り出した日付型
      */
-    @ReturnNonNull
+    @Nonnull
     public static Date getTimePart(Date date) {
         nonNull(date, "date");
         return getTimePart(toCalendar(date, null)).getTime();
@@ -419,7 +419,7 @@ public class ClassicDateUtils {
      * @param cal 日付型
      * @return 時刻部分のみを取り出した日付型
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar getTimePart(Calendar cal) {
         nonNull(cal, "cal");
         Calendar newCal = (Calendar) cal.clone();
@@ -451,7 +451,7 @@ public class ClassicDateUtils {
      *
      * @return 現在のカレンダーを取得.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar now() {
         return getCurrentDateProvider().getNow();
     }
@@ -479,7 +479,7 @@ public class ClassicDateUtils {
      * @return カレンダー.
      * @throws ParseException dateText が空、または解析に失敗した場合.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar parseCalendar(String dateText) throws ParseException {
         if (isEmpty(dateText)) {
             throw new ParseException("dateText is must be not empty.", 0);
@@ -505,7 +505,7 @@ public class ClassicDateUtils {
      * @param settings
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static Calendar shiftIfHoliday(Calendar cal, WorkingDaySettings settings) {
         nonNull(cal, "cal");
         nonNull(settings, "settings");
@@ -526,7 +526,7 @@ public class ClassicDateUtils {
      *
      * @return 短縮年変換器を追加.
      */
-    @ReturnNonNull
+    @Nonnull
     static ShortYearConverter getShortYearConverter() {
         ShortYearConverter conv = get(ShortYearConverter.class);
         if (conv == null) {

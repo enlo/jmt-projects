@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.closeable;
 
 import java.util.concurrent.locks.Lock;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -38,7 +39,7 @@ public class LockGuard extends Guard {
      * @param lock
      * @param doLock
      */
-    public LockGuard(Lock lock, boolean doLock) {
+    public LockGuard(@Nonnull Lock lock, boolean doLock) {
         this.lock = lock;
         if (doLock) {
             lock.lock();

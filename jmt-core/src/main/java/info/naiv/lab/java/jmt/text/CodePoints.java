@@ -2,10 +2,10 @@ package info.naiv.lab.java.jmt.text;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayEqualsInRange;
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.util.*;
 import static java.util.Arrays.copyOf;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -114,21 +114,21 @@ public class CodePoints extends AbstractCollection<Integer> implements Collectio
         return codePoints.length;
     }
 
-    @ReturnNonNull
+    @Nonnull
     public String stringAt(int i) {
         int from = getBeginIndex(i);
         int to = getEndIndex(i);
         return origin.substring(from, to);
     }
 
-    @ReturnNonNull
+    @Nonnull
     public String subCodePoints(int from, int to) {
         from = getBeginIndex(from);
         to = getEndIndex(to);
         return origin.substring(from, to);
     }
 
-    @ReturnNonNull
+    @Nonnull
     public int[] toCodePointArray() {
         return copyOf(codePoints, codePoints.length);
     }

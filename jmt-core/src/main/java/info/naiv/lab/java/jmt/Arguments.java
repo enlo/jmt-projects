@@ -24,8 +24,10 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -44,7 +46,8 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
      */
-    public static <T extends Comparable<T>> T between(T arg, T begin, T end, String varname) throws IllegalArgumentException {
+    @Nonnull
+    public static <T extends Comparable<T>> T between(@Nonnull T arg, @Nonnull T begin, @Nonnull T end, String varname) throws IllegalArgumentException {
         if (begin.compareTo(arg) > 0 || end.compareTo(arg) < 0) {
             String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
             throw new IllegalArgumentException(msg);
@@ -132,9 +135,9 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg がインターフェイスではない.
      */
-    @ReturnNonNull
-    public static <T> Class<T> isInterface(Class<T> arg, String varname) throws IllegalArgumentException {
-        if (arg == null || !arg.isInterface()) {
+    @Nonnull
+    public static <T> Class<T> isInterface(@NonNull Class<T> arg, String varname) throws IllegalArgumentException {
+        if (!arg.isInterface()) {
             throw new IllegalArgumentException(varname + " is must be interface.");
         }
         return arg;
@@ -149,8 +152,9 @@ public abstract class Arguments {
      * @param varname
      * @return
      */
+    @Nonnull
     public static <T extends Comparable<T>> T lessThan(T lhs, T rhs, String varname) {
-        nonNull(lhs, varname);
+        lhs = nonNull(lhs, varname);
         if (lhs.compareTo(rhs) < 0) {
             return lhs;
         }
@@ -195,7 +199,7 @@ public abstract class Arguments {
      * @throws IllegalArgumentException arg が null または empty.
      * @return arg.
      */
-    @ReturnNonNull
+    @Nonnull
     public static String nonEmpty(String arg, String varname) throws IllegalArgumentException {
         if (arg == null || arg.isEmpty()) {
             throw new IllegalArgumentException(varname + " is must not be empty.");
@@ -212,7 +216,7 @@ public abstract class Arguments {
      * @return arg.
      * @throws IllegalArgumentException arg が null または empty.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T extends Collection> T nonEmpty(T arg, String varname) throws IllegalArgumentException {
         if (arg == null || arg.isEmpty()) {
             throw new IllegalArgumentException(varname + "is must not be empty.");
@@ -229,7 +233,7 @@ public abstract class Arguments {
      * @return arg.
      * @throws IllegalArgumentException arg が null または empty.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> T[] nonEmpty(T[] arg, String varname) throws IllegalArgumentException {
         if (arg == null || arg.length == 0) {
             throw new IllegalArgumentException(varname + "is must not be empty.");
@@ -245,7 +249,21 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
      */
+    @Nonnegative
     public static long nonMinus(long arg, String varname) throws IllegalArgumentException {
+        return nonNegative(arg, varname);
+    }
+    
+    /**
+     * 引数がマイナスでないことをチェック.
+     *
+     * @param arg チェックする値.
+     * @param varname 引数名.
+     * @return arg
+     * @throws IllegalArgumentException arg が範囲外.
+     */
+    @Nonnegative
+    public static long nonNegative(long arg, String varname) throws IllegalArgumentException {
         if (arg < 0) {
             throw new IllegalArgumentException(varname + " is must be plus.");
         }
@@ -261,7 +279,7 @@ public abstract class Arguments {
      * @throws IllegalArgumentException arg が null.
      * @return arg.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> T nonNull(T arg, String varname) throws IllegalArgumentException {
         if (arg == null) {
             throw new IllegalArgumentException(varname + " is must not be null.");
@@ -278,7 +296,7 @@ public abstract class Arguments {
      * @return
      * @throws IllegalArgumentException
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> T[] nonNullAll(T[] arg, String varname) throws IllegalArgumentException {
         nonNull(arg, varname);
         for (int i = 0; i < arg.length; i++) {
@@ -299,7 +317,7 @@ public abstract class Arguments {
      * @return
      * @throws IllegalArgumentException
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T extends Iterable> T nonNullAll(T arg, String varname) throws IllegalArgumentException {
         nonNull(arg, varname);
         int i = 0;

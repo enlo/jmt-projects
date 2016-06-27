@@ -24,6 +24,8 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Properties;
 import org.springframework.util.PropertyPlaceholderHelper;
@@ -32,12 +34,19 @@ import org.springframework.util.PropertyPlaceholderHelper;
  *
  * @author enlo
  */
-public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper implements Serializable {
+public class PropertiesPlaceholderResolver implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      *
      */
     public static final PropertiesPlaceholderResolver DEFAULT = new PropertiesPlaceholderResolver();
+
+    private final String prefix;
+    private final String suffix;
+
+    private transient PropertyPlaceholderHelper helper;
 
     /**
      *
@@ -52,7 +61,9 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
      * @param placeholderSuffix
      */
     public PropertiesPlaceholderResolver(String placeholderPrefix, String placeholderSuffix) {
-        super(placeholderPrefix, placeholderSuffix);
+        prefix = placeholderPrefix;
+        suffix = placeholderSuffix;
+        helper = new PropertyPlaceholderHelper(placeholderPrefix, placeholderSuffix);
     }
 
     /**
@@ -65,7 +76,7 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
         if (isEmpty(value)) {
             return value;
         }
-        return replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
+        return helper.replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
             @Override
             public String resolvePlaceholder(String placeholderName) {
                 return resolveProperty(props, placeholderName);
@@ -100,4 +111,8 @@ public class PropertiesPlaceholderResolver extends PropertyPlaceholderHelper imp
         return value;
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        helper = new PropertyPlaceholderHelper(prefix, suffix);
+    }
 }

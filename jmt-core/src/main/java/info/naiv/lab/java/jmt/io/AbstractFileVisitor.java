@@ -1,6 +1,5 @@
 package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitResult;
@@ -9,6 +8,7 @@ import static java.nio.file.Files.readAttributes;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -26,7 +26,7 @@ public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implem
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         if (accept(file, attrs)) {
             return onTarget(file, attrs);
@@ -50,7 +50,7 @@ public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implem
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     protected FileVisitResult onTarget(Path file, BasicFileAttributes attrs) throws IOException {
         return CONTINUE;
     }

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -58,6 +58,6 @@ public interface ServiceConnection extends AutoCloseable {
      * @return コンテナー.
      * @throws IllegalStateException コンテナーから削除されている場合.
      */
-    @ReturnNonNull
+    @Nonnull
     ServiceContainer getContainer() throws IllegalStateException;
 }

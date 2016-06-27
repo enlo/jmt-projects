@@ -31,6 +31,7 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import lombok.EqualsAndHashCode;
 
 /**
  * 値が null の場合に後からインスタンスを生成する {@link Holder }.
@@ -38,7 +39,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * @author enlo
  * @param <T>
  */
-public class AutoCreateHolder<T> extends MutableHolder<T> implements Holder<T> {
+@EqualsAndHashCode(callSuper = true, exclude = "rwl")
+public class AutoCreateHolder<T> extends MutableHolder<T> {
 
     private final Function1<Class<? extends T>, T> creator;
     private final ReadWriteLock rwl = new ReentrantReadWriteLock();
@@ -112,4 +114,5 @@ public class AutoCreateHolder<T> extends MutableHolder<T> implements Holder<T> {
     protected T createInstance() {
         return creator.apply(getContentType());
     }
+
 }

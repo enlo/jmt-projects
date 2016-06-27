@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.closeable;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -48,7 +48,7 @@ public class Guard implements ACS<Guard> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public final Guard getContent() {
         return this;
     }
@@ -70,6 +70,7 @@ public class Guard implements ACS<Guard> {
      * @param doEnter enter するかどうか
      * @return
      */
+    @Nonnull
     public Guard reverse(boolean doEnter) {
         return new ReverseGuard(this, doEnter);
     }

@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
+import javax.annotation.Nonnull;
+
 /**
  *
  * @author enlo
@@ -44,6 +46,7 @@ public interface MultiValueLookup<TKey, TValue> {
      * @param key キー
      * @return キーに対応する値のセット
      */
+    @Nonnull
     Iterable<TValue> get(TKey key);
 
 }

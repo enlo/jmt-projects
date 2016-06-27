@@ -23,10 +23,12 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonMinus;
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
+import static info.naiv.lab.java.jmt.Arguments.nonNegative;
 import static java.lang.System.currentTimeMillis;
 import java.util.Random;
+import javax.annotation.Nonnegative;
+import javax.annotation.concurrent.ThreadSafe;
+import lombok.Synchronized;
 
 /**
  * XorShift Random
@@ -34,7 +36,7 @@ import java.util.Random;
  * @author enlo
  * @see <a href="http://xorshift.di.unimi.it/">XorShift</a>
  */
-@ThreadSafety
+@ThreadSafe
 public abstract class XorShiftRandom extends Random {
 
     private static final long serialVersionUID = -2899992351727546151L;
@@ -102,8 +104,8 @@ public abstract class XorShiftRandom extends Random {
      * @param n 値の上限.
      * @return
      */
-    public long nextLong(long n) {
-        nonMinus(n, "n");
+    public long nextLong(@Nonnegative long n) {
+        n = nonNegative(n, "n");
         for (;;) {
             final long bits = nextLongCore() >>> 1;
             final long value = bits % n;
@@ -113,7 +115,7 @@ public abstract class XorShiftRandom extends Random {
         }
     }
 
-    @Override
+    @Override    
     public synchronized void setSeed(long seed) {
         super.setSeed(seed);
         if (state == null) {

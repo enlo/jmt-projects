@@ -24,9 +24,9 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.isInstanceOf;
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static java.util.Objects.requireNonNull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -50,8 +50,7 @@ public class MutableHolder<T> implements Holder<T> {
      * @param object 初期値. null 不可.
      */
     @SuppressWarnings("unchecked")
-    public MutableHolder(T object) {
-        nonNull(object, "object");
+    public MutableHolder(@NonNull T object) {
         this.object = object;
         this.clazz = (Class<? extends T>) object.getClass();
     }

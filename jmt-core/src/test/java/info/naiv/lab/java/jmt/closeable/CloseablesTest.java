@@ -113,7 +113,7 @@ public class CloseablesTest {
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testLock_Lock_Boolean_4() {
         Closeables.lock(null, false);
     }

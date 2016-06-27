@@ -114,7 +114,7 @@ public class CloseableLockTest {
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testLock_NullArg() {
         CloseableLock.lock(null);
     }

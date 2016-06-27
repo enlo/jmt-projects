@@ -29,7 +29,6 @@ import static info.naiv.lab.java.jmt.Misc.isBlank;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import static info.naiv.lab.java.jmt.io.NIOUtils.copyAll;
 import static info.naiv.lab.java.jmt.io.NIOUtils.deleteRecursive;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
@@ -45,6 +44,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.Nonnull;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -69,7 +69,7 @@ public abstract class TempDirectory implements Closeable {
      * @param prefix
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected static String checkPrefix(String prefix) {
         if (isBlank(prefix)) {
             return JMT_PREFIX;
@@ -116,7 +116,7 @@ public abstract class TempDirectory implements Closeable {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public Path add(String prefix, Resource resource) throws IOException {
         nonNull(resource, "resource");
         Path dir = resolvePrefix(prefix);
@@ -134,7 +134,7 @@ public abstract class TempDirectory implements Closeable {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public Path add(String prefix, File file) throws IOException {
         return add(prefix, file.toPath());
     }
@@ -146,7 +146,7 @@ public abstract class TempDirectory implements Closeable {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public Path add(String prefix, Path file) throws IOException {
         Path dir = resolvePrefix(prefix);
         Path dst = dir.resolve(file.getFileName());
@@ -166,7 +166,7 @@ public abstract class TempDirectory implements Closeable {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public Path add(String prefix, InputStream is) throws IOException {
         Path dir = resolvePrefix(prefix);
         Path dst = createTempFile(dir, null, null);
@@ -184,12 +184,12 @@ public abstract class TempDirectory implements Closeable {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public Path getPath() {
         return tempRoot;
     }
 
-    @ReturnNonNull
+    @Nonnull
     private Path resolvePrefix(String prefix) throws IOException {
         if (isNotBlank(prefix)) {
             Path dir = getPath().resolve(prefix);

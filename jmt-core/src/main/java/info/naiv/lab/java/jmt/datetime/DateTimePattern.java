@@ -25,11 +25,11 @@ package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import static info.naiv.lab.java.jmt.Misc.toInt;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -119,7 +119,7 @@ public enum DateTimePattern {
      *
      * @return 正規表現パターン
      */
-    @ReturnNonNull
+    @Nonnull
     public String pattern() {
         return this.pattern.pattern();
     }

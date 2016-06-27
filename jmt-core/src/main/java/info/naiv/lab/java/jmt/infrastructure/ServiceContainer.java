@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.UUID;
+import javax.annotation.Nonnull;
 
 /**
  * サービスコンテナー
@@ -36,7 +36,7 @@ public interface ServiceContainer extends ServiceProvider {
     /**
      * @return UUID
      */
-    @ReturnNonNull
+    @Nonnull
     UUID id();
 
     /**
@@ -50,7 +50,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @throws IllegalArgumentException service が null.
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
-    @ReturnNonNull
+    @Nonnull
     ServiceConnection registerService(Object service, Tag tag) throws IllegalArgumentException;
 
     /**
@@ -62,7 +62,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @throws IllegalArgumentException service が null.
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
-    @ReturnNonNull
+    @Nonnull
     ServiceConnection registerService(Object service) throws IllegalArgumentException;
 
     /**
@@ -74,7 +74,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @throws IllegalArgumentException service が null.
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
-    @ReturnNonNull
+    @Nonnull
     ServiceConnection registerService(int priority, Object service) throws IllegalArgumentException;
 
     /**
@@ -87,7 +87,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @throws IllegalArgumentException service が null.
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
-    @ReturnNonNull
+    @Nonnull
     ServiceConnection registerService(int priority, Object service, Tag tag) throws IllegalArgumentException;
 
 }

@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -50,7 +50,7 @@ public class ServiceProviders {
      *
      * @return システムのサービスコンテナー
      */
-    @ReturnNonNull
+    @Nonnull
     public static ServiceContainer getSystemContainer() {
         return systemContainer;
     }
@@ -59,7 +59,7 @@ public class ServiceProviders {
      *
      * @return 現在のスレッドのサービスコンテナー
      */
-    @ReturnNonNull
+    @Nonnull
     public static ServiceContainer getThreadContainer() {
         return threadLocalContainer.get();
     }
@@ -68,7 +68,7 @@ public class ServiceProviders {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static ServiceContainer newServiceContainer() {
         return new SimpleServiceContainer(getSystemContainer());
     }
@@ -106,7 +106,7 @@ public class ServiceProviders {
      * @param serviceType サービスタイプ
      * @return サービスオブジェクトコレクション. 見つからない場合は null.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Collection<T> resolveServices(Class<T> serviceType) {
         return getThreadContainer().resolveServices(serviceType);
     }
@@ -119,7 +119,7 @@ public class ServiceProviders {
      * @param tag タグオブジェクト.
      * @return the java.util.Collection
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Collection<T> resolveServices(Class<T> serviceType, Tag tag) {
         return getThreadContainer().resolveServices(serviceType, tag);
     }
@@ -130,7 +130,7 @@ public class ServiceProviders {
      * @param container サービスコンテナー
      * @return 今まで設定されていたコンテナー.
      */
-    @ReturnNonNull
+    @Nonnull
     public static ServiceContainer setThreadContainer(ServiceContainer container) {
         ServiceContainer current = threadLocalContainer.get();
         if (container == null) {

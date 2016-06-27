@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.closeable;
 
 import info.naiv.lab.java.jmt.ImmutableHolder;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -32,7 +33,7 @@ import info.naiv.lab.java.jmt.ImmutableHolder;
 class DummyCloseable<T> extends ImmutableHolder<T> implements ACS<T> {
 
     DummyCloseable(T object) {
-        super(object);
+        super(object, object == null ? null : (Class<T>) object.getClass());
     }
 
     DummyCloseable(T object, Class<T> clazz) {

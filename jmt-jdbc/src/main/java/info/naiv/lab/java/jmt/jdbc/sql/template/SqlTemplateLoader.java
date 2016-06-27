@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.nio.charset.Charset;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -48,7 +48,7 @@ public interface SqlTemplateLoader {
      * @param template
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     SqlTemplate fromString(String template);
 
     /**
@@ -57,7 +57,7 @@ public interface SqlTemplateLoader {
      * @param template
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     SqlTemplate fromString(String name, String template);
 
     /**
@@ -72,7 +72,7 @@ public interface SqlTemplateLoader {
      * @param name
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     SqlTemplate load(String category, String name);
 
     /**
@@ -82,7 +82,7 @@ public interface SqlTemplateLoader {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     SqlTemplate load(String category, String name, Charset charset);
 
     /**
@@ -90,7 +90,7 @@ public interface SqlTemplateLoader {
      * @param category
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Iterable<SqlTemplate> loadCategory(String category);
 
     /**
@@ -99,7 +99,7 @@ public interface SqlTemplateLoader {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Iterable<SqlTemplate> loadCategory(String category, Charset charset);
 
     /**

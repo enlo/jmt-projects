@@ -27,7 +27,6 @@ import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
 import static info.naiv.lab.java.jmt.Constants.KNOWN_INT_TYPES;
 import info.naiv.lab.java.jmt.IntegerEnum;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.math.BigDecimal;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -36,6 +35,8 @@ import java.sql.SQLXML;
 import java.sql.Struct;
 import java.sql.Types;
 import java.util.Calendar;
+import java.util.List;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.SqlParameterValue;
@@ -236,7 +237,7 @@ public enum JdbcType implements IntegerEnum {
      * @param value
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static JdbcType valueOf(int value) {
         for (JdbcType jt : values()) {
             if (jt.value == value) {
@@ -251,7 +252,7 @@ public enum JdbcType implements IntegerEnum {
      * @param type
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static JdbcType valueOf(Class<?> type) {
         int jdbcType = StatementCreatorUtils.javaTypeToSqlParameterType(type);
         if (jdbcType == SqlTypeValue.TYPE_UNKNOWN) {
@@ -284,6 +285,11 @@ public enum JdbcType implements IntegerEnum {
 
     private static Class<?>[] tie(Class<?>... clz) {
         return clz;
+    }
+
+    private static Class<?>[] tie(List<Class<?>> clz) {
+        Class<?>[] ret = new Class<?>[clz.size()];
+        return clz.toArray(ret);
     }
 
     private final Class<?>[] compatibleTypes;

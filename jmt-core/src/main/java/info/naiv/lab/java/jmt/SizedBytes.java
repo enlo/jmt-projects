@@ -24,19 +24,21 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.*;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.Serializable;
 import java.util.Arrays;
+import javax.annotation.Nonnegative;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-@ThreadSafety
+@ThreadSafe
 @Value
 public class SizedBytes implements Serializable, Cloneable {
 
@@ -45,14 +47,13 @@ public class SizedBytes implements Serializable, Cloneable {
     final byte[] data;
     final int size;
 
-    public SizedBytes(byte[] data) {
-        nonNull(data, "data");
+    public SizedBytes(@NonNull byte[] data) {
         this.size = data.length;
         this.data = data;
     }
 
-    public SizedBytes(int size, byte[] data) {
-        nonMinus(size, "size");
+    public SizedBytes(@Nonnegative int size, byte[] data) {
+        nonNegative(size, "size");
         if (0 < size) {
             nonNull(data, "data");
             between(size, 0, data.length, "size");
@@ -65,12 +66,12 @@ public class SizedBytes implements Serializable, Cloneable {
         }
     }
 
-    public SizedBytes(ByteArrayOutputStream os) {
-        nonNull(os, "os");
+    public SizedBytes(@NonNull ByteArrayOutputStream os) {
         this.size = os.size();
         this.data = os.toByteArray();
     }
 
+    @Nonnull
     public ByteArrayInputStream newInputStream() {
         return new ByteArrayInputStream(data, 0, size);
     }
@@ -79,14 +80,14 @@ public class SizedBytes implements Serializable, Cloneable {
      *
      * @return 指定されたサイズにあったバイト列を作成して戻す.
      */
+    @Nonnull
     public byte[] toByteArray() {
         return Arrays.copyOf(data, size);
     }
 
     @Override
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    @ReturnNonNull
-    protected SizedBytes clone() {
+    public SizedBytes clone() {
         try {
             return (SizedBytes) super.clone(); //To change body of generated methods, choose Tools | Templates.
         }

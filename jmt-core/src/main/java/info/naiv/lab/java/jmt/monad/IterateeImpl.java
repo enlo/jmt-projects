@@ -34,7 +34,6 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.iteration.FilteringIterator;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -42,6 +41,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import lombok.Value;
 
 /**
@@ -62,7 +62,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param <T> 型T
      * @return 空のOptional
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> IterateeImpl<T> empty() {
         return EMPTY;
     }
@@ -73,7 +73,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param value
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> IterateeImpl<T> of(Iterable<T> value) {
         return new IterateeImpl<>(value);
     }
@@ -84,7 +84,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param value
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> IterateeImpl<T> of(T... value) {
         return new IterateeImpl<>(value);
     }
@@ -141,7 +141,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param predicate 述語オブジェクト
      * @return predicate が true を戻したオブジェクトのみを戻す.
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public IterateeImpl<T> filter(Predicate1<? super T> predicate) {
         return new IterateeImpl<>(this, predicate);
@@ -164,7 +164,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param mapper 変換オブジェクト
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <U> IterateeImpl<U> flatMap(Function1<? super T, IterateeImpl<U>> mapper) {
         Iterable<U> it = Misc.flat(Misc.map(this, mapper));
@@ -191,7 +191,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param mapper
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <U> IterateeImpl<U> map(Function1<? super T, ? extends U> mapper) {
         Iterable<U> it = Misc.map(this, mapper);
@@ -202,7 +202,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public List<T> toList() {
         List<T> result = new ArrayList<>();
@@ -218,7 +218,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @param keyResolver
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <K> Map<K, T> toMap(Function1<T, K> keyResolver) {
         nonNull(keyResolver, "keyResolver");

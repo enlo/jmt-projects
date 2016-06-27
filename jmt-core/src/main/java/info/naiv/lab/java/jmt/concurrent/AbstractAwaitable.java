@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -79,6 +80,6 @@ public abstract class AbstractAwaitable implements Awaitable {
      * @return
      * @throws Exception
      */
-    protected abstract boolean doAwait(long timeout, TimeUnit unit) throws Exception;
+    protected abstract boolean doAwait(long timeout, @Nonnull TimeUnit unit) throws Exception;
 
 }

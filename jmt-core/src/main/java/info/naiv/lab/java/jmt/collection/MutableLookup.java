@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -73,6 +74,7 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterab
      * @param value
      * @return
      */
+    @Nonnull
     public MutableLookup<TKey, TValue> put(TKey key, TValue value) {
         map.put(key, value);
         return this;

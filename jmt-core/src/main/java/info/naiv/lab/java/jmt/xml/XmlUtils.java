@@ -2,11 +2,11 @@ package info.naiv.lab.java.jmt.xml;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.resolveService;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
 import static java.util.Objects.requireNonNull;
+import javax.annotation.Nonnull;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -35,7 +35,7 @@ public abstract class XmlUtils {
      * @return
      * @throws XPathExpressionException
      */
-    @ReturnNonNull
+    @Nonnull
     public static XPathExpression getXPath(String path) throws XPathExpressionException {
         XPath xpath = get(XPath.class);
         return xpath.compile(path);
@@ -51,7 +51,7 @@ public abstract class XmlUtils {
      * @throws java.io.IOException
      * @throws org.xml.sax.SAXException
      */
-    @ReturnNonNull
+    @Nonnull
     public static Document setNodeValue(Document source, String path, String newValue) throws XPathExpressionException, IOException, SAXException {
         nonNull(source, "source");
         XPath xpath = get(XPath.class);
@@ -70,7 +70,7 @@ public abstract class XmlUtils {
      * @return
      * @throws TransformerException
      */
-    @ReturnNonNull
+    @Nonnull
     public static byte[] toByteArray(DOMSource source) throws TransformerException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         Result result = new StreamResult(os);
@@ -85,7 +85,7 @@ public abstract class XmlUtils {
      * @return
      * @throws TransformerException
      */
-    @ReturnNonNull
+    @Nonnull
     public static byte[] toByteArray(Document source) throws TransformerException {
         return toByteArray(new DOMSource(source));
     }
@@ -97,7 +97,7 @@ public abstract class XmlUtils {
      * @throws IOException
      * @throws SAXException
      */
-    @ReturnNonNull
+    @Nonnull
     public static Document toDocument(InputSource source) throws IOException, SAXException {
         nonNull(source, "source");
         DocumentBuilder builder = get(DocumentBuilder.class);
@@ -110,7 +110,7 @@ public abstract class XmlUtils {
      * @return
      * @throws TransformerException
      */
-    @ReturnNonNull
+    @Nonnull
     public static String toString(DOMSource source) throws TransformerException {
         StringWriter sw = new StringWriter();
         Result result = new StreamResult(sw);

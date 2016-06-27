@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.closeable;
 
 import info.naiv.lab.java.jmt.Holder;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
 
 /**
  * try-with-resource によるリソースの開放を目的とした インターフェイス.
@@ -44,7 +44,7 @@ public interface ACS<T> extends Holder<T>, AutoCloseable {
     void close() throws RuntimeException;
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     T getContent();
 
 }

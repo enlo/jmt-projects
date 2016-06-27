@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -38,7 +39,9 @@ import java.util.Comparator;
  * @param <T> 型T
  *
  */
-public class ComparableComparator<T extends Comparable<T>> implements Comparator<T> {
+public class ComparableComparator<T extends Comparable<T>> implements Comparator<T>, Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      *

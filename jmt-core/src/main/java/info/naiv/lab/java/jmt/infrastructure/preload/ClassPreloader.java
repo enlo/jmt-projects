@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.infrastructure.preload;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Set;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -36,6 +36,6 @@ public interface ClassPreloader {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public Set<Class<?>> preload();
 }

@@ -29,10 +29,10 @@ import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Supplier;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.Value;
 
 /**
@@ -54,7 +54,7 @@ public class OptionalImpl<T> implements Optional<T> {
      * @param <T> 型T
      * @return 空のOptional
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> OptionalImpl<T> empty() {
         return (OptionalImpl<T>) EMPTY;
     }
@@ -66,7 +66,7 @@ public class OptionalImpl<T> implements Optional<T> {
      * @return {@link #isPresent()} &amp;&amp; predicate が true を戻せば自分自身. <br>
      * そうでなければ {@link #empty()}
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public Optional<T> filter(Predicate1<? super T> predicate) {
         return isPresent() && predicate.test(value) ? this : OptionalImpl.<T>empty();
@@ -79,7 +79,7 @@ public class OptionalImpl<T> implements Optional<T> {
      * @param mapper 変換オブジェクト
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <U> Optional<U> flatMap(Function1<? super T, ? extends Optional<U>> mapper) {
         if (isPresent()) {
@@ -125,12 +125,12 @@ public class OptionalImpl<T> implements Optional<T> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public Iterator<T> iterator() {
         return new SingleIterator<>(isPresent(), value);
     }
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <U> Optional<U> map(Function1<? super T, ? extends U> mapper) {
         if (isPresent()) {
@@ -141,30 +141,30 @@ public class OptionalImpl<T> implements Optional<T> {
         }
     }
 
-    @ReturnNonNull
+    @Nonnull
     public static <T> Optional<T> of(T value) {
         nonNull(value, "value");
         return new OptionalImpl<>(value);
     }
 
-    @ReturnNonNull
+    @Nonnull
     public static <T> Optional<T> ofNullable(T value) {
         return new OptionalImpl<>(value);
     }
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     public T orElse(T other) {
         return isPresent() ? value : other;
     }
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     public T orElseGet(Supplier<? extends T> other) {
         return isPresent() ? value : other.get();
     }
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
         if (isPresent()) {
@@ -173,7 +173,7 @@ public class OptionalImpl<T> implements Optional<T> {
         throw exceptionSupplier.get();
     }
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     public Set<T> toSet() {
         Set<T> result = new HashSet<>();

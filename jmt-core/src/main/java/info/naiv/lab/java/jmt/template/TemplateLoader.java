@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.template;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.nio.charset.Charset;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -49,7 +49,7 @@ public interface TemplateLoader<TResult> {
      * @param template
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Template<TResult> fromString(String template);
 
     /**
@@ -58,7 +58,7 @@ public interface TemplateLoader<TResult> {
      * @param template
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Template<TResult> fromString(String name, String template);
 
     /**
@@ -73,7 +73,7 @@ public interface TemplateLoader<TResult> {
      * @param name
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Template<TResult> load(String category, String name);
 
     /**
@@ -83,7 +83,7 @@ public interface TemplateLoader<TResult> {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Template<TResult> load(String category, String name, Charset charset);
 
     /**
@@ -91,7 +91,7 @@ public interface TemplateLoader<TResult> {
      * @param category
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Iterable<Template<TResult>> loadCategory(String category);
 
     /**
@@ -100,7 +100,7 @@ public interface TemplateLoader<TResult> {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Iterable<Template<TResult>> loadCategory(String category, Charset charset);
 
     /**

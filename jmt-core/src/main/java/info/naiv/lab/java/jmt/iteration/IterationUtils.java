@@ -8,13 +8,13 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Function2;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -86,7 +86,7 @@ public class IterationUtils {
      * @param predicate
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return new IterateeImpl<>(iterable, predicate);
     }
@@ -99,7 +99,7 @@ public class IterationUtils {
      * @param iterable
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iteratee<T> filterNonNull(Iterable<T> iterable) {
         return new IterateeImpl<>(iterable, StandardFunctions.<T>nonNull());
     }
@@ -110,7 +110,7 @@ public class IterationUtils {
      * @param items
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
         return new Iterable<T>() {
             @Override
@@ -274,7 +274,7 @@ public class IterationUtils {
      * @param mapper
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
         return new Iterable<U>() {
             @Override

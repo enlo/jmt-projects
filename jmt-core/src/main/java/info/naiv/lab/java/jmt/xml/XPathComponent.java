@@ -27,9 +27,9 @@ import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.component.AbstractTlsServiceComponent;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
 import static java.util.Objects.requireNonNull;
+import javax.annotation.Nonnull;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathFactory;
 
@@ -48,7 +48,7 @@ public class XPathComponent
      * @return
      */
     @Override
-    @ReturnNonNull
+    @Nonnull
     public XPath getContent(Tag tag, ServiceProvider provider) {
         XPath xpath = super.getContent(tag, provider);
         xpath.reset();

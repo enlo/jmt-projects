@@ -23,9 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static java.util.Objects.requireNonNull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -45,8 +45,7 @@ public class ImmutableHolder<T> implements Holder<T> {
      * @param object
      */
     @SuppressWarnings("unchecked")
-    public ImmutableHolder(T object) {
-        nonNull(object, "object");
+    public ImmutableHolder(@NonNull T object) {
         this.object = object;
         this.clazz = (Class<? extends T>) object.getClass();
     }

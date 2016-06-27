@@ -23,9 +23,10 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.ToString;
 
 /**
@@ -34,7 +35,7 @@ import lombok.ToString;
  * @param <TKey>
  * @param <TValue>
  */
-@ThreadSafety
+@ThreadSafe
 @ToString
 public abstract class SingletonMapSupport<TKey, TValue> {
 
@@ -51,8 +52,7 @@ public abstract class SingletonMapSupport<TKey, TValue> {
      *
      * @param map
      */
-    public SingletonMapSupport(ConcurrentMap<TKey, TValue> map) {
-        assert map != null;
+    public SingletonMapSupport(@Nonnull ConcurrentMap<TKey, TValue> map) {
         this.map = map;
     }
 

@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt;
 
 import java.nio.CharBuffer;
+import javax.annotation.Nonnull;
 
 /**
  * CharBuffer を利用した Joiner. 短い文字列用.
@@ -64,6 +65,7 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      * @param delim 区切り文字.
      * @return インスタンス.
      */
+    @Nonnull
     public static CharBufferJoiner valueOf(String delim) {
         if (delim == null) {
             return SIMPLE;

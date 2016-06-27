@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -184,6 +185,7 @@ public class StandardIterationUnits {
      * @param step
      * @return
      */
+    @Nonnull
     public static final IterationUnit<Integer> step(final int step) {
         return new AbstractIterationUnit<Integer>() {
             private static final long serialVersionUID = 1L;

@@ -23,12 +23,11 @@
  */
 package info.naiv.lab.java.jmt.text;
 
-import info.naiv.lab.java.jmt.ClassicArrayUtils.ArrayIterator;
+import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayAsIterable;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.Lazy;
 import info.naiv.lab.java.jmt.iteration.ReverseIterator;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.text.BreakIterator;
 import static java.text.BreakIterator.DONE;
@@ -40,6 +39,7 @@ import static java.util.Arrays.asList;
 import static java.util.Arrays.copyOfRange;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -121,7 +121,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
      *
      * @return ユニコード構成文字の配列.
      */
-    @ReturnNonNull
+    @Nonnull
     public UnicodeScalar[] elements() {
         return elements.get();
     }
@@ -132,7 +132,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
 
     @Override
     public Iterator<UnicodeScalar> iterator() {
-        return new ArrayIterator<>(elements());
+        return arrayAsIterable(elements()).iterator();
     }
 
     @Override
@@ -140,7 +140,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
         return source.length();
     }
 
-    @ReturnNonNull
+    @Nonnull
     public Iterator<UnicodeScalar> reverseIterator() {
         return new ReverseIterator<>(asList(elements()));
     }
@@ -156,7 +156,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
      * @param start 開始文字位置
      * @return 開始文字から終端まで
      */
-    @ReturnNonNull
+    @Nonnull
     public UnicodeVector subVector(int start) {
         return subVector(start, elements().length);
     }
@@ -168,7 +168,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
      * @param end 終端文字位置
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public UnicodeVector subVector(int start, int end) {
         UnicodeScalar[] elm = elements();
         if (elm.length < start) {

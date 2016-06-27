@@ -25,6 +25,8 @@ package info.naiv.lab.java.jmt;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,19 +52,20 @@ public class Constants {
     /**
      * 既知の整数型
      */
-    public static final Class<?>[] KNOWN_INT_TYPES = {
-        BigInteger.class,
-        Long.class,
-        Integer.class,
-        Short.class,
-        Byte.class,};
+    public static final List<Class<?>> KNOWN_INT_TYPES = Arrays.<Class<?>>asList(
+            BigInteger.class,
+            Long.class,
+            Integer.class,
+            Short.class,
+            Byte.class);
+
     /**
      * 既知の実数型
      */
-    public static final Class<?>[] KNOWN_REAL_TYPES = {
-        BigDecimal.class,
-        Double.class,
-        Float.class,};
+    public static final List<Class<?>> KNOWN_REAL_TYPES = Arrays.<Class<?>>asList(
+            BigDecimal.class,
+            Double.class,
+            Float.class);
 
     /**
      * 改行コード LF

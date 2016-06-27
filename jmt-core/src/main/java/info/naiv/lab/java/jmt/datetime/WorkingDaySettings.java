@@ -25,12 +25,12 @@ package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.contains;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.util.Calendar;
 import static java.util.Calendar.DAY_OF_WEEK;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -76,17 +76,17 @@ public class WorkingDaySettings implements Cloneable, Serializable {
         return super.clone();
     }
 
-    @ReturnNonNull
+    @Nonnull
     public Set<Calendar> getExtractHolidays() {
         return extractHolidays;
     }
 
-    @ReturnNonNull
+    @Nonnull
     public Set<Calendar> getHolidays() {
         return holidays;
     }
 
-    @ReturnNonNull
+    @Nonnull
     public WeekSettings getWeekSettings() {
         return weekSettings;
     }

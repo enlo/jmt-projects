@@ -24,10 +24,10 @@
 package info.naiv.lab.java.jmt.text;
 
 import info.naiv.lab.java.jmt.Lazy;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import static java.text.Normalizer.Form.NFD;
 import static java.text.Normalizer.normalize;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -60,7 +60,7 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
         return element.charAt(index);
     }
 
-    @ReturnNonNull
+    @Nonnull
     public String getDecomposed() {
         return decomposed.get();
     }

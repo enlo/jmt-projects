@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.runtime;
 
 import static info.naiv.lab.java.jmt.io.NIOUtils.listPaths;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -36,6 +35,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
+import javax.annotation.Nonnull;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -111,7 +111,7 @@ public class URLClassLoaderBuilder {
         return this;
     }
 
-    @ReturnNonNull
+    @Nonnull
     protected URLClassLoader newClassLoader() throws IOException {
         URL[] array = new URL[jarFiles.size()];
         ClassLoader p = this.parentClassLoader;

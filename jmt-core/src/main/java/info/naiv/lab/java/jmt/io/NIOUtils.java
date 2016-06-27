@@ -26,7 +26,6 @@ package info.naiv.lab.java.jmt.io;
 import static info.naiv.lab.java.jmt.Arguments.lessThan;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -57,6 +56,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -237,7 +237,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public static List<String> listFiles(Path directory, String pattern, int depth) throws IOException {
         final List<String> result = new ArrayList<>();
         walkFileTree(directory,
@@ -263,7 +263,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     public static List<Path> listPaths(Path directory, String pattern, int depth) throws IOException {
         final List<Path> result = new ArrayList<>();
         walkFileTree(directory,

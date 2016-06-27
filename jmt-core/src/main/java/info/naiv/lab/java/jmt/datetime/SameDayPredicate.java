@@ -24,10 +24,10 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Calendar;
 import static java.util.Calendar.DAY_OF_YEAR;
 import static java.util.Calendar.YEAR;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -51,7 +51,7 @@ public class SameDayPredicate implements Predicate1<Calendar> {
      * @return
      */
     @Override
-    @ReturnNonNull
+    @Nonnull
     public boolean test(Calendar a1) {
         if (value == a1) {
             return true;

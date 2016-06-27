@@ -24,8 +24,8 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Calendar;
+import javax.annotation.Nonnull;
 
 /**
  * 日付時刻マスク.
@@ -67,7 +67,7 @@ public enum DateTimeMask {
      * @param date
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public abstract Calendar mask(Calendar date);
 
     /**

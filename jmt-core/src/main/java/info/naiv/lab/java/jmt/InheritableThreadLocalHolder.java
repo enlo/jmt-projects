@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -43,8 +43,8 @@ public class InheritableThreadLocalHolder<T> extends InheritableThreadLocal<T> i
      *
      * @param clazz
      */
-    public InheritableThreadLocalHolder(Class<? extends T> clazz) {
-        this.clazz = nonNull(clazz, "clazz");
+    public InheritableThreadLocalHolder(@NonNull Class<? extends T> clazz) {
+        this.clazz = clazz;
     }
 
     @Override

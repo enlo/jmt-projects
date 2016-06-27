@@ -127,7 +127,7 @@ public class HoldersTest {
     /**
      * Test of of method, of class Holders.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testOf02() {
         Holders.of(null);
     }

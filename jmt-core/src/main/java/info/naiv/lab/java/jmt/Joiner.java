@@ -23,10 +23,10 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.Setter;
 
 /**
@@ -47,8 +47,8 @@ public abstract class Joiner<T, R> {
      * @param items
      * @return
      */
-    public R join(Iterable<? extends T> items) {
-        nonNull(items, "items");
+    @Nonnull
+    public R join(@NonNull Iterable<? extends T> items) {
         R r = createResult();
         Adder<T, R> adder = getFirst();
         final Adder<T, R> more = getMore();
@@ -71,8 +71,8 @@ public abstract class Joiner<T, R> {
      * @param items
      * @return
      */
-    public R join(T[] items) {
-        nonNull(items, "items");
+    @Nonnull
+    public R join(@NonNull T[] items) {
         R r = createResult();
         Adder<T, R> adder = getFirst();
         final Adder<T, R> more = getMore();
@@ -94,6 +94,7 @@ public abstract class Joiner<T, R> {
      * @param items アイテム.
      * @return
      */
+    @Nonnull
     public R joinItems(T... items) {
         return join(items);
     }
@@ -101,20 +102,21 @@ public abstract class Joiner<T, R> {
     /**
      * @return 連結結果
      */
+    @Nonnull
     protected abstract R createResult();
 
     /**
      *
      * @return 最初の連結器
      */
-    @ReturnNonNull
+    @Nonnull
     protected abstract Adder<T, R> getFirst();
 
     /**
      *
      * @return 2回以降の連結器
      */
-    @ReturnNonNull
+    @Nonnull
     protected abstract Adder<T, R> getMore();
 
     /**
@@ -124,7 +126,8 @@ public abstract class Joiner<T, R> {
      * @param count
      * @return
      */
-    protected R postLoop(R r, int count) {
+    @Nonnull
+    protected R postLoop(@Nonnull R r, int count) {
         return r;
     }
 
@@ -134,7 +137,8 @@ public abstract class Joiner<T, R> {
      * @param r
      * @return
      */
-    protected R preLoop(R r) {
+    @Nonnull
+    protected R preLoop(@Nonnull R r) {
         return r;
     }
 

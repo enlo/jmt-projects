@@ -27,8 +27,6 @@ import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
 import info.naiv.lab.java.jmt.iteration.MappingIterator;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.fx.Function1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.io.Serializable;
 import java.text.BreakIterator;
 import static java.text.BreakIterator.getCharacterInstance;
@@ -37,6 +35,8 @@ import static java.text.Normalizer.normalize;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Locale;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.util.StringUtils;
@@ -47,7 +47,7 @@ import org.springframework.util.StringUtils;
  * @author enlo
  *
  */
-@ThreadSafety
+@ThreadSafe
 @EqualsAndHashCode
 @RequiredArgsConstructor
 public final class Rope implements Comparable<Rope>, Iterable<String>, Serializable {
@@ -468,9 +468,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      *
      * @return すべて小文字に変換した文字列.
      */
-    @ReturnNonNull
+    @Nonnull
     public Rope toLowerCase() {
-        String lc = source.getSource().toLowerCase();
+        String lc = source.getSource().toLowerCase(Locale.getDefault());
         return new Rope(source.isDecomposed(), lc);
     }
 
@@ -480,7 +480,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param locale ロケール
      * @return すべて小文字に変換した文字列
      */
-    @ReturnNonNull
+    @Nonnull
     public Rope toLowerCase(Locale locale) {
         String lc = source.getSource().toLowerCase(locale);
         return new Rope(source.isDecomposed(), lc);
@@ -501,9 +501,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      *
      * @return すべて小文字に変換した文字列.
      */
-    @ReturnNonNull
+    @Nonnull
     public Rope toUpperCase() {
-        String uc = source.getSource().toUpperCase();
+        String uc = source.getSource().toUpperCase(Locale.getDefault());
         return new Rope(source.isDecomposed(), uc);
     }
 
@@ -513,14 +513,14 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param locale
      * @return すべて小文字に変換した文字列.
      */
-    @ReturnNonNull
+    @Nonnull
     public Rope toUpperCase(Locale locale) {
         String uc = source.getSource().toUpperCase(locale);
         return new Rope(source.isDecomposed(), uc);
     }
 
-    @ReturnNonNull
-    private Iterator<String> reverseIterator() {
+    @Nonnull
+    public Iterator<String> reverseIterator() {
         return new Iter(source.reverseIterator());
     }
 

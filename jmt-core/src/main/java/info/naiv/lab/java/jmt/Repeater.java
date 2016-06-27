@@ -23,8 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import javax.annotation.Nonnull;
 import lombok.ToString;
 
 /**
@@ -57,7 +58,7 @@ public class Repeater<T> implements Iterable<T> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public Iterator<T> iterator() {
         return new RepeatIterator();
     }
@@ -73,6 +74,9 @@ public class Repeater<T> implements Iterable<T> {
 
         @Override
         public T next() {
+            if (repeatMax <= count) {
+                throw new NoSuchElementException();
+            }
             count++;
             return getValue();
         }

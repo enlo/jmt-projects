@@ -23,6 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+
 /**
  *
  * @author enlo
@@ -37,6 +40,7 @@ public abstract class Holders {
      * @return
      */
     @SuppressWarnings("unchecked")
+    @CheckForNull
     public static <T> Holder<T> as(Holder<?> holder, Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
             return (Holder<T>) holder;
@@ -53,6 +57,7 @@ public abstract class Holders {
      * @param clazz
      * @return
      */
+    @CheckForNull
     public static <T> T getContentAs(Holder<?> holder, Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
             return clazz.cast(holder.getContent());
@@ -68,6 +73,7 @@ public abstract class Holders {
      * @param object
      * @return
      */
+    @Nonnull
     public static <T> Holder<T> of(T object) {
         return new ImmutableHolder<>(object);
     }

@@ -26,16 +26,16 @@ package info.naiv.lab.java.jmt.infrastructure;
 import info.naiv.lab.java.jmt.closeable.Guard;
 import info.naiv.lab.java.jmt.closeable.LockGuard;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getSystemContainer;
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  */
-@ThreadSafety
+@ThreadSafe
 public class ThreadSafeServiceContainer extends AbstractServiceContainer {
 
     final ReadWriteLock rwl = new ReentrantReadWriteLock();

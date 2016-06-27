@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt;
 import info.naiv.lab.java.jmt.fx.Supplier;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 
 /**
@@ -48,6 +49,7 @@ public class Lazy<T> implements Supplier<T> {
         this.initialized.set(true);
     }
 
+    @Nonnull
     public static <T> Lazy<T> of(final Supplier<? extends T> initializer) {
         return new Lazy<T>() {
             @Override

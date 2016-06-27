@@ -24,17 +24,22 @@
 package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.TimeUnit;
+import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  */
+@ThreadSafe
 public interface Awaitable {
 
     /**
      *
      * @return 最後に発生したエラー
      */
+    @CheckReturnValue
     public Exception lastException();
 
     /**
@@ -51,5 +56,5 @@ public interface Awaitable {
      * @param unit ユニット.
      * @return 例外なく終了した場合は true. タイムアウトや割り込み等の例外が発生していれば false.
      */
-    public boolean await(long timeout, TimeUnit unit);
+    public boolean await(long timeout, @Nonnull TimeUnit unit);
 }

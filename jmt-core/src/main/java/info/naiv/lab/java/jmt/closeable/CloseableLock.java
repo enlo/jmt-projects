@@ -23,12 +23,12 @@
  */
 package info.naiv.lab.java.jmt.closeable;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.ImmutableHolder;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -43,8 +43,8 @@ public class CloseableLock extends ImmutableHolder<Lock> implements Lock, ACS<Lo
      * @return CloseableLock インスタンス
      * @throws IllegalArgumentException lock が null.
      */
-    @ReturnNonNull
-    public static CloseableLock lock(Lock lock) throws IllegalArgumentException {
+    @Nonnull
+    public static CloseableLock lock(@Nonnull Lock lock) throws IllegalArgumentException {
         CloseableLock lck = new CloseableLock(lock);
         lck.lock();
         return lck;
@@ -54,8 +54,8 @@ public class CloseableLock extends ImmutableHolder<Lock> implements Lock, ACS<Lo
      *
      * @param lock
      */
-    public CloseableLock(Lock lock) {
-        super(nonNull(lock, "lock"), Lock.class);
+    public CloseableLock(@NonNull Lock lock) {
+        super(lock, Lock.class);
     }
 
     @Override

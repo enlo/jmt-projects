@@ -4,8 +4,8 @@ import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.component.AbstractTlsServiceComponent;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
@@ -25,7 +25,7 @@ public class TransformerComponent
      * @return
      */
     @Override
-    @ReturnNonNull
+    @Nonnull
     public Transformer getContent(Tag tag, ServiceProvider provider) {
         Transformer transformer = super.getContent(tag, provider);
         transformer.reset();

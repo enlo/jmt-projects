@@ -23,9 +23,9 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import org.springframework.beans.TypeMismatchException;
 
 /**
@@ -39,7 +39,7 @@ public interface Attributes {
      *
      * @return 保持している属性名の一覧
      */
-    @ReturnNonNull
+    @Nonnull
     Set<String> getAttributeNames();
 
     /**
@@ -75,6 +75,6 @@ public interface Attributes {
      * @param target コピー先のマップ
      * @return target そのもの
      */
-    @ReturnNonNull
+    @Nonnull
     Map<String, Object> copyTo(Map<String, Object> target);
 }

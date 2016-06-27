@@ -68,7 +68,7 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testCtor01() {
         Misc.nop(new AbstractStringJoinerImpl(null));
     }
@@ -76,7 +76,7 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testCtor02() {
         Misc.nop(new AbstractStringJoinerImpl(null, null));
     }
@@ -84,7 +84,7 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testCtor03() {
         Misc.nop(new AbstractStringJoinerImpl(ADDER1, null));
     }
@@ -92,7 +92,7 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testCtor04() {
         Misc.nop(new AbstractStringJoinerImpl(null, ADDER2));
     }

@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.closeable;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -39,8 +39,7 @@ public class ReverseGuard extends Guard {
      * @param g
      * @param doEnter
      */
-    public ReverseGuard(Guard g, boolean doEnter) {
-        nonNull(g, "g");
+    public ReverseGuard(@NonNull Guard g, boolean doEnter) {
         this.g = g;
         if (doEnter) {
             g.leave();
@@ -64,7 +63,7 @@ public class ReverseGuard extends Guard {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public Guard reverse(boolean doEnter) {
         Guard x = this.g;
         if (doEnter) {

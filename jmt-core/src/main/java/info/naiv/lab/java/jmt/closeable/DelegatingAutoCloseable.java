@@ -23,11 +23,12 @@
  */
 package info.naiv.lab.java.jmt.closeable;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.ImmutableHolder;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -43,7 +44,7 @@ public class DelegatingAutoCloseable<T> extends ImmutableHolder<T> implements AC
      * @param object
      * @throws IllegalArgumentException
      */
-    public DelegatingAutoCloseable(T object) throws IllegalArgumentException {
+    public DelegatingAutoCloseable(@Nonnull T object) throws IllegalArgumentException {
         this(object, new ReflectClose<>(object));
     }
 
@@ -53,9 +54,9 @@ public class DelegatingAutoCloseable<T> extends ImmutableHolder<T> implements AC
      * @param closeMethod
      * @throws IllegalArgumentException
      */
-    public DelegatingAutoCloseable(T object, Consumer1<T> closeMethod) throws IllegalArgumentException {
+    public DelegatingAutoCloseable(@Nonnull T object, @NonNull Consumer1<T> closeMethod) throws IllegalArgumentException {
         super(object);
-        this.closeMethod = nonNull(closeMethod, "closeMethod");
+        this.closeMethod = closeMethod;
     }
 
     @Override
@@ -67,8 +68,7 @@ public class DelegatingAutoCloseable<T> extends ImmutableHolder<T> implements AC
 
         final private Method method;
 
-        ReflectClose(T object) {
-            nonNull(object, "object");
+        ReflectClose(@NonNull T object) {
             try {
                 this.method = object.getClass().getDeclaredMethod("close");
             }

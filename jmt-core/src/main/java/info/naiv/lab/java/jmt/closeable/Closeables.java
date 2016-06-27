@@ -25,10 +25,10 @@ package info.naiv.lab.java.jmt.closeable;
 
 import info.naiv.lab.java.jmt.ImmutableHolder;
 import info.naiv.lab.java.jmt.fx.Consumer1;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
+import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -45,7 +45,7 @@ public class Closeables {
      * @param object
      * @return Exception. close が失敗した場合.
      */
-    public static Exception close(AutoCloseable object) {
+    public static Exception close(@Nonnull AutoCloseable object) {
         try {
             object.close();
             return null;
@@ -62,7 +62,8 @@ public class Closeables {
      * @return
      */
     @SuppressWarnings("ThrowableResultIgnored")
-    public static <T extends AutoCloseable> Map<T, Exception> closeAll(Iterable<T> list) {
+    @Nonnull
+    public static <T extends AutoCloseable> Map<T, Exception> closeAll(@Nonnull Iterable<T> list) {
         Map<T, Exception> result = new HashMap<>();
         for (T obj : list) {
             Exception th = close(obj);
@@ -80,8 +81,8 @@ public class Closeables {
      * @param lock ロックオブジェクト
      * @return {@link CloseableLock}
      */
-    @ReturnNonNull
-    public static CloseableLock lock(Lock lock) {
+    @Nonnull
+    public static CloseableLock lock(@Nonnull Lock lock) {
         return CloseableLock.lock(lock);
     }
 
@@ -92,7 +93,7 @@ public class Closeables {
      * @param nullable lock の null を許容するか.
      * @return 自動クローズ可能な Lock.
      */
-    @ReturnNonNull
+    @Nonnull
     public static ACS<Lock> lock(Lock lock, boolean nullable) {
         if (nullable && lock == null) {
             return new DummyCloseable<>(lock, Lock.class);
@@ -107,9 +108,11 @@ public class Closeables {
      * @param object
      */
     public static void nonThrowClose(AutoCloseable object) {
-        Exception e = close(object);
-        if (e != null) {
-            logger.trace("close failed.", e);
+        if (object != null) {
+            Exception e = close(object);
+            if (e != null) {
+                logger.trace("close failed.", e);
+            }
         }
     }
 
@@ -119,7 +122,7 @@ public class Closeables {
      * @param object
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> ACS<T> of(final T object) {
         if (object == null) {
             return new DummyCloseable<>(object, null);
@@ -151,8 +154,8 @@ public class Closeables {
      * @param closeMethod
      * @return
      */
-    @ReturnNonNull
-    public static <T> ACS<T> of(T object, Consumer1<T> closeMethod) {
+    @Nonnull
+    public static <T> ACS<T> of(T object, @Nonnull Consumer1<T> closeMethod) {
         return new DelegatingAutoCloseable<>(object, closeMethod);
     }
 
@@ -161,7 +164,7 @@ public class Closeables {
 
     private static abstract class ACSHelper<T> extends ImmutableHolder<T> implements ACS<T> {
 
-        ACSHelper(T object) {
+        ACSHelper(@Nonnull T object) {
             super(object);
         }
     }

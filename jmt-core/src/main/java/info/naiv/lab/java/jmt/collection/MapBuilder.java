@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.Nonnull;
 
 /**
  * マップビルダー.
@@ -48,6 +49,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値
      * @return マップビルダー
      */
+    @Nonnull
     public static <K, V> MapBuilder<K, V> begin(K key, V value) {
         return new HashMapBuilder<K, V>().put(key, value);
     }
@@ -61,6 +63,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値
      * @return マップビルダー
      */
+    @Nonnull
     public static <K, V> MapBuilder<K, V> concurrentHashMap(K key, V value) {
         return new ConcurrentHashMapBuilder<K, V>().put(key, value);
     }
@@ -74,6 +77,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値
      * @return マップビルダー
      */
+    @Nonnull
     public static <K, V> MapBuilder<K, V> hashMap(K key, V value) {
         return new HashMapBuilder<K, V>().put(key, value);
     }
@@ -87,6 +91,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値
      * @return マップビルダー
      */
+    @Nonnull
     public static <K, V> MapBuilder<K, V> treeMap(K key, V value) {
         return new TreeMapBuilder<K, V>().put(key, value);
     }
@@ -101,6 +106,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値
      * @return マップビルダー
      */
+    @Nonnull
     public static <K, V> MapBuilder<K, V> treeMap(Comparator<K> comp, K key, V value) {
         return new TreeMapBuilder<K, V>(comp).put(key, value);
     }
@@ -123,6 +129,7 @@ public abstract class MapBuilder<K, V> {
      *
      * @return
      */
+    @Nonnull
     public abstract Map<K, V> build();
 
     /**
@@ -132,6 +139,7 @@ public abstract class MapBuilder<K, V> {
      * @param value 値.
      * @return マップビルダー
      */
+    @Nonnull
     public MapBuilder<K, V> put(K key, V value) {
         map.put(key, value);
         return this;
@@ -143,6 +151,7 @@ public abstract class MapBuilder<K, V> {
      * @param other 別のマップ
      * @return マップビルダー
      */
+    @Nonnull
     public MapBuilder<K, V> putAll(Map<K, V> other) {
         map.putAll(other);
         return this;
@@ -152,6 +161,7 @@ public abstract class MapBuilder<K, V> {
      *
      * @return 作成したマップ.
      */
+    @Nonnull
     public Map<K, V> toMap() {
         return build();
     }

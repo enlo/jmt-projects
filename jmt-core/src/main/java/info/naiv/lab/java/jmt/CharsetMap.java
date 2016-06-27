@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.nio.charset.Charset;
 import static java.nio.charset.Charset.defaultCharset;
 import static java.nio.charset.Charset.forName;
@@ -31,6 +30,7 @@ import static java.nio.charset.StandardCharsets.ISO_8859_1;
 import static java.nio.charset.StandardCharsets.US_ASCII;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import java.util.concurrent.ConcurrentSkipListMap;
+import javax.annotation.Nonnull;
 
 /**
  * 文字セットマップ. <br> {@link Charset#forName} が十分に高速なので使用する意味はない.
@@ -55,7 +55,7 @@ public final class CharsetMap extends SingletonMapSupport<String, Charset> {
      * @param name 文字コード名.
      * @return Charset オブジェクト.
      */
-    @ReturnNonNull
+    @Nonnull
     public static Charset get(String name) {
         if (name == null) {
             return defaultCharset();
@@ -77,7 +77,7 @@ public final class CharsetMap extends SingletonMapSupport<String, Charset> {
      * @return
      */
     @Override
-    @ReturnNonNull
+    @Nonnull
     protected Charset newValue(String key) {
         if (check(UTF_8, key)) {
             return UTF_8;

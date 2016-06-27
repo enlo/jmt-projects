@@ -23,7 +23,8 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
+import javax.annotation.concurrent.ThreadSafe;
+import lombok.Synchronized;
 import lombok.ToString;
 
 /**
@@ -33,7 +34,7 @@ import lombok.ToString;
  * @author enlo
  * @see <a href="http://xorshift.di.unimi.it/">XorShift</a>
  */
-@ThreadSafety
+@ThreadSafe
 @ToString
 public class XorShift1024sRandom extends XorShiftRandom {
 
@@ -45,6 +46,7 @@ public class XorShift1024sRandom extends XorShiftRandom {
     }
 
     @Override
+    @Synchronized
     protected long nextLongCore() {
         final long s0 = state[index];
         long s1 = state[index = (index + 1) & 15];

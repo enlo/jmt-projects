@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
+import lombok.NonNull;
 
 /**
  *
@@ -49,9 +49,9 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
      * @param first １回目の Adder.
      * @param more 2回目以降の Adder.
      */
-    public AbstractJoiner(Adder<T, R> first, Adder<T, R> more) {
-        this.first = nonNull(first, "first");
-        this.more = nonNull(more, "more");
+    public AbstractJoiner(@NonNull Adder<T, R> first, @NonNull Adder<T, R> more) {
+        this.first = first;
+        this.more = more;
     }
 
     /**
@@ -59,8 +59,8 @@ public abstract class AbstractJoiner<T, R> extends Joiner<T, R> {
      *
      * @param adder Adder.
      */
-    public AbstractJoiner(Adder<T, R> adder) {
-        this.first = nonNull(adder, "adder");
+    public AbstractJoiner(@NonNull Adder<T, R> adder) {
+        this.first = adder;
         this.more = adder;
     }
 

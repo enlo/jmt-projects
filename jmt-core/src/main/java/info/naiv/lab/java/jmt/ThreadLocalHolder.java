@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -38,8 +38,8 @@ public class ThreadLocalHolder<T> extends ThreadLocal<T> implements Holder<T> {
 
     private final Class<? extends T> clazz;
 
-    public ThreadLocalHolder(Class<? extends T> clazz) {
-        this.clazz = nonNull(clazz, "clazz");
+    public ThreadLocalHolder(@NonNull Class<? extends T> clazz) {
+        this.clazz = clazz;
     }
 
     @Override

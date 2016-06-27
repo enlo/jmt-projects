@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 
 /**
  * サービス提供
@@ -52,7 +52,7 @@ public interface ServiceProvider extends AutoCloseable {
      * @param serviceType サービスタイプ
      * @return サービスオブジェクトコレクション. 見つからない場合は null.
      */
-    @ReturnNonNull
+    @Nonnull
     <T> Collection<T> resolveServices(Class<T> serviceType);
 
     /**
@@ -73,6 +73,6 @@ public interface ServiceProvider extends AutoCloseable {
      * @param tag タグオブジェクト.
      * @return the java.util.Collection
      */
-    @ReturnNonNull
+    @Nonnull
     <T> Collection<T> resolveServices(Class<T> serviceType, Tag tag);
 }

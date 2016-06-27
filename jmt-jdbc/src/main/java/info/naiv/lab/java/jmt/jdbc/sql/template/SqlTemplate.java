@@ -26,8 +26,8 @@ package info.naiv.lab.java.jmt.jdbc.sql.template;
 import info.naiv.lab.java.jmt.jdbc.sql.Query;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQuery;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
@@ -48,7 +48,7 @@ public interface SqlTemplate {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Query merge();
 
     /**
@@ -59,7 +59,7 @@ public interface SqlTemplate {
      * @param parameters
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <T> Query merge(Map<String, T> parameters);
 
     /**
@@ -69,7 +69,7 @@ public interface SqlTemplate {
      * @param parameters
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Query merge(SqlParameterSource parameters);
 
     /**
@@ -80,7 +80,7 @@ public interface SqlTemplate {
      * @return クエリ.
      * @see BeanPropertySqlParameterSource
      */
-    @ReturnNonNull
+    @Nonnull
     Query merge(Object bean);
 
     /**
@@ -88,7 +88,7 @@ public interface SqlTemplate {
      * @param context
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Query mergeContext(SqlQueryContext context);
 
     /**
@@ -99,7 +99,7 @@ public interface SqlTemplate {
      * @param parameters
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <T> Query mergeMap(Map<String, T> parameters);
 
     /**
@@ -109,6 +109,6 @@ public interface SqlTemplate {
      * @param parameters
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Query mergeParameterSource(SqlParameterSource parameters);
 }

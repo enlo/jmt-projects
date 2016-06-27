@@ -27,11 +27,11 @@ import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import static java.util.Arrays.asList;
+import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -56,7 +56,7 @@ public class SpringServiceInjector implements BeanPostProcessor, BeanFactoryAwar
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public Object postProcessBeforeInitialization(final Object o, final String string) throws BeansException {
         doWithFields(o.getClass(), new Callback(o));
         return o;
@@ -86,7 +86,7 @@ public class SpringServiceInjector implements BeanPostProcessor, BeanFactoryAwar
         }
     }
 
-    @ReturnNonNull
+    @Nonnull
     ServiceProvider getServiceProvider() {
         ServiceProvider sp = null;
         try {

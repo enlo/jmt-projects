@@ -25,7 +25,7 @@ package info.naiv.lab.java.jmt.infrastructure.component;
 
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -38,7 +38,7 @@ public interface ServiceComponent<T> {
      *
      * @return オブジェクトの型.
      */
-    @ReturnNonNull
+    @Nonnull
     Class<? extends T> getContentType();
 
     /**

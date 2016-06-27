@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.jdbc.driver;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.runtime.URLClassLoaderBuilder;
 import java.io.IOException;
 import java.net.URLClassLoader;
@@ -37,6 +36,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -71,7 +71,7 @@ public class ExternalJdbcDriverLoader {
      * @throws IOException
      * @throws SQLException
      */
-    @ReturnNonNull
+    @Nonnull
     public Set<Driver> load(Collection<Path> paths) throws IOException, SQLException {
         return load(paths, Collections.EMPTY_LIST);
     }
@@ -85,7 +85,7 @@ public class ExternalJdbcDriverLoader {
      * @throws IOException
      * @throws SQLException
      */
-    @ReturnNonNull
+    @Nonnull
     public Set<Driver> load(Collection<Path> paths, Iterable<String> classicDriverNames) throws IOException, SQLException {
         URLClassLoader loader = newClassLoader(paths);
         return load(loader, classicDriverNames);
@@ -99,7 +99,7 @@ public class ExternalJdbcDriverLoader {
      * @return 読み込んだJDBCドライバー
      * @throws SQLException
      */
-    @ReturnNonNull
+    @Nonnull
     public synchronized Set<Driver> load(ClassLoader loader, Iterable<String> classicDriverNames) throws SQLException {
         ServiceLoader<Driver> drivers = ServiceLoader.load(Driver.class, loader);
         Set<Driver> result = new HashSet<>();
@@ -161,7 +161,7 @@ public class ExternalJdbcDriverLoader {
      * @return
      * @throws IOException
      */
-    @ReturnNonNull
+    @Nonnull
     protected URLClassLoader newClassLoader(Collection<Path> paths) throws IOException {
         URLClassLoaderBuilder builder = URLClassLoaderBuilder.builder();
         builder.setParentClassLoader(parentClassLoader);

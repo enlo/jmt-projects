@@ -214,7 +214,7 @@ public class SqlQuery implements Query {
     public <T> T execute(JdbcOperations jdbcOperations, final PreparedStatementCallback<T> action) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("execute Sql={}", q);
         }
         return jdbcOperations.execute(q, new PreparedStatementCallback<T>() {
             @Override
@@ -253,7 +253,7 @@ public class SqlQuery implements Query {
     public <T> T query(JdbcOperations jdbcOperations, ResultSetExtractor<T> resultSetExtractor) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("query Sql={}", q);
         }
         return jdbcOperations.query(q, setter, resultSetExtractor);
     }
@@ -262,7 +262,7 @@ public class SqlQuery implements Query {
     public <T> List<T> query(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("query Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new RowMapperFactoryResultSetExtractor<>(rowMapperFactory));
     }
@@ -286,7 +286,7 @@ public class SqlQuery implements Query {
     public List<Map<String, Object>> queryForMapList(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("query Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new ColumnMapRowMapper());
     }
@@ -306,7 +306,7 @@ public class SqlQuery implements Query {
     public <T> List<T> queryForObjectList(JdbcOperations jdbcOperations, Class<T> elementType) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("queryForObjectList Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new SingleColumnRowMapper<>(elementType));
     }
@@ -315,7 +315,7 @@ public class SqlQuery implements Query {
     public SqlRowSet queryForRowSet(JdbcOperations jdbcOperations) {
         String q = modifyForQuery(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("queryForObjectList Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new SqlRowSetResultSetExtractor());
     }
@@ -349,7 +349,7 @@ public class SqlQuery implements Query {
     public int update(JdbcOperations jdbcOperations) {
         String q = modifyForUpdate(getMergedSql());
         if (isDebugLogging()) {
-            logger.debug("batchUpdate Sql={}", q);
+            logger.debug("update Sql={}", q);
         }
         return jdbcOperations.update(q, setter);
     }
@@ -362,7 +362,7 @@ public class SqlQuery implements Query {
             public PreparedStatement createPreparedStatement(Connection con) throws SQLException {
                 String q = modifyForUpdate(getMergedSql());
                 if (db) {
-                    logger.debug("batchUpdate Sql={}", q);
+                    logger.debug("update Sql={}", q);
                 }
                 PreparedStatement ps = con.prepareStatement(q);
                 setter.setValues(ps);

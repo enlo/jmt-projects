@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Calendar;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -36,14 +36,14 @@ public interface CurrentDateProvider {
      * @see Calendar#getInstance()
      * @return 本日の日付.
      */
-    @ReturnNonNull
+    @Nonnull
     Calendar getToday();
 
     /**
      * @see Calendar#getInstance()
      * @return 現在の日時.
      */
-    @ReturnNonNull
+    @Nonnull
     Calendar getNow();
 
     /**

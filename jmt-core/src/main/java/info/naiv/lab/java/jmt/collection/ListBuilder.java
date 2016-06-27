@@ -23,13 +23,14 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
@@ -45,6 +46,7 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
      * @param values
      * @return
      */
+    @Nonnull
     public static <T> ListBuilder<T> arrayList(T... values) {
         return new ArrayListBuilder(values);
     }
@@ -57,6 +59,7 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
      * @param values
      * @return
      */
+    @Nonnull
     public static <T> ListBuilder<T> cowArrayList(T... values) {
         return new CopyOnWriteArrayListBuilder(values);
     }
@@ -68,6 +71,7 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
      * @param values
      * @return
      */
+    @Nonnull
     public static <T> ListBuilder<T> linkedList(T... values) {
         return new CopyOnWriteArrayListBuilder(values);
     }
@@ -85,12 +89,14 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
      * @return
      */
     @Override
+    @Nonnull
     public abstract List<T> build();
 
     /**
      *
      * @return
      */
+    @Nonnull
     public List<T> toList() {
         return build();
     }
@@ -107,7 +113,7 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
         }
     }
 
-    @ThreadSafety
+    @ThreadSafe
     static class CopyOnWriteArrayListBuilder<T> extends ListBuilder<T> {
 
         CopyOnWriteArrayListBuilder(T... values) {

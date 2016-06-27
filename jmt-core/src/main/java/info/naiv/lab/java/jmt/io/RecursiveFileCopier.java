@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.IOException;
 import java.nio.file.CopyOption;
 import java.nio.file.FileVisitResult;
@@ -34,6 +33,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayDeque;
 import java.util.Deque;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -60,14 +60,14 @@ public class RecursiveFileCopier extends SimpleFileVisitor<Path> {
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
         this.depth.pop();
         return super.postVisitDirectory(dir, exc);
     }
 
     @Override
-    @ReturnNonNull
+    @Nonnull
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
         Path current = this.depth.peekFirst();
         Path next = current.resolve(dir.getFileName());

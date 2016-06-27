@@ -18,7 +18,6 @@ import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.iteration.IterationUtils;
 import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.mark.Nop;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
@@ -48,6 +47,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Set;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
@@ -85,7 +87,8 @@ public abstract class Misc {
      * @param n
      * @return
      */
-    public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
+    @Nonnull
+    public static <T> Iterator<T> advance(@Nonnull Iterator<T> iter, int n) {
         return IterationUtils.advance(iter, n);
     }
 
@@ -130,6 +133,7 @@ public abstract class Misc {
      * @param items
      * @return
      */
+    @Nonnull
     public static String concatnate(String... items) {
         int size = 0;
         for (String item : items) {
@@ -192,8 +196,8 @@ public abstract class Misc {
      * @param predicate
      * @return
      */
-    @ReturnNonNull
-    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
+    @Nonnull
+    public static <T> Iteratee<T> filter(@Nonnull Iterable<T> iterable, @Nonnull Predicate1<? super T> predicate) {
         return IterationUtils.filter(iterable, predicate);
     }
 
@@ -205,7 +209,7 @@ public abstract class Misc {
      * @param iterable
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iteratee<T> filterNonNull(Iterable<T> iterable) {
         return IterationUtils.filterNonNull(iterable);
     }
@@ -216,7 +220,7 @@ public abstract class Misc {
      * @param items
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iterable<T> flat(final Iterable<? extends Iterable<T>> items) {
         return IterationUtils.flat(items);
     }
@@ -252,6 +256,7 @@ public abstract class Misc {
      * @param byteFormat 各バイトごとのフォーマット.
      * @return フォーマット済み文字列.
      */
+    @Nonnull
     public static String formatBytes(byte[] data, String byteFormat) {
         try (Formatter formatter = new Formatter()) {
             for (byte b : data) {
@@ -268,6 +273,7 @@ public abstract class Misc {
      * @param iterable
      * @return 最初の項目. 空なら null.
      */
+    @CheckForNull
     public static <T> T getFirst(Iterable<T> iterable) {
         return IterationUtils.getFirst(iterable);
     }
@@ -280,6 +286,7 @@ public abstract class Misc {
      * @param predicate
      * @return
      */
+    @CheckForNull
     public static <T> T getFirst(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return IterationUtils.getFirst(iterable, predicate);
     }
@@ -293,7 +300,7 @@ public abstract class Misc {
      * @param value 値
      * @return キーセット
      */
-    @ReturnNonNull
+    @Nonnull
     public static <TKey, TValue> Set<TKey> getKeySetByValue(Map<TKey, TValue> map, TValue value) {
         nonNull(map, "map");
         Set<TKey> keys = new HashSet<>();
@@ -488,8 +495,8 @@ public abstract class Misc {
      * @param delim 区切り文字
      * @return 連結された文字列.
      */
-    @ReturnNonNull
-    public static String join(Iterable<?> items, String delim) {
+    @Nonnull
+    public static String join(@Nonnull Iterable<?> items, String delim) {
         return (StringJoiner.valueOf(delim)).join(items).toString();
     }
 
@@ -505,10 +512,8 @@ public abstract class Misc {
      * @return 変換先のコレクション
      * @throws IllegalArgumentException dest または mapper が null
      */
-    @ReturnNonNull
-    public static <Dest extends Collection<R>, R, T> Dest map(Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
-        nonNull(dest, "dest");
-        nonNull(mapper, "mapper");
+    @Nonnull
+    public static <Dest extends Collection<R>, R, T> Dest map(@NonNull Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
         if (source != null) {
             for (T item : source) {
                 dest.add(mapper.apply(item));
@@ -525,7 +530,7 @@ public abstract class Misc {
      * @param mapper
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
         return IterationUtils.map(iter, mapper);
     }
@@ -542,9 +547,8 @@ public abstract class Misc {
      * @param mapper 変換器
      * @return 変換先のマップ
      */
-    @ReturnNonNull
-    public static <Dest extends Map<K, R>, K, R, T> Dest map(Dest dest, Map<K, T> source, Function1<T, R> mapper) {
-        nonNull(dest, "dest");
+    @Nonnull
+    public static <Dest extends Map<K, R>, K, R, T> Dest map(@NonNull Dest dest, Map<K, T> source, Function1<T, R> mapper) {
         if (source != null) {
             for (Entry<K, T> e : source.entrySet()) {
                 K key = e.getKey();
@@ -563,7 +567,7 @@ public abstract class Misc {
      * @param mapper 変換器
      * @return dest.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <R, T> Set<R> map(Set<T> source, Function1<T, R> mapper) {
         final Set<R> result = new HashSet<>(source.size());
         return map(result, source, mapper);
@@ -578,7 +582,7 @@ public abstract class Misc {
      * @param mapper 変換器
      * @return dest.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <R, T> List<R> map(List<T> source, Function1<T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
@@ -605,6 +609,7 @@ public abstract class Misc {
      * @param max 最大値
      * @return min ≦ x ≦ max の値
      */
+    @Nonnull
     public static <T extends Comparable<T>> T minmax(T x, T min, T max) {
         if (min != null && x.compareTo(min) <= 0) {
             return min;
@@ -624,6 +629,7 @@ public abstract class Misc {
      * @param values
      * @return
      */
+     @Nonnull
     public static <T> ArrayList<T> newArrayList(T... values) {
         return new ArrayList<>(Arrays.asList(values));
     }
@@ -634,6 +640,7 @@ public abstract class Misc {
      * @param clazz
      * @return
      */
+    @CheckForNull
     public static <T> T newInstance(Class<T> clazz) {
         try {
             return clazz.newInstance();
@@ -649,6 +656,7 @@ public abstract class Misc {
      * @param clazz
      * @return
      */
+    @Nonnull
     public static <T> Optional<T> newInstance(Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
             return OptionalImpl.ofNullable(newInstance(clazz.get()));
@@ -663,6 +671,7 @@ public abstract class Misc {
      * @param className
      * @return
      */
+    @Nonnull
     public static Optional<Object> newInstance(String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
         return newInstance((Optional) clazz);
@@ -696,7 +705,8 @@ public abstract class Misc {
      * @param ls 改行文字
      * @return 全ての改行文字を ls にしたテキスト
      */
-    public static String normalizeLineSeparator(String text, String ls) {
+    @Nonnull
+    public static String normalizeLineSeparator(@NonNull String text, String ls) {
         return text.replaceAll("\\u000D\\u000A|\\u000A|\\u000D|\\u0085|\\u0008|\\u000C|\\u2028|\\u2029", ls);
     }
 
@@ -783,7 +793,7 @@ public abstract class Misc {
      * @param value 値
      * @return Iterable
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Iterable<T> repeat(int repeatMax, T value) {
         return new Repeater<>(repeatMax, value);
     }
@@ -794,6 +804,7 @@ public abstract class Misc {
      * @param className クラス名
      * @return クラスをOptionalでラップしたもの.
      */
+    @Nonnull
     public static Optional<Class<?>> resolveClassName(String className) {
         try {
             return OptionalImpl.<Class<?>>ofNullable(Class.forName(className));
@@ -812,6 +823,7 @@ public abstract class Misc {
      * @param classLoader クラスローダー.
      * @return クラスをOptionalでラップしたもの.
      */
+    @Nonnull
     public static Optional<Class<?>> resolveClassName(String className, boolean initialize, ClassLoader classLoader) {
         try {
             Class clz = Class.forName(className, initialize, classLoader);
@@ -903,12 +915,12 @@ public abstract class Misc {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static byte[] toByteArray(String text, String charset) {
         if (text == null) {
             return new byte[]{};
         }
-        Charset cs = CharsetMap.get(charset);
+        Charset cs = Charset.forName(charset);
         return text.getBytes(cs);
     }
 
@@ -917,7 +929,7 @@ public abstract class Misc {
      * @param resource
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static byte[] toByteArray(Resource resource) {
         if (resource == null) {
             return new byte[]{};
@@ -1082,7 +1094,7 @@ public abstract class Misc {
      * @param iter
      * @return
      */
-    @ReturnNonNull
+       @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> List<T> toList(Iterable<T> iter) {
         if (iter instanceof Collection) {
@@ -1209,7 +1221,7 @@ public abstract class Misc {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static String toString(byte[] bytes, String charset) {
         Charset cs = CharsetMap.get(charset);
         return new String(bytes, cs);
@@ -1224,7 +1236,7 @@ public abstract class Misc {
      * @param charset
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static String toString(byte[] bytes, int offset, int length, String charset) {
         Charset cs = CharsetMap.get(charset);
         return new String(bytes, offset, length, cs);

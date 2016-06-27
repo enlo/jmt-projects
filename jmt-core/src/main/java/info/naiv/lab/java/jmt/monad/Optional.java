@@ -27,10 +27,10 @@ import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.Supplier;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -58,7 +58,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return {@link #isPresent()} &amp;&amp; predicate が true を戻せば自分自身. <br>
      * そうでなければ {@link #empty()}
      */
-    @ReturnNonNull
+    @Nonnull
     Optional<T> filter(Predicate1<? super T> predicate);
 
     /**
@@ -68,7 +68,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param mapper 変換オブジェクト
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <U> Optional<U> flatMap(Function1<? super T, ? extends Optional<U>> mapper);
 
     /**
@@ -89,7 +89,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      */
     boolean isPresent();
 
-    @ReturnNonNull
+    @Nonnull
     @Override
     Iterator<T> iterator();
 
@@ -99,7 +99,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param mapper
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     <U> Optional<U> map(Function1<? super T, ? extends U> mapper);
 
     /**
@@ -107,7 +107,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param other
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     T orElse(T other);
 
     /**
@@ -115,7 +115,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param other
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     T orElseGet(Supplier<? extends T> other);
 
     /**
@@ -125,14 +125,14 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      * @throws X
      */
-    @ReturnNonNull
+    @Nonnull
     <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     Set<T> toSet();
 
 }

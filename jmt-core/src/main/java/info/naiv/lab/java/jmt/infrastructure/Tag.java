@@ -24,8 +24,8 @@
 package info.naiv.lab.java.jmt.infrastructure;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
+import javax.annotation.Nonnull;
 import lombok.Data;
 
 /**
@@ -57,7 +57,7 @@ public class Tag {
      * @param id ID
      * @return タグ
      */
-    @ReturnNonNull
+    @Nonnull
     public static Tag of(Serializable id) {
         return new Tag(id);
     }

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -41,7 +41,7 @@ public interface IntegerEnum {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     String getName();
 
 }

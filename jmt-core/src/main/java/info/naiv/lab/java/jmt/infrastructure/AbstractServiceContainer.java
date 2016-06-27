@@ -32,7 +32,6 @@ import info.naiv.lab.java.jmt.closeable.ReverseGuard;
 import info.naiv.lab.java.jmt.infrastructure.annotation.ServicePriority;
 import info.naiv.lab.java.jmt.infrastructure.component.ComponentServiceConnection;
 import info.naiv.lab.java.jmt.infrastructure.component.ServiceComponent;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,6 +42,7 @@ import java.util.Set;
 import java.util.UUID;
 import static java.util.UUID.randomUUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.annotation.Nonnull;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.OrderUtils;
 
@@ -199,7 +199,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected AbstractServiceConnection createConnection(int priority, Object service, Tag tag) {
         if (service instanceof ServiceComponent) {
             return new ComponentServiceConnection((ServiceComponent<?>) service, priority, this, tag);
@@ -297,7 +297,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected ServiceConnection internalRegisterService(int priority, Object service, Tag tag) {
         final AbstractServiceConnection conn = createConnection(priority, service, tag);
         addIfNotFound(connections, conn);
@@ -308,7 +308,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected abstract Guard readGuard();
 
     /**
@@ -346,7 +346,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected abstract Guard writeGuard();
 
 }

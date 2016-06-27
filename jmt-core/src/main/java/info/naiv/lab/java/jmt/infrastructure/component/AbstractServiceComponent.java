@@ -27,8 +27,8 @@ import info.naiv.lab.java.jmt.Holders;
 import info.naiv.lab.java.jmt.infrastructure.HolderTag;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -82,7 +82,7 @@ public abstract class AbstractServiceComponent<T> implements ServiceComponent<T>
      *
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     protected abstract Map<Tag, T> getComponentMap();
 
     /**

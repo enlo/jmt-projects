@@ -26,10 +26,12 @@ package info.naiv.lab.java.jmt;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.EqualsAndHashCode;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
@@ -39,9 +41,11 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
  *
  * @author enlo
  */
+@EqualsAndHashCode(callSuper = true)
 public class ResolvableProperties extends Properties {
 
     private static final PropertiesPlaceholderResolver defaultResolver = PropertiesPlaceholderResolver.DEFAULT;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Placeholder resolver.
@@ -192,4 +196,7 @@ public class ResolvableProperties extends Properties {
         return resolver.resolve(this, value);
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+    }
 }

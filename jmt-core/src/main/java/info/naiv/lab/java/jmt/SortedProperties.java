@@ -36,6 +36,8 @@ import java.util.Properties;
  */
 public class SortedProperties extends Properties {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * デフォルトコンストラクター
      */
@@ -53,8 +55,9 @@ public class SortedProperties extends Properties {
     }
 
     @Override
-    public synchronized Object clone() {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public synchronized SortedProperties clone() {
+        return (SortedProperties) super.clone();
     }
 
     @Override

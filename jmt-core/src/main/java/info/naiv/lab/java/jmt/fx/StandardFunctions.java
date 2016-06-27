@@ -25,10 +25,10 @@ package info.naiv.lab.java.jmt.fx;
 
 import info.naiv.lab.java.jmt.Holder;
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.Integer.parseInt;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -61,7 +61,7 @@ public class StandardFunctions {
      * @param pattern
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static StringPredicate byRegex(final String pattern) {
         final Pattern p = Pattern.compile(pattern);
         return new StringPredicate() {
@@ -78,7 +78,7 @@ public class StandardFunctions {
      * @param value
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T extends Comparable<T>> Predicate1<T> compareEqual(final T value) {
         return new Predicate1<T>() {
             @Override
@@ -93,7 +93,7 @@ public class StandardFunctions {
      * @param defaultValue
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static Function1<String, Integer> convertStringToInt(final int defaultValue) {
         return new Function1<String, Integer>() {
 
@@ -117,7 +117,7 @@ public class StandardFunctions {
      * @param suffix
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static StringPredicate endsWith(final String suffix) {
         return new StringPredicate() {
             @Override
@@ -133,7 +133,7 @@ public class StandardFunctions {
      * @param value
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Predicate1<T> equal(final T value) {
         return new Predicate1<T>() {
             @Override
@@ -149,7 +149,7 @@ public class StandardFunctions {
      * @param clazz
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Function1<Holder<T>, T> getContent(Class<T> clazz) {
         return new Function1<Holder<T>, T>() {
 
@@ -166,7 +166,7 @@ public class StandardFunctions {
      * @param clazz
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz) {
         return new Function1<Class<? extends T>, T>() {
             @Override
@@ -188,7 +188,7 @@ public class StandardFunctions {
      * @param initialValue
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Function1<Class<? extends T>, T> newInstance(Class<? extends T> clazz, final T initialValue) {
         return new Function1<Class<? extends T>, T>() {
             @Override
@@ -203,7 +203,7 @@ public class StandardFunctions {
      * @param <T>
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Predicate1<T> noCheck() {
         return NO_CHECK;
     }
@@ -213,7 +213,7 @@ public class StandardFunctions {
      * @param <T>
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> Predicate1<T> nonNull() {
         return NON_NULL;
     }

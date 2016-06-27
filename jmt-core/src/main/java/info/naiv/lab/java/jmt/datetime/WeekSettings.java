@@ -2,11 +2,10 @@ package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Arguments.between;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import static info.naiv.lab.java.jmt.Misc.*;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import java.io.Serializable;
 import static java.util.Calendar.SATURDAY;
 import static java.util.Calendar.SUNDAY;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -83,7 +82,7 @@ public final class WeekSettings implements Serializable {
     /**
      * @return その他休日
      */
-    @ReturnNonNull
+    @Nonnull
     public int[] getUnofficialHolidays() {
         return unofficialHolidays.clone();
     }
@@ -114,7 +113,7 @@ public final class WeekSettings implements Serializable {
      * @param fdow 新しい開始曜日
      * @return 新しく作成した WeekSettings.
      */
-    @ReturnNonNull
+    @Nonnull
     public WeekSettings newFirstDayOfWeek(int fdow) {
         return new WeekSettings(fdow, this.officialHoliday, this.unofficialHolidays);
     }

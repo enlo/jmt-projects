@@ -23,8 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
+
 
 /**
  * オブジェクトホルダー.
@@ -32,7 +33,7 @@ import info.naiv.lab.java.jmt.mark.ThreadSafety;
  * @author enlo
  * @param <T> 保持するオブジェクトの型
  */
-@ThreadSafety
+@ThreadSafe
 public interface Holder<T> {
 
     /**
@@ -45,6 +46,6 @@ public interface Holder<T> {
      *
      * @return オブジェクトの型.
      */
-    @ReturnNonNull
+    @Nonnull
     Class<? extends T> getContentType();
 }

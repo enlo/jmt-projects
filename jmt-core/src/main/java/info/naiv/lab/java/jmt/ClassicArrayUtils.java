@@ -26,15 +26,18 @@ package info.naiv.lab.java.jmt;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
-import info.naiv.lab.java.jmt.mark.ReturnNonNull;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
 import static java.util.Arrays.sort;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import static java.util.Objects.deepEquals;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import lombok.AccessLevel;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
 
 /**
  * Stream が使用できない Java7 で配列を扱うためのユーティリティ.
@@ -84,6 +87,7 @@ public class ClassicArrayUtils {
      * @param array 引数
      * @return array が配列ならObject[]、そうでなければ null.
      */
+    @CheckForNull
     public static Object[] asObjectArray(Object array) {
         Object[] result = null;
         if (array instanceof Object[]) {
@@ -128,7 +132,8 @@ public class ClassicArrayUtils {
      * @param array
      * @return
      */
-    public static <T> ArrayIterable<T> arrayAsIterable(T[] array) {
+    @Nonnull
+    public static <T> Iterable<T> arrayAsIterable(T[] array) {
         return new ArrayIterable<>(array);
     }
 
@@ -199,7 +204,14 @@ public class ClassicArrayUtils {
      * @return
      */
     public static <T> boolean arrayContains(T[] array, T search) {
-        return 0 <= arrayIndexOf(array, StandardFunctions.equal(search));
+        if (array != null) {
+            for (T v : array) {
+                if (Objects.equals(v, search)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -327,7 +339,7 @@ public class ClassicArrayUtils {
      * @param items 連結する項目
      * @return 連結された文字列.
      */
-    @ReturnNonNull
+    @Nonnull
     public static <T> String arrayToString(T... items) {
         return (StringJoiner.SIMPLE).join(items).toString();
     }
@@ -340,7 +352,7 @@ public class ClassicArrayUtils {
      * @param more 追加
      * @return
      */
-    @ReturnNonNull
+    @Nonnull
     @SuppressWarnings(value = "unchecked")
     public static <T> T[] createArray(T first, T... more) {
         assert more != null;
@@ -355,10 +367,13 @@ public class ClassicArrayUtils {
      *
      * @param <T>
      */
-    @Value
-    public static final class ArrayIterable<T> implements Iterable<T> {
+    static final class ArrayIterable<T> implements Iterable<T> {
 
         final T[] array;
+
+        ArrayIterable(T[] array) {
+            this.array = array;
+        }
 
         @Override
         public Iterator<T> iterator() {
@@ -373,7 +388,7 @@ public class ClassicArrayUtils {
      * @author enlo
      * @param <T>
      */
-    @RequiredArgsConstructor
+    @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
     public static final class ArrayIterator<T> implements Iterator<T> {
 
         @NonNull
@@ -387,6 +402,9 @@ public class ClassicArrayUtils {
 
         @Override
         public T next() {
+            if (array.length <= i) {
+                throw new NoSuchElementException();
+            }
             return array[i++];
         }
 

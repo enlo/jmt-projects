@@ -23,14 +23,16 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.mark.ThreadSafety;
+import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 文字列連結.
  *
  * @author enlo
+ * 
  */
-@ThreadSafety
+@ThreadSafe
 public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
 
     /**
@@ -63,6 +65,7 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
      * @param delim
      * @return
      */
+    @Nonnull
     public static StringJoiner valueOf(String delim) {
         if (delim == null) {
             return SIMPLE;

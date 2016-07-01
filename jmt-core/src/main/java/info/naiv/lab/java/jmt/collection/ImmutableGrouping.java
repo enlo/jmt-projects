@@ -26,12 +26,15 @@ package info.naiv.lab.java.jmt.collection;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.Iterator;
+import lombok.NonNull;
 import lombok.Value;
 
 @Value
 public class ImmutableGrouping<TKey, TValue> implements Grouping<TKey, TValue> {
 
     TKey key;
+    
+    @NonNull
     Iteratee<TValue> values;
 
     public ImmutableGrouping(TKey key, Iteratee<TValue> values) {

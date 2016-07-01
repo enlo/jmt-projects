@@ -35,4 +35,5 @@ public interface MvelTemplate<TResult> extends Template<TResult> {
 
     @Override
     CompiledTemplate getTemplateObject();
+
 }

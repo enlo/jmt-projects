@@ -24,9 +24,11 @@
 package info.naiv.lab.java.jmt.template;
 
 import java.nio.charset.Charset;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
+ * テンプレートローダー
  *
  * @author enlo
  * @param <TResult>
@@ -39,24 +41,27 @@ public interface TemplateLoader<TResult> {
     static final String DEFAULT_SUFFIX = "";
 
     /**
+     * 親のテンプレートローダーを設定.
      *
-     * @param parentLoader
+     * @param parentLoader 親のテンプレートローダー
      */
     void setParentTemplateLoader(TemplateLoader<? extends TResult> parentLoader);
 
     /**
+     * 文字列からテンプレートオブジェクトを生成する.
      *
-     * @param template
-     * @return
+     * @param template テンプレート文字列
+     * @return テンプレートオブジェクト
      */
     @Nonnull
     Template<TResult> fromString(String template);
 
     /**
+     * 文字列からテンプレートオブジェクトを生成する.
      *
-     * @param name
-     * @param template
-     * @return
+     * @param name テンプレート名
+     * @param template テンプレート文字列
+     * @return テンプレートオブジェクト
      */
     @Nonnull
     Template<TResult> fromString(String name, String template);
@@ -69,21 +74,25 @@ public interface TemplateLoader<TResult> {
 
     /**
      *
+     * テンプレートオブジェクトを読み込む.
+     *
      * @param category
      * @param name
      * @return
      */
-    @Nonnull
+    @CheckForNull
     Template<TResult> load(String category, String name);
 
     /**
+     *
+     * テンプレートオブジェクトを読み込む.
      *
      * @param category
      * @param name
      * @param charset
      * @return
      */
-    @Nonnull
+    @CheckForNull
     Template<TResult> load(String category, String name, Charset charset);
 
     /**
@@ -109,4 +118,20 @@ public interface TemplateLoader<TResult> {
      * @param suffix サフィックスを設定.
      */
     void setSuffix(String suffix);
+
+    /**
+     * リスナを追加.
+     *
+     * @param listener
+     * @return
+     */
+    boolean addTemplateLoaderListener(@Nonnull TemplateLoaderListener listener);
+
+    /**
+     * リスナを削除.
+     *
+     * @param listener
+     * @return
+     */
+    boolean removeTemplateLoaderListener(@Nonnull TemplateLoaderListener listener);
 }

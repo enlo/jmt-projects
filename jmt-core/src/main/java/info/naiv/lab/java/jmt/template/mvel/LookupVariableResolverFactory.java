@@ -43,14 +43,14 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
     /**
      *
      */
-    protected final Lookup<String, Object> parameters;
+    protected final Lookup<String, ?> parameters;
 
     /**
      *
-     * @param oarameters
+     * @param parameters
      */
-    public LookupVariableResolverFactory(Lookup<String, Object> oarameters) {
-        this(oarameters, null);
+    public LookupVariableResolverFactory(Lookup<String, ?> parameters) {
+        this(parameters, null);
     }
 
     /**
@@ -58,7 +58,7 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
      * @param parameters
      * @param nextFactory
      */
-    public LookupVariableResolverFactory(Lookup<String, Object> parameters, VariableResolverFactory nextFactory) {
+    public LookupVariableResolverFactory(Lookup<String, ?> parameters, VariableResolverFactory nextFactory) {
         this.parameters = parameters;
         this.nextFactory = nextFactory;
     }

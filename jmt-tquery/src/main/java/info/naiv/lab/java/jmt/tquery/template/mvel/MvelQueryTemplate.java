@@ -36,6 +36,7 @@ import org.mvel2.templates.CompiledTemplate;
  *
  * @author enlo
  */
+@SuppressWarnings("serial")
 public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContext> implements QueryTemplate {
 
     public MvelQueryTemplate(String name, CompiledTemplate template) {

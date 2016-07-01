@@ -25,10 +25,13 @@ package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.mvel.MvelTemplate;
+import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
 import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
+import java.io.Serializable;
 import java.util.Objects;
+import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateRuntime;
@@ -38,24 +41,33 @@ import org.mvel2.templates.util.TemplateOutputStream;
  *
  * @author enlo
  */
-public class IncludeTemplateNode extends CustomNode {
+public class ExtractTemplateNode extends SingleCompiledExpressionNode {
+
+    private static final long serialVersionUID = 1L;
 
     @Override
-    protected void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, QueryContext ctx, VariableResolverFactory factory) {
+    public String name() {
+        return "extractTemplate";
+    }
+
+    @Override
+    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
+        QueryContext context = (QueryContext) ctx;
         final String appendable;
         if (value instanceof MvelTemplate) {
             MvelTemplate templ = (MvelTemplate) value;
             CompiledTemplate ct = templ.getTemplateObject();
-            appendable = (String) TemplateRuntime.execute(ct, ctx, factory);
+            appendable = (String) TemplateRuntime.execute(ct, context, factory);
         }
         else if (value instanceof QueryTemplate) {
             QueryTemplate templ = (QueryTemplate) value;
-            Command ct = templ.mergeBean(ctx.getSource());
+            Command ct = templ.mergeBean(context.getSource());
             appendable = ct.getQuery();
         }
         else if (value instanceof Template) {
             Template templ = (Template) value;
-            Object obj = templ.mergeBean(ctx.getSource());
+            Object obj = templ.mergeBean(context.getSource());
             appendable = Objects.toString(obj, "");
         }
         else {

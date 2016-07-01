@@ -36,17 +36,17 @@ import org.springframework.util.PropertyPlaceholderHelper;
  */
 public class PropertiesPlaceholderResolver implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      *
      */
     public static final PropertiesPlaceholderResolver DEFAULT = new PropertiesPlaceholderResolver();
 
-    private final String prefix;
-    private final String suffix;
+    private static final long serialVersionUID = 1L;
 
     private transient PropertyPlaceholderHelper helper;
+
+    private final String prefix;
+    private final String suffix;
 
     /**
      *
@@ -84,6 +84,11 @@ public class PropertiesPlaceholderResolver implements Serializable {
         });
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        helper = new PropertyPlaceholderHelper(prefix, suffix);
+    }
+
     /**
      *
      * @param propertyName
@@ -109,10 +114,5 @@ public class PropertiesPlaceholderResolver implements Serializable {
             value = onPropertyNotFound(propertyName);
         }
         return value;
-    }
-
-    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
-        helper = new PropertyPlaceholderHelper(prefix, suffix);
     }
 }

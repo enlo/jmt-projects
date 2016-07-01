@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 import java.util.Set;
+import lombok.NonNull;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -45,7 +46,7 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
      *
      * @param bean
      */
-    public BeanPropertyLookup(Object bean) {
+    public BeanPropertyLookup(@NonNull Object bean) {
         beanWrapper = new BeanWrapperImpl(bean);
         PropertyDescriptor[] pds = beanWrapper.getPropertyDescriptors();
         propertyNames = new HashSet<>(pds.length);
@@ -76,6 +77,11 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
         return result.iterator();
     }
 
+    /**
+     * プロパティの数を取得する.
+     *
+     * @return
+     */
     public int size() {
         return beanWrapper.getPropertyDescriptors().length;
     }

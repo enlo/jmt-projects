@@ -26,8 +26,12 @@ package info.naiv.lab.java.jmt.template;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.atomic.AtomicBoolean;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,10 +45,16 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
 
     private final AtomicBoolean initialized = new AtomicBoolean(false);
 
+    private final Set<TemplateLoaderListener<TResult>> listnenrs = new ConcurrentSkipListSet<>();
     private TemplateLoader<TResult> parentTemplateLoader;
 
     @Setter
     private String suffix = DEFAULT_SUFFIX;
+
+    @Override
+    public boolean addTemplateLoaderListener(@NonNull TemplateLoaderListener listener) {
+        return listnenrs.add(listener);
+    }
 
     @Override
     public Template<TResult> fromString(String template) {
@@ -54,7 +64,9 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
     @Override
     public Template<TResult> fromString(String name, String template) {
         needInitialize();
-        return doFromString(name, template);
+        Template<TResult> templ = doFromString(name, template);
+        send(templ);
+        return templ;
     }
 
     @Override
@@ -73,6 +85,7 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         needInitialize();
         try {
             result = doLoad(category, name, charset);
+            send(result);
             return result;
         }
         catch (IOException ex) {
@@ -80,6 +93,9 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         }
         if (result == null && parentTemplateLoader != null) {
             result = parentTemplateLoader.load(category, name, charset);
+            if (result != null) {
+                send(result);
+            }
         }
         return result;
     }
@@ -107,8 +123,24 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
     }
 
     @Override
+    public boolean removeTemplateLoaderListener(TemplateLoaderListener listener) {
+        if (listener == null) {
+            return false;
+        }
+        return listnenrs.remove(listener);
+    }
+
+    @Override
     public void setParentTemplateLoader(TemplateLoader<? extends TResult> parentLoader) {
         parentTemplateLoader = (TemplateLoader<TResult>) parentLoader;
+    }
+
+    private void send(Template<TResult> templ) {
+        if (templ != null) {
+            for (TemplateLoaderListener<TResult> listener : listnenrs) {
+                listener.onLoadTemplate(templ);
+            }
+        }
     }
 
     /**
@@ -117,6 +149,7 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
      * @param template
      * @return
      */
+    @Nonnull
     protected abstract Template<TResult> doFromString(String name, String template);
 
     /**
@@ -136,6 +169,7 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
      * @return
      * @throws IOException
      */
+    @Nonnull
     protected abstract Iterable<Template<TResult>> doLoadCategory(String category, Charset charset) throws IOException;
 
     /**

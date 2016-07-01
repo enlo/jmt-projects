@@ -23,8 +23,10 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
-import info.naiv.lab.java.jmt.StringJoiner;
+import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
+import java.io.Serializable;
+import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.util.TemplateOutputStream;
@@ -33,21 +35,20 @@ import org.mvel2.templates.util.TemplateOutputStream;
  *
  * @author enlo
  */
-public class BindManyNode extends CustomNode {
+public class BindManyNode extends SingleCompiledExpressionNode {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     *
-     * @param value
-     * @param runtime
-     * @param appender
-     * @param ctx
-     * @param factory
-     */
     @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, QueryContext ctx, VariableResolverFactory factory) {
-        String bound = ctx.getParameterBinder().bindMany(value, ctx);
+    public String name() {
+        return "bindMany";
+    }
+
+    @Override
+    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+        QueryContext context = ((QueryContext)ctx);
+        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
+        String bound = context.getParameterBinder().bindMany(value, context);
         appender.append(bound);
     }
 

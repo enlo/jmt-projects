@@ -39,6 +39,7 @@ import lombok.Data;
 public class NamedParameterBinder implements ParameterBinder {
 
     private static final StringJoiner joiner = StringJoiner.valueOf(", ");
+    private static final long serialVersionUID = 1L;
 
     private String prefix;
 

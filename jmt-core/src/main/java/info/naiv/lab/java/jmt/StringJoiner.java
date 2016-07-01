@@ -30,7 +30,7 @@ import javax.annotation.concurrent.ThreadSafe;
  * 文字列連結.
  *
  * @author enlo
- * 
+ *
  */
 @ThreadSafe
 public class StringJoiner extends AbstractStringBuilderJoiner<Object> {

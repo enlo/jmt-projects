@@ -253,7 +253,7 @@ public abstract class Arguments {
     public static long nonMinus(long arg, String varname) throws IllegalArgumentException {
         return nonNegative(arg, varname);
     }
-    
+
     /**
      * 引数がマイナスでないことをチェック.
      *

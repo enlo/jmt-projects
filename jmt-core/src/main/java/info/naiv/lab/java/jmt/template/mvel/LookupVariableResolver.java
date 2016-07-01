@@ -35,14 +35,14 @@ public class LookupVariableResolver implements VariableResolver {
 
     private final Class<?> knownType;
     private final String name;
-    private final Lookup<String, Object> parameters;
+    private final Lookup<String, ?> parameters;
 
     /**
      *
      * @param parameters
      * @param name
      */
-    public LookupVariableResolver(Lookup<String, Object> parameters, String name) {
+    public LookupVariableResolver(Lookup<String, ?> parameters, String name) {
         this.name = name;
         this.knownType = resolveType(parameters, name);
         this.parameters = parameters;
@@ -54,7 +54,7 @@ public class LookupVariableResolver implements VariableResolver {
      * @param name
      * @param knownType
      */
-    public LookupVariableResolver(Lookup<String, Object> parameters, String name, Class<?> knownType) {
+    public LookupVariableResolver(Lookup<String, ?> parameters, String name, Class<?> knownType) {
         this.name = name;
         this.knownType = knownType;
         this.parameters = parameters;
@@ -94,7 +94,7 @@ public class LookupVariableResolver implements VariableResolver {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    private Class<?> resolveType(Lookup<String, Object> parameters, String name) {
+    private Class<?> resolveType(Lookup<String, ?> parameters, String name) {
         if (parameters.containsKey(name)) {
             Object obj = parameters.get(name);
             return obj != null ? obj.getClass() : null;

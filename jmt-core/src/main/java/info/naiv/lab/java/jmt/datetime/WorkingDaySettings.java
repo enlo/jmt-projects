@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import lombok.ToString;
 
 /**
@@ -50,21 +51,21 @@ public class WorkingDaySettings implements Cloneable, Serializable {
                                       new HashSet<Calendar>(), true);
     }
 
+    @NonNull
     private Set<Calendar> extractHolidays;
 
+    @NonNull
     private Set<Calendar> holidays;
 
     private boolean shiftForward;
 
+    @NonNull
     private WeekSettings weekSettings;
 
     public WorkingDaySettings(WeekSettings weekSettings,
                               Set<Calendar> holidays,
                               Set<Calendar> extractHolidays,
                               boolean shiftForward) {
-        nonNull(weekSettings, "weekSettings");
-        nonNull(holidays, "holidays");
-        nonNull(extractHolidays, "extractHolidays");
         this.weekSettings = weekSettings;
         this.holidays = holidays;
         this.extractHolidays = extractHolidays;
@@ -127,12 +128,10 @@ public class WorkingDaySettings implements Cloneable, Serializable {
     }
 
     public void setExtractHolidays(Set<Calendar> extractHolidays) {
-        nonNull(extractHolidays, "extractHolidays");
         this.extractHolidays = extractHolidays;
     }
 
     public void setHolidays(Set<Calendar> holidays) {
-        nonNull(holidays, "holidays");
         this.holidays = holidays;
     }
 

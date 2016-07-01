@@ -21,35 +21,55 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt.text;
 
-import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import java.io.Serializable;
-import org.mvel2.MVEL;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import lombok.NonNull;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public class BindNode extends SingleCompiledExpressionNode {
+@Value
+public class NumberFormatConfig implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 694171468800516115L;
 
-    @Override
-    public String name() {
-        return "bind";
+    @NonNull
+    String format;
+
+    boolean parseBigDecimal;
+
+    public NumberFormatConfig() {
+        this.format = null;
+        this.parseBigDecimal = true;
     }
 
-    @Override
-    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
-        String bound = context.getParameterBinder().bind(value, context);
-        appender.append(bound);
+    public NumberFormatConfig(String format) {
+        this.format = format;
+        this.parseBigDecimal = true;
     }
 
+    public NumberFormatConfig(String format, boolean parseBigDecimal) {
+        this.format = format;
+        this.parseBigDecimal = parseBigDecimal;
+    }
+
+    public NumberFormat createNumberFormat() {
+        DecimalFormat df;
+        if (isEmpty(format)) {
+            df = new DecimalFormat();
+        }
+        else {
+            df = new DecimalFormat(format);
+        }
+        if (parseBigDecimal) {
+            df.setParseBigDecimal(parseBigDecimal);
+        }
+        return df;
+    }
 }

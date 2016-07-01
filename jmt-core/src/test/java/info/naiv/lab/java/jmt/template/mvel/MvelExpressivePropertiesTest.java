@@ -55,6 +55,9 @@ public class MvelExpressivePropertiesTest {
 
     MvelExpressiveProperties testTarget;
 
+    /**
+     *
+     */
     public MvelExpressivePropertiesTest() {
     }
 

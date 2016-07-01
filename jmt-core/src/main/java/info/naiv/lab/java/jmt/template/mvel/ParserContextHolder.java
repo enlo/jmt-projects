@@ -21,35 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt.template.mvel;
 
-import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import java.io.Serializable;
-import org.mvel2.MVEL;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import info.naiv.lab.java.jmt.ThreadLocalStack;
+import org.mvel2.ParserContext;
 
 /**
  *
  * @author enlo
  */
-public class BindNode extends SingleCompiledExpressionNode {
+public class ParserContextHolder {
 
-    private static final long serialVersionUID = 1L;
+    private static final ThreadLocalStack<ParserContext> stack = new ThreadLocalStack<>();
 
-    @Override
-    public String name() {
-        return "bind";
+    /**
+     * ParserContext 取得.
+     *
+     * @return
+     */
+    public static ParserContext get() {
+        if (stack.isEmpty()) {
+            return null;
+        }
+        return stack.getTop();
     }
 
-    @Override
-    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
-        String bound = context.getParameterBinder().bind(value, context);
-        appender.append(bound);
+    /**
+     * ParserContext を戻す
+     */
+    public static void pop() {
+        stack.pop();
     }
 
+    /**
+     * ParserContext を保存.
+     *
+     * @param ctx
+     */
+    public static void push(ParserContext ctx) {
+        stack.push(ctx);
+    }
+
+    private ParserContextHolder() {
+    }
 }

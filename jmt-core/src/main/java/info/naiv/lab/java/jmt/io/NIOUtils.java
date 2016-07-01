@@ -315,6 +315,14 @@ public class NIOUtils {
         }
     }
 
+    /**
+     * InputStream からデータを読み込んで CharBuffer に格納する.
+     *
+     * @param is
+     * @param charset
+     * @return
+     * @throws IOException
+     */
     public static CharBuffer toCharBuffer(InputStream is, Charset charset) throws IOException {
         if (is instanceof FileInputStream) {
             FileChannel fch = ((FileInputStream) is).getChannel();

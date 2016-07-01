@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.template;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.io.Serializable;
 import java.util.Map;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -77,11 +78,13 @@ public interface Template<TResult> extends Serializable {
      *
      * @return テンプレートのもととなる文字列または、テンプレートの文字列表現
      */
+    @Nonnull
     String getTemplateSource();
 
     /**
      *
      * @return テンプレートオブジェクト.
      */
+    @Nonnull
     Object getTemplateObject();
 }

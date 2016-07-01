@@ -40,90 +40,10 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Stream が使用できない Java7 で配列を扱うためのユーティリティ.
  *
  * @author enlo
  */
 public class ClassicArrayUtils {
-
-    /**
-     * 条件を満たす要素のインデックスを取得する.
-     *
-     * @param <T> 値の型
-     * @param array 配列
-     * @param predicate 条件
-     * @return 条件に一致する要素のインデックス. 存在しない場合、-1
-     */
-    public static <T> int arrayIndexOf(T[] array, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
-        if (array == null) {
-            return -1;
-        }
-        for (int i = 0; i < array.length; i++) {
-            if (predicate.test(array[i])) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * 一致する要素のインデックスを取得する.
-     *
-     * @param <T> 値の型
-     * @param array 配列
-     * @param search 要素
-     * @return 一致する要素のインデックス. 存在しない場合、-1
-     */
-    public static <T> int arrayIndexOf(T[] array, T search) {
-        return arrayIndexOf(array, StandardFunctions.equal(search));
-    }
-
-    /**
-     * 引数 array が配列だった場合、Object[] を戻す. <br>
-     * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
-     * 引数が配列でない場合、null を戻す.
-     *
-     * @param array 引数
-     * @return array が配列ならObject[]、そうでなければ null.
-     */
-    @CheckForNull
-    public static Object[] asObjectArray(Object array) {
-        Object[] result = null;
-        if (array instanceof Object[]) {
-            return (Object[]) array;
-        }
-        else if (array != null) {
-            Class<?> clazz = array.getClass();
-            if (clazz.isArray()) {
-                int length = Array.getLength(array);
-                result = new Object[length];
-                for (int i = 0; i < length; i++) {
-                    result[i] = Array.get(array, i);
-                }
-            }
-        }
-        return result;
-    }
-
-    /**
-     * オブジェクトが指定された型の配列かどうかをチェックする.
-     *
-     * @param <T> 型パラメータT
-     * @param array 配列オブジェクト
-     * @param clazz 型情報.
-     * @return array が T[] なら true.
-     */
-    public static <T> boolean isArrayOf(Object array, Class<T> clazz) {
-        if (array != null) {
-            Class<?> aclz = array.getClass();
-            if (aclz.isArray()) {
-                Class ofArray = aclz.getComponentType();
-                return ofArray.equals(clazz);
-            }
-        }
-        return false;
-    }
 
     /**
      * 配列を {@link Iterable} に変換する.
@@ -320,6 +240,39 @@ public class ClassicArrayUtils {
     }
 
     /**
+     * 条件を満たす要素のインデックスを取得する.
+     *
+     * @param <T> 値の型
+     * @param array 配列
+     * @param predicate 条件
+     * @return 条件に一致する要素のインデックス. 存在しない場合、-1
+     */
+    public static <T> int arrayIndexOf(T[] array, Predicate1<? super T> predicate) {
+        nonNull(predicate, "predicate");
+        if (array == null) {
+            return -1;
+        }
+        for (int i = 0; i < array.length; i++) {
+            if (predicate.test(array[i])) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 一致する要素のインデックスを取得する.
+     *
+     * @param <T> 値の型
+     * @param array 配列
+     * @param search 要素
+     * @return 一致する要素のインデックス. 存在しない場合、-1
+     */
+    public static <T> int arrayIndexOf(T[] array, T search) {
+        return arrayIndexOf(array, StandardFunctions.equal(search));
+    }
+
+    /**
      * 配列を並び替える.
      *
      * @param <T>
@@ -345,6 +298,33 @@ public class ClassicArrayUtils {
     }
 
     /**
+     * 引数 array が配列だった場合、Object[] を戻す. <br>
+     * 引数が基本型の配列だった場合、Object[] にコピーする.<br>
+     * 引数が配列でない場合、null を戻す.
+     *
+     * @param array 引数
+     * @return array が配列ならObject[]、そうでなければ null.
+     */
+    @CheckForNull
+    public static Object[] asObjectArray(Object array) {
+        Object[] result = null;
+        if (array instanceof Object[]) {
+            return (Object[]) array;
+        }
+        else if (array != null) {
+            Class<?> clazz = array.getClass();
+            if (clazz.isArray()) {
+                int length = Array.getLength(array);
+                result = new Object[length];
+                for (int i = 0; i < length; i++) {
+                    result[i] = Array.get(array, i);
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * 配列を作成する.
      *
      * @param <T>
@@ -363,23 +343,22 @@ public class ClassicArrayUtils {
     }
 
     /**
-     * 配列用 Iterable.
+     * オブジェクトが指定された型の配列かどうかをチェックする.
      *
-     * @param <T>
+     * @param <T> 型パラメータT
+     * @param array 配列オブジェクト
+     * @param clazz 型情報.
+     * @return array が T[] なら true.
      */
-    static final class ArrayIterable<T> implements Iterable<T> {
-
-        final T[] array;
-
-        ArrayIterable(T[] array) {
-            this.array = array;
+    public static <T> boolean isArrayOf(Object array, Class<T> clazz) {
+        if (array != null) {
+            Class<?> aclz = array.getClass();
+            if (aclz.isArray()) {
+                Class ofArray = aclz.getComponentType();
+                return ofArray.equals(clazz);
+            }
         }
-
-        @Override
-        public Iterator<T> iterator() {
-            return new ArrayIterator<>(array);
-        }
-
+        return false;
     }
 
     /**
@@ -413,6 +392,29 @@ public class ClassicArrayUtils {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
+    }
+
+    /**
+     * 配列用 Iterable.
+     *
+     * @param <T>
+     */
+    static final class ArrayIterable<T> implements Iterable<T> {
+
+        final T[] array;
+
+        ArrayIterable(T[] array) {
+            this.array = array;
+        }
+
+        @Override
+        public Iterator<T> iterator() {
+            return new ArrayIterator<>(array);
+        }
+
+    }
+
+    private ClassicArrayUtils() {
     }
 
 }

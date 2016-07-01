@@ -33,9 +33,9 @@ import static org.junit.Assert.*;
  *
  * @author enlo
  */
-public class TQueryMvelCustomNodesProviderTest {
+public class TQueryCustomNodesProviderTest {
 
-    public TQueryMvelCustomNodesProviderTest() {
+    public TQueryCustomNodesProviderTest() {
     }
 
     /**
@@ -43,7 +43,7 @@ public class TQueryMvelCustomNodesProviderTest {
      */
     @Test
     public void testGetCustomNodes() {
-        MvelCustomNodesProvider provider = new TQueryMvelCustomNodesProvider();
+        MvelCustomNodesProvider provider = new TQueryCustomNodesProvider();
         assertThat(provider.getCustomNodes(), is((Map) CustomNodes.NODES));
     }
 

@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.collection;
 
 import info.naiv.lab.java.jmt.monad.Iteratee;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -43,5 +44,6 @@ public interface Grouping<TKey, TValue> extends Iterable<TValue> {
      *
      * @return
      */
+    @Nonnull
     Iteratee<TValue> getValues();
 }

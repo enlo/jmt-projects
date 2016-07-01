@@ -24,54 +24,17 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.template.Template;
-import info.naiv.lab.java.jmt.template.TemplateBuilder;
-import java.util.Map;
-import lombok.Getter;
-import lombok.Setter;
-import org.mvel2.templates.TemplateCompiler;
-import org.mvel2.templates.res.Node;
+import org.mvel2.templates.CompiledTemplate;
 
 /**
  *
  * @author enlo
  */
-public class StringMvelTemplateBuilder implements TemplateBuilder<String> {
-
-    @Getter
-    @Setter
-    MvelCustomNodesProvider customNodesProvider;
+public class StringMvelTemplateBuilder extends AbstractMvelTemplateBuilder<String> {
 
     @Override
-    public Template<String> build(String name, String template) {
-        if (customNodesProvider != null) {
-            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
-        }
-        else {
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
-        }
-    }
-
-    @Override
-    public Template<String> build(String name, CharSequence template) {
-        if (customNodesProvider != null) {
-            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
-        }
-        else {
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
-        }
-    }
-
-    @Override
-    public Template<String> build(String name, char[] template) {
-        if (customNodesProvider != null) {
-            Map<String, Class<? extends Node>> customNodes = getCustomNodesProvider().getCustomNodes();
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template, customNodes));
-        }
-        else {
-            return new StringMvelTemplate(name, TemplateCompiler.compileTemplate(template));
-        }
+    protected Template<String> build(String name, CompiledTemplate template) {
+        return new StringMvelTemplate(name, template);
     }
 
 }

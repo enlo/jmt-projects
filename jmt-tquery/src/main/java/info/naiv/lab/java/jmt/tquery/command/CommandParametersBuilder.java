@@ -23,9 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
-import java.util.List;
-import lombok.NonNull;
-
 /**
  *
  * @author enlo

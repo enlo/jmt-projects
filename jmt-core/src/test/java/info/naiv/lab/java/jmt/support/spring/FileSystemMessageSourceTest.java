@@ -45,6 +45,9 @@ public class FileSystemMessageSourceTest {
     private FileSystemMessageSource messageSource;
     private MessageSource parentMessageSource;
 
+    /**
+     *
+     */
     public FileSystemMessageSourceTest() {
     }
 
@@ -114,13 +117,16 @@ public class FileSystemMessageSourceTest {
         assertThat(hello, is("Hello"));
     }
 
+    /**
+     *
+     */
     @Before
     public void setup() {
         ResourceBundleMessageSource parent = new ResourceBundleMessageSource();
         parent.setBasename("message");
         parent.setFallbackToSystemLocale(false);
         parentMessageSource = parent;
-        
+
         messageSource = new FileSystemMessageSource();
         messageSource.setBasename("message");
         messageSource.setParentMessageSource(parent);

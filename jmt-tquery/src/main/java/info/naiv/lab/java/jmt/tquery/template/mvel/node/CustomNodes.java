@@ -42,7 +42,7 @@ public class CustomNodes {
         NODES.put("bind", BindNode.class);
         NODES.put("bindMany", BindManyNode.class);
         NODES.put("orderBy", OrderByNode.class);
-        NODES.put("includeTemplate", IncludeTemplateNode.class);
+        NODES.put("includeTemplate", ExtractTemplateNode.class);
     }
 
     private CustomNodes() {

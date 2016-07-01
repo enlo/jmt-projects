@@ -41,12 +41,11 @@ import java.util.Comparator;
  */
 public class ComparableComparator<T extends Comparable<T>> implements Comparator<T>, Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     /**
      *
      */
     public static final ComparableComparator INSTANCE = new ComparableComparator();
+    private static final long serialVersionUID = 1L;
 
     @Override
     public int compare(T o1, T o2) {

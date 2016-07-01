@@ -21,35 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt.template.mvel;
 
-import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import java.io.Serializable;
-import org.mvel2.MVEL;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import org.mvel2.ParserContext;
+import org.mvel2.templates.CompiledTemplate;
+import org.mvel2.templates.TemplateCompiler;
+import org.mvel2.templates.res.Node;
 
 /**
  *
  * @author enlo
  */
-public class BindNode extends SingleCompiledExpressionNode {
-
-    private static final long serialVersionUID = 1L;
-
-    @Override
-    public String name() {
-        return "bind";
+public class MvelTemplateUtils {
+    
+    @Nonnull
+    public static CompiledTemplate compile(char[] template, ParserContext context, MvelCustomNodesProvider customNodesProvider) {
+        ParserContextHolder.push(context);
+        try {
+            if (customNodesProvider != null) {
+                Map<String, Class<? extends Node>> customNodes = customNodesProvider.getCustomNodes();
+                return TemplateCompiler.compileTemplate(template, customNodes, context);
+            }
+            else {
+                return TemplateCompiler.compileTemplate(template, context);
+            }
+        }
+        finally {
+            ParserContextHolder.pop();
+        }        
     }
-
-    @Override
-    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
-        String bound = context.getParameterBinder().bind(value, context);
-        appender.append(bound);
-    }
-
 }

@@ -29,6 +29,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.text.Format;
@@ -629,7 +630,7 @@ public abstract class Misc {
      * @param values
      * @return
      */
-     @Nonnull
+    @Nonnull
     public static <T> ArrayList<T> newArrayList(T... values) {
         return new ArrayList<>(Arrays.asList(values));
     }
@@ -836,6 +837,79 @@ public abstract class Misc {
     }
 
     /**
+     * 文字配列を文字列化する.
+     *
+     * @param chars
+     * @return
+     */
+    @Nonnull
+    public static String stringize(char[] chars) {
+        return chars != null ? new String(chars) : "";
+    }
+
+    /**
+     * オブジェクトを文字列化する.
+     *
+     * @param obj
+     * @return
+     */
+    @Nonnull
+    public static String stringize(Object obj) {
+        return obj != null ? obj.toString() : "";
+    }
+
+    /**
+     * バイト列をエンコード指定して文字列化する.
+     *
+     * @param data
+     * @param cs
+     * @return
+     */
+    @Nonnull
+    public static String stringize(byte[] data, Charset cs) {
+        if (data == null) {
+            return "";
+        }
+        return stringize(ByteBuffer.wrap(data), cs);
+    }
+
+    /**
+     * バッファをエンコード指定して文字列化する.
+     *
+     * @param data
+     * @param cs
+     * @return
+     */
+    @Nonnull
+    public static String stringize(ByteBuffer data, Charset cs) {
+        if (data == null) {
+            return "";
+        }
+        if (cs == null) {
+            cs = Charset.defaultCharset();
+        }
+        return cs.decode(data).toString();
+    }
+
+    /**
+     * オブジェクトをフォーマット指定して文字列化する.
+     *
+     * @param obj
+     * @param format
+     * @return
+     */
+    @Nonnull
+    public static String stringize(Object obj, Format format) {
+        if (obj == null) {
+            return "";
+        }
+        if (format == null) {
+            return obj.toString();
+        }
+        return format.format(obj);
+    }
+
+    /**
      * Number を BigDecimal に変換
      *
      * @param source ソース
@@ -981,6 +1055,28 @@ public abstract class Misc {
     }
 
     /**
+     * CharSequence を char配列に変換.
+     *
+     * @param chars
+     * @return
+     */
+    @Nonnull
+    public static char[] toCharArray(CharSequence chars) {
+        if (chars == null) {
+            return new char[]{};
+        }
+        if (chars instanceof String) {
+            return ((String) chars).toCharArray();
+        }
+        int sz = chars.length();
+        char[] chz = new char[sz];
+        for (int i = 0; i < sz; i++) {
+            chz[i] = chars.charAt(i);
+        }
+        return chz;
+    }
+
+    /**
      * 文字列を日付に変換. {@link ClassicDateUtils#parseCalendar(String)} を呼び出す.
      *
      * @param dateText 日付テキスト
@@ -1094,7 +1190,7 @@ public abstract class Misc {
      * @param iter
      * @return
      */
-       @Nonnull
+    @Nonnull
     @SuppressWarnings("unchecked")
     public static <T> List<T> toList(Iterable<T> iter) {
         if (iter instanceof Collection) {
@@ -1254,17 +1350,12 @@ public abstract class Misc {
         if (value == null) {
             return defaultValue;
         }
-        if (format != null) {
-            try {
-                return format.format(value);
-            }
-            catch (Exception e) {
-                logger.warn("format failed. value:{} format:{} throws:{}", value, format, e);
-                return defaultValue;
-            }
+        try {
+            return stringize(value, format);
         }
-        else {
-            return value.toString();
+        catch (Exception e) {
+            logger.warn("format failed. value:{} format:{} throws:{}", value, format, e);
+            return defaultValue;
         }
     }
 

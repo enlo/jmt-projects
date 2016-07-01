@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *

@@ -24,8 +24,11 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
+import info.naiv.lab.java.jmt.template.mvel.node.CustomNode;
 import info.naiv.lab.java.jmt.tquery.command.OrderBy;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
+import java.io.Serializable;
+import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.util.TemplateOutputStream;
@@ -36,12 +39,19 @@ import org.mvel2.templates.util.TemplateOutputStream;
  */
 public class OrderByNode extends CustomNode {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -915298491003931475L;
+
+    private Serializable[] ces;
 
     /**
      *
      */
     protected static final String ORDER_BY_PREFIX = " order by ";
+
+    @Override
+    public String name() {
+        return "orderBy";
+    }
 
     /**
      *
@@ -51,8 +61,7 @@ public class OrderByNode extends CustomNode {
      * @param ctx
      * @param factory
      */
-    @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, QueryContext ctx, VariableResolverFactory factory) {
+    public void processOrder(Object value, TemplateRuntime runtime, TemplateOutputStream appender, QueryContext ctx, VariableResolverFactory factory) {
         if (value instanceof Iterable) {
             Iterable<?> ordItems = (Iterable<?>) value;
             new Joiner(appender).join(ordItems);
@@ -83,6 +92,21 @@ public class OrderByNode extends CustomNode {
      */
     protected void appendOrder(TemplateOutputStream appender, OrderBy ord) {
         appender.append(ord.getOrderItem()).append(" ").append(ord.getOrder().name());
+    }
+
+    @Override
+    protected void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+        Object[] values = MVEL.executeAllExpression(ces, ctx, factory);
+        QueryContext context = (QueryContext) ctx;
+        for (Object value : values) {
+            processOrder(value, runtime, appender, context, factory);
+        }
+    }
+
+    @Override
+    protected void onSetContents() {
+        super.onSetContents();
+        ces = compileMultipleContents(',');
     }
 
     private static class Joiner extends TemplateOutputStreamJoiner<Object> {

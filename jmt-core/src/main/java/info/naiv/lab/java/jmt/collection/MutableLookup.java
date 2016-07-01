@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -42,7 +43,7 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterab
      *
      * @param map
      */
-    public MutableLookup(Map<TKey, TValue> map) {
+    public MutableLookup(@NonNull Map<TKey, TValue> map) {
         this.map = map;
     }
 
@@ -80,6 +81,11 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterab
         return this;
     }
 
+    /**
+     * 要素数を取得する.
+     *
+     * @return
+     */
     public int size() {
         return map.size();
     }

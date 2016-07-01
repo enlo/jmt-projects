@@ -14,6 +14,7 @@ import java.util.Collection;
 public class DefaultParameterBinder implements ParameterBinder {
 
     private static final StringJoiner joiner = StringJoiner.valueOf(", ");
+    private static final long serialVersionUID = 1L;
 
     public int addParameters(Iterable<?> items, CommandParameters params) {
         int count = 0;

@@ -32,6 +32,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -48,6 +49,7 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
      * @param entries
      * @return
      */
+    @Nonnull
     public static <K extends Comparable, V> MultiValueLookup<K, V> fromEntries(Collection<Entry<K, V>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (Entry<K, V> e : entries) {
@@ -101,6 +103,11 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
         return values.iterator();
     }
 
+    /**
+     * 要素数を取得する.
+     *
+     * @return
+     */
     public int size() {
         return values.size();
     }
@@ -147,6 +154,7 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
          *
          * @return
          */
+        @Nonnull
         public List<Grouping<TKey, TValue>> build() {
             List<Grouping<TKey, TValue>> result = new ArrayList<>(values.size());
             for (Entry<TKey, List<TValue>> kv : values.entrySet()) {
@@ -160,6 +168,7 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
          * @param key
          * @return
          */
+        @Nonnull
         public Grouping<TKey, TValue> get(TKey key) {
             List<TValue> list = values.get(key);
             return new ImmutableGrouping<>(key, list);

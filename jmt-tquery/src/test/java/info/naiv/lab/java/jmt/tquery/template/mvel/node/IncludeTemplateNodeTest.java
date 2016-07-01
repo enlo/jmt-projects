@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
-import static info.naiv.lab.java.jmt.Misc.map;
 import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryTemplate;

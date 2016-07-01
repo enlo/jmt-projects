@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -408,8 +409,7 @@ public class ClassicDateUtils {
      * @return 時刻部分のみを取り出した日付型
      */
     @Nonnull
-    public static Date getTimePart(Date date) {
-        nonNull(date, "date");
+    public static Date getTimePart(@NonNull Date date) {
         return getTimePart(toCalendar(date, null)).getTime();
     }
 
@@ -420,8 +420,7 @@ public class ClassicDateUtils {
      * @return 時刻部分のみを取り出した日付型
      */
     @Nonnull
-    public static Calendar getTimePart(Calendar cal) {
-        nonNull(cal, "cal");
+    public static Calendar getTimePart(@NonNull Calendar cal) {
         Calendar newCal = (Calendar) cal.clone();
         newCal.clear();
         return copyFields(newCal, cal, TIME_PART_FIELDS);

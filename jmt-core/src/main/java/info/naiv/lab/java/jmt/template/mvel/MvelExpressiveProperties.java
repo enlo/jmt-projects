@@ -16,15 +16,25 @@ import org.mvel2.templates.TemplateRuntime;
  */
 public class MvelExpressiveProperties extends Properties {
 
+    private static final long serialVersionUID = -2208239490931819164L;
+
     private final LookupVariableResolverFactory factory;
     private final Map<String, CompiledTemplate> templates = new ConcurrentHashMap<>();
     private final Lookup thisLookup;
 
+    /**
+     * Constructor.
+     */
     public MvelExpressiveProperties() {
         this.thisLookup = new PropertiesLookup(this);
         this.factory = new LookupVariableResolverFactory(thisLookup);
     }
 
+    /**
+     * Constructor.
+     *
+     * @param defaults
+     */
     public MvelExpressiveProperties(Properties defaults) {
         super(defaults);
         this.thisLookup = new PropertiesLookup(this);
@@ -70,10 +80,10 @@ public class MvelExpressiveProperties extends Properties {
     }
 
     /**
-     * プレイスホルダーを実際の値に変換し、戻す.
+     * Placeholder を実際の値に変換し、戻す.
      *
      * @param value 値
-     * @return プレイスホルダー評価後の値
+     * @return Placeholder 評価後の値
      */
     protected String eval(String value) {
         if (isBlank(value)) {
@@ -103,6 +113,8 @@ public class MvelExpressiveProperties extends Properties {
     }
 
     private static class PropertiesLookup implements Lookup<String, String>, Serializable {
+
+        private static final long serialVersionUID = 1L;
 
         private final MvelExpressiveProperties props;
 

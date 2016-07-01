@@ -26,7 +26,6 @@ package info.naiv.lab.java.jmt;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
-
 /**
  * オブジェクトホルダー.
  *

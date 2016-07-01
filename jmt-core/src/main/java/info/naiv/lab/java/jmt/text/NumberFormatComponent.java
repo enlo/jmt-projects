@@ -65,6 +65,14 @@ public class NumberFormatComponent
             }
             map.put(tag, f);
         }
+        else if (id instanceof NumberFormatConfig) {
+            NumberFormatConfig conf = (NumberFormatConfig) id;
+            NumberFormat f = conf.createNumberFormat();
+            map.put(tag, f);
+        }
+        else if (id instanceof String) {
+            map.put(tag, new DecimalFormat((String) id));
+        }
         else {
             map.put(tag, NumberFormat.getInstance());
         }

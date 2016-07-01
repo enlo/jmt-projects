@@ -21,35 +21,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import java.io.Serializable;
-import org.mvel2.MVEL;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 /**
  *
  * @author enlo
+ * @param <T>
  */
-public class BindNode extends SingleCompiledExpressionNode {
+public class ThreadLocalStack<T> {
 
-    private static final long serialVersionUID = 1L;
+    private final ThreadLocal<Deque<T>> tls = new ThreadLocal<Deque<T>>() {
 
-    @Override
-    public String name() {
-        return "bind";
+        @Override
+        protected Deque<T> initialValue() {
+            return new ArrayDeque<>();
+        }
+
+    };
+
+    /**
+     * スタックの先頭要素を取得する.
+     *
+     * @return
+     */
+    public T getTop() {
+        return tls.get().peekFirst();
     }
 
-    @Override
-    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
-        String bound = context.getParameterBinder().bind(value, context);
-        appender.append(bound);
+    /**
+     * スタックが空かどうかを判断する.
+     *
+     * @return
+     */
+    public boolean isEmpty() {
+        return tls.get().isEmpty();
+    }
+
+    /**
+     * スタック先頭から要素を取り除く.
+     *
+     * @return
+     */
+    public T pop() {
+        return tls.get().removeFirst();
+    }
+
+    /**
+     * スタック先頭に要素を追加する.
+     *
+     * @param value
+     */
+    public void push(T value) {
+        tls.get().addFirst(value);
     }
 
 }

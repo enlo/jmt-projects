@@ -80,7 +80,7 @@ public abstract class ListBuilder<T> extends CollectionBuilder<T> {
      *
      * @param collection
      */
-    public ListBuilder(Collection<T> collection) {
+    protected ListBuilder(@Nonnull Collection<T> collection) {
         super(collection);
     }
 

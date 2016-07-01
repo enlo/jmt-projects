@@ -35,6 +35,8 @@ import lombok.Data;
 @Data
 public class Command implements Serializable, Cloneable {
 
+    private static final long serialVersionUID = 1L;
+
     String query;
 
     List<CommandParameter> parameters;

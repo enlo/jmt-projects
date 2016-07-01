@@ -121,7 +121,7 @@ public abstract class MapBuilder<K, V> {
      *
      * @param map 初期値.
      */
-    protected MapBuilder(Map<K, V> map) {
+    protected MapBuilder(@Nonnull Map<K, V> map) {
         this.map = map;
     }
 

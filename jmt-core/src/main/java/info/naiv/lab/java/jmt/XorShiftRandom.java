@@ -28,7 +28,6 @@ import static java.lang.System.currentTimeMillis;
 import java.util.Random;
 import javax.annotation.Nonnegative;
 import javax.annotation.concurrent.ThreadSafe;
-import lombok.Synchronized;
 
 /**
  * XorShift Random
@@ -115,7 +114,7 @@ public abstract class XorShiftRandom extends Random {
         }
     }
 
-    @Override    
+    @Override
     public synchronized void setSeed(long seed) {
         super.setSeed(seed);
         if (state == null) {

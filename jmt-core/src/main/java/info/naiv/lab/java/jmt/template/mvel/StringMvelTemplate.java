@@ -30,6 +30,7 @@ import org.mvel2.templates.CompiledTemplate;
  *
  * @author enlo
  */
+@SuppressWarnings("serial")
 public class StringMvelTemplate extends AbstractMvelTemplate<String, Object> {
 
     /**

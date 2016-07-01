@@ -38,6 +38,7 @@ import org.mvel2.templates.TemplateRuntime;
  * @param <TResult>
  * @param <TContext>
  */
+@SuppressWarnings("serial")
 public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTemplate<TResult> {
 
     String name;
@@ -83,7 +84,10 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
 
     @Override
     public <TArg> TResult merge(Lookup<String, TArg> parameters) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        VariableResolverFactory factory = new LookupVariableResolverFactory(parameters);
+        TContext context = createContext(factory, parameters);
+        Object result = TemplateRuntime.execute(template, context, factory);
+        return createResult(result, context);
     }
 
     @Override

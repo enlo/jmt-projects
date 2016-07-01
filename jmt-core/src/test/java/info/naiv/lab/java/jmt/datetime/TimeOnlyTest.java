@@ -29,6 +29,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import org.apache.commons.lang3.time.DateUtils;
+import static org.apache.commons.lang3.time.DateUtils.toCalendar;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -129,7 +130,12 @@ public class TimeOnlyTest {
         Date now = new Date();
         Date actual = new TimeOnly(0);
         actual.setTime(now.getTime());
-        Date expected = getTimePart(now);
+        Calendar cal = toCalendar(now);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        int min = cal.get(Calendar.MINUTE);
+        int sec = cal.get(Calendar.SECOND);
+        int ms = cal.get(Calendar.MILLISECOND);
+        Date expected = new TimeOnly(hour, min, sec, ms);
         assertThat(actual, is(expected));
     }
 

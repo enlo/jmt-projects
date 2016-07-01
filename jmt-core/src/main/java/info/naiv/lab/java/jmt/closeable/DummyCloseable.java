@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.closeable;
 
 import info.naiv.lab.java.jmt.ImmutableHolder;
-import javax.annotation.Nonnull;
 
 /**
  *

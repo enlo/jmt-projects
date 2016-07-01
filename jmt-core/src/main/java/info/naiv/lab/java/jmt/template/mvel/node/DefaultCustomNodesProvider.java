@@ -21,35 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt.template.mvel.node;
 
-import info.naiv.lab.java.jmt.template.mvel.node.SingleCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import java.io.Serializable;
-import org.mvel2.MVEL;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import org.mvel2.templates.res.Node;
 
 /**
  *
  * @author enlo
  */
-public class BindNode extends SingleCompiledExpressionNode {
+public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
 
-    private static final long serialVersionUID = 1L;
+    /**
+     *
+     */
+    private static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
 
-    @Override
-    public String name() {
-        return "bind";
+    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
+    
+    static {
+        NODES.put("format", FormatNode.class);
+        NODES.put("numberFormat", NumberFormatNode.class);
     }
 
     @Override
-    protected void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object value = MVEL.executeExpression(compiledExpression, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
-        String bound = context.getParameterBinder().bind(value, context);
-        appender.append(bound);
+    public Map<String, Class<? extends Node>> getCustomNodes() {
+        return NODES;
     }
 
+    public static Class<? extends Node> registerNode(String name, Class<? extends Node> node) {
+        return NODES.put(name, node);
+    }
+
+    public static boolean unregisterNode(String name, Class<? extends Node> node) {
+        return NODES.remove(name, node);
+    }
 }

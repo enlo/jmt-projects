@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.collection;
 
 import java.util.Arrays;
 import java.util.Collection;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -42,7 +43,7 @@ public abstract class CollectionBuilder<T> {
      *
      * @param collection
      */
-    public CollectionBuilder(Collection<T> collection) {
+    protected CollectionBuilder(@Nonnull Collection<T> collection) {
         this.collection = collection;
     }
 
@@ -52,6 +53,7 @@ public abstract class CollectionBuilder<T> {
      * @param value 値.
      * @return コレクションビルダー
      */
+    @Nonnull
     public CollectionBuilder<T> add(T value) {
         collection.add(value);
         return this;
@@ -63,6 +65,7 @@ public abstract class CollectionBuilder<T> {
      * @param values
      * @return
      */
+    @Nonnull
     public CollectionBuilder<T> addAll(T... values) {
         collection.addAll(Arrays.asList(values));
         return this;
@@ -72,5 +75,6 @@ public abstract class CollectionBuilder<T> {
      *
      * @return
      */
+    @Nonnull
     public abstract Collection<T> build();
 }

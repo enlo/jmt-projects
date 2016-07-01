@@ -21,21 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
-
-import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
-import java.util.Map;
-import org.mvel2.templates.res.Node;
+package info.naiv.lab.java.jmt.template;
 
 /**
  *
  * @author enlo
+ * @param <TResult>
  */
-public class TQueryMvelCustomNodesProvider implements MvelCustomNodesProvider {
+public interface TemplateLoaderListener<TResult> {
 
-    @Override
-    public Map<String, Class<? extends Node>> getCustomNodes() {
-        return CustomNodes.NODES;
-    }
-    
+    /**
+     * テンプレート読み込み時の処理.
+     *
+     * @param template
+     */
+    void onLoadTemplate(Template<TResult> template);
 }

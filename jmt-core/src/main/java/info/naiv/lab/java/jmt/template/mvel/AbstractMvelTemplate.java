@@ -27,9 +27,12 @@ import info.naiv.lab.java.jmt.collection.BeanPropertyLookup;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.mvel2.templates.CompiledTemplate;
+import org.mvel2.templates.TemplateRegistry;
 import org.mvel2.templates.TemplateRuntime;
 
 /**
@@ -39,10 +42,13 @@ import org.mvel2.templates.TemplateRuntime;
  * @param <TContext>
  */
 @SuppressWarnings("serial")
+@Getter
+@Setter
 public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTemplate<TResult> {
 
-    String name;
-    CompiledTemplate template;
+    private final String name;
+    private final CompiledTemplate template;
+    private TemplateRegistry templateRegistry;
 
     /**
      *
@@ -52,11 +58,6 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
     public AbstractMvelTemplate(String name, CompiledTemplate template) {
         this.name = name;
         this.template = template;
-    }
-
-    @Override
-    public String getName() {
-        return name;
     }
 
     @Override
@@ -74,11 +75,22 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
         return merge(new HashMap<String, Object>());
     }
 
+    /**
+     * テンプレートから実際のオブジェクトを取得
+     *
+     * @param context
+     * @param factory
+     * @return
+     */
+    protected Object execute(TContext context, VariableResolverFactory factory) {
+        return TemplateRuntime.execute(template, context, factory, templateRegistry);
+    }
+
     @Override
     public <TArg> TResult merge(Map<String, TArg> parameters) {
         VariableResolverFactory factory = new MapVariableResolverFactory(parameters);
         TContext context = createContext(factory, parameters);
-        Object result = TemplateRuntime.execute(template, context, factory);
+        Object result = execute(context, factory);
         return createResult(result, context);
     }
 
@@ -86,7 +98,7 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
     public <TArg> TResult merge(Lookup<String, TArg> parameters) {
         VariableResolverFactory factory = new LookupVariableResolverFactory(parameters);
         TContext context = createContext(factory, parameters);
-        Object result = TemplateRuntime.execute(template, context, factory);
+        Object result = execute(context, factory);
         return createResult(result, context);
     }
 
@@ -94,7 +106,7 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
     public TResult mergeBean(Object bean) {
         VariableResolverFactory factory = createFactory(bean);
         TContext context = createContext(factory, bean);
-        Object result = TemplateRuntime.execute(template, context, factory);
+        Object result = execute(context, factory);
         return createResult(result, context);
     }
 

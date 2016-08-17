@@ -88,6 +88,7 @@ public class SqlTemplateInjector implements BeanPostProcessor, BeanFactoryAware 
      */
     protected SqlTemplateLoader getLoaderFromBeanFactory(String loaderName) throws BeansException {
         if (beanFactory == null) {
+            logger.debug("no bean factory.");
             return null;
         }
         try {

@@ -68,7 +68,8 @@ public abstract class AbstractResourceTemplateLoader<TResult> extends AbstractTe
         SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, getSuffix(), getExtension(), true);
         Resource res = getResourceRepository().getResource(category, filter);
         if (res != null) {
-            return createTemplateFromResource(res.getFilename(), res, charset);
+            String fullname = buildName(category, res.getFilename());
+            return createTemplateFromResource(fullname, res, charset);
         }
         else {
             return null;
@@ -88,7 +89,8 @@ public abstract class AbstractResourceTemplateLoader<TResult> extends AbstractTe
         Map<String, Resource> list = getResourceRepository().getResources(category, filter);
         List<Template<TResult>> result = new ArrayList<>(list.size());
         for (Resource res : list.values()) {
-            Template<TResult> st = createTemplateFromResource(res.getFilename(), res, charset);
+            String fullname = buildName(category, res.getFilename());
+            Template<TResult> st = createTemplateFromResource(fullname, res, charset);
             if (st != null) {
                 result.add(st);
             }

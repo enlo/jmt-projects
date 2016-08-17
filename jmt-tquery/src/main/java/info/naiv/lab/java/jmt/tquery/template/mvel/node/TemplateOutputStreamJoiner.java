@@ -40,6 +40,7 @@ public abstract class TemplateOutputStreamJoiner<T> extends Joiner<T, TemplateOu
             return appendFirst(obj, value);
         }
     };
+    
     private final Adder<T, TemplateOutputStream> MORE_ADDR = new Adder<T, TemplateOutputStream>() {
 
         @Override

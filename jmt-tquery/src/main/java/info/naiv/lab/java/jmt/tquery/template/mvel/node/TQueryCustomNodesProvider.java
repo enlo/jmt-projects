@@ -24,8 +24,6 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.template.mvel.node.DefaultCustomNodesProvider;
-import java.util.Map;
-import org.mvel2.templates.res.Node;
 
 /**
  *
@@ -33,10 +31,8 @@ import org.mvel2.templates.res.Node;
  */
 public class TQueryCustomNodesProvider extends DefaultCustomNodesProvider {
 
-    @Override
-    public Map<String, Class<? extends Node>> getCustomNodes() {        
-        return CustomNodes.NODES;
+    public TQueryCustomNodesProvider() {
+        super(CustomNodes.NODES);
     }
 
-   
 }

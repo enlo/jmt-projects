@@ -24,9 +24,12 @@
 package info.naiv.lab.java.jmt.template.mvel.node;
 
 import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.Getter;
 import org.mvel2.templates.res.Node;
 
 /**
@@ -38,25 +41,46 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
     /**
      *
      */
-    private static final ConcurrentMap<String, Class<? extends Node>> NODES = new ConcurrentHashMap<>();
+    public static final Map<String, Class<? extends Node>> NODES;
 
     private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
-    
+
+    @Getter
+    private static final DefaultCustomNodesProvider globalInstance;
+
     static {
-        NODES.put("format", FormatNode.class);
-        NODES.put("numberFormat", NumberFormatNode.class);
+
+        Map<String, Class<? extends Node>> nodes = new HashMap<>();
+        nodes.put("format", FormatNode.class);
+        nodes.put("numberFormat", NumberFormatNode.class);
+
+        NODES = Collections.unmodifiableMap(nodes);
+        globalInstance = new DefaultCustomNodesProvider();
+    }
+
+    public DefaultCustomNodesProvider() {
+        nodes.putAll(NODES);
+    }
+
+    public DefaultCustomNodesProvider(Map<String, Class<? extends Node>> nodes) {
+        this();
+        this.nodes.putAll(nodes);
+    }
+
+    protected final void addNodes(Map<String, Class<? extends Node>> nodes) {
+        this.nodes.putAll(nodes);
     }
 
     @Override
     public Map<String, Class<? extends Node>> getCustomNodes() {
-        return NODES;
+        return nodes;
     }
 
-    public static Class<? extends Node> registerNode(String name, Class<? extends Node> node) {
-        return NODES.put(name, node);
+    public Class<? extends Node> registerNode(String name, Class<? extends Node> node) {
+        return nodes.put(name, node);
     }
 
-    public static boolean unregisterNode(String name, Class<? extends Node> node) {
-        return NODES.remove(name, node);
+    public boolean unregisterNode(String name, Class<? extends Node> node) {
+        return nodes.remove(name, node);
     }
 }

@@ -36,7 +36,7 @@ import javax.annotation.Nonnull;
 public interface Template<TResult> extends Serializable {
 
     /**
-     *
+     * 
      * @return テンプレート名
      */
     String getName();

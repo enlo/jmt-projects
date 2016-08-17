@@ -23,9 +23,12 @@
  */
 package info.naiv.lab.java.jmt.template;
 
+import static info.naiv.lab.java.jmt.Misc.isBlank;
+import info.naiv.lab.java.jmt.StringJoiner;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
@@ -111,6 +114,7 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         needInitialize();
         try {
             result = doLoadCategory(category, charset);
+            sendAll(result);
             return result;
         }
         catch (IOException ex) {
@@ -118,8 +122,9 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         }
         if (result == null && parentTemplateLoader != null) {
             result = parentTemplateLoader.loadCategory(category, charset);
+            sendAll(result);
         }
-        return result;
+        return result != null ? result : Collections.EMPTY_LIST;
     }
 
     @Override
@@ -135,10 +140,26 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         parentTemplateLoader = (TemplateLoader<TResult>) parentLoader;
     }
 
-    private void send(Template<TResult> templ) {
+    /**
+     *
+     * @param templ
+     */
+    protected void send(Template<TResult> templ) {
         if (templ != null) {
             for (TemplateLoaderListener<TResult> listener : listnenrs) {
                 listener.onLoadTemplate(templ);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param templ
+     */
+    protected void sendAll(Iterable<Template<TResult>> templ) {
+        if (templ != null) {
+            for (Template<TResult> t : templ) {
+                send(t);
             }
         }
     }
@@ -169,7 +190,6 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
      * @return
      * @throws IOException
      */
-    @Nonnull
     protected abstract Iterable<Template<TResult>> doLoadCategory(String category, Charset charset) throws IOException;
 
     /**
@@ -185,6 +205,15 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
     protected void needInitialize() {
         if (initialized.compareAndSet(false, true)) {
             initialize();
+        }
+    }
+
+    protected String buildName(String category, String name) {
+        if (isBlank(category)) {
+            return name;
+        }
+        else {
+            return StringJoiner.DOTTED.joinItems(category, name).toString();
         }
     }
 

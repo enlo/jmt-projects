@@ -21,26 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template.mvel;
+package info.naiv.lab.java.jmt.template.di;
 
-import info.naiv.lab.java.jmt.template.Template;
-import org.mvel2.templates.CompiledTemplate;
-import org.mvel2.templates.TemplateRegistry;
+import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public interface MvelTemplate<TResult> extends Template<TResult> {
-
-    @Override
-    CompiledTemplate getTemplateObject();
+public class CdiDependentTemplateInjectorTest {
+    
+    public CdiDependentTemplateInjectorTest() {
+    }
 
     /**
-     * TemplateResistry の登録.
-     * 
-     * @param templateRegistry 
+     * Test of getService method, of class CdiDependentTemplateInjector.
      */
-    void setTemplateRegistry(TemplateRegistry templateRegistry);
+    @Test
+    public void testGetService() {
+    }
+    
 }

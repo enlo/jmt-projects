@@ -24,7 +24,10 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.template.Template;
+import info.naiv.lab.java.jmt.template.TemplateLoaderListener;
+import lombok.NonNull;
 import org.mvel2.templates.CompiledTemplate;
+import org.mvel2.templates.SimpleTemplateRegistry;
 import org.mvel2.templates.TemplateRegistry;
 
 /**
@@ -32,15 +35,25 @@ import org.mvel2.templates.TemplateRegistry;
  * @author enlo
  * @param <TResult>
  */
-public interface MvelTemplate<TResult> extends Template<TResult> {
+public class TemplateRegisterListner<TResult> implements TemplateLoaderListener<TResult> {
+
+    @NonNull
+    TemplateRegistry templateRegistry;
+
+    public TemplateRegisterListner() {
+        this(new SimpleTemplateRegistry());
+    }
+
+    public TemplateRegisterListner(TemplateRegistry templateRegistry) {
+        this.templateRegistry = templateRegistry;
+    }
 
     @Override
-    CompiledTemplate getTemplateObject();
+    public void onLoadTemplate(Template<TResult> template) {
+        Object templ = template.getTemplateObject();
+        if (templ instanceof CompiledTemplate) {
+            templateRegistry.addNamedTemplate(template.getName(), (CompiledTemplate) templ);
+        }
+    }
 
-    /**
-     * TemplateResistry の登録.
-     * 
-     * @param templateRegistry 
-     */
-    void setTemplateRegistry(TemplateRegistry templateRegistry);
 }

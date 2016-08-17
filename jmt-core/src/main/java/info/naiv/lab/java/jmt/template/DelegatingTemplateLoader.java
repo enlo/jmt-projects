@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.core.io.Resource;
 
@@ -37,6 +39,8 @@ import org.springframework.core.io.Resource;
  * @author enlo
  * @param <TResult>
  */
+@Getter
+@Setter
 public class DelegatingTemplateLoader<TResult> extends AbstractResourceTemplateLoader<TResult> implements InitializingBean {
 
     private ResourceRepository resourceRepository;
@@ -63,11 +67,6 @@ public class DelegatingTemplateLoader<TResult> extends AbstractResourceTemplateL
     @Override
     protected Template<TResult> doFromString(String name, String template) {
         return templateBuilder.build(name, template);
-    }
-
-    @Override
-    protected ResourceRepository getResourceRepository() {
-        return resourceRepository;
     }
 
 }

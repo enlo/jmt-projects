@@ -35,6 +35,8 @@ import java.util.Map;
  */
 public class CommandParameters extends ArrayList<CommandParameter> implements Cloneable, Serializable {
 
+    private static final long serialVersionUID = -8025210291274076721L;
+
     public CommandParameters() {
     }
 

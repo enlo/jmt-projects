@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.tquery.command;
 
 import info.naiv.lab.java.jmt.collection.KeyedValue;
 import java.io.Serializable;
-import java.util.Map;
 import lombok.Value;
 
 /**
@@ -34,6 +33,8 @@ import lombok.Value;
  */
 @Value
 public class CommandParameter implements Serializable, Cloneable, KeyedValue<String> {
+
+    private static final long serialVersionUID = -6521832621632523550L;
 
     private String key;
 

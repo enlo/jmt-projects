@@ -712,6 +712,17 @@ public abstract class Misc {
     }
 
     /**
+     * null を戻す. null をキャストする際の警告対策.
+     *
+     * @param <T>
+     * @param clazz
+     * @return
+     */
+    public static <T> T nullOf(@NonNull Class<T> clazz) {
+        return null;
+    }
+
+    /**
      * オブジェクトを double に変換する.
      *
      * @param value 数値に変換したいオブジェクト.
@@ -811,7 +822,7 @@ public abstract class Misc {
             return OptionalImpl.<Class<?>>ofNullable(Class.forName(className));
         }
         catch (ClassNotFoundException ex) {
-            logger.debug("class load failed. ", ex);
+            logger.debug("class load failed. className:{} throws:{}", className, ex.getMessage());
             return OptionalImpl.<Class<?>>empty();
         }
     }
@@ -831,7 +842,7 @@ public abstract class Misc {
             return OptionalImpl.<Class<?>>ofNullable(clz);
         }
         catch (ClassNotFoundException ex) {
-            logger.debug("class load failed. ", ex);
+            logger.debug("class load failed. className:{} throws:{}", className, ex.getMessage());
             return OptionalImpl.<Class<?>>empty();
         }
     }
@@ -947,7 +958,7 @@ public abstract class Misc {
                 return new BigDecimal(source);
             }
             catch (NumberFormatException e) {
-                logger.warn("to bigdecimal error. source:{}, throws:{}", source, e);
+                logger.warn("to bigdecimal error. source:{}, throws:{}", source, e.getMessage());
             }
         }
         return defaultValue;
@@ -1012,7 +1023,7 @@ public abstract class Misc {
             return NIOUtils.toByteArray(io);
         }
         catch (IOException ex) {
-            logger.warn("resource open failed.", ex);
+            logger.warn("resource open failed. {}", ex.getMessage());
             return new byte[]{};
         }
     }
@@ -1048,7 +1059,7 @@ public abstract class Misc {
                 return parseCalendar(dateText);
             }
             catch (ParseException ex) {
-                logger.warn("parse error.", ex);
+                logger.warn("parse error. {}", ex.getMessage());
             }
         }
         return defaultValue;
@@ -1090,7 +1101,7 @@ public abstract class Misc {
                 return c.getTime();
             }
             catch (ParseException ex) {
-                logger.warn("parse error.", ex);
+                logger.warn("parse error. {}", ex.getMessage());
             }
         }
         return defaultValue;
@@ -1303,7 +1314,7 @@ public abstract class Misc {
                 return format.parse(source);
             }
             catch (ParseException ex) {
-                logger.warn("toNumber error.", ex);
+                logger.warn("toNumber error. {}", ex.getMessage());
             }
         }
         return defaultValue;
@@ -1354,7 +1365,7 @@ public abstract class Misc {
             return stringize(value, format);
         }
         catch (Exception e) {
-            logger.warn("format failed. value:{} format:{} throws:{}", value, format, e);
+            logger.warn("format failed. value:{} format:{} throws:{}", value, format, e.getMessage());
             return defaultValue;
         }
     }

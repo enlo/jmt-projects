@@ -27,7 +27,10 @@ import info.naiv.lab.java.jmt.StringJoiner;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.Setter;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -44,7 +47,15 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
     @Getter
     private String rootPath;
 
-    final ResourcePatternResolver resolver;
+    @NonNull
+    @Getter
+    @Setter(AccessLevel.PROTECTED)
+    private ResourcePatternResolver resolver;
+
+    @Override
+    protected ResourceLoader getResourceLoader() {
+        return resolver;
+    }
 
     /**
      *

@@ -23,11 +23,14 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
+import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultNode;
 import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
+import info.naiv.lab.java.jmt.template.mvel.node.DefaultCustomNodesProvider;
 import java.util.Map;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.hasEntry;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.mvel2.templates.res.Node;
 
 /**
  *
@@ -42,9 +45,19 @@ public class TQueryCustomNodesProviderTest {
      * Test of getCustomNodes method, of class TQueryMvelCustomNodesProvider.
      */
     @Test
+
     public void testGetCustomNodes() {
+
         MvelCustomNodesProvider provider = new TQueryCustomNodesProvider();
-        assertThat(provider.getCustomNodes(), is((Map) CustomNodes.NODES));
+        Map<String, Class<? extends Node>> actual = provider.getCustomNodes();
+
+        for (Map.Entry<String, Class<? extends Node>> e : CustomNodes.NODES.entrySet()) {
+            assertThat(e.getKey(), actual, hasEntry(e.getKey(), (Object) e.getValue()));
+        }
+        for (Map.Entry<String, Class<? extends Node>> e : DefaultCustomNodesProvider.NODES.entrySet()) {
+            assertThat(e.getKey(), actual, hasEntry(e.getKey(), (Object) e.getValue()));
+        }
+
     }
 
 }

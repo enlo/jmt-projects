@@ -32,7 +32,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
@@ -45,8 +44,6 @@ import org.springframework.core.io.ResourceLoader;
 public abstract class AbstractResourceRepository implements ResourceRepository {
 
     private ResourceRepository parent;
-
-    private ResourceLoader resourceLoader = new DefaultResourceLoader();
 
     @Override
     public ResourceRepository getParent() {
@@ -130,6 +127,8 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
     public void setParent(ResourceRepository parent) {
         this.parent = parent;
     }
+
+    protected abstract ResourceLoader getResourceLoader();
 
     /**
      *

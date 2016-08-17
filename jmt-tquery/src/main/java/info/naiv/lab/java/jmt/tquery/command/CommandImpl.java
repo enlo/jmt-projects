@@ -21,41 +21,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel;
+package info.naiv.lab.java.jmt.tquery.command;
 
-import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplate;
-import info.naiv.lab.java.jmt.tquery.command.Command;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import info.naiv.lab.java.jmt.tquery.command.CommandImpl;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
-import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.CompiledTemplate;
+import lombok.Data;
 
 /**
  *
  * @author enlo
  */
-@SuppressWarnings("serial")
-public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContext> implements QueryTemplate {
+@Data
+public class CommandImpl implements Command {
 
-    public MvelQueryTemplate(String name, CompiledTemplate template) {
-        super(name, template);
+    private static final long serialVersionUID = -7816515353531445011L;
+
+    String query;
+
+    List<CommandParameter> parameters;
+
+    /**
+     * コンストラクタ.
+     *
+     * @param query
+     * @param parameters
+     */
+    public CommandImpl(String query, List<CommandParameter> parameters) {
+        this.query = query;
+        this.parameters = parameters;
+    }
+
+    /**
+     *
+     * @return パラメータ値リスト
+     */
+    @Override
+    public List<Object> getParameterValues() {
+        List<Object> result = new ArrayList<>(parameters.size());
+        for (CommandParameter p : parameters) {
+            result.add(p.getValue());
+        }
+        return result;
     }
 
     @Override
-    protected QueryContext createContext(VariableResolverFactory factory, Object source) {
-        QueryContext context = new QueryContext();
-        context.setSource(source);
-        return context;
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public CommandImpl clone() {
+        try {
+            CommandImpl cmd = (CommandImpl) super.clone();
+            cmd.parameters = new CommandParameters(this.parameters);
+            return cmd;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
     }
-
-    @Override
-    protected Command createResult(Object result, QueryContext context) {
-        List<CommandParameter> parameters = context.getParameters().clone();
-        Command query = new CommandImpl((String) result, parameters);
-        return query;
-    }
-
 }

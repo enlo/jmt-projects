@@ -37,6 +37,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import javax.annotation.Nonnull;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -55,36 +56,43 @@ public class URLClassLoaderBuilder {
      *
      * @return URLClassLoaderBuilder instance.
      */
+    @Nonnull
     public static URLClassLoaderBuilder builder() {
         return new URLClassLoaderBuilder();
     }
 
-    public URLClassLoaderBuilder setParentClassLoader(ClassLoader parentClassLoader) {
+    public URLClassLoaderBuilder setParentClassLoader(@NonNull ClassLoader parentClassLoader) {
         this.parentClassLoader = parentClassLoader;
         return this;
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addDirectory(String directory) throws IOException {
         return addDirectory(Paths.get(directory));
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addDirectory(File directory) throws IOException {
         return addDirectory(directory.toPath());
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addDirectory(Path directory) throws IOException {
         listJarFiles(directory);
         return this;
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addJarFile(String jarfile) throws IOException {
         return addJarFile(Paths.get(jarfile));
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addJarFile(File jarfile) throws IOException {
         return addJarFile(jarfile.toPath());
     }
 
+    @Nonnull
     public URLClassLoaderBuilder addJarFile(Path jarfile) throws IOException {
         if (Files.exists(jarfile)) {
             URL u = jarfile.toUri().toURL();
@@ -93,6 +101,7 @@ public class URLClassLoaderBuilder {
         return this;
     }
 
+    @Nonnull
     public URLClassLoader build() throws IOException {
         URLClassLoader urlLoader = newClassLoader();
         return urlLoader;
@@ -106,7 +115,8 @@ public class URLClassLoaderBuilder {
         }
     }
 
-    public URLClassLoaderBuilder removeJars(Collection<URL> paths) {
+    @Nonnull
+    public URLClassLoaderBuilder removeJars(@NonNull Collection<URL> paths) {
         jarFiles.removeAll(paths);
         return this;
     }

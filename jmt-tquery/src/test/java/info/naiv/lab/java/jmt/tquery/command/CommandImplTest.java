@@ -38,14 +38,14 @@ import org.junit.Before;
  *
  * @author enlo
  */
-public class CommandTest {
+public class CommandImplTest {
 
-    public CommandTest() {
+    public CommandImplTest() {
     }
 
     static final String TEST_QUERY = "select * from Table where id = ?";
     List<CommandParameter> testParameters;
-    Command testTarget;
+    CommandImpl testTarget;
 
     @Before
     public void setup() {
@@ -54,7 +54,7 @@ public class CommandTest {
         ctx.getParameters().addValue(123);
 
         testParameters = ctx.getParameters().clone();
-        testTarget = new Command(TEST_QUERY, ctx.getParameters());
+        testTarget = new CommandImpl(TEST_QUERY, ctx.getParameters());
     }
 
     /**
@@ -70,7 +70,7 @@ public class CommandTest {
      */
     @Test
     public void testClone() {
-        Command cloned = testTarget.clone();
+        CommandImpl cloned = testTarget.clone();
         assertThat(cloned, is(not(Matchers.sameInstance(testTarget))));
         assertThat(cloned, is(testTarget));
     }

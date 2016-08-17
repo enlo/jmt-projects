@@ -24,46 +24,34 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.Data;
 
 /**
+ * コマンド.
  *
  * @author enlo
  */
-@Data
-public class Command implements Serializable, Cloneable {
+public interface Command extends Cloneable, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    /**
+     *
+     * @return パラメータリスト.
+     */
+    List<CommandParameter> getParameters();
 
-    String query;
+    /**
+     *
+     * @return 実際のSQL.
+     */
+    String getQuery();
 
-    List<CommandParameter> parameters;
+    @SuppressWarnings(value = "CloneDeclaresCloneNotSupported")
+    Command clone();
 
-    public Command(String query, List<CommandParameter> parameters) {
-        this.query = query;
-        this.parameters = parameters;
-    }
+    /**
+     *
+     * @return パラメータ値リスト
+     */
+    List<Object> getParameterValues();
 
-    public List<Object> getParameterValues() {
-        List<Object> result = new ArrayList<>(parameters.size());
-        for (CommandParameter p : parameters) {
-            result.add(p.getValue());
-        }
-        return result;
-    }
-
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public Command clone() {
-        try {
-            Command cmd = (Command) super.clone();
-            cmd.parameters = new CommandParameters(this.parameters);
-            return cmd;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
-    }
 }

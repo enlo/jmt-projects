@@ -21,26 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template.mvel;
+package info.naiv.lab.java.jmt.support.spring;
 
-import info.naiv.lab.java.jmt.template.Template;
-import org.mvel2.templates.CompiledTemplate;
-import org.mvel2.templates.TemplateRegistry;
+import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
+import java.io.IOException;
+import java.util.Map;
+import lombok.Getter;
+import lombok.NonNull;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public interface MvelTemplate<TResult> extends Template<TResult> {
+public class ApplicationContextResourceRepository
+        extends ClassPathResourceRepository
+        implements ApplicationContextAware {
+
+    @Getter
+    ApplicationContext applicationContext;
 
     @Override
-    CompiledTemplate getTemplateObject();
+    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
+        setResolver(applicationContext);
+    }
 
-    /**
-     * TemplateResistry の登録.
-     * 
-     * @param templateRegistry 
-     */
-    void setTemplateRegistry(TemplateRegistry templateRegistry);
 }

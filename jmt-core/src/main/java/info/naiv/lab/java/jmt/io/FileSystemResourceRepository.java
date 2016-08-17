@@ -34,11 +34,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.FileSystemResourceLoader;
+import org.springframework.core.io.ResourceLoader;
 
 /**
  * ファイルシステムを使用したリポジトリ.
@@ -55,11 +57,15 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
     @NonNull
     Path rootDirectory;
 
+    @NonNull
+    @Setter(AccessLevel.PROTECTED)
+    protected ResourceLoader resourceLoader;
+
     /**
      *
      */
     public FileSystemResourceRepository() {
-        setResourceLoader(new FileSystemResourceLoader());
+        resourceLoader = new FileSystemResourceLoader();
     }
 
     /**

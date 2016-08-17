@@ -23,6 +23,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.NumberFormat;
@@ -1411,6 +1413,93 @@ public class MiscTest {
     @Test
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_charArr() {
+        assertThat(Misc.stringize(Misc.nullOf(char[].class)), is(""));
+        assertThat(Misc.stringize(new char[]{}), is(""));
+        assertThat(Misc.stringize(new char[]{'A'}), is("A"));
+        assertThat(Misc.stringize(new char[]{'A', 'B'}), is("AB"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_Object() {
+        assertThat(Misc.stringize(Misc.nullOf(Object.class)), is(""));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_byteArr_Charset() {
+        Charset cs1 = StandardCharsets.UTF_8;
+        Charset cs2 = StandardCharsets.UTF_16;
+        byte[] nil = null;
+        byte[] utf8 = "いろはにほへと".getBytes(cs1);
+        byte[] utf16 = "いろはにほへと".getBytes(cs2);
+
+        assertThat(Misc.stringize(nil, cs1), is(""));
+        assertThat(Misc.stringize(nil, cs2), is(""));
+        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
+        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_ByteBuffer_Charset() {
+        Charset cs1 = StandardCharsets.UTF_8;
+        Charset cs2 = StandardCharsets.UTF_16;
+        ByteBuffer nil = null;
+        ByteBuffer utf8 = cs1.encode("いろはにほへと");
+        ByteBuffer utf16 = cs2.encode("いろはにほへと");
+
+        assertThat(Misc.stringize(nil, cs1), is(""));
+        assertThat(Misc.stringize(nil, cs2), is(""));
+        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
+        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_Object_Format() {
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        String sym = format.getCurrency().getSymbol();
+        assertThat(Misc.stringize(null, format), is(""));
+        assertThat(Misc.stringize(123456789, null), is("123456789"));
+        assertThat(Misc.stringize(123456789, format), is(sym + "123,456,789"));
+    }
+
+    /**
+     * Test of toCharArray method, of class Misc.
+     */
+    @Test
+    public void testToCharArray() {
+        assertArrayEquals(new char[]{}, Misc.toCharArray(null));
+        assertArrayEquals(new char[]{}, Misc.toCharArray(""));
+        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray("ABC"));
+        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray(CharBuffer.wrap("ABC")));
+    }
+
+    /**
+     * Test of nullOf method, of class Misc.
+     */
+    @Test
+    public void testNullOf() {
+        assertThat(Misc.nullOf(Object.class), is(nullValue()));
+        assertThat(Misc.nullOf(String.class), is(nullValue()));
+        assertThat(Misc.nullOf(Integer.class), is(nullValue()));
+        assertThat(Misc.nullOf(int[].class), is(nullValue()));
     }
 
 }

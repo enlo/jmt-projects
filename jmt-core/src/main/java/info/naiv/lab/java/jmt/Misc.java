@@ -302,8 +302,7 @@ public abstract class Misc {
      * @return キーセット
      */
     @Nonnull
-    public static <TKey, TValue> Set<TKey> getKeySetByValue(Map<TKey, TValue> map, TValue value) {
-        nonNull(map, "map");
+    public static <TKey, TValue> Set<TKey> getKeySetByValue(@NonNull Map<TKey, TValue> map, TValue value) {
         Set<TKey> keys = new HashSet<>();
         for (Entry<TKey, TValue> e : map.entrySet()) {
             if (Objects.equals(e.getValue(), value)) {

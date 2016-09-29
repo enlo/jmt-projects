@@ -30,10 +30,15 @@ import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.Serializable;
 import java.text.ParseException;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -43,37 +48,37 @@ import lombok.Value;
 @Value
 public class TimeSpan implements Serializable, Comparable<TimeSpan> {
 
-    long time;
-    TimeUnit unit;
-
-    public TimeSpan(long time, TimeUnit unit) {
-        this.time = time;
-        this.unit = unit;
-    }
-
-    private static final Pattern pattern = Pattern.compile("^(\\+|-)?(\\d+)(\\w+)?$", Pattern.CASE_INSENSITIVE);
-    private static final String[] NANOS = {"N", "NS", "NANO", "NANOS", "NANOSEC", "NANOSECOND", "NANOSECONDS"};
+    private static final String[] DAYS = {"D", "DAY", "DAYS"};
+    private static final String[] HOURS = {"H", "HOUR", "HOURS"};
     private static final String[] MICROS = {"MC", "MIC", "MICRO", "MICROS", "MICROSEC", "MICROSECOND", "MICROSECONDS"};
     private static final String[] MILLS = {"MS", "MIL", "MILLI", "MILLIS", "MILLISEC", "MILLISECOND", "MILLISECONDS"};
-    private static final String[] SECS = {"S", "SEC", "SECOND", "SECONDS"};
     private static final String[] MINS = {"M", "MIN", "MINUTE", "MINUTES"};
-    private static final String[] HOURS = {"H", "HOUR", "HOURS"};
-    private static final String[] DAYS = {"D", "DAY", "DAYS"};
+    private static final String[] NANOS = {"N", "NS", "NANO", "NANOS", "NANOSEC", "NANOSECOND", "NANOSECONDS"};
+    private static final String[] SECS = {"S", "SEC", "SECOND", "SECONDS"};
+    private static final Pattern pattern = Pattern.compile("^(\\+|-)?(\\d+)(\\w+)?$", Pattern.CASE_INSENSITIVE);
+    private static final long serialVersionUID = -5609761961762572788L;
 
-    public static Optional<TimeSpan> tryParse(String value) {
-        try {
-            return OptionalImpl.of(parse(value));
-        }
-        catch (ParseException | RuntimeException ex) {
-            return OptionalImpl.<TimeSpan>empty();
-        }
+    private static final Map<TimeUnit, String[]> UNIT_MAP;
+
+    static {
+        Map<TimeUnit, String[]> m = new HashMap<>();
+        m.put(TimeUnit.DAYS, DAYS);
+        m.put(TimeUnit.HOURS, HOURS);
+        m.put(TimeUnit.MICROSECONDS, MICROS);
+        m.put(TimeUnit.MILLISECONDS, MILLS);
+        m.put(TimeUnit.MINUTES, MINS);
+        m.put(TimeUnit.NANOSECONDS, NANOS);
+        m.put(TimeUnit.SECONDS, SECS);
+        UNIT_MAP = Collections.unmodifiableMap(m);
     }
 
-    public static TimeSpan distance(Date from, Date to) {
+    @Nonnull
+    public static TimeSpan distance(@Nonnull Date from, @Nonnull Date to) {
         long dist = to.getTime() - from.getTime();
         return new TimeSpan(dist, TimeUnit.MILLISECONDS);
     }
 
+    @Nonnull
     public static TimeSpan parse(String value) throws ParseException, NumberFormatException {
         if (isBlank(value)) {
             throw new ParseException("value is empty.", 0);
@@ -92,34 +97,19 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
         }
 
         String unit = m.group(3);
-        TimeUnit u;
+        TimeUnit u = null;
         if (isEmpty(unit)) {
             u = TimeUnit.MILLISECONDS;
         }
         else {
             unit = unit.toUpperCase();
-            if (arrayContains(MILLS, unit)) {
-                u = TimeUnit.MILLISECONDS;
+            for (Map.Entry<TimeUnit, String[]> e : UNIT_MAP.entrySet()) {
+                if (arrayContains(e.getValue(), unit)) {
+                    u = e.getKey();
+                    break;
+                }
             }
-            else if (arrayContains(SECS, unit)) {
-                u = TimeUnit.SECONDS;
-            }
-            else if (arrayContains(MINS, unit)) {
-                u = TimeUnit.MINUTES;
-            }
-            else if (arrayContains(HOURS, unit)) {
-                u = TimeUnit.HOURS;
-            }
-            else if (arrayContains(DAYS, unit)) {
-                u = TimeUnit.DAYS;
-            }
-            else if (arrayContains(NANOS, unit)) {
-                u = TimeUnit.NANOSECONDS;
-            }
-            else if (arrayContains(MICROS, unit)) {
-                u = TimeUnit.MICROSECONDS;
-            }
-            else {
+            if (u == null) {
                 int unitStart = m.start(3);
                 throw new ParseException("invalid unit.", unitStart);
             }
@@ -127,20 +117,45 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
         return new TimeSpan(v, u);
     }
 
+    @Nonnull
+    public static Optional<TimeSpan> tryParse(String value) {
+        try {
+            return OptionalImpl.of(parse(value));
+        }
+        catch (ParseException | RuntimeException ex) {
+            return OptionalImpl.<TimeSpan>empty();
+        }
+    }
+
+    private final long value;
+    private final TimeUnit unit;
+
+    public TimeSpan(long value, @NonNull TimeUnit unit) {
+        this.value = value;
+        this.unit = unit;
+    }
+
     @Override
     public int compareTo(TimeSpan o) {
         return Long.compare(toMillis(), o.toMillis());
     }
 
-    public long toMillis() {
-        return unit.toMillis(time);
+    @Nonnull
+    public TimeSpan newValue(long value) {
+        return new TimeSpan(value, unit);
     }
 
-    public TimeSpan newTime(long time) {
-        return new TimeSpan(time, unit);
-    }
-
+    @Nonnull
     public TimeSpan newUnit(TimeUnit unit) {
-        return new TimeSpan(time, unit);
+        return new TimeSpan(value, unit);
+    }
+
+    public long toMillis() {
+        return unit.toMillis(value);
+    }
+
+    @Override
+    public String toString() {
+        return value + unit.name();
     }
 }

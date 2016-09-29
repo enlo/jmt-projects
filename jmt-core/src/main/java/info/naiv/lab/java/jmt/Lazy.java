@@ -27,15 +27,24 @@ import info.naiv.lab.java.jmt.fx.Supplier;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
-import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 /**
  *
  * @author enlo
  * @param <T>
  */
-@EqualsAndHashCode(of = "value")
 public class Lazy<T> implements Supplier<T> {
+
+    @Nonnull
+    public static <T> Lazy<T> of(@NonNull final Supplier<? extends T> initializer) {
+        return new Lazy<T>() {
+            @Override
+            public T initialValue() {
+                return initializer.get();
+            }
+        };
+    }
 
     final AtomicBoolean initialized = new AtomicBoolean(false);
 
@@ -49,14 +58,16 @@ public class Lazy<T> implements Supplier<T> {
         this.initialized.set(true);
     }
 
-    @Nonnull
-    public static <T> Lazy<T> of(final Supplier<? extends T> initializer) {
-        return new Lazy<T>() {
-            @Override
-            public T initialValue() {
-                return initializer.get();
-            }
-        };
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Lazy<?> other = (Lazy<?>) obj;
+        return Objects.equals(this.get(), other.get());
     }
 
     @Override
@@ -67,6 +78,13 @@ public class Lazy<T> implements Supplier<T> {
         return value;
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(get());
+        return hash;
+    }
+
     public T initialValue() {
         return null;
     }
@@ -75,4 +93,5 @@ public class Lazy<T> implements Supplier<T> {
     public final String toString() {
         return Objects.toString(value);
     }
+
 }

@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.monad;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.iteration.BreakException;
 import info.naiv.lab.java.jmt.iteration.ContinueException;
@@ -42,6 +41,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.Value;
 
 /**
@@ -128,7 +128,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      * @return
      */
     @Override
-    public IterateeImpl<T> bind(Consumer1<? super T> consumer) {
+    public IterateeImpl<T> bind(@NonNull Consumer1<? super T> consumer) {
         for (T v : this) {
             consumer.accept(v);
         }
@@ -220,8 +220,7 @@ public final class IterateeImpl<T> implements Iteratee<T> {
      */
     @Nonnull
     @Override
-    public <K> Map<K, T> toMap(Function1<T, K> keyResolver) {
-        nonNull(keyResolver, "keyResolver");
+    public <K> Map<K, T> toMap(@NonNull Function1<T, K> keyResolver) {
         final Map<K, T> result = new HashMap<>();
         for (T v : this) {
             result.put(keyResolver.apply(v), v);

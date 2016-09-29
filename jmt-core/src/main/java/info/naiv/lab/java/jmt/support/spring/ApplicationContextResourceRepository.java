@@ -24,8 +24,6 @@
 package info.naiv.lab.java.jmt.support.spring;
 
 import info.naiv.lab.java.jmt.io.ClassPathResourceRepository;
-import java.io.IOException;
-import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
 import org.springframework.beans.BeansException;

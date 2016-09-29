@@ -2,6 +2,7 @@ package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
+import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -59,7 +60,7 @@ public class TimeSpanTest {
     }
 
     /**
-     * Test of newTime method, of class TimeSpan.
+     * Test of newValue method, of class TimeSpan.
      */
     @Test
     public void testNewTime() {
@@ -74,6 +75,8 @@ public class TimeSpanTest {
 
     /**
      * Test of parse method, of class TimeSpan.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testParse() throws Exception {
@@ -95,6 +98,8 @@ public class TimeSpanTest {
 
     /**
      * Test of parse method, of class TimeSpan.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testParseMills() throws Exception {
@@ -120,6 +125,8 @@ public class TimeSpanTest {
 
     /**
      * Test of parse method, of class TimeSpan.
+     *
+     * @throws java.lang.Exception
      */
     @Test
     public void testParseNanos() throws Exception {
@@ -148,13 +155,40 @@ public class TimeSpanTest {
      */
     @Test
     public void testToMillis() {
+        for (TimeUnit tu : TimeUnit.values()) {
+            TimeSpan ts1 = new TimeSpan(-1, tu);
+            TimeSpan ts2 = new TimeSpan(0, tu);
+            TimeSpan ts3 = new TimeSpan(1, tu);
+            assertThat("tu=" + tu, ts1.toMillis(), is(tu.toMillis(-1)));
+            assertThat("tu=" + tu, ts2.toMillis(), is(tu.toMillis(0)));
+            assertThat("tu=" + tu, ts3.toMillis(), is(tu.toMillis(1)));
+        }
     }
 
     /**
      * Test of toString method, of class TimeSpan.
+     *
+     * @throws java.text.ParseException
      */
     @Test
-    public void testToString() {
+    public void testToString() throws ParseException {
+        for (TimeUnit tu : TimeUnit.values()) {
+            TimeSpan ts1 = new TimeSpan(-1, tu);
+            TimeSpan ts2 = new TimeSpan(0, tu);
+            TimeSpan ts3 = new TimeSpan(1, tu);
+
+            String s1 = ts1.toString();
+            String s2 = ts2.toString();
+            String s3 = ts3.toString();
+
+            assertThat("tu=" + tu, s1, is(-1 + tu.name()));
+            assertThat("tu=" + tu, s2, is(0 + tu.name()));
+            assertThat("tu=" + tu, s3, is(1 + tu.name()));
+            assertThat("tu=" + tu, TimeSpan.parse(s1), is(ts1));
+            assertThat("tu=" + tu, TimeSpan.parse(s2), is(ts2));
+            assertThat("tu=" + tu, TimeSpan.parse(s3), is(ts3));
+
+        }
     }
 
     /**

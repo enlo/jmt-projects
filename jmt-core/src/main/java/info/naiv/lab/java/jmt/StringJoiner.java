@@ -61,6 +61,18 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
     public static final StringJoiner SLASHED = new StringJoiner("/");
 
     /**
+     * オブジェクトを文字列化して連結.
+     *
+     * @param delim
+     * @param args
+     * @return
+     */
+    @Nonnull
+    public static String join(String delim, Object... args) {
+        return valueOf(delim).joinItems(args).toString();
+    }
+
+    /**
      *
      * @param delim
      * @return
@@ -88,13 +100,8 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
      *
      * @param delim
      */
-    public StringJoiner(final String delim) {
-        super(new SimpleAdder(), new Adder<Object, StringBuilder>() {
-            @Override
-            public StringBuilder add(StringBuilder obj, Object value, int idx) {
-                return obj.append(delim).append(value);
-            }
-        });
+    public StringJoiner(String delim) {
+        super(new SimpleAdder(), delim == null ? new SimpleAdder() : new DelimAdder(delim));
     }
 
     /**
@@ -110,5 +117,20 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
         public StringBuilder add(StringBuilder obj, Object value, int idx) {
             return obj.append(value);
         }
+    }
+
+    private static class DelimAdder implements Adder<Object, StringBuilder> {
+
+        private final String delim;
+
+        public DelimAdder(String delim) {
+            this.delim = delim;
+        }
+
+        @Override
+        public StringBuilder add(StringBuilder obj, Object value, int idx) {
+            return obj.append(delim).append(value);
+        }
+
     }
 }

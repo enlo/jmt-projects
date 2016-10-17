@@ -30,6 +30,7 @@ import info.naiv.lab.java.jmt.fx.Supplier;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 
 /**
@@ -49,7 +50,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @param consumer
      * @return
      */
-    Optional<T> bind(Consumer1<? super T> consumer);
+    Optional<T> bind(@Nonnull Consumer1<? super T> consumer);
 
     /**
      * フィルター処理.
@@ -59,7 +60,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * そうでなければ {@link #empty()}
      */
     @Nonnull
-    Optional<T> filter(Predicate1<? super T> predicate);
+    Optional<T> filter(@Nonnull Predicate1<? super T> predicate);
 
     /**
      * フラットマップ.
@@ -69,19 +70,27 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    <U> Optional<U> flatMap(Function1<? super T, ? extends Optional<U>> mapper);
+    <U> Optional<U> flatMap(@Nonnull Function1<? super T, ? extends Optional<U>> mapper);
 
     /**
      *
-     * @return 値
+     * @return null ではない値
      */
+    @Nonnull
     T get();
+
+    /**
+     *
+     * @return null かもしれない値
+     */
+    @CheckForNull
+    T getOrNull();
 
     /**
      *
      * @param consumer
      */
-    void ifPresent(Consumer1<? super T> consumer);
+    void ifPresent(@Nonnull Consumer1<? super T> consumer);
 
     /**
      *
@@ -100,7 +109,12 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    <U> Optional<U> map(Function1<? super T, ? extends U> mapper);
+    <U> Optional<U> map(@Nonnull Function1<? super T, ? extends U> mapper);
+
+    @Nonnull
+    <X> X match(@Nonnull Function1<? super T, X> some, @Nonnull Supplier<X> none);
+
+    void match(@Nonnull Consumer1<? super T> some, @Nonnull Runnable none);
 
     /**
      *
@@ -108,7 +122,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    T orElse(T other);
+    T orElse(@Nonnull T other);
 
     /**
      *
@@ -116,7 +130,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    T orElseGet(Supplier<? extends T> other);
+    T orElseGet(@Nonnull Supplier<? extends T> other);
 
     /**
      *
@@ -126,7 +140,7 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @throws X
      */
     @Nonnull
-    <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
+    <X extends Throwable> T orElseThrow(@Nonnull Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      *
@@ -134,5 +148,4 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      */
     @Nonnull
     Set<T> toSet();
-
 }

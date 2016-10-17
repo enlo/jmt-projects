@@ -25,6 +25,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
+import info.naiv.lab.java.jmt.datetime.bizday.WeekSettings;
 import java.util.Calendar;
 import org.apache.commons.lang3.ArrayUtils;
 import static org.hamcrest.Matchers.arrayContaining;

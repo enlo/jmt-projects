@@ -525,14 +525,6 @@ public class MiscTest {
     }
 
     /**
-     *
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void testGetKeySetByValue_2() {
-        Misc.getKeySetByValue(null, null);
-    }
-
-    /**
      * Test of isBlank method, of class Misc.
      */
     @Test

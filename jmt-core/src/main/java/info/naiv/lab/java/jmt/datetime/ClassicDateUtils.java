@@ -1,5 +1,6 @@
 package info.naiv.lab.java.jmt.datetime;
 
+import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
 import static info.naiv.lab.java.jmt.Arguments.between;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Constants;

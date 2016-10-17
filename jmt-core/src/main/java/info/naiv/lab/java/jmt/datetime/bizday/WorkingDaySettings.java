@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.datetime;
+package info.naiv.lab.java.jmt.datetime.bizday;
 
+import info.naiv.lab.java.jmt.datetime.SameDayPredicate;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.contains;
 import java.io.Serializable;

@@ -31,6 +31,8 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import lombok.Value;
@@ -46,8 +48,6 @@ public class OptionalImpl<T> implements Optional<T> {
 
     private static final long serialVersionUID = 1L;
 
-    T value;
-
     /**
      * 空の OptionalImpl
      *
@@ -57,6 +57,27 @@ public class OptionalImpl<T> implements Optional<T> {
     @Nonnull
     public static <T> OptionalImpl<T> empty() {
         return (OptionalImpl<T>) EMPTY;
+    }
+
+    @Nonnull
+    public static <T> Optional<T> of(T value) {
+        nonNull(value, "value");
+        return new OptionalImpl<>(value);
+    }
+
+    @Nonnull
+    public static <T> Optional<T> ofNullable(T value) {
+        return new OptionalImpl<>(value);
+    }
+
+    T value;
+
+    @Override
+    public Optional<T> bind(Consumer1<? super T> consumer) {
+        if (isPresent()) {
+            consumer.accept(value);
+        }
+        return this;
     }
 
     /**
@@ -93,28 +114,16 @@ public class OptionalImpl<T> implements Optional<T> {
 
     /**
      *
-     * @return 値が null でなければ true.
-     */
-    @Override
-    public boolean isPresent() {
-        return value != null;
-    }
-
-    /**
-     *
      * @return 値
      */
     @Override
     public T get() {
-        return value;
+        return requireNonNull(value);
     }
 
     @Override
-    public Optional<T> bind(Consumer1<? super T> consumer) {
-        if (isPresent()) {
-            consumer.accept(value);
-        }
-        return this;
+    public T getOrNull() {
+        return value;
     }
 
     @Override
@@ -122,6 +131,15 @@ public class OptionalImpl<T> implements Optional<T> {
         if (isPresent()) {
             consumer.accept(value);
         }
+    }
+
+    /**
+     *
+     * @return 値が null でなければ true.
+     */
+    @Override
+    public boolean isPresent() {
+        return value != null;
     }
 
     @Override
@@ -141,15 +159,19 @@ public class OptionalImpl<T> implements Optional<T> {
         }
     }
 
-    @Nonnull
-    public static <T> Optional<T> of(T value) {
-        nonNull(value, "value");
-        return new OptionalImpl<>(value);
+    @Override
+    public void match(Consumer1<? super T> some, Runnable none) {
+        if (isPresent()) {
+            some.accept(value);
+        }
+        else {
+            none.run();
+        }
     }
 
-    @Nonnull
-    public static <T> Optional<T> ofNullable(T value) {
-        return new OptionalImpl<>(value);
+    @Override
+    public <X> X match(Function1<? super T, X> some, Supplier<X> none) {
+        return requireNonNull(isPresent() ? some.apply(value) : none.get());
     }
 
     @Nonnull

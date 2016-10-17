@@ -25,6 +25,8 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
+import info.naiv.lab.java.jmt.datetime.bizday.WeekSettings;
+import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;

@@ -5,6 +5,8 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
+import info.naiv.lab.java.jmt.datetime.bizday.WeekSettings;
+import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import java.sql.Timestamp;
 import java.text.ParseException;

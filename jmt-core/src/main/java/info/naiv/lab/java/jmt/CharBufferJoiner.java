@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt;
 
 import java.nio.CharBuffer;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  * CharBuffer を利用した Joiner. 短い文字列用.
@@ -119,7 +120,7 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      *
      * @param delim 区切り文字.
      */
-    public CharBufferJoiner(CharSequence delim) {
+    public CharBufferJoiner(@Nonnull CharSequence delim) {
         this(DEFAULT_CAPACITY, delim);
     }
 
@@ -129,7 +130,7 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      * @param capacity キャパシティ.
      * @param delim 区切り文字.
      */
-    public CharBufferJoiner(int capacity, final CharSequence delim) {
+    public CharBufferJoiner(int capacity, @NonNull final CharSequence delim) {
         super(new SimpleAdder(), new Adder<CharSequence, CharBuffer>() {
             @Override
             public CharBuffer add(CharBuffer obj, CharSequence value, int idx) {
@@ -146,7 +147,8 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      * @param first 最初の adder
      * @param more 2回目以降の adder
      */
-    public CharBufferJoiner(Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
+    public CharBufferJoiner(@Nonnull Adder<CharSequence, CharBuffer> first,
+                            @Nonnull Adder<CharSequence, CharBuffer> more) {
         this(DEFAULT_CAPACITY, first, more);
     }
 
@@ -157,7 +159,9 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      * @param first 最初の adder
      * @param more 2回目以降の adder
      */
-    public CharBufferJoiner(int capacity, Adder<CharSequence, CharBuffer> first, Adder<CharSequence, CharBuffer> more) {
+    public CharBufferJoiner(int capacity,
+                            @Nonnull Adder<CharSequence, CharBuffer> first,
+                            @Nonnull Adder<CharSequence, CharBuffer> more) {
         super(first, more);
         this.capacity = capacity;
     }
@@ -168,6 +172,7 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      * @param newCapacity 新しいキャパシティ.
      * @return キャパシティを変更した CharBufferJoiner.
      */
+    @Nonnull
     public CharBufferJoiner newCapacity(int newCapacity) {
         return new CharBufferJoiner(newCapacity, first, more);
     }

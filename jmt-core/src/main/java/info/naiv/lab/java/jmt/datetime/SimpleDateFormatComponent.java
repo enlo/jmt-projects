@@ -30,6 +30,7 @@ import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Map;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,6 +38,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author enlo
  */
 @Slf4j
+@ThreadSafe
 public class SimpleDateFormatComponent
         extends AbstractTlsServiceComponent<SimpleDateFormat>
         implements SystemComponent {

@@ -39,7 +39,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.util.StringUtils;
 
 /**
  * Rope. 文字列を正規化したうえで、サロゲートペアまで含めて比較を行う. String より処理が重いので Rope.
@@ -123,6 +122,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param value 元のオブジェクト.
      * @return 値
      */
+    @Nonnull
     public static Rope valueOf(Object value) {
         if (value == null) {
             return EMPTY;
@@ -138,6 +138,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param value 元のオブジェクト.
      * @return 値
      */
+    @Nonnull
     public static Rope valueOf(String value) {
         if (Misc.isEmpty(value)) {
             return EMPTY;
@@ -213,7 +214,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 検索対象が存在すればtrue. ただし、検索対象が空なら常にfalse.
      */
     public boolean contains(String search) {
-        if (StringUtils.isEmpty(search)) {
+        if (Misc.isEmpty(search)) {
             return false;
         }
         return indexOf(search) >= 0;
@@ -224,6 +225,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      *
      * @return 文字列を正規分解した結果
      */
+    @Nonnull
     public Rope decompose() {
         if (source.isDecomposed()) {
             return this;
@@ -260,6 +262,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param index 位置
      * @return 指定された位置の文字.
      */
+    @Nonnull
     public String getAt(int index) {
         return source.elements()[index].getElement();
     }
@@ -268,6 +271,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      *
      * @return ブレイクイテレーター
      */
+    @Nonnull
     public BreakIterator getBreakIterator() {
         BreakIterator iter = getCharacterInstance();
         iter.setText(source.getSource());
@@ -280,7 +284,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param searchString 検索する文字列
      * @return 見つかった位置。見つからない場合は-1.
      */
-    public int indexOf(Rope searchString) {
+    public int indexOf(@Nonnull Rope searchString) {
         return indexOf(searchString, 0);
     }
 
@@ -291,7 +295,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param offset 検索開始位置
      * @return 見つかった位置。見つからない場合は-1.
      */
-    public int indexOf(Rope searchString, int offset) {
+    public int indexOf(@Nonnull Rope searchString, int offset) {
         UnicodeScalar[] search = searchString.decompose().source.elements();
         for (int i = offset; i < source.elements().length; i++) {
             if (startsWith(search, i)) {
@@ -327,7 +331,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param searchString 検索する文字列
      * @return 文字列が見つかった先頭からの位置。見つからなければ-1
      */
-    public int lastIndexOf(Rope searchString) {
+    public int lastIndexOf(@Nonnull Rope searchString) {
         UnicodeScalar[] search = searchString.decompose().source.elements();
         for (int i = source.elements().length - 1; 0 <= i; i--) {
             if (startsWith(search, i)) {
@@ -355,6 +359,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param length 文字数
      * @return 指定長の文字列
      */
+    @Nonnull
     public String left(int length) {
         return source.subVector(0, length).toString();
     }
@@ -378,6 +383,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param max 置換する数。マイナスの値で全て
      * @return 置換された文字列
      */
+    @Nonnull
     public Rope replace(Rope searchString, Rope replacement, int max) {
         if (isEmpty(searchString) || replacement == null || max == 0) {
             return this;
@@ -416,6 +422,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param replacement 置換後の文字列
      * @return 置換された文字列
      */
+    @Nonnull
     public Rope replaceAll(Rope searchString, Rope replacement) {
         return replace(searchString, replacement, -1);
     }
@@ -426,6 +433,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param length 文字数
      * @return 指定長の文字列
      */
+    @Nonnull
     public String right(int length) {
         return source.subVector(source.elements().length - length).toString();
     }
@@ -448,6 +456,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param start 開始位置
      * @return [開始位置,文字列長)の文字列
      */
+    @Nonnull
     public String substring(int start) {
         return substring(start, length());
     }
@@ -459,6 +468,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param end 終了位置
      * @return [開始位置,終了位置)の文字列
      */
+    @Nonnull
     public String substring(int start, int end) {
         return source.subVector(start, end).toString();
     }

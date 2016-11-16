@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.infrastructure.component;
 import info.naiv.lab.java.jmt.infrastructure.AbstractServiceConnection;
 import info.naiv.lab.java.jmt.infrastructure.AbstractServiceContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -42,7 +43,10 @@ public class ComponentServiceConnection extends AbstractServiceConnection {
      * @param container
      * @param tag
      */
-    public ComponentServiceConnection(ServiceComponent<?> serviceHolder, int priority, AbstractServiceContainer container, Tag tag) {
+    public ComponentServiceConnection(@Nonnull ServiceComponent<?> serviceHolder,
+                                      int priority,
+                                      @Nonnull AbstractServiceContainer container,
+                                      @Nonnull Tag tag) {
         super(priority, container, tag);
         this.serviceHolder = serviceHolder;
     }

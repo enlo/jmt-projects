@@ -29,6 +29,7 @@ import static java.lang.Integer.parseInt;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *

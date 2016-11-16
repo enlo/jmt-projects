@@ -28,6 +28,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.util.Properties;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 /**
@@ -60,7 +62,8 @@ public class PropertiesPlaceholderResolver implements Serializable {
      * @param placeholderPrefix
      * @param placeholderSuffix
      */
-    public PropertiesPlaceholderResolver(String placeholderPrefix, String placeholderSuffix) {
+    public PropertiesPlaceholderResolver(@NonNull String placeholderPrefix,
+                                         @NonNull String placeholderSuffix) {
         prefix = placeholderPrefix;
         suffix = placeholderSuffix;
         helper = new PropertyPlaceholderHelper(placeholderPrefix, placeholderSuffix);
@@ -94,7 +97,7 @@ public class PropertiesPlaceholderResolver implements Serializable {
      * @param propertyName
      * @return
      */
-    protected String onPropertyNotFound(String propertyName) {
+    protected String onPropertyNotFound(@Nonnull String propertyName) {
         String value = System.getProperty(propertyName);
         if (value == null) {
             value = System.getenv(propertyName);
@@ -108,7 +111,7 @@ public class PropertiesPlaceholderResolver implements Serializable {
      * @param propertyName
      * @return
      */
-    protected String resolveProperty(Properties props, String propertyName) {
+    protected String resolveProperty(@Nonnull Properties props, @Nonnull String propertyName) {
         String value = props.getProperty(propertyName, null);
         if (value == null) {
             value = onPropertyNotFound(propertyName);

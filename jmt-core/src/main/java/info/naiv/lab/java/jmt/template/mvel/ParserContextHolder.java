@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.ThreadLocalStack;
+import javax.annotation.CheckForNull;
 import org.mvel2.ParserContext;
 
 /**
@@ -39,6 +40,7 @@ public class ParserContextHolder {
      *
      * @return
      */
+    @CheckForNull
     public static ParserContext get() {
         if (stack.isEmpty()) {
             return null;

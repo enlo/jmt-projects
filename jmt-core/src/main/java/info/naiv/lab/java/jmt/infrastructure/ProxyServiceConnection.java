@@ -24,6 +24,8 @@
 package info.naiv.lab.java.jmt.infrastructure;
 
 import info.naiv.lab.java.jmt.Holder;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -40,8 +42,8 @@ public class ProxyServiceConnection extends AbstractServiceConnection {
      * @param container
      * @param tag
      */
-    public ProxyServiceConnection(Holder<?> serviceHolder, int priority,
-                                  AbstractServiceContainer container, Tag tag) {
+    public ProxyServiceConnection(@NonNull Holder<?> serviceHolder, int priority,
+                                 @Nonnull AbstractServiceContainer container, Tag tag) {
         super(priority, container, tag);
         this.serviceHolder = serviceHolder;
     }

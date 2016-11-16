@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import java.util.Map;
+import javax.annotation.Nonnull;
 import org.mvel2.templates.res.Node;
 
 /**
@@ -37,5 +38,6 @@ public interface MvelCustomNodesProvider {
      *
      * @return
      */
+    @Nonnull
     Map<String, Class<? extends Node>> getCustomNodes();
 }

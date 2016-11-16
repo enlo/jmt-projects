@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -40,7 +41,8 @@ import javax.annotation.Nonnull;
  * @param <TKey>
  * @param <TValue>
  */
-public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implements MultiValueLookup<TKey, TValue>, Iterable<Grouping<TKey, TValue>> {
+public class ImmutableMutiValueLookup<TKey extends Comparable, TValue>
+        implements MultiValueLookup<TKey, TValue>, Iterable<Grouping<TKey, TValue>> {
 
     /**
      *
@@ -50,7 +52,8 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
      * @return
      */
     @Nonnull
-    public static <K extends Comparable, V> MultiValueLookup<K, V> fromEntries(Collection<Entry<K, V>> entries) {
+    public static <K extends Comparable, V>
+            MultiValueLookup<K, V> fromEntries(@Nonnull Collection<Entry<K, V>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (Entry<K, V> e : entries) {
             gb.add(e.getKey(), e.getValue());
@@ -64,7 +67,9 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
      * @param entries
      * @return
      */
-    public static <K extends Comparable> MultiValueLookup<K, KeyedValue<K>> fromKeyedValues(Collection<? extends KeyedValue<K>> entries) {
+    @Nonnull
+    public static <K extends Comparable>
+            MultiValueLookup<K, KeyedValue<K>> fromKeyedValues(@Nonnull Collection<? extends KeyedValue<K>> entries) {
         GroupBuilder gb = new GroupBuilder(entries.size());
         for (KeyedValue<K> e : entries) {
             gb.add(e.getKey(), e);
@@ -74,12 +79,12 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
 
     private final List<Grouping<TKey, TValue>> values;
 
-    private ImmutableMutiValueLookup(List<Grouping<TKey, TValue>> values) {
+    private ImmutableMutiValueLookup(@NonNull List<Grouping<TKey, TValue>> values) {
         this.values = values;
     }
 
     @Override
-    public boolean containsKey(TKey key) {
+    public boolean containsKey(@Nonnull TKey key) {
         for (Grouping<TKey, TValue> g : values) {
             if (g.getKey().compareTo(key) == 0) {
                 return true;
@@ -89,7 +94,8 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
     }
 
     @Override
-    public Iterable<TValue> get(TKey key) {
+    @Nonnull
+    public Iterable<TValue> get(@Nonnull TKey key) {
         for (Grouping<TKey, TValue> g : values) {
             if (g.getKey().compareTo(key) == 0) {
                 return g;
@@ -141,7 +147,7 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
          * @param key
          * @param value
          */
-        public void add(TKey key, TValue value) {
+        public void add(@Nonnull TKey key, TValue value) {
             if (values.containsKey(key)) {
                 values.get(key).add(value);
             }
@@ -169,7 +175,7 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue> implement
          * @return
          */
         @Nonnull
-        public Grouping<TKey, TValue> get(TKey key) {
+        public Grouping<TKey, TValue> get(@Nonnull TKey key) {
             List<TValue> list = values.get(key);
             return new ImmutableGrouping<>(key, list);
         }

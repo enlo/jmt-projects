@@ -93,7 +93,7 @@ public class AutoCreateHolderTest {
     /**
      *
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testCtorNull01() {
         Misc.nop(new AutoCreateHolder<>(null));
     }
@@ -104,7 +104,7 @@ public class AutoCreateHolderTest {
      */
     @Theory
     public void testCtorNull02(@FromDataPoints("nullCtor") CtorFixture f) {
-        ex.expect(IllegalArgumentException.class);
+        ex.expect(NullPointerException.class);
         Misc.nop(new AutoCreateHolder<>(f.clazz, f.creator));
     }
 
@@ -114,7 +114,7 @@ public class AutoCreateHolderTest {
      */
     @Theory
     public void testCtorNull03(@FromDataPoints("nullCtor") CtorFixture f) {
-        ex.expect(IllegalArgumentException.class);
+        ex.expect(NullPointerException.class);
         Misc.nop(new AutoCreateHolder<>(f.object, f.clazz, f.creator));
     }
 

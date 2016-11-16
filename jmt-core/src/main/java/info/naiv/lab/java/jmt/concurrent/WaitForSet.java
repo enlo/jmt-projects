@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
@@ -35,6 +36,7 @@ import java.util.concurrent.TimeUnit;
  * @author enlo
  * @param <T>
  */
+@ThreadSafe
 public class WaitForSet<T> extends AbstractAwaitable {
 
     private final CountDownLatch cdl = new CountDownLatch(1);

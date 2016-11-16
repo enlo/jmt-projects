@@ -53,7 +53,7 @@ public class TransformerComponent
             return true;
         }
         catch (TransformerConfigurationException ex) {
-            throw new RuntimeException(ex);
+            throw new XmlRuntimeException(ex);
         }
     }
 

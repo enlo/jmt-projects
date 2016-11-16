@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 比較可能な型Tのオブジェクトの{@link Comparator}.
@@ -39,6 +40,7 @@ import java.util.Comparator;
  * @param <T> 型T
  *
  */
+@ThreadSafe
 public class ComparableComparator<T extends Comparable<T>> implements Comparator<T>, Serializable {
 
     /**

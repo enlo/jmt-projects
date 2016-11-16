@@ -25,11 +25,13 @@ package info.naiv.lab.java.jmt.concurrent;
 
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  */
+@ThreadSafe
 public class WaitForZero extends AbstractAwaitable {
 
     final Phaser count;

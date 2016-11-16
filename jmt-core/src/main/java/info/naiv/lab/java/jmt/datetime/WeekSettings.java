@@ -1,4 +1,4 @@
-package info.naiv.lab.java.jmt.datetime.bizday;
+package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Arguments.between;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
@@ -51,7 +51,7 @@ public final class WeekSettings implements Serializable, Cloneable {
      * @param officialHoliday 法定休日
      * @param unofficialHolidays その他休日
      */
-    public WeekSettings(int firstDayOfWeek, int officialHoliday, int[] unofficialHolidays) {
+    public WeekSettings(int firstDayOfWeek, int officialHoliday, @Nonnull int[] unofficialHolidays) {
         check(firstDayOfWeek, "firstDayOfWeek");
         check(officialHoliday, "officialHoliday");
         check(unofficialHolidays, "unofficialHolidays");

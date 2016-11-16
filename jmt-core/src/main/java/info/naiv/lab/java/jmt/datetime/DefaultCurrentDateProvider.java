@@ -26,11 +26,13 @@ package info.naiv.lab.java.jmt.datetime;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.util.Calendar;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  */
+@ThreadSafe
 public class DefaultCurrentDateProvider
         implements CurrentDateProvider, SystemComponent {
 

@@ -9,11 +9,13 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  */
+@ThreadSafe
 public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implements DirectoryStream.Filter<Path> {
 
     @Override
@@ -26,7 +28,6 @@ public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implem
     }
 
     @Override
-    @Nonnull
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
         if (accept(file, attrs)) {
             return onTarget(file, attrs);

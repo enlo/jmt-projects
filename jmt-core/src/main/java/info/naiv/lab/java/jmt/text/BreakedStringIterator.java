@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.text;
 import java.text.BreakIterator;
 import static java.text.BreakIterator.DONE;
 import java.util.Iterator;
+import lombok.NonNull;
 
 /**
  *
@@ -42,7 +43,7 @@ public class BreakedStringIterator implements Iterator<String> {
      * @param source 元の文字列
      * @param iter BreakIterator
      */
-    public BreakedStringIterator(String source, BreakIterator iter) {
+    public BreakedStringIterator(@NonNull String source, @NonNull BreakIterator iter) {
         this.source = source;
         this.iter = iter;
     }

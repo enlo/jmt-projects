@@ -64,7 +64,7 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public static <K, V> MapBuilder<K, V> concurrentHashMap(K key, V value) {
+    public static <K, V> MapBuilder<K, V> concurrentHashMap(@Nonnull K key, V value) {
         return new ConcurrentHashMapBuilder<K, V>().put(key, value);
     }
 
@@ -78,7 +78,7 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public static <K, V> MapBuilder<K, V> hashMap(K key, V value) {
+    public static <K, V> MapBuilder<K, V> hashMap(@Nonnull K key, V value) {
         return new HashMapBuilder<K, V>().put(key, value);
     }
 
@@ -92,7 +92,7 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public static <K, V> MapBuilder<K, V> treeMap(K key, V value) {
+    public static <K, V> MapBuilder<K, V> treeMap(@Nonnull K key, V value) {
         return new TreeMapBuilder<K, V>().put(key, value);
     }
 
@@ -107,7 +107,8 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public static <K, V> MapBuilder<K, V> treeMap(Comparator<K> comp, K key, V value) {
+    public static <K, V> MapBuilder<K, V> treeMap(@Nonnull Comparator<K> comp,
+                                                  @Nonnull K key, V value) {
         return new TreeMapBuilder<K, V>(comp).put(key, value);
     }
 
@@ -140,7 +141,7 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public MapBuilder<K, V> put(K key, V value) {
+    public MapBuilder<K, V> put(@Nonnull K key, V value) {
         map.put(key, value);
         return this;
     }
@@ -152,7 +153,7 @@ public abstract class MapBuilder<K, V> {
      * @return マップビルダー
      */
     @Nonnull
-    public MapBuilder<K, V> putAll(Map<K, V> other) {
+    public MapBuilder<K, V> putAll(@Nonnull Map<K, V> other) {
         map.putAll(other);
         return this;
     }
@@ -198,7 +199,7 @@ public abstract class MapBuilder<K, V> {
             super(new TreeMap<K, V>());
         }
 
-        TreeMapBuilder(Comparator<K> comparator) {
+        TreeMapBuilder(@Nonnull Comparator<K> comparator) {
             super(new TreeMap<K, V>(comparator));
         }
 

@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
 import static java.util.Collections.unmodifiableMap;
@@ -31,6 +30,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import static org.springframework.beans.BeanUtils.getPropertyDescriptors;
 import org.springframework.beans.TypeMismatchException;
@@ -43,7 +44,8 @@ import org.springframework.beans.TypeMismatchException;
 @Slf4j
 public class ObjectAttributes implements Attributes {
 
-    private static Map<String, PropertyDescriptor> makeMap(Object object) {
+    @Nonnull
+    private static Map<String, PropertyDescriptor> makeMap(@Nonnull Object object) {
         Map<String, PropertyDescriptor> result = new HashMap<>();
         PropertyDescriptor[] pds = getPropertyDescriptors(object.getClass());
         for (PropertyDescriptor pd : pds) {
@@ -60,8 +62,7 @@ public class ObjectAttributes implements Attributes {
      *
      * @param object オブジェクト
      */
-    public ObjectAttributes(Object object) {
-        nonNull(object, "object");
+    public ObjectAttributes(@NonNull Object object) {
         this.object = object;
         this.pdmap = makeMap(object);
     }
@@ -72,7 +73,7 @@ public class ObjectAttributes implements Attributes {
     }
 
     @Override
-    public Map<String, Object> copyTo(Map<String, Object> target) {
+    public Map<String, Object> copyTo(@NonNull Map<String, Object> target) {
         for (Entry<String, PropertyDescriptor> e : pdmap.entrySet()) {
             String name = e.getKey();
             PropertyDescriptor pd = e.getValue();

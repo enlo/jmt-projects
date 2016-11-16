@@ -23,10 +23,10 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-package info.naiv.lab.java.jmt.datetime;
+package info.naiv.lab.java.jmt.datetime.workingday;
 
-import info.naiv.lab.java.jmt.datetime.bizday.WeekSettings;
-import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
+import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
+import info.naiv.lab.java.jmt.datetime.WeekSettings;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;

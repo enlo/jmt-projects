@@ -1,6 +1,5 @@
 package info.naiv.lab.java.jmt.iteration;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.nop;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
@@ -14,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -44,8 +45,7 @@ public class IterationUtils {
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean contains(Iterable<T> items, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
+    public static <T> boolean contains(Iterable<T> items, @NonNull Predicate1<? super T> predicate) {
         if (items == null) {
             return false;
         }
@@ -65,7 +65,8 @@ public class IterationUtils {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
+    public static <T extends Comparable<T>>
+            boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         if (items == null) {
             return false;
         }
@@ -75,6 +76,15 @@ public class IterationUtils {
             }
         }
         return false;
+    }
+
+    public static <T> long count(Iterator<T> iter) {
+        long r = 0;
+        while (iter.hasNext()) {
+            iter.next();
+            r++;
+        }
+        return r;
     }
 
     /**
@@ -89,6 +99,20 @@ public class IterationUtils {
     @Nonnull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return new IterateeImpl<>(iterable, predicate);
+    }
+
+    /**
+     *
+     * フィルター
+     *
+     * @param <T>
+     * @param iter
+     * @param predicate
+     * @return
+     */
+    @Nonnull
+    public static <T> Iterator<T> filter(Iterator<T> iter, Predicate1<? super T> predicate) {
+        return new FilteringIterator<>(iter, predicate);
     }
 
     /**
@@ -126,7 +150,7 @@ public class IterationUtils {
      * @param iter
      * @param action
      */
-    public static <T> void forEach(Iterable<T> iter, final Consumer1<? super T> action) {
+    public static <T> void forEach(Iterable<T> iter, @NonNull final Consumer1<? super T> action) {
         forEach(iter, new LoopAction<T>() {
             @Override
             public void accept(T a1, LoopCondition a2) {
@@ -141,7 +165,7 @@ public class IterationUtils {
      * @param iter
      * @param action
      */
-    public static <T> void forEach(Iterable<T> iter, Consumer2<? super T, LoopCondition> action) {
+    public static <T> void forEach(Iterable<T> iter, @NonNull Consumer2<? super T, LoopCondition> action) {
         if (iter != null) {
             LoopConditionImpl c = new LoopConditionImpl();
             try {
@@ -169,7 +193,7 @@ public class IterationUtils {
      * @param func
      * @return
      */
-    public static <T, R> List<R> forEach(Iterable<T> iter, final Function1<? super T, R> func) {
+    public static <T, R> List<R> forEach(Iterable<T> iter, @NonNull final Function1<? super T, R> func) {
         return forEach(iter, new LoopFunction<T, R>() {
             @Override
             public R apply(T a1, LoopCondition a2) {
@@ -186,7 +210,8 @@ public class IterationUtils {
      * @param func
      * @return
      */
-    public static <T, R> List<R> forEach(Iterable<T> iter, final Function2<? super T, LoopCondition, R> func) {
+    public static <T, R> List<R> forEach(Iterable<T> iter,
+                                         @NonNull final Function2<? super T, LoopCondition, R> func) {
         final List<R> result;
         if (iter instanceof Collection) {
             result = new ArrayList<>(((Collection) iter).size());
@@ -210,6 +235,7 @@ public class IterationUtils {
      * @param iterable
      * @return 最初の項目. 空なら null.
      */
+    @CheckForNull
     public static <T> T getFirst(Iterable<T> iterable) {
         if (iterable != null) {
             for (T i : iterable) {
@@ -227,8 +253,8 @@ public class IterationUtils {
      * @param predicate
      * @return
      */
-    public static <T> T getFirst(Iterable<T> iterable, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
+    @CheckForNull
+    public static <T> T getFirst(Iterable<T> iterable, @NonNull Predicate1<? super T> predicate) {
         if (iterable != null) {
             for (T i : iterable) {
                 if (predicate.test(i)) {
@@ -288,6 +314,8 @@ public class IterationUtils {
     }
 
     private static class LoopConditionImpl extends LoopCondition {
+
+        private static final long serialVersionUID = 1L;
 
         int index = 0;
 

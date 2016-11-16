@@ -24,6 +24,8 @@
 package info.naiv.lab.java.jmt.text;
 
 import java.nio.IntBuffer;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  * 伝統的な半角全角処理. <br>
@@ -308,7 +310,7 @@ public class JapaneseHalfAndFullUtils {
         return cp;
     }
 
-    private static String convert(String source, ConvertCallback converter) {
+    private static String convert(@NonNull String source, @Nonnull ConvertCallback converter) {
         int len = source.length();
         int size = source.codePointCount(0, len);
         IntBuffer buff = IntBuffer.allocate(size * 2);

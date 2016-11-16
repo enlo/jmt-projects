@@ -51,7 +51,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
     @Nonnull
-    ServiceConnection registerService(Object service, Tag tag) throws IllegalArgumentException;
+    ServiceConnection registerService(@Nonnull Object service, Tag tag) throws IllegalArgumentException;
 
     /**
      * サービスの登録. <br>
@@ -63,7 +63,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
     @Nonnull
-    ServiceConnection registerService(Object service) throws IllegalArgumentException;
+    ServiceConnection registerService(@Nonnull Object service) throws IllegalArgumentException;
 
     /**
      * サービスの登録. <br>
@@ -75,7 +75,7 @@ public interface ServiceContainer extends ServiceProvider {
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
     @Nonnull
-    ServiceConnection registerService(int priority, Object service) throws IllegalArgumentException;
+    ServiceConnection registerService(int priority, @Nonnull Object service) throws IllegalArgumentException;
 
     /**
      * サービスの登録. <br>
@@ -88,6 +88,6 @@ public interface ServiceContainer extends ServiceProvider {
      * @return the info.naiv.java.jmt.component.ServiceConnection
      */
     @Nonnull
-    ServiceConnection registerService(int priority, Object service, Tag tag) throws IllegalArgumentException;
+    ServiceConnection registerService(int priority, @Nonnull Object service, @Nonnull Tag tag) throws IllegalArgumentException;
 
 }

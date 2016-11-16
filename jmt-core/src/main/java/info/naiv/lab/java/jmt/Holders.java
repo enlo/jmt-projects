@@ -41,7 +41,7 @@ public abstract class Holders {
      */
     @SuppressWarnings("unchecked")
     @CheckForNull
-    public static <T> Holder<T> as(Holder<?> holder, Class<T> clazz) {
+    public static <T> Holder<T> as(@Nonnull Holder<?> holder, @Nonnull Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
             return (Holder<T>) holder;
         }
@@ -58,7 +58,7 @@ public abstract class Holders {
      * @return
      */
     @CheckForNull
-    public static <T> T getContentAs(Holder<?> holder, Class<T> clazz) {
+    public static <T> T getContentAs(@Nonnull Holder<?> holder, @Nonnull Class<T> clazz) {
         if (clazz.isAssignableFrom(holder.getContentType())) {
             return clazz.cast(holder.getContent());
         }
@@ -74,7 +74,7 @@ public abstract class Holders {
      * @return
      */
     @Nonnull
-    public static <T> Holder<T> of(T object) {
+    public static <T> Holder<T> of(@Nonnull T object) {
         return new ImmutableHolder<>(object);
     }
 

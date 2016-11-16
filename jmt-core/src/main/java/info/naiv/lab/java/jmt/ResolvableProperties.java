@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -31,7 +30,9 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
@@ -74,9 +75,10 @@ public class ResolvableProperties extends Properties {
      * @param helper プレイホルダーヘルパー
      * @param defaultProps 既定のプロパティ
      */
-    protected ResolvableProperties(PropertiesPlaceholderResolver helper, Properties defaultProps) {
+    protected ResolvableProperties(@NonNull PropertiesPlaceholderResolver helper,
+                                   Properties defaultProps) {
         super(defaultProps);
-        this.resolver = nonNull(helper, "helper");
+        this.resolver = helper;
     }
 
     @Override
@@ -90,6 +92,7 @@ public class ResolvableProperties extends Properties {
      *
      * @return 固定したプロパティ.
      */
+    @Nonnull
     public Properties fix() {
         Properties props = new Properties();
         for (String key : this.stringPropertyNames()) {
@@ -117,7 +120,8 @@ public class ResolvableProperties extends Properties {
      * @return
      * @throws IOException
      */
-    public ResolvableProperties loadFromResource(String uriLocation) throws IOException {
+    @Nonnull
+    public ResolvableProperties loadFromResource(@Nonnull String uriLocation) throws IOException {
         String path = eval(uriLocation);
         Resource res = (new DefaultResourceLoader()).getResource(path);
         PropertiesLoaderUtils.fillProperties(this, res);
@@ -131,6 +135,7 @@ public class ResolvableProperties extends Properties {
      * @return
      * @throws IOException
      */
+    @Nonnull
     public ResolvableProperties loadFromResource(String uriLocation, Charset charset) throws IOException {
         String path = eval(uriLocation);
         Resource r = (new DefaultResourceLoader()).getResource(path);
@@ -145,7 +150,8 @@ public class ResolvableProperties extends Properties {
      * @param value
      * @return
      */
-    public ResolvableProperties setPropertyIfValueNotBlank(String propertyName, String value) {
+    @Nonnull
+    public ResolvableProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
         if (isNotBlank(value)) {
             setProperty(propertyName, value);
         }
@@ -156,6 +162,7 @@ public class ResolvableProperties extends Properties {
      *
      * @return
      */
+    @Nonnull
     public ConcurrentMap<String, String> toMap() {
         ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
         for (String key : this.stringPropertyNames()) {
@@ -186,6 +193,10 @@ public class ResolvableProperties extends Properties {
         }
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+    }
+
     /**
      * プレイスホルダーを実際の値に変換し、戻す.
      *
@@ -194,9 +205,5 @@ public class ResolvableProperties extends Properties {
      */
     protected String eval(String value) {
         return resolver.resolve(this, value);
-    }
-
-    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
-        stream.defaultReadObject();
     }
 }

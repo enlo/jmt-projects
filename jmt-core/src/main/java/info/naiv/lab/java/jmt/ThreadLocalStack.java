@@ -25,12 +25,14 @@ package info.naiv.lab.java.jmt;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
  * @author enlo
  * @param <T>
  */
+@ThreadSafe
 public class ThreadLocalStack<T> {
 
     private final ThreadLocal<Deque<T>> tls = new ThreadLocal<Deque<T>>() {

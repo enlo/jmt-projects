@@ -27,6 +27,7 @@ import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.Value;
 
@@ -49,16 +50,17 @@ public class NumberFormatConfig implements Serializable {
         this.parseBigDecimal = true;
     }
 
-    public NumberFormatConfig(String format) {
+    public NumberFormatConfig(@Nonnull String format) {
         this.format = format;
         this.parseBigDecimal = true;
     }
 
-    public NumberFormatConfig(String format, boolean parseBigDecimal) {
+    public NumberFormatConfig(@Nonnull String format, boolean parseBigDecimal) {
         this.format = format;
         this.parseBigDecimal = parseBigDecimal;
     }
 
+    @Nonnull
     public NumberFormat createNumberFormat() {
         DecimalFormat df;
         if (isEmpty(format)) {

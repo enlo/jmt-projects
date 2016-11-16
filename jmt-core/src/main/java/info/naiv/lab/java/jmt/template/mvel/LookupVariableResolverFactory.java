@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.collection.Lookup;
+import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 import org.mvel2.UnresolveablePropertyException;
 import org.mvel2.integration.VariableResolver;
@@ -58,7 +59,7 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
      * @param parameters
      * @param nextFactory
      */
-    public LookupVariableResolverFactory(Lookup<String, ?> parameters, VariableResolverFactory nextFactory) {
+    public LookupVariableResolverFactory(@Nonnull Lookup<String, ?> parameters, VariableResolverFactory nextFactory) {
         this.parameters = parameters;
         this.nextFactory = nextFactory;
     }

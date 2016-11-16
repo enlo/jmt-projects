@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.infrastructure;
 
 import java.util.Collection;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  * サービス提供
@@ -41,7 +42,7 @@ public interface ServiceProvider extends AutoCloseable {
      * @param serviceType サービスタイプ
      * @return サービスオブジェクト. 見つからない場合は null.
      */
-    <T> T resolveService(Class<T> serviceType);
+    <T> T resolveService(@Nonnull Class<T> serviceType);
 
     /**
      * 型からサービスを取得. <br>
@@ -53,7 +54,7 @@ public interface ServiceProvider extends AutoCloseable {
      * @return サービスオブジェクトコレクション. 見つからない場合は null.
      */
     @Nonnull
-    <T> Collection<T> resolveServices(Class<T> serviceType);
+    <T> Collection<T> resolveServices(@Nonnull Class<T> serviceType);
 
     /**
      * 型からサービスを取得.
@@ -63,7 +64,7 @@ public interface ServiceProvider extends AutoCloseable {
      * @param tag タグオブジェクト.
      * @return the T
      */
-    <T> T resolveService(Class<T> serviceType, Tag tag);
+    <T> T resolveService(@Nonnull Class<T> serviceType, Tag tag);
 
     /**
      * 型からサービスを取得. 複数一致するものがある場合、一致するものをすべて戻す.
@@ -74,5 +75,5 @@ public interface ServiceProvider extends AutoCloseable {
      * @return the java.util.Collection
      */
     @Nonnull
-    <T> Collection<T> resolveServices(Class<T> serviceType, Tag tag);
+    <T> Collection<T> resolveServices(@Nonnull Class<T> serviceType, @Nonnull Tag tag);
 }

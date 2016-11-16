@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arraySort;
 import info.naiv.lab.java.jmt.IterationUnit;
+import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -118,80 +119,80 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      *
      */
     WEEK1(Calendar.WEEK_OF_MONTH, 1) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateWeek(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return advanceWeek(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceWeek(x, y, multi);
                 }
-
+                
             },
     /**
      *
      */
     WEEK4(Calendar.WEEK_OF_MONTH, 4) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateWeek(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return advanceWeek(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceWeek(x, y, multi);
                 }
-
+                
             },
     /**
      *
      */
     WEEK6(Calendar.WEEK_OF_MONTH, 6) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateWeek(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return advanceWeek(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceWeek(x, y, multi);
                 }
-
+                
             },
     /**
      *
      */
     MONTH1(Calendar.MONTH, 1) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateMonth(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return truncateMonth(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceMonth(x, y, multi);
@@ -201,17 +202,17 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      *
      */
     MONTH3(Calendar.MONTH, 3) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateMonth(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return truncateMonth(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceMonth(x, y, multi);
@@ -221,26 +222,26 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      *
      */
     MONTH6(Calendar.MONTH, 6) {
-
+                
                 @Override
                 protected Calendar truncateCore(Calendar cal) {
                     return truncateMonth(cal, multi);
                 }
-
+                
                 @Override
                 protected Calendar advanceCore(Calendar c, long x) {
                     return truncateMonth(c, multi * x);
                 }
-
+                
                 @Override
                 protected long distanceCore(Calendar x, Calendar y) {
                     return distanceMonth(x, y, multi);
                 }
             },;
-
+    
     int calendarType;
     long multi;
-
+    
     private CalendarIterationUnits(int calendarType, long multi) {
         this.calendarType = calendarType;
         this.multi = multi;
@@ -291,7 +292,7 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         long r = d / multi + (d % multi != 0 ? 1 : 0);
         return r;
     }
-
+    
     @Override
     public final Calendar truncate(Calendar cal) {
         return truncateCore((Calendar) cal.clone());
@@ -313,18 +314,10 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      * @return
      */
     protected static Calendar truncateMills(Calendar cal, long x) {
-        cal.setTimeInMillis((cal.getTimeInMillis() / x) * x);
-        return cal;
-    }
-
-    /**
-     *
-     * @param cal
-     * @param x
-     * @return
-     */
-    protected static Calendar truncateDays(Calendar cal, long x) {
-        truncateMills(cal, TimeUnit.DAYS.toMillis(x));
+        long ms = cal.getTimeInMillis();
+        long off = cal.getTimeZone().getOffset(ms);
+        ms += off;
+        cal.setTimeInMillis(((ms / x) * x) - off);
         return cal;
     }
 
@@ -335,7 +328,7 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      * @return
      */
     protected static Calendar truncateWeek(Calendar cal, long x) {
-        cal = truncateDays(cal, 1);
+        cal = getDatePart(cal);
         int year = cal.get(Calendar.YEAR);
         int week = (int) ((cal.get(Calendar.WEEK_OF_YEAR) / x) * x);
         cal.setWeekDate(year, week, Calendar.SUNDAY);
@@ -349,7 +342,7 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      * @return
      */
     protected static Calendar truncateMonth(Calendar cal, long x) {
-        cal = truncateDays(cal, 1);
+        cal = getDatePart(cal);
         int month = (int) ((cal.get(Calendar.MONTH) / x) * x);
         cal.set(Calendar.MONTH, month);
         cal.set(Calendar.DAY_OF_MONTH, 1);
@@ -402,12 +395,12 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         Calendar c = truncate(cal);
         return advanceCore(c, x);
     }
-
+    
     @Override
     public final Calendar next(Calendar value) {
         return advance(value, 1);
     }
-
+    
     @Override
     public final Calendar prior(Calendar value) {
         return advance(value, -1);
@@ -425,10 +418,10 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         Calendar y = truncate(rhs);
         return distanceCore(x, y);
     }
-
+    
     @Override
     public final int compare(Calendar o1, Calendar o2) {
         return truncate(o1).compareTo(truncate(o2));
     }
-
+    
 }

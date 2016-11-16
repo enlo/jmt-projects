@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
+import javax.annotation.Nonnull;
+
 /**
  *
  * @author enlo
@@ -39,8 +41,9 @@ public class SimpleServiceConnection extends AbstractServiceConnection {
      * @param container
      * @param tag
      */
-    public SimpleServiceConnection(Object service, int priority,
-                                   AbstractServiceContainer container, Tag tag) {
+    public SimpleServiceConnection(@Nonnull Object service, int priority,
+                                   @Nonnull AbstractServiceContainer container,
+                                   @Nonnull Tag tag) {
         super(priority, container, tag);
         this.service = service;
         this.serviceType = service.getClass();

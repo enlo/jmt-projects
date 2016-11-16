@@ -28,6 +28,7 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CoderResult;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -42,7 +43,8 @@ public class StringByteLimitter {
      * @param limitBytes
      * @return
      */
-    public static final String truncate(String source, Charset encoding, int limitBytes) {
+    @Nonnull
+    public static final String truncate(@Nonnull String source, @Nonnull Charset encoding, int limitBytes) {
         int len = source.length();
         CharsetEncoder encoder = encoding.newEncoder();
         if (!isLimitOver(encoder, len, limitBytes)) {
@@ -63,7 +65,8 @@ public class StringByteLimitter {
      * @param limitBytes
      * @return
      */
-    public static CharBuffer truncate(CharBuffer source, CharsetEncoder encoder, int limitBytes) {
+    @Nonnull
+    public static CharBuffer truncate(@Nonnull CharBuffer source, @Nonnull CharsetEncoder encoder, int limitBytes) {
         if (!isLimitOver(encoder, source.limit(), limitBytes)) {
             return source;
         }

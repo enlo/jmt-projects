@@ -84,7 +84,7 @@ public class CloseableLock extends ImmutableHolder<Lock> implements Lock, ACS<Lo
     }
 
     @Override
-    public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+    public boolean tryLock(long time, @Nonnull TimeUnit unit) throws InterruptedException {
         return getContent().tryLock(time, unit);
     }
 

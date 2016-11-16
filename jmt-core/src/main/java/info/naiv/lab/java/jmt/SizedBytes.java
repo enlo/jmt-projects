@@ -52,7 +52,7 @@ public class SizedBytes implements Serializable, Cloneable {
         this.data = data;
     }
 
-    public SizedBytes(@Nonnegative int size, byte[] data) {
+    public SizedBytes(@Nonnegative int size, @Nonnull byte[] data) {
         nonNegative(size, "size");
         if (0 < size) {
             nonNull(data, "data");

@@ -76,7 +76,7 @@ public class DocumentBuilderComponent
             return true;
         }
         catch (ParserConfigurationException ex) {
-            throw new RuntimeException(ex);
+            throw new XmlRuntimeException(ex);
         }
     }
 

@@ -10,6 +10,7 @@ import info.naiv.lab.java.jmt.template.annotation.InjectTemplate;
 import info.naiv.lab.java.jmt.template.annotation.TemplateCategoryOf;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
+import javax.annotation.CheckForNull;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -112,6 +113,7 @@ public abstract class AbstractTemplateInjector {
      * @param loaderClass ローダークラス
      * @return
      */
+    @CheckForNull
     protected abstract TemplateLoader getTemplateLoaderCore(String loaderName, Class<? extends TemplateLoader> loaderClass);
 
 }

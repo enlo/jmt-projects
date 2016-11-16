@@ -5,8 +5,6 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.datetime.bizday.WeekSettings;
-import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -20,7 +18,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import static org.hamcrest.Matchers.comparesEqualTo;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
@@ -48,24 +45,6 @@ public class ClassicDateUtilsTest {
 
     /**
      *
-     * @param i
-     * @param ws
-     * @param in
-     * @param workingDay
-     * @param expected
-     */
-    public void doTestAddWorkingDays(int i, WorkingDaySettings ws, Calendar in, int workingDay, Calendar expected) {
-        Calendar saved = (Calendar) in.clone();
-        Calendar actual = ClassicDateUtils.addWorkingDays(in, workingDay, ws);
-        String ix = Integer.toString(i);
-        assertThat(ix, saved, is(in));
-        assertThat(ix, actual, is(notNullValue()));
-        assertThat(ix, actual, is(not(sameInstance(in))));
-        assertThat(ix, actual, is(comparesEqualTo(expected)));
-    }
-
-    /**
-     *
      */
     @Before
     public void setUp() {
@@ -89,18 +68,6 @@ public class ClassicDateUtilsTest {
      */
     @After
     public void tearDown() {
-    }
-
-    /**
-     * Test of addWorkingDays method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testAddWorkingDays() {
-
-        WorkingDaySettings ws = WorkingDaySettings.newInstance();
-
-        Calendar in = ClassicDateUtils.createCalendar(2015, 3, 10);
-        doTestAddWorkingDays(1, ws, in, 7, ClassicDateUtils.createCalendar(2015, 3, 19));
     }
 
     /**
@@ -158,7 +125,7 @@ public class ClassicDateUtilsTest {
     /**
      * Test of clearDatePart method, of class ClassicDateUtils.
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = NullPointerException.class)
     public void testClearDatePart_null() {
         ClassicDateUtils.clearDatePart(NULL_CALENDAR);
     }
@@ -174,42 +141,6 @@ public class ClassicDateUtilsTest {
         Calendar actual = ClassicDateUtils.clearTimePart(in);
         assertThat(in, is(expected));
         assertThat(actual, is(sameInstance(in)));
-    }
-
-    /**
-     * Test of computeFirstBizDayOfWeek method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testComputeFirstBizDayOfWeek() {
-        WorkingDaySettings ws = WorkingDaySettings.newInstance();
-        doTestComputeFirstBizDayOfWeek(1, ws, ClassicDateUtils.createCalendar(2015, 3, 14), ClassicDateUtils.createCalendar(2015, 3, 9));
-        doTestComputeFirstBizDayOfWeek(2, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(3, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(4, ws, ClassicDateUtils.createCalendar(2015, 3, 20), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(5, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(6, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 23));
-
-        ws.setWeekSettings(new WeekSettings(Calendar.MONDAY, Calendar.SUNDAY));
-        doTestComputeFirstBizDayOfWeek(7, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 9));
-        doTestComputeFirstBizDayOfWeek(8, ws, ClassicDateUtils.createCalendar(2015, 3, 16), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(9, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(10, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(11, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(12, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 23));
-
-        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
-        doTestComputeFirstBizDayOfWeek(13, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
-        doTestComputeFirstBizDayOfWeek(14, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(15, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(16, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(17, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(18, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 18));
-
-        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
-        ws.getHolidays().add(ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(19, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
-        doTestComputeFirstBizDayOfWeek(20, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 19));
-        doTestComputeFirstBizDayOfWeek(21, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 19));
     }
 
     /**
@@ -853,18 +784,6 @@ public class ClassicDateUtilsTest {
         assertThat(actual, is(expected));
     }
 
-    /**
-     * Test of shiftIfHoliday method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testShiftIfHoliday() {
-        WorkingDaySettings ws = WorkingDaySettings.newInstance();
-        doTestShiftIfHoliday(1, ws, ClassicDateUtils.createCalendar(2015, 3, 10), ClassicDateUtils.createCalendar(2015, 3, 10));
-        doTestShiftIfHoliday(1, ws, ClassicDateUtils.createCalendar(2015, 3, 14), ClassicDateUtils.createCalendar(2015, 3, 16));
-        ws.setShiftForward(false);
-        doTestShiftIfHoliday(1, ws, ClassicDateUtils.createCalendar(2015, 3, 14), ClassicDateUtils.createCalendar(2015, 3, 13));
-    }
-
     private void doCopyFieldsTest(Calendar in, int field) {
         Calendar now = Calendar.getInstance();
         Calendar expected = (Calendar) now.clone();
@@ -895,24 +814,21 @@ public class ClassicDateUtilsTest {
         assertThat(ix, actual, is(expected.getTime()));
     }
 
-    private void doTestComputeFirstBizDayOfWeek(int i, WorkingDaySettings ws, Calendar in, Calendar expected) {
-        Calendar saved = (Calendar) in.clone();
-        Calendar actual = ClassicDateUtils.computeFirstBizDayOfWeek(in, ws);
-        String ix = Integer.toString(i);
-        assertThat(ix, saved, is(in));
-        assertThat(ix, actual, is(notNullValue()));
-        assertThat(ix, actual, is(not(sameInstance(in))));
-        assertThat(ix, actual, is(comparesEqualTo(expected)));
+    /**
+     * Test of isEpochDatePart method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testIsEpochDatePart() {
+        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
+        assertThat(ClassicDateUtils.isEpochDatePart(epoch), is(true));
     }
 
-    private void doTestShiftIfHoliday(int i, WorkingDaySettings ws, Calendar in, Calendar expected) {
-        Calendar saved = (Calendar) in.clone();
-        Calendar actual = ClassicDateUtils.shiftIfHoliday(in, ws);
-
-        String ix = Integer.toString(i);
-        assertThat(ix, saved, is(in));
-        assertThat(ix, actual, is(notNullValue()));
-        assertThat(ix, actual, is(not(sameInstance(in))));
-        assertThat(ix, actual, is(comparesEqualTo(expected)));
+    /**
+     * Test of isEpochTimePart method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testIsEpochTimePart() {
+        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
+        assertThat(ClassicDateUtils.isEpochTimePart(epoch), is(true));
     }
 }

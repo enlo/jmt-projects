@@ -37,7 +37,9 @@ import org.mvel2.templates.res.Node;
 public class MvelTemplateUtils {
     
     @Nonnull
-    public static CompiledTemplate compile(char[] template, ParserContext context, MvelCustomNodesProvider customNodesProvider) {
+    public static CompiledTemplate compile(@Nonnull char[] template,
+                                           ParserContext context,
+                                           MvelCustomNodesProvider customNodesProvider) {
         ParserContextHolder.push(context);
         try {
             if (customNodesProvider != null) {

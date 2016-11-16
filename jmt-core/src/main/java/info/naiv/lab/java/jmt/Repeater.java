@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.ToString;
 
 /**
@@ -34,6 +35,7 @@ import lombok.ToString;
  * @param <T>
  */
 @ToString
+@ThreadSafe
 public class Repeater<T> implements Iterable<T> {
 
     final int repeatMax;

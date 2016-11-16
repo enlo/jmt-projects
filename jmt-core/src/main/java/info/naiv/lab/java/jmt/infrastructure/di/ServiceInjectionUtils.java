@@ -32,6 +32,7 @@ import java.io.Serializable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import javax.annotation.Nonnull;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 import lombok.extern.slf4j.Slf4j;
@@ -53,7 +54,7 @@ public class ServiceInjectionUtils {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException
      */
-    public static Tag findTag(InjectService anno, Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    public static Tag findTag(@Nonnull InjectService anno, @Nonnull Iterable<Annotation> annotations) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         if (isNotEmpty(anno.value())) {
             return Tag.of(anno.value());
         }
@@ -88,7 +89,7 @@ public class ServiceInjectionUtils {
      * @param ip
      * @return
      */
-    public static <T> T getService(Class<T> clazz, InjectionPoint ip) {
+    public static <T> T getService(@Nonnull Class<T> clazz, @Nonnull InjectionPoint ip) {
         try {
             Annotated at = ip.getAnnotated();
             InjectService anno = at.getAnnotation(InjectService.class);

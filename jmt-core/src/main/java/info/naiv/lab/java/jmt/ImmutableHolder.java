@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt;
 
 import static java.util.Objects.requireNonNull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -35,6 +36,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode
 @ToString
+@ThreadSafe
 public class ImmutableHolder<T> implements Holder<T> {
 
     protected final Class<? extends T> clazz;

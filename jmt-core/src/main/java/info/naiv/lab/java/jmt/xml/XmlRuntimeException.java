@@ -21,12 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.datetime.bizday;
+package info.naiv.lab.java.jmt.xml;
 
 /**
  *
  * @author enlo
  */
-public class WorkingDayCalculator {
-    
+public class XmlRuntimeException extends RuntimeException {
+
+    private static final long serialVersionUID = -7135142029208244857L;
+
+    public XmlRuntimeException(Throwable cause) {
+        super(cause);
+    }
+
+    public XmlRuntimeException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

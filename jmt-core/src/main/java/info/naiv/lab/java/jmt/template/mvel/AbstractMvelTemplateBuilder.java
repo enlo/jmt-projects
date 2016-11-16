@@ -27,14 +27,12 @@ import static info.naiv.lab.java.jmt.Misc.toCharArray;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.TemplateBuilder;
-import java.util.Map;
 import javax.annotation.CheckReturnValue;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 import org.mvel2.ParserContext;
 import org.mvel2.templates.CompiledTemplate;
-import org.mvel2.templates.TemplateCompiler;
-import org.mvel2.templates.res.Node;
 
 /**
  *
@@ -83,7 +81,8 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
      * @param template
      * @return
      */
-    protected abstract Template<TResult> build(String name, CompiledTemplate template);
+    @Nonnull
+    protected abstract Template<TResult> build(String name, @Nonnull CompiledTemplate template);
 
     /**
      * 文字列から CompiledTemplate を生成する.
@@ -91,6 +90,7 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
      * @param template
      * @return
      */
+    @Nonnull
     protected CompiledTemplate compile(char[] template) {
         ParserContext ctx = ParserContext.create();
         return MvelTemplateUtils.compile(template, ctx, customNodesProvider);

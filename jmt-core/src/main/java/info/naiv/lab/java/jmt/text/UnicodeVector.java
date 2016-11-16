@@ -192,6 +192,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
      *
      * @return 分析結果.
      */
+    @Nonnull
     private UnicodeScalar[] analyze() {
         List<UnicodeScalar> result = new ArrayList<>(source.length());
         BreakIterator it = getCharacterInstance();

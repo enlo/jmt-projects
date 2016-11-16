@@ -27,6 +27,7 @@ import info.naiv.lab.java.jmt.infrastructure.AnnotationMetadataSetResolver;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 import lombok.NonNull;
 
@@ -58,6 +59,7 @@ public abstract class AbstractClassPreloader implements ClassPreloader {
      *
      * @return
      */
+    @Nonnull
     @Override
     public Set<Class<?>> preload() {
         Set<Class<?>> classSet = new HashSet<>();

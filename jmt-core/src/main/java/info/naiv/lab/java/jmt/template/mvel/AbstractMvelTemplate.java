@@ -27,6 +27,8 @@ import info.naiv.lab.java.jmt.collection.BeanPropertyLookup;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.util.HashMap;
 import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.mvel2.integration.VariableResolverFactory;
@@ -55,7 +57,7 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
      * @param name
      * @param template
      */
-    public AbstractMvelTemplate(String name, CompiledTemplate template) {
+    public AbstractMvelTemplate(@Nonnull String name, @Nonnull CompiledTemplate template) {
         this.name = name;
         this.template = template;
     }

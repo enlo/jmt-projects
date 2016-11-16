@@ -30,6 +30,7 @@ import java.nio.file.Watchable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.core.io.Resource;
@@ -128,6 +129,7 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
         this.parent = parent;
     }
 
+    @Nonnull
     protected abstract ResourceLoader getResourceLoader();
 
     /**
@@ -137,6 +139,7 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
      * @return
      * @throws IOException
      */
+    @Nonnull
     protected abstract String resolveLocation(String category, String name) throws IOException;
 
     /**

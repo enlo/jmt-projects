@@ -27,6 +27,7 @@ import java.lang.ref.Reference;
 import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import javax.annotation.Nonnull;
 
 /**
  * サービスコンテナーとのコネクション.
@@ -47,7 +48,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
      * @param container コンテナー
      * @param tag タグオブジェクト.
      */
-    public AbstractServiceConnection(int priority, AbstractServiceContainer container, Tag tag) {
+    public AbstractServiceConnection(int priority, @Nonnull AbstractServiceContainer container, Tag tag) {
         this.priority = new AtomicInteger(priority);
         this.container = new WeakReference<>(container);
         this.tag = tag;
@@ -95,7 +96,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
      * @param tag タグ
      * @return 一致する場合は true.
      */
-    protected boolean contains(Class<?> serviceType, Tag tag) {
+    protected boolean contains(@Nonnull Class<?> serviceType, Tag tag) {
         return this.tag.contains(tag) && isAssignableTo(serviceType);
     }
 
@@ -107,7 +108,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
      * @param tag the value of tag
      * @return the T
      */
-    protected abstract <T> T getService(Class<T> serviceType, Tag tag);
+    protected abstract <T> T getService(@Nonnull Class<T> serviceType, Tag tag);
 
     /**
      * サービスが代入可能かどうか.
@@ -115,7 +116,7 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
      * @param clazz 型
      * @return 代入
      */
-    protected abstract boolean isAssignableTo(Class<?> clazz);
+    protected abstract boolean isAssignableTo(@Nonnull Class<?> clazz);
 
     /**
      * オブジェクトの同一性をチェック.

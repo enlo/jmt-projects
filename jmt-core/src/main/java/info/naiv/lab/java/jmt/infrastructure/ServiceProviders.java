@@ -81,7 +81,7 @@ public class ServiceProviders {
      * @param serviceType サービスタイプ
      * @return サービスオブジェクト. 見つからない場合は null.
      */
-    public static <T> T resolveService(Class<T> serviceType) {
+    public static <T> T resolveService(@Nonnull Class<T> serviceType) {
         return getThreadContainer().resolveService(serviceType);
     }
 
@@ -93,7 +93,7 @@ public class ServiceProviders {
      * @param tag タグオブジェクト.
      * @return the T
      */
-    static public <T> T resolveService(Class<T> serviceType, Tag tag) {
+    static public <T> T resolveService(@Nonnull Class<T> serviceType, @Nonnull Tag tag) {
         return getThreadContainer().resolveService(serviceType, tag);
     }
 
@@ -107,7 +107,7 @@ public class ServiceProviders {
      * @return サービスオブジェクトコレクション. 見つからない場合は null.
      */
     @Nonnull
-    public static <T> Collection<T> resolveServices(Class<T> serviceType) {
+    public static <T> Collection<T> resolveServices(@Nonnull Class<T> serviceType) {
         return getThreadContainer().resolveServices(serviceType);
     }
 
@@ -120,7 +120,7 @@ public class ServiceProviders {
      * @return the java.util.Collection
      */
     @Nonnull
-    public static <T> Collection<T> resolveServices(Class<T> serviceType, Tag tag) {
+    public static <T> Collection<T> resolveServices(@Nonnull Class<T> serviceType, @Nonnull Tag tag) {
         return getThreadContainer().resolveServices(serviceType, tag);
     }
 

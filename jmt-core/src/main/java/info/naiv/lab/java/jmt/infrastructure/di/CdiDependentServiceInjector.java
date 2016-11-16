@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.infrastructure.di;
 
 import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;
+import javax.annotation.Nonnull;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -42,7 +43,7 @@ public class CdiDependentServiceInjector {
      */
     @Produces
     @InjectService
-    public Object getService(InjectionPoint ip) {
+    public Object getService(@Nonnull InjectionPoint ip) {
         return ServiceInjectionUtils.getService(ip.getBean().getBeanClass(), ip);
     }
 }

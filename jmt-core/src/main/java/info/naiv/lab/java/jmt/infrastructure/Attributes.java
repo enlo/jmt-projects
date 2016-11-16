@@ -48,7 +48,7 @@ public interface Attributes {
      * @param name 属性名.
      * @return 値. 属性が無い場合は null.
      */
-    Object getAttribute(String name);
+    Object getAttribute(@Nonnull String name);
 
     /**
      * 属性名に対応する値を型付で取得する. 値が存在しない場合は null を戻す.
@@ -59,7 +59,7 @@ public interface Attributes {
      * @throws TypeMismatchException 型と値が一致しない場合.
      * @return 値. 属性が無い場合は null.
      */
-    <T> T getAttribute(String name, Class<T> clazz) throws TypeMismatchException;
+    <T> T getAttribute(@Nonnull String name, @Nonnull Class<T> clazz) throws TypeMismatchException;
 
     /**
      * 属性の有無を確認.
@@ -67,7 +67,7 @@ public interface Attributes {
      * @param name 属性名.
      * @return 指定された名前の属性名があれば true.
      */
-    boolean contains(String name);
+    boolean contains(@Nonnull String name);
 
     /**
      * 属性の内容をマップにコピー
@@ -76,5 +76,5 @@ public interface Attributes {
      * @return target そのもの
      */
     @Nonnull
-    Map<String, Object> copyTo(Map<String, Object> target);
+    Map<String, Object> copyTo(@Nonnull Map<String, Object> target);
 }

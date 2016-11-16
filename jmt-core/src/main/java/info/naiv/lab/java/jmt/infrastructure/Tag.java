@@ -23,10 +23,10 @@
  */
 package info.naiv.lab.java.jmt.infrastructure;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import java.io.Serializable;
 import javax.annotation.Nonnull;
 import lombok.Data;
+import lombok.NonNull;
 
 /**
  * タグ情報
@@ -58,7 +58,7 @@ public class Tag {
      * @return タグ
      */
     @Nonnull
-    public static Tag of(Serializable id) {
+    public static Tag of(@Nonnull Serializable id) {
         return new Tag(id);
     }
 
@@ -69,8 +69,7 @@ public class Tag {
      *
      * @param id ID
      */
-    public Tag(Serializable id) {
-        nonNull(id, "id");
+    public Tag(@NonNull Serializable id) {
         this.id = id;
     }
 

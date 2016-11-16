@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.nop;
 import info.naiv.lab.java.jmt.closeable.ACS;
 import static info.naiv.lab.java.jmt.closeable.Closeables.lock;
@@ -31,7 +30,9 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
+import lombok.NonNull;
 
 /**
  * 値が null の場合に後からインスタンスを生成する {@link Holder }.
@@ -50,7 +51,7 @@ public class AutoCreateHolder<T> extends MutableHolder<T> {
      *
      * @param clazz 値の型.
      */
-    public AutoCreateHolder(Class<? extends T> clazz) {
+    public AutoCreateHolder(@Nonnull Class<? extends T> clazz) {
         this(null, clazz, StandardFunctions.newInstance(clazz));
     }
 
@@ -61,7 +62,7 @@ public class AutoCreateHolder<T> extends MutableHolder<T> {
      * @param clazz 値の型.
      * @param creator インスタンス生成器.
      */
-    public AutoCreateHolder(Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
+    public AutoCreateHolder(@Nonnull Class<? extends T> clazz, @Nonnull Function1<Class<? extends T>, T> creator) {
         this(null, clazz, creator);
     }
 
@@ -73,9 +74,9 @@ public class AutoCreateHolder<T> extends MutableHolder<T> {
      * @param clazz 値の型.
      * @param creator インスタンス生成器.
      */
-    public AutoCreateHolder(T object, Class<? extends T> clazz, Function1<Class<? extends T>, T> creator) {
-        super(object, nonNull(clazz, "clazz"));
-        this.creator = nonNull(creator, "creator");
+    public AutoCreateHolder(T object, @NonNull Class<? extends T> clazz, @NonNull Function1<Class<? extends T>, T> creator) {
+        super(object, clazz);
+        this.creator = creator;
     }
 
     @Override
@@ -111,6 +112,7 @@ public class AutoCreateHolder<T> extends MutableHolder<T> {
      *
      * @return 生成したインスタンス.
      */
+    @Nonnull
     protected T createInstance() {
         return creator.apply(getContentType());
     }

@@ -29,6 +29,7 @@ import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getSystemCo
 import java.util.List;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 
 /**
@@ -56,7 +57,7 @@ public class ThreadSafeServiceContainer extends AbstractServiceContainer {
     }
 
     ThreadSafeServiceContainer(ServiceProvider defaultProvider,
-                               List<AbstractServiceConnection> connections) {
+                               @Nonnull List<AbstractServiceConnection> connections) {
         super(defaultProvider, connections);
     }
 

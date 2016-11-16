@@ -43,6 +43,7 @@ import java.util.UUID;
 import static java.util.UUID.randomUUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.OrderUtils;
 
@@ -74,7 +75,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param connections コネクションリスト.
      */
     protected AbstractServiceContainer(ServiceProvider defaultProvider,
-                                       List<AbstractServiceConnection> connections) {
+                                       @NonNull List<AbstractServiceConnection> connections) {
         this.defaultProvider = defaultProvider;
         this.connections = connections;
         this.uuid = randomUUID();
@@ -111,9 +112,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
     }
 
     @Override
-    @SuppressWarnings("unused")
-    public final ServiceConnection registerService(int priority, Object service, Tag tag) throws IllegalArgumentException {
-        nonNull(service, "service");
+    public final ServiceConnection registerService(int priority, @NonNull Object service, Tag tag) throws IllegalArgumentException {
 
         /*
          登録時は同期をとる.
@@ -142,9 +141,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
     }
 
     @Override
-    public final <T> T resolveService(Class<T> serviceType, Tag tag) {
-        nonNull(serviceType, "serviceType");
-        nonNull(tag, "tag");
+    public final <T> T resolveService(@NonNull Class<T> serviceType, @NonNull Tag tag) {
 
         /*
          CopyOnWriteArrayList を利用し、厳密な同期は不要とする
@@ -180,6 +177,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      *
      * @return
      */
+    @Nonnull
     public ThreadSafeServiceContainer toThreadSafe() {
         return new ThreadSafeServiceContainer(this.defaultProvider, new ArrayList<>(this.connections));
     }
@@ -229,6 +227,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
+    @Nonnull
     protected <T> Set<T> find(Class<T> serviceType, Tag tag) {
         Set<T> result = new HashSet<>();
         for (AbstractServiceConnection conn : connections) {
@@ -262,7 +261,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
-    protected AbstractServiceConnection getAndUpdate(Object service, int priority, Tag tag) {
+    protected AbstractServiceConnection getAndUpdate(@Nonnull Object service, int priority, @Nonnull Tag tag) {
         for (AbstractServiceConnection conn : connections) {
             if (conn.getTag().equals(tag) && conn.isSameInstance(service)) {
                 conn.setPriority(priority);
@@ -298,7 +297,9 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @return
      */
     @Nonnull
-    protected ServiceConnection internalRegisterService(int priority, Object service, Tag tag) {
+    protected ServiceConnection internalRegisterService(int priority,
+                                                        @Nonnull Object service,
+                                                        @Nonnull Tag tag) {
         final AbstractServiceConnection conn = createConnection(priority, service, tag);
         addIfNotFound(connections, conn);
         return conn;
@@ -318,7 +319,7 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
-    protected <T> T resolveDefault(Class<T> serviceType, Tag tag) {
+    protected <T> T resolveDefault(@Nonnull Class<T> serviceType, @Nonnull Tag tag) {
         if (defaultProvider != null) {
             return defaultProvider.resolveService(serviceType, tag);
         }
@@ -335,7 +336,8 @@ public abstract class AbstractServiceContainer implements ServiceContainer {
      * @param tag
      * @return
      */
-    protected <T> Set<T> resolveDefault(Set<T> result, Class<T> serviceType, Tag tag) {
+    @Nonnull
+    protected <T> Set<T> resolveDefault(@Nonnull Set<T> result, @Nonnull Class<T> serviceType, @Nonnull Tag tag) {
         if (defaultProvider != null) {
             result.addAll(defaultProvider.resolveServices(serviceType, tag));
         }

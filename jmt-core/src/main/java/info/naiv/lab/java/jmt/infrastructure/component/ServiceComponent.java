@@ -47,7 +47,7 @@ public interface ServiceComponent<T> {
      * @param provider
      * @return
      */
-    T getContent(Tag tag, ServiceProvider provider);
+    T getContent(@Nonnull Tag tag, @Nonnull ServiceProvider provider);
 
     /**
      *
@@ -55,5 +55,5 @@ public interface ServiceComponent<T> {
      * @param provider
      * @return
      */
-    boolean contains(Tag tag, ServiceProvider provider);
+    boolean contains(@Nonnull Tag tag, @Nonnull ServiceProvider provider);
 }

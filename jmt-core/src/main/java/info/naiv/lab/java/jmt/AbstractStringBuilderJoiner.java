@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt;
 
+import javax.annotation.Nonnull;
+
 /**
  * 文字列連結用クラス
  *
@@ -37,7 +39,8 @@ public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, S
      * @param first
      * @param more
      */
-    public AbstractStringBuilderJoiner(Adder<T, StringBuilder> first, Adder<T, StringBuilder> more) {
+    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilder> first,
+                                       @Nonnull Adder<T, StringBuilder> more) {
         super(first, more);
     }
 
@@ -46,7 +49,7 @@ public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, S
      *
      * @param adder
      */
-    public AbstractStringBuilderJoiner(Adder<T, StringBuilder> adder) {
+    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilder> adder) {
         super(adder);
     }
 

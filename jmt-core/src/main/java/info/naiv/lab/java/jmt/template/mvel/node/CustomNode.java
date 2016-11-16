@@ -52,7 +52,8 @@ public abstract class CustomNode extends Node {
      * @param delim
      * @return
      */
-    protected static List<String> splitExpression(char[] contents, char delim) {
+    @Nonnull
+    protected static List<String> splitExpression(@Nonnull char[] contents, char delim) {
         List<String> expr = new ArrayList<>();
         int start = 0;
         int to = contents.length;
@@ -164,10 +165,9 @@ public abstract class CustomNode extends Node {
      * 複数の式をそれぞれコンパイル.
      *
      * @param expressions
-     * @param delim
      * @return
      */
-    protected static Serializable[] compileMultipleContents(List<String> expressions) {
+    protected static Serializable[] compileMultipleContents(@Nonnull List<String> expressions) {
         Serializable[] ces = new Serializable[expressions.size()];
         ParserContext ctx = ParserContextHolder.get();
         if (ctx != null) {
@@ -188,6 +188,7 @@ public abstract class CustomNode extends Node {
      *
      * @return
      */
+    @Nonnull
     protected Serializable compileSingleContents() {
         ParserContext ctx = ParserContextHolder.get();
         if (ctx != null) {
@@ -206,7 +207,7 @@ public abstract class CustomNode extends Node {
      * @param ctx
      * @param factory
      */
-    protected abstract void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
+    protected abstract void doEval(@Nonnull TemplateRuntime runtime, @Nonnull TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
 
     /**
      * コンテンツが設定された後に処理を行う

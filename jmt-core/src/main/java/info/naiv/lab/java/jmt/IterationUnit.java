@@ -25,6 +25,8 @@ package info.naiv.lab.java.jmt;
 
 import java.io.Serializable;
 import java.util.Comparator;
+import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -39,7 +41,8 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      * @param value 切り捨てする値. value は変更されない.
      * @return 切り捨てられた値.
      */
-    T truncate(T value);
+    @Nonnull
+    T truncate(@NonNull T value);
 
     /**
      * 次の値.
@@ -47,7 +50,8 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      * @param value もとになる値. value は変更されない.
      * @return 次の値.
      */
-    T next(T value);
+    @Nonnull
+    T next(@NonNull T value);
 
     /**
      * 前の値.
@@ -55,7 +59,8 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      * @param value もとになる値. value は変更されない.
      * @return 前の値.
      */
-    T prior(T value);
+    @Nonnull
+    T prior(@NonNull T value);
 
     /**
      *
@@ -63,7 +68,8 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      * @param n
      * @return
      */
-    T advance(T value, long n);
+    @Nonnull
+    T advance(@NonNull T value, long n);
 
     /**
      *
@@ -71,5 +77,5 @@ public interface IterationUnit<T> extends Comparator<T>, Serializable {
      * @param rhs
      * @return
      */
-    long distance(T lhs, T rhs);
+    long distance(@NonNull T lhs, @NonNull T rhs);
 }

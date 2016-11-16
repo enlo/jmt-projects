@@ -1,7 +1,6 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
@@ -160,7 +159,7 @@ public abstract class Misc {
      * @param predicate 検索
      * @return 等価な項目があれば true.
      */
-    public static <T> boolean contains(Iterable<T> items, Predicate1<? super T> predicate) {
+    public static <T> boolean contains(Iterable<T> items, @Nonnull Predicate1<? super T> predicate) {
         return IterationUtils.contains(items, predicate);
     }
 
@@ -172,7 +171,8 @@ public abstract class Misc {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
+    public static <T extends Comparable<T>>
+            boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         return IterationUtils.containsCompareEquals(items, valueToFind);
     }
 
@@ -235,7 +235,7 @@ public abstract class Misc {
      * @param iter
      * @param action
      */
-    public static <T> void forEach(Iterable<T> iter, Consumer1<? super T> action) {
+    public static <T> void forEach(Iterable<T> iter, @Nonnull Consumer1<? super T> action) {
         IterationUtils.forEach(iter, action);
     }
 
@@ -246,7 +246,7 @@ public abstract class Misc {
      * @param iter
      * @param action
      */
-    public static <T> void forEach(Iterable<T> iter, Consumer2<? super T, LoopCondition> action) {
+    public static <T> void forEach(Iterable<T> iter, @Nonnull Consumer2<? super T, LoopCondition> action) {
         IterationUtils.forEach(iter, action);
     }
 
@@ -258,7 +258,7 @@ public abstract class Misc {
      * @return フォーマット済み文字列.
      */
     @Nonnull
-    public static String formatBytes(byte[] data, String byteFormat) {
+    public static String formatBytes(byte[] data, @NonNull String byteFormat) {
         try (Formatter formatter = new Formatter()) {
             for (byte b : data) {
                 formatter.format(byteFormat, b);
@@ -288,7 +288,7 @@ public abstract class Misc {
      * @return
      */
     @CheckForNull
-    public static <T> T getFirst(Iterable<T> iterable, Predicate1<? super T> predicate) {
+    public static <T> T getFirst(Iterable<T> iterable, @Nonnull Predicate1<? super T> predicate) {
         return IterationUtils.getFirst(iterable, predicate);
     }
 
@@ -398,7 +398,7 @@ public abstract class Misc {
      * @param className
      * @return
      */
-    public static boolean isLoadable(String className) {
+    public static boolean isLoadable(@Nonnull String className) {
         try {
             Class.forName(className);
             return true;
@@ -416,7 +416,7 @@ public abstract class Misc {
      * @param loader
      * @return
      */
-    public static boolean isLoadable(String className, ClassLoader loader) {
+    public static boolean isLoadable(@Nonnull String className, ClassLoader loader) {
         try {
             Class.forName(className, true, loader);
             return true;
@@ -443,7 +443,7 @@ public abstract class Misc {
      * @param object チェックするオブジェクト
      * @return 空でなければ true.
      */
-    public static boolean isNotEmpty(String object) {
+    public static boolean isNotEmpty(CharSequence object) {
         return !isEmpty(object);
     }
 
@@ -513,7 +513,9 @@ public abstract class Misc {
      * @throws IllegalArgumentException dest または mapper が null
      */
     @Nonnull
-    public static <Dest extends Collection<R>, R, T> Dest map(@NonNull Dest dest, Collection<T> source, Function1<? super T, R> mapper) throws IllegalArgumentException {
+    public static <Dest extends Collection<R>, R, T>
+            Dest map(@NonNull Dest dest, Collection<T> source,
+                     @Nonnull Function1<? super T, R> mapper) {
         if (source != null) {
             for (T item : source) {
                 dest.add(mapper.apply(item));
@@ -531,7 +533,8 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T, U> Iterable<U> map(final Iterable<T> iter, final Function1<? super T, ? extends U> mapper) {
+    public static <T, U> Iterable<U> map(final Iterable<T> iter,
+                                         @Nonnull final Function1<? super T, ? extends U> mapper) {
         return IterationUtils.map(iter, mapper);
     }
 
@@ -548,7 +551,8 @@ public abstract class Misc {
      * @return 変換先のマップ
      */
     @Nonnull
-    public static <Dest extends Map<K, R>, K, R, T> Dest map(@NonNull Dest dest, Map<K, T> source, Function1<T, R> mapper) {
+    public static <Dest extends Map<K, R>, K, R, T>
+            Dest map(@NonNull Dest dest, Map<K, T> source, @Nonnull Function1<T, R> mapper) {
         if (source != null) {
             for (Entry<K, T> e : source.entrySet()) {
                 K key = e.getKey();
@@ -568,7 +572,7 @@ public abstract class Misc {
      * @return dest.
      */
     @Nonnull
-    public static <R, T> Set<R> map(Set<T> source, Function1<T, R> mapper) {
+    public static <R, T> Set<R> map(Set<T> source, @Nonnull Function1<T, R> mapper) {
         final Set<R> result = new HashSet<>(source.size());
         return map(result, source, mapper);
     }
@@ -583,7 +587,7 @@ public abstract class Misc {
      * @return dest.
      */
     @Nonnull
-    public static <R, T> List<R> map(List<T> source, Function1<T, R> mapper) {
+    public static <R, T> List<R> map(List<T> source, @Nonnull Function1<T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
     }
@@ -641,7 +645,7 @@ public abstract class Misc {
      * @return
      */
     @CheckForNull
-    public static <T> T newInstance(Class<T> clazz) {
+    public static <T> T newInstance(@Nonnull Class<T> clazz) {
         try {
             return clazz.newInstance();
         }
@@ -657,7 +661,7 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T> Optional<T> newInstance(Optional<Class<T>> clazz) {
+    public static <T> Optional<T> newInstance(@Nonnull Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
             return OptionalImpl.ofNullable(newInstance(clazz.get()));
         }
@@ -672,7 +676,7 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static Optional<Object> newInstance(String className) {
+    public static Optional<Object> newInstance(@Nonnull String className) {
         Optional<Class<?>> clazz = resolveClassName(className);
         return newInstance((Optional) clazz);
     }
@@ -685,7 +689,6 @@ public abstract class Misc {
      */
     @Nop
     public static <T> void nop(T x) {
-
     }
 
     /**
@@ -706,7 +709,7 @@ public abstract class Misc {
      * @return 全ての改行文字を ls にしたテキスト
      */
     @Nonnull
-    public static String normalizeLineSeparator(@NonNull String text, String ls) {
+    public static String normalizeLineSeparator(@NonNull String text, @Nonnull String ls) {
         return text.replaceAll("\\u000D\\u000A|\\u000A|\\u000D|\\u0085|\\u0008|\\u000C|\\u2028|\\u2029", ls);
     }
 
@@ -717,7 +720,7 @@ public abstract class Misc {
      * @param clazz
      * @return
      */
-    public static <T> T nullOf(@NonNull Class<T> clazz) {
+    public static <T> T nullOf(@Nonnull Class<T> clazz) {
         return null;
     }
 
@@ -781,18 +784,18 @@ public abstract class Misc {
     /**
      * 先頭の ZWNBSP (BOM) を除外.
      *
-     * @param string 文字列
+     * @param value 文字列
      * @return 先頭から ZWNBSP を除外した文字列.
      */
-    public static String removeZwnbsp(String string) {
-        if (isEmpty(string)) {
-            return string;
+    public static String removeZwnbsp(String value) {
+        if (isEmpty(value)) {
+            return value;
         }
-        else if (string.startsWith(ZWNBSP)) {
-            return string.substring(ZWNBSP.length());
+        else if (value.startsWith(ZWNBSP)) {
+            return value.substring(ZWNBSP.length());
         }
         else {
-            return string;
+            return value;
         }
     }
 
@@ -816,7 +819,7 @@ public abstract class Misc {
      * @return クラスをOptionalでラップしたもの.
      */
     @Nonnull
-    public static Optional<Class<?>> resolveClassName(String className) {
+    public static Optional<Class<?>> resolveClassName(@Nonnull String className) {
         try {
             return OptionalImpl.<Class<?>>ofNullable(Class.forName(className));
         }
@@ -835,7 +838,9 @@ public abstract class Misc {
      * @return クラスをOptionalでラップしたもの.
      */
     @Nonnull
-    public static Optional<Class<?>> resolveClassName(String className, boolean initialize, ClassLoader classLoader) {
+    public static Optional<Class<?>> resolveClassName(@Nonnull String className,
+                                                      boolean initialize,
+                                                      ClassLoader classLoader) {
         try {
             Class clz = Class.forName(className, initialize, classLoader);
             return OptionalImpl.<Class<?>>ofNullable(clz);
@@ -1375,7 +1380,7 @@ public abstract class Misc {
      * @param url URL文字列.
      * @return URL. URLの形式が不正であれば、null.
      */
-    public static URL toURL(String url) {
+    public static URL toURL(@Nonnull String url) {
         nonEmpty(url, "url");
         try {
             return new URL(url);

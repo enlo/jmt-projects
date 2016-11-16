@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import static java.lang.System.arraycopy;
@@ -53,7 +52,7 @@ public class ClassicArrayUtils {
      * @return
      */
     @Nonnull
-    public static <T> Iterable<T> arrayAsIterable(T[] array) {
+    public static <T> Iterable<T> arrayAsIterable(@Nonnull T[] array) {
         return new ArrayIterable<>(array);
     }
 
@@ -65,7 +64,8 @@ public class ClassicArrayUtils {
      * @param arr2
      * @return
      */
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, T[] arr2) {
+    public static <T extends Comparable<T>> int arrayCompareTo(@Nonnull T[] arr1,
+                                                               @Nonnull T[] arr2) {
         return arrayCompareTo(arr1, 0, arr2, 0);
     }
 
@@ -79,9 +79,9 @@ public class ClassicArrayUtils {
      * @param pos2
      * @return
      */
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, T[] arr2, int pos2) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
+    public static <T extends Comparable<T>>
+            int arrayCompareTo(@NonNull T[] arr1, int pos1,
+                               @NonNull T[] arr2, int pos2) {
         int len1 = arr1.length - pos1;
         int len2 = arr2.length - pos2;
         return arrayCompareTo(arr1, pos1, len1, arr2, pos2, len2);
@@ -99,11 +99,11 @@ public class ClassicArrayUtils {
      * @param len2
      * @return
      */
-    public static <T extends Comparable<T>> int arrayCompareTo(T[] arr1, int pos1, int len1, T[] arr2, int pos2, int len2) {
+    public static <T extends Comparable<T>>
+            int arrayCompareTo(@NonNull T[] arr1, int pos1, int len1,
+                               @NonNull T[] arr2, int pos2, int len2) {
         int lim1 = pos1 + len1;
         int lim2 = pos2 + len2;
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
         Arguments.between(pos2, 0, arr2.length - 1, "pos2");
         for (int i1 = pos1, i2 = pos2; i1 < lim1 && i2 < lim2; i1++, i2++) {
@@ -168,9 +168,8 @@ public class ClassicArrayUtils {
      * @param len
      * @return
      */
-    public static boolean arrayEqualsInRange(byte[] arr1, int pos1, byte[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
+    public static boolean arrayEqualsInRange(@NonNull byte[] arr1, int pos1,
+                                             @NonNull byte[] arr2, int pos2, int len) {
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
         Arguments.between(pos2, 0, arr2.length - 1, "pos2");
         Arguments.between(pos1 + len, 0, arr1.length, "len");
@@ -195,9 +194,8 @@ public class ClassicArrayUtils {
      * @param len
      * @return
      */
-    public static boolean arrayEqualsInRange(int[] arr1, int pos1, int[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
+    public static boolean arrayEqualsInRange(@NonNull int[] arr1, int pos1,
+                                             @NonNull int[] arr2, int pos2, int len) {
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
         Arguments.between(pos2, 0, arr2.length - 1, "pos2");
         Arguments.between(pos1 + len, 0, arr1.length, "len");
@@ -223,9 +221,8 @@ public class ClassicArrayUtils {
      * @param len
      * @return
      */
-    public static <T> boolean arrayEqualsInRange(T[] arr1, int pos1, T[] arr2, int pos2, int len) {
-        nonNull(arr1, "arr1");
-        nonNull(arr2, "arr2");
+    public static <T> boolean arrayEqualsInRange(@NonNull T[] arr1, int pos1,
+                                                 @NonNull T[] arr2, int pos2, int len) {
         Arguments.between(pos1, 0, arr1.length - 1, "pos1");
         Arguments.between(pos2, 0, arr2.length - 1, "pos2");
         Arguments.between(pos1 + len, 0, arr1.length, "len");
@@ -247,8 +244,7 @@ public class ClassicArrayUtils {
      * @param predicate 条件
      * @return 条件に一致する要素のインデックス. 存在しない場合、-1
      */
-    public static <T> int arrayIndexOf(T[] array, Predicate1<? super T> predicate) {
-        nonNull(predicate, "predicate");
+    public static <T> int arrayIndexOf(T[] array, @NonNull Predicate1<? super T> predicate) {
         if (array == null) {
             return -1;
         }
@@ -350,7 +346,7 @@ public class ClassicArrayUtils {
      * @param clazz 型情報.
      * @return array が T[] なら true.
      */
-    public static <T> boolean isArrayOf(Object array, Class<T> clazz) {
+    public static <T> boolean isArrayOf(Object array, @Nonnull Class<T> clazz) {
         if (array != null) {
             Class<?> aclz = array.getClass();
             if (aclz.isArray()) {

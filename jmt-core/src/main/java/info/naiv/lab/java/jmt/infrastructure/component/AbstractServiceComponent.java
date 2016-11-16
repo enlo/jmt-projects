@@ -92,6 +92,8 @@ public abstract class AbstractServiceComponent<T> implements ServiceComponent<T>
      * @param provider
      * @return
      */
-    abstract protected boolean handleNotFound(Map<Tag, T> map, Tag tag, ServiceProvider provider);
+    abstract protected boolean handleNotFound(@Nonnull Map<Tag, T> map,
+                                              @Nonnull Tag tag,
+                                              @Nonnull ServiceProvider provider);
 
 }

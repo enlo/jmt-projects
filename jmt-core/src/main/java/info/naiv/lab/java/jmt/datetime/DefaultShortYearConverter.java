@@ -27,6 +27,7 @@ import static info.naiv.lab.java.jmt.Arguments.nonMinus;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import javax.annotation.concurrent.ThreadSafe;
 
 /**
  * 2桁年の短縮年を、4桁の年に変換する <br>
@@ -36,6 +37,7 @@ import java.util.Calendar;
  *
  * @author enlo
  */
+@ThreadSafe
 public class DefaultShortYearConverter
         implements ShortYearConverter, SystemComponent {
 

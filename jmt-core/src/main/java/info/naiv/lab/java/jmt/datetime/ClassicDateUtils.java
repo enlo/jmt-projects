@@ -1,9 +1,7 @@
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.datetime.bizday.WorkingDaySettings;
 import static info.naiv.lab.java.jmt.Arguments.between;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import info.naiv.lab.java.jmt.Constants;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static info.naiv.lab.java.jmt.Misc.toCalendar;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
@@ -14,7 +12,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import static java.util.Calendar.DAY_OF_MONTH;
-import static java.util.Calendar.DAY_OF_WEEK;
 import static java.util.Calendar.DAY_OF_YEAR;
 import static java.util.Calendar.ERA;
 import static java.util.Calendar.HOUR_OF_DAY;
@@ -28,6 +25,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
@@ -46,21 +44,36 @@ public class ClassicDateUtils {
     /**
      *
      */
-    public static final Calendar EPOC_CALENDAR;
+    public static final Calendar LOCAL_EPOC_CALENDAR;
 
     /**
      *
      */
-    public static final Date EPOC_DATE;
-
+    public static final Date LOCAL_EPOC_DATE;
     /**
      *
      */
     public static final int[] TIME_PART_FIELDS = {HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND};
 
+    /**
+     *
+     */
+    public static final Calendar UTC_EPOC_CALENDAR;
+
+    /**
+     *
+     */
+    public static final Date UTC_EPOC_DATE;
+
+    public static final TimeZone TZ_UTC = TimeZone.getTimeZone("UTC");
+
     static {
-        EPOC_DATE = new Date(0);
-        EPOC_CALENDAR = toCalendar(EPOC_DATE, null);
+        LOCAL_EPOC_DATE = Timestamp.valueOf("1970-01-01 00:00:00");
+        LOCAL_EPOC_CALENDAR = toCalendar(LOCAL_EPOC_DATE, null);
+
+        UTC_EPOC_CALENDAR = Calendar.getInstance(TZ_UTC);
+        UTC_EPOC_CALENDAR.setTimeInMillis(0);
+        UTC_EPOC_DATE = UTC_EPOC_CALENDAR.getTime();
     }
 
     /**
@@ -72,9 +85,7 @@ public class ClassicDateUtils {
      * @return 結果
      */
     @Nonnull
-    public static Date add(Date date, long amount, TimeUnit timeUnit) {
-        nonNull(date, "date");
-        nonNull(timeUnit, "timeUnit");
+    public static Date add(@NonNull Date date, long amount, @NonNull TimeUnit timeUnit) {
         return new Date(date.getTime() + timeUnit.toMillis(amount));
     }
 
@@ -87,39 +98,10 @@ public class ClassicDateUtils {
      * @return 結果
      */
     @Nonnull
-    public static Calendar add(Calendar cal, long amount, TimeUnit timeUnit) {
-        nonNull(cal, "cal");
-        nonNull(timeUnit, "timeUnit");
+    public static Calendar add(@NonNull Calendar cal, long amount, @NonNull TimeUnit timeUnit) {
         Calendar c = (Calendar) cal.clone();
         c.setTimeInMillis(cal.getTimeInMillis() + timeUnit.toMillis(amount));
         return c;
-    }
-
-    /**
-     * 営業日計算.
-     * 指定された日付が休日の場合、{@link #shiftIfHoliday(java.util.Calendar, info.naiv.java.jmt.datetime.WorkingDaySettings) }
-     * を呼び出し、営業日にしてから処理を行う
-     *
-     * @param cal 日付
-     * @param days 加算する営業日.
-     * @param settings 設定.
-     * @return 営業日分だけ加算した値.
-     */
-    @Nonnull
-    public static Calendar addWorkingDays(Calendar cal, int days, WorkingDaySettings settings) {
-        nonNull(cal, "cal");
-        nonNull(settings, "settings");
-
-        int mod = days < 0 ? -1 : 1;
-        int absDays = mod * days;
-        Calendar result = shiftIfHoliday(cal, settings);
-        for (int i = 0; i < absDays; i++) {
-            result.add(DAY_OF_MONTH, mod);
-            while (settings.isHoliday(result)) {
-                result.add(DAY_OF_MONTH, mod);
-            }
-        }
-        return result;
     }
 
     /**
@@ -130,8 +112,7 @@ public class ClassicDateUtils {
      * @return 入力されたカレンダー
      */
     @Nonnull
-    static public Calendar clearDatePart(Calendar cal) {
-        nonNull(cal, "cal");
+    static public Calendar clearDatePart(@NonNull Calendar cal) {
         cal.set(YEAR, 1970);
         cal.set(MONTH, JANUARY);
         cal.set(DAY_OF_MONTH, 1);
@@ -145,36 +126,12 @@ public class ClassicDateUtils {
      * @return 入力されたカレンダー
      */
     @Nonnull
-    static public Calendar clearTimePart(Calendar cal) {
-        nonNull(cal, "cal");
+    static public Calendar clearTimePart(@NonNull Calendar cal) {
         cal.set(HOUR_OF_DAY, 0);
         cal.set(MINUTE, 0);
         cal.set(SECOND, 0);
         cal.set(MILLISECOND, 0);
         return cal;
-    }
-
-    /**
-     * 指定された週の最初の営業日を取得する.週の開始日が休日の場合、翌平日を戻す.
-     *
-     * @param cal カレンダー
-     * @param settings 営業日情報.
-     * @return 週の最初の営業日.
-     */
-    @Nonnull
-    static public Calendar computeFirstBizDayOfWeek(Calendar cal, WorkingDaySettings settings) {
-        nonNull(cal, "cal");
-        nonNull(settings, "holidaySettings");
-        final Calendar base = (Calendar) cal.clone();
-        final int fdow = settings.getWeekSettings().getFirstDayOfWeek();
-        final int dow = base.get(DAY_OF_WEEK);
-        final int mod = (dow < fdow) ? Constants.SEVEN_DAYS : 0;
-        base.setFirstDayOfWeek(fdow);
-        base.add(DAY_OF_MONTH, fdow - dow - mod);
-        while (settings.isHoliday(base)) {
-            base.add(DAY_OF_MONTH, 1);
-        }
-        return base;
     }
 
     /**
@@ -428,6 +385,29 @@ public class ClassicDateUtils {
     }
 
     /**
+     * 指定されたカレンダーオブジェクトの日付が1970-1-1かどうか調査する.
+     *
+     * @param cal
+     * @return
+     */
+    public static boolean isEpochDatePart(@NonNull Calendar cal) {
+        return isSameDay(cal, LOCAL_EPOC_CALENDAR);
+    }
+
+    /**
+     * 指定されたカレンダーオブジェクトの時刻が00:00:00.000かどうか調査する. 時差は考慮しない.
+     *
+     * @param cal
+     * @return
+     */
+    public static boolean isEpochTimePart(@NonNull Calendar cal) {
+        return cal.get(Calendar.HOUR_OF_DAY) == 0
+                && cal.get(Calendar.MINUTE) == 0
+                && cal.get(Calendar.SECOND) == 0
+                && cal.get(Calendar.MILLISECOND) == 0;
+    }
+
+    /**
      *
      * @param lhs
      * @param rhs
@@ -495,27 +475,6 @@ public class ClassicDateUtils {
 
         Date date = SimpleDateFormat.getInstance().parse(dateText);
         return toCalendar(date, null);
-    }
-
-    /**
-     * 日付が休日なら、営業日までシフトした日付を戻し、<br>
-     * そうでなければカレンダーを戻す.
-     *
-     * @param cal
-     * @param settings
-     * @return
-     */
-    @Nonnull
-    public static Calendar shiftIfHoliday(Calendar cal, WorkingDaySettings settings) {
-        nonNull(cal, "cal");
-        nonNull(settings, "settings");
-
-        Calendar result = (Calendar) cal.clone();
-        int shift = settings.isShiftForward() ? 1 : -1;
-        while (settings.isHoliday(result)) {
-            result.add(DAY_OF_MONTH, shift);
-        }
-        return result;
     }
 
     private static <T> T get(Class<T> clazz) {

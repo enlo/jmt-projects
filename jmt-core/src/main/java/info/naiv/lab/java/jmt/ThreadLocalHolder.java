@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.ToString;
@@ -34,6 +35,7 @@ import lombok.ToString;
  */
 @EqualsAndHashCode(callSuper = false)
 @ToString
+@ThreadSafe
 public class ThreadLocalHolder<T> extends ThreadLocal<T> implements Holder<T> {
 
     private final Class<? extends T> clazz;

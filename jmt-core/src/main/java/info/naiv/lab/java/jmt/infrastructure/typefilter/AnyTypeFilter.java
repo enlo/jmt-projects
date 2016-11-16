@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.infrastructure.typefilter;
 
 import java.io.IOException;
+import javax.annotation.concurrent.ThreadSafe;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.core.type.classreading.MetadataReaderFactory;
 import org.springframework.core.type.filter.TypeFilter;
@@ -32,6 +33,7 @@ import org.springframework.core.type.filter.TypeFilter;
  *
  * @author enlo
  */
+@ThreadSafe
 public class AnyTypeFilter implements TypeFilter {
 
     /**

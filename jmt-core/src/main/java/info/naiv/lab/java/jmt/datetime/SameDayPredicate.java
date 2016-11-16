@@ -35,7 +35,7 @@ import javax.annotation.Nonnull;
  */
 public class SameDayPredicate implements Predicate1<Calendar> {
 
-    Calendar value;
+    final Calendar value;
 
     /**
      *

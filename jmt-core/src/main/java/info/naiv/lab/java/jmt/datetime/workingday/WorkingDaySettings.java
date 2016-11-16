@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.datetime.bizday;
+package info.naiv.lab.java.jmt.datetime.workingday;
 
+import info.naiv.lab.java.jmt.datetime.WeekSettings;
 import info.naiv.lab.java.jmt.datetime.SameDayPredicate;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.contains;
@@ -34,6 +35,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.ToString;
 
 /**
@@ -63,6 +65,14 @@ public class WorkingDaySettings implements Cloneable, Serializable {
     @NonNull
     private WeekSettings weekSettings;
 
+    /**
+     * コンストラクタ
+     * 
+     * @param weekSettings  週設定
+     * @param holidays  休日リスト
+     * @param extractHolidays   休日/休日リストから除外する休日
+     * @param shiftForward 休日の際に営業日をどちらにずらすか
+     */
     public WorkingDaySettings(WeekSettings weekSettings,
                               Set<Calendar> holidays,
                               Set<Calendar> extractHolidays,
@@ -74,8 +84,10 @@ public class WorkingDaySettings implements Cloneable, Serializable {
     }
 
     @Override
-    public Object clone() throws CloneNotSupportedException {
-        return super.clone();
+    @SneakyThrows
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public WorkingDaySettings clone() {
+        return (WorkingDaySettings) super.clone();
     }
 
     @Nonnull

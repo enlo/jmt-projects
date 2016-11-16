@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.annotation.Nonnull;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -64,6 +65,7 @@ public class AnnotationMetadataSetResolver {
      *
      * @return
      */
+    @Nonnull
     public static AnnotationMetadataSetResolver newAnyType() {
         AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
         resolver.includeTypeFilters.add(AnyTypeFilter.INSTANCE);
@@ -90,6 +92,7 @@ public class AnnotationMetadataSetResolver {
      * @return
      * @throws IOException
      */
+    @Nonnull
     public Set<AnnotationMetadata> resolve(String basePackage) throws IOException {
         return resolve(basePackage, null);
     }
@@ -101,6 +104,7 @@ public class AnnotationMetadataSetResolver {
      * @return
      * @throws IOException
      */
+    @Nonnull
     public Set<AnnotationMetadata> resolve(String basePackage, Predicate1<AnnotationMetadata> predicate) throws IOException {
         String packageSearchPath = arrayToString(ResourcePatternResolver.CLASSPATH_ALL_URL_PREFIX,
                                                  resolveBasePackage(basePackage), "/", this.resourcePattern);
@@ -131,7 +135,7 @@ public class AnnotationMetadataSetResolver {
      * @return
      * @throws IOException
      */
-    protected boolean isTarget(MetadataReader metadataReader) throws IOException {
+    protected boolean isTarget(@Nonnull MetadataReader metadataReader) throws IOException {
         List<TypeFilter> filters = getExcludeTypeFilters();
         MetadataReaderFactory factory = getMetadataReaderFactory();
         for (TypeFilter filter : filters) {

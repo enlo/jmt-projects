@@ -59,7 +59,9 @@ public class RecursiveFileDeleter extends SimpleFileVisitor<Path> {
     @Override
     @Nonnull
     public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-        deleteIfExists(file);
+        if (!attrs.isDirectory() || deleteDirectory) {
+            deleteIfExists(file);
+        }
         return super.visitFile(file, attrs);
     }
 }

@@ -24,8 +24,8 @@
 package info.naiv.lab.java.jmt.io;
 
 import static info.naiv.lab.java.jmt.Arguments.lessThan;
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.Misc;
+import static info.naiv.lab.java.jmt.Misc.toStringList;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -43,6 +43,7 @@ import java.nio.file.CopyOption;
 import java.nio.file.DirectoryStream;
 import java.nio.file.FileVisitOption;
 import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import static java.nio.file.Files.walkFileTree;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
@@ -54,9 +55,9 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -64,6 +65,19 @@ import javax.annotation.Nonnull;
  */
 public class NIOUtils {
 
+    static final DirectoryStream.Filter<Path> ANY_PATH_FILTER = new DirectoryStream.Filter<Path>() {
+        @Override
+        public boolean accept(Path entry) throws IOException {
+            return true;
+        }
+    };
+
+    static final PathMatcher ANY_PATH_MATCHER = new PathMatcher() {
+        @Override
+        public boolean matches(Path path) {
+            return true;
+        }
+    };
     static final int DEFAULT_BUFFER_SIZE = 0x2000;
 
     /**
@@ -71,12 +85,7 @@ public class NIOUtils {
      * @return
      */
     public static DirectoryStream.Filter<Path> anyPathFilter() {
-        return new DirectoryStream.Filter<Path>() {
-            @Override
-            public boolean accept(Path entry) throws IOException {
-                return true;
-            }
-        };
+        return ANY_PATH_FILTER;
     }
 
     /**
@@ -84,12 +93,7 @@ public class NIOUtils {
      * @return
      */
     public static PathMatcher anyPathMatcher() {
-        return new PathMatcher() {
-            @Override
-            public boolean matches(Path path) {
-                return true;
-            }
-        };
+        return ANY_PATH_MATCHER;
     }
 
     /**
@@ -99,9 +103,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    public static long copy(InputStream from, OutputStream to) throws IOException {
-        nonNull(from, "from");
-        nonNull(to, "to");
+    public static long copy(@NonNull InputStream from, @NonNull OutputStream to) throws IOException {
         byte[] buf = new byte[DEFAULT_BUFFER_SIZE];
         long size = 0;
         while (true) {
@@ -122,9 +124,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    public static long copy(Readable from, Appendable to) throws IOException {
-        nonNull(from, "from");
-        nonNull(to, "to");
+    public static long copy(@NonNull Readable from, @NonNull Appendable to) throws IOException {
         long size = 0;
         CharBuffer cb = CharBuffer.allocate(DEFAULT_BUFFER_SIZE);
         while (from.read(cb) > 0) {
@@ -137,14 +137,15 @@ public class NIOUtils {
     }
 
     /**
-     *
+     * ファイル階層をコピーする.
+     * 
      * @param source
      * @param dest
      * @param options
      * @throws IOException
      */
     public static void copyAll(Path source, Path dest, CopyOption... options) throws IOException {
-        walkFileTree(source, new RecursiveFileCopier(dest, options));
+        walkFileTree(source, new RecursiveFileCopier(source, dest, options));
     }
 
     /**
@@ -165,7 +166,7 @@ public class NIOUtils {
      * @param extension
      * @return
      */
-    public static Path findByFilenameWithSuffixAndExtention(Set<String> list, String name, String suffix, String extension) {
+    public static Path findByFilenameWithSuffixAndExtention(Iterable<String> list, String name, String suffix, String extension) {
         return findByFilenameWithSuffixAndExtention(list, name, suffix, extension, false);
     }
 
@@ -215,18 +216,33 @@ public class NIOUtils {
      * @param ignoreCase 大文字小文字の区別
      * @return
      */
-    public static Collection<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list,
-                                                                        String name,
-                                                                        String suffix,
-                                                                        String extension,
-                                                                        boolean ignoreCase) {
+    public static List<Path> listByFilenameWithSuffixAndExtention(Iterable<String> list,
+                                                                  String name,
+                                                                  String suffix,
+                                                                  String extension,
+                                                                  boolean ignoreCase) {
         SuffixAndExtensionFilter filter = new SuffixAndExtensionFilter(name, suffix, extension, ignoreCase);
         Map<String, Path> founds = new HashMap<>();
         for (String item : list) {
             Path filepath = Paths.get(item);
             filter.filter(filepath, founds);
         }
-        return founds.values();
+        return new ArrayList<>(founds.values());
+    }
+
+    /**
+     * パターンに一致するファイルを検索.
+     *
+     *
+     * @param directory
+     * @param pattern
+     * @param depth
+     * @return
+     * @throws IOException
+     */
+    @Nonnull
+    public static List<String> listFiles(@Nonnull Path directory, @Nonnull String pattern, int depth) throws IOException {
+        return toStringList(listPaths(directory, pattern, depth));
     }
 
     /**
@@ -237,48 +253,52 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    @Nonnull
-    public static List<String> listFiles(Path directory, String pattern, int depth) throws IOException {
-        final List<String> result = new ArrayList<>();
-        walkFileTree(directory,
-                     EnumSet.noneOf(FileVisitOption.class),
-                     depth,
-                     new PatternVisitor(pattern) {
-                         @Override
-                         protected FileVisitResult
-                         onTarget(Path file,
-                                  BasicFileAttributes attrs) throws IOException {
-                             result.add(file.toString());
-                             return super.onTarget(file, attrs);
-                         }
-                     });
-        return result;
-    }
-
-    /**
-     *
-     * @param directory
-     * @param pattern
-     * @param depth
-     * @return
-     * @throws IOException
-     */
-    @Nonnull
-    public static List<Path> listPaths(Path directory, String pattern, int depth) throws IOException {
+    public static List<Path> listPaths(@Nonnull Path directory, @Nonnull String pattern, int depth) throws IOException {
         final List<Path> result = new ArrayList<>();
-        walkFileTree(directory,
-                     EnumSet.noneOf(FileVisitOption.class),
-                     depth,
-                     new PatternVisitor(pattern) {
-                         @Override
-                         protected FileVisitResult
-                         onTarget(Path file,
-                                  BasicFileAttributes attrs) throws IOException {
-                             result.add(file);
-                             return super.onTarget(file, attrs);
-                         }
-                     });
+        FileVisitor<Path> visitor = new PatternVisitor(pattern) {
+            @Override
+            protected FileVisitResult onTarget(Path file,
+                                               BasicFileAttributes attrs) throws IOException {
+                result.add(file);
+                return super.onTarget(file, attrs);
+            }
+        };
+        walkFileTree(directory, EnumSet.noneOf(FileVisitOption.class),
+                     depth, visitor);
         return result;
+    }
+
+    /**
+     *
+     * @param directory
+     * @return
+     * @throws IOException
+     */
+    @Nonnull
+    public static List<Path> listPaths(@Nonnull Path directory) throws IOException {
+        final List<Path> result = new ArrayList<>();
+        final FileVisitor<Path> visitor = new PatternVisitor() {
+            @Override
+            protected FileVisitResult onTarget(Path file,
+                                               BasicFileAttributes attrs) throws IOException {
+                result.add(file);
+                return super.onTarget(file, attrs);
+            }
+        };
+        walkFileTree(directory, visitor);
+        return result;
+    }
+
+    /**
+     *
+     * @param directory
+     * @param pattern
+     * @return
+     * @throws IOException
+     */
+    @Nonnull
+    public static List<Path> listPaths(@Nonnull Path directory, @Nonnull String pattern) throws IOException {
+        return listPaths(directory, pattern, Integer.MAX_VALUE);
     }
 
     /**
@@ -287,7 +307,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    public static byte[] toByteArray(InputStream is) throws IOException {
+    public static byte[] toByteArray(@Nonnull InputStream is) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         copy(is, os);
         return os.toByteArray();
@@ -299,7 +319,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    public static ByteBuffer toByteBuffer(InputStream is) throws IOException {
+    public static ByteBuffer toByteBuffer(@Nonnull InputStream is) throws IOException {
         if (is instanceof FileInputStream) {
             FileChannel fch = ((FileInputStream) is).getChannel();
             long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
@@ -323,7 +343,7 @@ public class NIOUtils {
      * @return
      * @throws IOException
      */
-    public static CharBuffer toCharBuffer(InputStream is, Charset charset) throws IOException {
+    public static CharBuffer toCharBuffer(@Nonnull InputStream is, @Nonnull Charset charset) throws IOException {
         if (is instanceof FileInputStream) {
             FileChannel fch = ((FileInputStream) is).getChannel();
             long size = lessThan(fch.size(), Integer.MAX_VALUE, "file size");
@@ -397,8 +417,7 @@ public class NIOUtils {
      * @return
      */
     public static PathMatcher toPathMatcher(final String pattern,
-                                            final org.springframework.util.PathMatcher pathMatcher) {
-        nonNull(pathMatcher, "spring PathMatcher");
+                                            @NonNull final org.springframework.util.PathMatcher pathMatcher) {
         if (pattern == null) {
             return anyPathMatcher();
         }
@@ -411,13 +430,30 @@ public class NIOUtils {
     }
 
     /**
+     * 文字列のパスをパスオブジェクトに変換.
+     *
+     * @param paths
+     * @return
+     */
+    public static List<Path> toPaths(Collection<String> paths) {
+        ArrayList<Path> result = new ArrayList<>();
+        if (paths != null) {
+            result.ensureCapacity(paths.size());
+            for (String p : paths) {
+                result.add(Paths.get(p));
+            }
+        }
+        return result;
+    }
+
+    /**
      *
      * @param is
      * @param charset
      * @return
      * @throws IOException
      */
-    public static String toString(InputStream is, Charset charset) throws IOException {
+    public static String toString(@Nonnull InputStream is, @Nonnull Charset charset) throws IOException {
         return charset.decode(toByteBuffer(is)).toString();
     }
 

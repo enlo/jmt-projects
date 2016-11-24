@@ -171,16 +171,19 @@ public class ServiceConnectionTest {
     @Test
     public void testClose_MT() throws InterruptedException, ExecutionException {
         int threadCount = 10;
-        int repeatCount = threadCount * 2;
+        int repeatCount = threadCount * 3;
+        final Object lock = new Object();
         final ServiceConnection instance = container.registerService(new TestObj(1));
         ExecutorService e = Executors.newFixedThreadPool(threadCount);
         List<Future<Integer>> list = e.invokeAll(toList(repeat(repeatCount, new Callable<Integer>() {
             @Override
             public Integer call() {
                 int r = 0;
-                if (!instance.isClosed()) {
-                    instance.getContainer();
-                    r = 1;
+                synchronized (lock) {
+                    if (!instance.isClosed()) {
+                        instance.getContainer();
+                        r = 1;
+                    }
                 }
                 instance.close();
                 return r;

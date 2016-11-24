@@ -21,48 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.io;
+package info.naiv.lab.java.jmt.jdbc;
 
-import java.nio.file.Paths;
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import org.junit.Test;
+import info.naiv.lab.java.jmt.fx.Function1;
 
 /**
  *
  * @author enlo
+ * @param <R>
  */
-public class PatternVisitorTest {
+public interface ResultSetMapper<R>
+        extends Function1<ResultSetAccessHelper, R> {
 
-    /**
-     *
-     */
-    public PatternVisitorTest() {
-    }
-
-    /**
-     *
-     */
-    @Test
-    public void testGlobMatcher() {
-
-        PatternVisitor pv = new PatternVisitor("**.txt");
-        assertThat(pv.matcher.matches(Paths.get("C:/temp/test.txt")), is(true));
-        assertThat(pv.matcher.matches(Paths.get("C:/temp/test.pdf")), is(false));
-        assertThat(pv.matcher.matches(Paths.get("test.txt")), is(true));
-        assertThat(pv.matcher.matches(Paths.get("test.pdf")), is(false));
-    }
-
-    /**
-     *
-     */
-    @Test
-    public void testGlobMatcher_02() {
-
-        PatternVisitor pv = new PatternVisitor("**");
-        assertThat(pv.matcher.matches(Paths.get("C:/temp/test.txt")), is(true));
-        assertThat(pv.matcher.matches(Paths.get("C:/temp/test.pdf")), is(true));
-        assertThat(pv.matcher.matches(Paths.get("test.txt")), is(true));
-        assertThat(pv.matcher.matches(Paths.get("test.pdf")), is(true));
-    }
 }

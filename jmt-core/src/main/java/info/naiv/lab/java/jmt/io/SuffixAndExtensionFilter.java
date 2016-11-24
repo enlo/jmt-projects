@@ -44,14 +44,20 @@ public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implem
                                       StringBuilder partsNoSuffix,
                                       String suffix,
                                       String extension) {
-        if (isNotBlank(name)) {
+        boolean hasName = isNotBlank(name);
+        boolean hasSuffix = isNotBlank(suffix);
+        boolean hasExtension = isNotBlank(extension);
+        if(!hasName && !hasSuffix && !hasExtension) {
+            throw new IllegalArgumentException("no name, no suffix, no extension. ");
+        }
+        if (hasName) {
             partsWithSuffix.append("^(").append(name).append(")");
             partsNoSuffix.append("^(").append(name).append(")");
         }
-        if (isNotBlank(suffix)) {
+        if (hasSuffix) {
             partsWithSuffix.append("\\.").append(suffix);
         }
-        if (isNotBlank(extension)) {
+        if (hasExtension) {
             partsWithSuffix.append("\\.").append(extension);
             partsNoSuffix.append("\\.").append(extension);
         }

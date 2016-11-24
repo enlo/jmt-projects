@@ -33,6 +33,21 @@ import java.util.List;
  */
 public interface Command extends Cloneable, Serializable {
 
+    @SuppressWarnings(value = "CloneDeclaresCloneNotSupported")
+    Command clone();
+
+    /**
+     *
+     * @return パラメータ値配列
+     */
+    Object[] getParameterValueArray();
+
+    /**
+     *
+     * @return パラメータ値リスト
+     */
+    List<Object> getParameterValueList();
+
     /**
      *
      * @return パラメータリスト.
@@ -44,14 +59,5 @@ public interface Command extends Cloneable, Serializable {
      * @return 実際のSQL.
      */
     String getQuery();
-
-    @SuppressWarnings(value = "CloneDeclaresCloneNotSupported")
-    Command clone();
-
-    /**
-     *
-     * @return パラメータ値リスト
-     */
-    List<Object> getParameterValues();
 
 }

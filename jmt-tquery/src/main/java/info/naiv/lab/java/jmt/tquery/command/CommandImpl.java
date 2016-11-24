@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -52,12 +51,22 @@ public class CommandImpl implements Command {
         this.parameters = parameters;
     }
 
+    @Override
+    public Object[] getParameterValueArray() {
+        int sz = parameters.size();
+        Object[] result = new Object[sz];
+        for (int i = 0; i < sz; i++) {
+            result[i] = parameters.get(i).getValue();
+        }
+        return result;
+    }
+
     /**
      *
      * @return パラメータ値リスト
      */
     @Override
-    public List<Object> getParameterValues() {
+    public List<Object> getParameterValueList() {
         List<Object> result = new ArrayList<>(parameters.size());
         for (CommandParameter p : parameters) {
             result.add(p.getValue());

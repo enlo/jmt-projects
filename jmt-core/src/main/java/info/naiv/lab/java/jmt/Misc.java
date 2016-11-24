@@ -198,7 +198,7 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T> Iteratee<T> filter(@Nonnull Iterable<T> iterable, @Nonnull Predicate1<? super T> predicate) {
+    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return IterationUtils.filter(iterable, predicate);
     }
 
@@ -1372,6 +1372,19 @@ public abstract class Misc {
             logger.warn("format failed. value:{} format:{} throws:{}", value, format, e.getMessage());
             return defaultValue;
         }
+    }
+
+    public static List<String> toStringList(Iterable<?> objects) {
+        ArrayList<String> result = new ArrayList<>();
+        if (objects != null) {
+            if (objects instanceof Collection) {
+                result.ensureCapacity(((Collection) objects).size());
+            }
+            for (Object obj : objects) {
+                result.add(Objects.toString(obj));
+            }
+        }
+        return result;
     }
 
     /**

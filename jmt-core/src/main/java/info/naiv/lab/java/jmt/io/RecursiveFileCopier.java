@@ -34,6 +34,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import javax.annotation.Nonnull;
+import lombok.NonNull;
 
 /**
  *
@@ -44,15 +45,17 @@ import javax.annotation.Nonnull;
 public class RecursiveFileCopier extends SimpleFileVisitor<Path> {
 
     final Deque<Path> depth;
+    final Path sourcePath;
     final Path destPath;
     final CopyOption[] options;
 
     /**
-     *
+     * @param sourcePath
      * @param destPath
      * @param options
      */
-    public RecursiveFileCopier(Path destPath, CopyOption... options) {
+    public RecursiveFileCopier(@NonNull Path sourcePath, @NonNull Path destPath, CopyOption... options) {
+        this.sourcePath = sourcePath;
         this.destPath = destPath;
         this.depth = new ArrayDeque<>();
         this.depth.push(destPath);
@@ -62,17 +65,21 @@ public class RecursiveFileCopier extends SimpleFileVisitor<Path> {
     @Override
     @Nonnull
     public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-        this.depth.pop();
+        if (!dir.equals(sourcePath)) {
+            this.depth.pop();
+        }
         return super.postVisitDirectory(dir, exc);
     }
 
     @Override
     @Nonnull
     public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-        Path current = this.depth.peekFirst();
-        Path next = current.resolve(dir.getFileName());
-        createDirectories(next);
-        this.depth.push(next);
+        if (!dir.equals(sourcePath)) {
+            Path current = this.depth.peekFirst();
+            Path next = current.resolve(dir.getFileName());
+            createDirectories(next);
+            this.depth.push(next);
+        }
         return super.preVisitDirectory(dir, attrs);
     }
 

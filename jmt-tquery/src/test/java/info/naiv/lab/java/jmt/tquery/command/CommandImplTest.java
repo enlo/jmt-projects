@@ -58,11 +58,11 @@ public class CommandImplTest {
     }
 
     /**
-     * Test of getParameterValues method, of class Command.
+     * Test of getParameterValueList method, of class Command.
      */
     @Test
     public void testGetParameterValues() {
-        assertThat(testTarget.getParameterValues(), contains((Object) 123));
+        assertThat(testTarget.getParameterValueList(), contains((Object) 123));
     }
 
     /**

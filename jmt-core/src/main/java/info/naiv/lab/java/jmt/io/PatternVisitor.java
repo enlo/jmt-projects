@@ -28,6 +28,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
 import java.nio.file.attribute.BasicFileAttributes;
+import lombok.NonNull;
 
 /**
  *
@@ -41,7 +42,7 @@ public class PatternVisitor extends AbstractFileVisitor {
      *
      * @param matcher
      */
-    public PatternVisitor(PathMatcher matcher) {
+    public PatternVisitor(@NonNull PathMatcher matcher) {
         this.matcher = matcher;
     }
 
@@ -56,7 +57,7 @@ public class PatternVisitor extends AbstractFileVisitor {
      *
      * @param pattern
      */
-    public PatternVisitor(String pattern) {
+    public PatternVisitor(@NonNull String pattern) {
         this(FileSystems.getDefault().getPathMatcher("glob:" + pattern));
     }
 

@@ -21,10 +21,15 @@ public abstract class AbstractFileVisitor extends SimpleFileVisitor<Path> implem
     @Override
     public boolean accept(Path entry) throws IOException {
         BasicFileAttributes attrs = readAttributes(entry, BasicFileAttributes.class);
-        if (attrs.isRegularFile()) {
-            return accept(entry, attrs);
+        return accept(entry, attrs);
+    }
+
+    @Override
+    public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+        if (accept(dir, attrs)) {
+            return onTarget(dir, attrs);
         }
-        return false;
+        return CONTINUE;
     }
 
     @Override

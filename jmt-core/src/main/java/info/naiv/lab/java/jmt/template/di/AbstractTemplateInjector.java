@@ -11,6 +11,8 @@ import info.naiv.lab.java.jmt.template.annotation.TemplateCategoryOf;
 import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.annotation.CheckForNull;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,6 +21,10 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public abstract class AbstractTemplateInjector {
+
+    @Getter
+    @Setter
+    protected TemplateLoader defaultTemplateLoader;
 
     /**
      *
@@ -102,6 +108,9 @@ public abstract class AbstractTemplateInjector {
         loader = getTemplateLoaderCore(loaderName, anno.loaderClass());
         if (loader == null) {
             loader = getLoaderFromServiceProvider(loaderName, anno.loaderClass());
+        }
+        if (loader == null) {
+            loader = getDefaultTemplateLoader();
         }
         return loader;
     }

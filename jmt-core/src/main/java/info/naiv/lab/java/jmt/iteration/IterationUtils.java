@@ -30,11 +30,12 @@ public class IterationUtils {
      * @param n
      * @return
      */
-    public static <T> Iterator<T> advance(Iterator<T> iter, int n) {
-        for (int i = 0; i < n && iter.hasNext(); i++) {
+    public static <T> boolean advance(Iterator<T> iter, int n) {
+        int i = 0;
+        for (; i < n && iter.hasNext(); i++) {
             iter.next();
         }
-        return iter;
+        return i == n;
     }
 
     /**

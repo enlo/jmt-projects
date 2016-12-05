@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
+import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
 import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryTemplate;
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +60,7 @@ public class IncludeTemplateNodeTest {
 
         String expected = "select * from ABC where name = ? and (age between ? and ?)";
         assertThat(q.getQuery(), is(expected));
-        assertThat(q.getParameters(), contains(CommandParameters.builder("John Doe", 15, 45).toArray()));
+        assertThat(q.getParameters(), contains(DefaultCommandParameters.builder("John Doe", 15, 45).toArray()));
     }
 
     /**

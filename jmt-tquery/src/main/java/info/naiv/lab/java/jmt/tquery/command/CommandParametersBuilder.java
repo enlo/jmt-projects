@@ -38,9 +38,14 @@ public class CommandParametersBuilder {
     }
 
     public CommandParametersBuilder(int capacity) {
-        impl = new CommandParameters(capacity);
+        impl = new DefaultCommandParameters(capacity);
     }
 
+    public CommandParametersBuilder add(CommandParameter cp) {
+        impl.add(cp);
+        return this;
+    }
+    
     public CommandParametersBuilder addCapacity(int capacity) {
         impl.addCapacity(capacity);
         return this;
@@ -61,18 +66,13 @@ public class CommandParametersBuilder {
         return this;
     }
 
-    public CommandParametersBuilder ensureCapacity(int minCapacity) {
-        impl.ensureCapacity(minCapacity);
-        return this;
-    }
-
     /**
      * コマンドパラメーターリストを生成する.
      *
      * @return コマンドパラメーターリスト
      */
     public CommandParameters build() {
-        return new CommandParameters(impl);
+        return new DefaultCommandParameters(impl);
     }
 
     /**

@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.tquery;
 
 import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.CommandParametersBuilder;
+import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.ParameterBinder;
 import info.naiv.lab.java.jmt.tquery.command.DefaultParameterBinder;
 import java.util.HashMap;
@@ -51,13 +52,13 @@ public class QueryContext {
 
     public QueryContext() {
         this.parameterBinder = new DefaultParameterBinder();
-        this.parameters = new CommandParameters();
+        this.parameters = new DefaultCommandParameters();
         this.attributes = new HashMap<>();
     }
 
     public QueryContext(@NonNull ParameterBinder parameterBinder) {
         this.parameterBinder = parameterBinder;
-        this.parameters = new CommandParameters();
+        this.parameters = new DefaultCommandParameters();
         this.attributes = new HashMap<>();
     }
 

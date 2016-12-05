@@ -83,7 +83,7 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
      * @return
      */
     public int size() {
-        return beanWrapper.getPropertyDescriptors().length;
+        return propertyNames.size();
     }
 
 }

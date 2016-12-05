@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
+import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.NamedParameterBinder;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -74,7 +75,7 @@ public class BindManyNodeTest {
         String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
 
         assertThat(actualSql, is(expectedSql));
-        assertThat(ctx.getParameters(), contains(CommandParameters.builder(category, names.get(0), names.get(1), names.get(2)).toArray()));
+        assertThat(ctx.getParameters(), contains(DefaultCommandParameters.builder(category, names.get(0), names.get(1), names.get(2)).toArray()));
 
     }
 

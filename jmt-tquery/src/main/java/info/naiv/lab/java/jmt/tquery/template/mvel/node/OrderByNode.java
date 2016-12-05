@@ -70,7 +70,7 @@ public class OrderByNode extends CustomNode {
             CharSequence seq = (CharSequence) value;
             if (seq.length() > 0) {
                 appender.append(ORDER_BY_PREFIX);
-                appender.append((CharSequence) value);
+                appender.append(seq);
             }
         }
         else {

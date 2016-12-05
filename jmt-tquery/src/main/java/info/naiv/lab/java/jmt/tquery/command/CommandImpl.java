@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import lombok.Data;
 
@@ -38,7 +39,7 @@ public class CommandImpl implements Command {
 
     String query;
 
-    List<CommandParameter> parameters;
+    CommandParameters parameters;
 
     /**
      * コンストラクタ.
@@ -46,7 +47,17 @@ public class CommandImpl implements Command {
      * @param query
      * @param parameters
      */
-    public CommandImpl(String query, List<CommandParameter> parameters) {
+    public CommandImpl(String query, Collection<CommandParameter> parameters) {
+        this(query, new DefaultCommandParameters(parameters));
+    }
+
+    /**
+     * コンストラクタ.
+     *
+     * @param query
+     * @param parameters
+     */
+    public CommandImpl(String query, CommandParameters parameters) {
         this.query = query;
         this.parameters = parameters;
     }
@@ -79,7 +90,7 @@ public class CommandImpl implements Command {
     public CommandImpl clone() {
         try {
             CommandImpl cmd = (CommandImpl) super.clone();
-            cmd.parameters = new CommandParameters(this.parameters);
+            cmd.parameters = new DefaultCommandParameters(this.parameters);
             return cmd;
         }
         catch (CloneNotSupportedException ex) {

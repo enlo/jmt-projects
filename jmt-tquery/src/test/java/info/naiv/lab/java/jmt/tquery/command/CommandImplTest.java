@@ -24,7 +24,8 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import info.naiv.lab.java.jmt.tquery.QueryContext;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 import org.hamcrest.Matchers;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.emptyCollectionOf;
@@ -44,7 +45,7 @@ public class CommandImplTest {
     }
 
     static final String TEST_QUERY = "select * from Table where id = ?";
-    List<CommandParameter> testParameters;
+    Collection<CommandParameter> testParameters;
     CommandImpl testTarget;
 
     @Before
@@ -53,7 +54,7 @@ public class CommandImplTest {
         QueryContext ctx = new QueryContext();
         ctx.getParameters().addValue(123);
 
-        testParameters = ctx.getParameters().clone();
+        testParameters = new ArrayList<>(ctx.getParameters());
         testTarget = new CommandImpl(TEST_QUERY, ctx.getParameters());
     }
 
@@ -105,7 +106,7 @@ public class CommandImplTest {
      */
     @Test
     public void testSetParameters() {
-        testTarget.setParameters(new CommandParameters());
+        testTarget.setParameters(new DefaultCommandParameters());
         assertThat(testTarget.getParameters(), is(emptyCollectionOf(CommandParameter.class)));
     }
 

@@ -1,13 +1,16 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
+import static info.naiv.lab.java.jmt.Arguments.nonMinus;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
+import info.naiv.lab.java.jmt.annotation.Nonempty;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
+import info.naiv.lab.java.jmt.i18n.Locales;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProvider;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.getThreadContainer;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
@@ -43,6 +46,7 @@ import java.util.Formatter;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -89,7 +93,18 @@ public abstract class Misc {
      */
     @Nonnull
     public static <T> Iterator<T> advance(@Nonnull Iterator<T> iter, int n) {
-        return IterationUtils.advance(iter, n);
+        IterationUtils.advance(iter, n);
+        return iter;
+    }
+
+    public static int asInt(Object value, int defaultValue) {
+        if (value instanceof Number) {
+            return ((Number) value).intValue();
+        }
+        else if (value instanceof CharSequence) {
+            return toInt(value.toString(), defaultValue);
+        }
+        return defaultValue;
     }
 
     /**
@@ -171,8 +186,7 @@ public abstract class Misc {
      * @param valueToFind 検索する値
      * @return 等価な項目があれば true.
      */
-    public static <T extends Comparable<T>>
-            boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
+    public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         return IterationUtils.containsCompareEquals(items, valueToFind);
     }
 
@@ -198,7 +212,8 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
+    public static <T>
+            Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return IterationUtils.filter(iterable, predicate);
     }
 
@@ -310,6 +325,22 @@ public abstract class Misc {
             }
         }
         return keys;
+    }
+
+    public static <T> T getOrDefault(List<T> list, int index, T defaultValue) {
+        nonMinus(index, "index");
+        if (list != null && index < list.size()) {
+            return list.get(index);
+        }
+        return defaultValue;
+    }
+
+    public static <T> T getOrDefault(T[] array, int index, T defaultValue) {
+        nonMinus(index, "index");
+        if (array != null && index < array.length) {
+            return array[index];
+        }
+        return defaultValue;
     }
 
     /**
@@ -514,8 +545,7 @@ public abstract class Misc {
      */
     @Nonnull
     public static <Dest extends Collection<R>, R, T>
-            Dest map(@NonNull Dest dest, Collection<T> source,
-                     @Nonnull Function1<? super T, R> mapper) {
+            Dest map(@NonNull Dest dest, Collection<T> source, @Nonnull Function1<? super T, R> mapper) {
         if (source != null) {
             for (T item : source) {
                 dest.add(mapper.apply(item));
@@ -533,8 +563,7 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T, U> Iterable<U> map(final Iterable<T> iter,
-                                         @Nonnull final Function1<? super T, ? extends U> mapper) {
+    public static <T, U> Iterable<U> map(final Iterable<T> iter, @Nonnull final Function1<? super T, ? extends U> mapper) {
         return IterationUtils.map(iter, mapper);
     }
 
@@ -838,9 +867,7 @@ public abstract class Misc {
      * @return クラスをOptionalでラップしたもの.
      */
     @Nonnull
-    public static Optional<Class<?>> resolveClassName(@Nonnull String className,
-                                                      boolean initialize,
-                                                      ClassLoader classLoader) {
+    public static Optional<Class<?>> resolveClassName(@Nonnull String className, boolean initialize, ClassLoader classLoader) {
         try {
             Class clz = Class.forName(className, initialize, classLoader);
             return OptionalImpl.<Class<?>>ofNullable(clz);
@@ -848,6 +875,26 @@ public abstract class Misc {
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. className:{} throws:{}", className, ex.getMessage());
             return OptionalImpl.<Class<?>>empty();
+        }
+    }
+
+    @CheckForNull
+    public static KeyValuePair<String, String> splitKeyValue(String text, @Nonempty String delim, boolean trim) {
+        nonEmpty(delim, "delim");
+        if (isEmpty(text)) {
+            return null;
+        }
+        int index = text.indexOf(delim);
+        if (index < 0) {
+            return null;
+        }
+        String key = text.substring(0, index);
+        String value = text.substring(index + delim.length());
+        if (trim) {
+            return KeyValuePair.of(key.trim(), value.trim());
+        }
+        else {
+            return KeyValuePair.of(key, value);
         }
     }
 
@@ -1220,6 +1267,27 @@ public abstract class Misc {
             }
             return list;
         }
+    }
+
+    /**
+     * オブジェクトをロケールに変換する.
+     *
+     * @param locale 文字列またはロケールオブジェクト.
+     * @param defaultLocale 既定のロケール.
+     * @return
+     */
+    public static Locale toLocale(Object locale, Locale defaultLocale) {
+        if (locale instanceof CharSequence) {
+            String localeString = locale.toString();
+            return Locales.toLocale(localeString);
+        }
+        else if (locale instanceof Locale) {
+            return (Locale) locale;
+        }
+        else if (locale instanceof Locale.Builder) {
+            return ((Locale.Builder) locale).build();
+        }
+        return defaultLocale;
     }
 
     /**

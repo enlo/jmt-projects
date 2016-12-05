@@ -53,9 +53,18 @@ public class NamedParameterBinder implements ParameterBinder {
     }
 
     @Override
+    public String bind(Object value, QueryContext context, Object typeHint) {
+        return context.getParameters().addValueWithPrefix(prefix, value, typeHint);
+    }
+
+    @Override
     public String bindMany(Object value, QueryContext context) {
-        List<String> keys;
         CommandParameters params = context.getParameters();
+        return bindManyCore(value, params);
+    }
+
+    protected String bindManyCore(Object value, CommandParameters params) {
+        List<String> keys;
         if (value instanceof Iterable) {
             keys = addParameters((Iterable) value, params);
         }
@@ -78,6 +87,11 @@ public class NamedParameterBinder implements ParameterBinder {
             keys.add(key);
         }
         return keys;
+    }
+
+    @Override
+    public String bindMany(Object value, QueryContext context, Object typeHint) {
+        return bindManyCore(value, CommandParametersWithTypeHint.wrap(context.getParameters(), typeHint));
     }
 
 }

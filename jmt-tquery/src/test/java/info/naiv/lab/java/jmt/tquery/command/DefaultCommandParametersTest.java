@@ -42,9 +42,9 @@ import static org.mockito.Mockito.verify;
  *
  * @author enlo
  */
-public class CommandParametersTest {
+public class DefaultCommandParametersTest {
 
-    public CommandParametersTest() {
+    public DefaultCommandParametersTest() {
     }
 
     /**
@@ -52,7 +52,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testAddCapacity() {
-        CommandParameters pl = spy(new CommandParameters());
+        DefaultCommandParameters pl = spy(new DefaultCommandParameters());
         pl.addCapacity(10);
         verify(pl).ensureCapacity(10);
 
@@ -66,7 +66,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testAddNamedValue() {
-        CommandParameters pl = new CommandParameters();
+        DefaultCommandParameters pl = new DefaultCommandParameters();
         String key = pl.addNamedValue("id", 12345);
         assertThat(key, is("id"));
         assertThat(pl, hasSize(1));
@@ -89,7 +89,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testAddValue() {
-        CommandParameters pl = new CommandParameters();
+        DefaultCommandParameters pl = new DefaultCommandParameters();
         String key = pl.addValue(12345);
         assertThat(key, is("p0"));
         assertThat(pl, hasSize(1));
@@ -112,7 +112,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testAddValueWithPrefix() {
-        CommandParameters pl = new CommandParameters();
+        CommandParameters pl = new DefaultCommandParameters();
         String key = pl.addValueWithPrefix(":p", 12345);
         assertThat(key, is(":p0"));
         assertThat(pl, hasSize(1));
@@ -135,7 +135,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testBuilder_0args() {
-        CommandParametersBuilder builder = CommandParameters.builder();
+        CommandParametersBuilder builder = DefaultCommandParameters.builder();
         assertThat(builder, is(not(nullValue())));
         CommandParameters pl = builder.build();
         assertThat(pl, is(emptyCollectionOf(CommandParameter.class)));
@@ -146,23 +146,10 @@ public class CommandParametersTest {
      */
     @Test
     public void testBuilder_ObjectArr() {
-        CommandParametersBuilder builder = CommandParameters.builder(123, "aaa");
+        CommandParametersBuilder builder = DefaultCommandParameters.builder(123, "aaa");
         assertThat(builder, is(not(nullValue())));
         CommandParameters pl = builder.build();
         assertThat(pl, contains(new CommandParameter(0, 123), new CommandParameter(1, "aaa")));
-    }
-
-    /**
-     * Test of toArray method, of class CommandParameters.
-     */
-    @Test
-    public void testToArray() {
-        CommandParametersBuilder builder = CommandParameters.builder(123, "aaa");
-        assertThat(builder, is(not(nullValue())));
-        CommandParameters pl = builder.build();
-
-        CommandParameter[] arr = pl.toArray();
-        assertThat(arr, arrayContaining(new CommandParameter(0, 123), new CommandParameter(1, "aaa")));
     }
 
     /**
@@ -170,12 +157,25 @@ public class CommandParametersTest {
      */
     @Test
     public void testClone() {
-        CommandParametersBuilder builder = CommandParameters.builder(123, "aaa");
+        CommandParametersBuilder builder = DefaultCommandParameters.builder(123, "aaa");
         CommandParameters p1 = builder.build();
-        CommandParameters p2 = p1.clone();
+        CommandParameters p2 = p1.copy();
 
         assertThat(p2, is(not(sameInstance(p1))));
         assertThat(p2, is(p1));
+    }
+
+    /**
+     * Test of toArray method, of class CommandParameters.
+     */
+    @Test
+    public void testToArray() {
+        CommandParametersBuilder builder = DefaultCommandParameters.builder(123, "aaa");
+        assertThat(builder, is(not(nullValue())));
+        CommandParameters pl = builder.build();
+        
+        CommandParameter[] arr = pl.toArray();
+        assertThat(arr, arrayContaining(new CommandParameter(0, 123), new CommandParameter(1, "aaa")));
     }
 
     /**
@@ -183,7 +183,7 @@ public class CommandParametersTest {
      */
     @Test
     public void testToMap() {
-        CommandParametersBuilder builder = CommandParameters.builder(123, "aaa");
+        CommandParametersBuilder builder = DefaultCommandParameters.builder(123, "aaa");
         CommandParameters p1 = builder.build();
         Map<String, Object> map = p1.toMap();
 

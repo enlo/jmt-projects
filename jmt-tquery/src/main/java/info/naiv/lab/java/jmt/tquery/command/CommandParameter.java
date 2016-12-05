@@ -35,19 +35,29 @@ import lombok.Value;
 public class CommandParameter implements Serializable, Cloneable, KeyedValue<String> {
 
     private static final long serialVersionUID = -6521832621632523550L;
-
+    
+    private Object typeHint;
     private String key;
-
     private Object value;
 
     public CommandParameter(int index, Object value) {
+        this(index, value, null);
+    }
+    
+    public CommandParameter(int index, Object value, Object typeHint) {
         this.key = "p" + index;
         this.value = value;
+        this.typeHint = typeHint;
     }
 
-    public CommandParameter(String key, Object value) {
+    public CommandParameter(String key,  Object value) {
+        this(key, value, null);
+    }
+    
+    public CommandParameter(String key, Object value, Object typeHint) {
         this.key = key;
         this.value = value;
+        this.typeHint = typeHint;
     }
 
     @Override

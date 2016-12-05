@@ -27,9 +27,8 @@ import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplate;
 import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import info.naiv.lab.java.jmt.tquery.command.CommandImpl;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
+import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
-import java.util.List;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.CompiledTemplate;
 
@@ -53,7 +52,7 @@ public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContex
 
     @Override
     protected Command createResult(Object result, QueryContext context) {
-        List<CommandParameter> parameters = context.getParameters().clone();
+        CommandParameters parameters = context.getParameters().copy();
         String queryString = (String) result;
         Command query = new CommandImpl(queryString, parameters);
         return query;

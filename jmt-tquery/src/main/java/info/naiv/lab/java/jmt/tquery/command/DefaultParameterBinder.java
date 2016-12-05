@@ -42,9 +42,19 @@ public class DefaultParameterBinder implements ParameterBinder {
     }
 
     @Override
+    public String bind(Object value, QueryContext context, Object typeHint) {
+        context.getParameters().addValue(value, typeHint);
+        return "?";
+    }
+
+    @Override
     public String bindMany(Object value, QueryContext context) {
-        int count;
         CommandParameters params = context.getParameters();
+        return bindManyCore(value, params);
+    }
+
+    protected String bindManyCore(Object value, CommandParameters params) {
+        int count;
         if (value instanceof Collection) {
             Collection list = (Collection) value;
             params.addCapacity(list.size());
@@ -65,5 +75,11 @@ public class DefaultParameterBinder implements ParameterBinder {
             }
         }
         return joiner.join(Misc.repeat(count, "?")).toString();
+    }
+
+    @Override
+    public String bindMany(Object value, QueryContext context, Object typeHint) {
+        CommandParameters params = context.getParameters();
+        return bindManyCore(value, CommandParametersWithTypeHint.wrap(params, typeHint));
     }
 }

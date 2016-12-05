@@ -14,6 +14,7 @@ import info.naiv.lab.java.jmt.iteration.BreakException;
 import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.monad.Iteratee;
+import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
@@ -670,16 +671,6 @@ public class MiscTest {
         assertThat(Misc.isNotEmpty(map), is(false));
         map.put("key", "value");
         assertThat(Misc.isNotEmpty(map), is(true));
-    }
-
-    /**
-     * Test of isNotEmpty method, of class Misc.
-     */
-    @Test
-    public void testIsNotEmpty_String() {
-        assertThat(Misc.isNotEmpty((String) null), is(false));
-        assertThat(Misc.isNotEmpty(""), is(false));
-        assertThat(Misc.isNotEmpty("A"), is(true));
     }
 
     /**
@@ -1492,6 +1483,87 @@ public class MiscTest {
         assertThat(Misc.nullOf(String.class), is(nullValue()));
         assertThat(Misc.nullOf(Integer.class), is(nullValue()));
         assertThat(Misc.nullOf(int[].class), is(nullValue()));
+    }
+
+    /**
+     * Test of isNotEmpty method, of class Misc.
+     */
+    @Test
+    public void testIsNotEmpty_CharSequence() {
+        assertThat(Misc.isNotEmpty((String) null), is(false));
+        assertThat(Misc.isNotEmpty(""), is(false));
+        assertThat(Misc.isNotEmpty("A"), is(true));
+    }
+
+    /**
+     * Test of splitKeyValue method, of class Misc.
+     */
+    @Test
+    public void testSplitKeyValue() {
+
+        String text1 = "abc = 1234";
+        String text2 = "abc := 1234";
+        String text3 = "abc ::= 1234";
+
+        assertThat(Misc.splitKeyValue(text1, "=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text1, "=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(text2, "=", true), is(KeyValuePair.of("abc :", "1234")));
+        assertThat(Misc.splitKeyValue(text2, ":=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text2, ":=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(text2, "::=", false), is(nullValue()));
+        assertThat(Misc.splitKeyValue(text3, "::=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text3, "::=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(null, "::=", false), is(nullValue()));
+        assertThat(Misc.splitKeyValue("", ":=", false), is(nullValue()));
+
+    }
+
+    /**
+     * Test of toStringList method, of class Misc.
+     */
+    @Test
+    public void testToStringList() {
+        Collection<?> items = Arrays.asList(1, "AAA", 2.5);
+        assertThat(Misc.toStringList(items), contains("1", "AAA", "2.5"));
+
+        Iterable<?> iter = IterateeImpl.of("abc", 22.0, "あいう");
+        assertThat(Misc.toStringList(iter), contains("abc", "22.0", "あいう"));
+
+        assertThat(Misc.toStringList(null), is(empty()));
+        assertThat(Misc.toStringList(Collections.emptyList()), is(empty()));
+    }
+
+    /**
+     * Test of asInt method, of class Misc.
+     */
+    @Test
+    public void testAsInt() {
+        assertThat(Misc.asInt(null, -1), is(-1));
+        assertThat(Misc.asInt("", 2), is(2));
+        assertThat(Misc.asInt("", 0), is(0));
+        assertThat(Misc.asInt("4", 0), is(4));
+        assertThat(Misc.asInt(new BigDecimal("5.5"), 0), is(5));
+    }
+
+    /**
+     * Test of getOrDefault method, of class Misc.
+     */
+    @Test
+    public void testGetOrDefault_3args_1() {
+    }
+
+    /**
+     * Test of getOrDefault method, of class Misc.
+     */
+    @Test
+    public void testGetOrDefault_3args_2() {
+    }
+
+    /**
+     * Test of toLocale method, of class Misc.
+     */
+    @Test
+    public void testToLocale() {
     }
 
 }

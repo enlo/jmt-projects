@@ -31,15 +31,7 @@ import javax.annotation.Nonnull;
  * @param <TKey>
  * @param <TValue>
  */
-public interface MultiValueLookup<TKey, TValue> {
-
-    /**
-     * キーの有無を検査
-     *
-     * @param key
-     * @return
-     */
-    boolean containsKey(TKey key);
+public interface MultiValueLookup<TKey, TValue> extends Lookup<TKey, Iterable<TValue>> {
 
     /**
      *
@@ -47,6 +39,8 @@ public interface MultiValueLookup<TKey, TValue> {
      * @return キーに対応する値のセット
      */
     @Nonnull
+    @Override
     Iterable<TValue> get(TKey key);
 
+    TValue getFirst(TKey key);
 }

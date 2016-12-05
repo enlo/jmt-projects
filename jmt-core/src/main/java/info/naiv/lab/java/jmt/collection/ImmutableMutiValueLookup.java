@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.collection;
 
 import static info.naiv.lab.java.jmt.Misc.newArrayList;
+import info.naiv.lab.java.jmt.iteration.IterationUtils;
 import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -102,6 +103,11 @@ public class ImmutableMutiValueLookup<TKey extends Comparable, TValue>
             }
         }
         return IterateeImpl.<TValue>empty();
+    }
+
+    @Override
+    public TValue getFirst(@Nonnull TKey key) {
+        return IterationUtils.getFirst(get(key));
     }
 
     @Override

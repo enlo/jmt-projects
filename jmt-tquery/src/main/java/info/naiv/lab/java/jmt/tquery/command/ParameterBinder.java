@@ -39,6 +39,15 @@ public interface ParameterBinder extends Serializable {
      * @return
      */
     String bind(Object value, QueryContext context);
+    
+    /**
+     * 
+     * @param value
+     * @param context
+     * @param typeHint
+     * @return 
+     */
+    String bind(Object value, QueryContext context, Object typeHint);
 
     /**
      *
@@ -47,4 +56,14 @@ public interface ParameterBinder extends Serializable {
      * @return
      */
     String bindMany(Object value, QueryContext context);
+
+    /**
+     * 
+     * @param value
+     * @param context
+     * @param typeHint
+     * @return 
+     */
+    String bindMany(Object value, QueryContext context, Object typeHint);
+
 }

@@ -24,18 +24,26 @@
 package info.naiv.lab.java.jmt.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
+import info.naiv.lab.java.jmt.KeyValuePair;
+import info.naiv.lab.java.jmt.Misc;
+import static info.naiv.lab.java.jmt.Misc.getOrDefault;
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import info.naiv.lab.java.jmt.template.mvel.ParserContextHolder;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nonnull;
-import org.mvel2.MVEL;
+import static org.mvel2.MVEL.compileExpression;
+import static org.mvel2.MVEL.executeExpression;
 import org.mvel2.ParserContext;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.res.Node;
 import org.mvel2.templates.util.TemplateOutputStream;
-import org.mvel2.util.ParseTools;
+import static org.mvel2.util.ParseTools.balancedCapture;
+import static org.mvel2.util.ParseTools.createStringTrimmed;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
 /**
  *
@@ -44,6 +52,39 @@ import org.mvel2.util.ParseTools;
 public abstract class CustomNode extends Node {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 複数の式をそれぞれコンパイル.
+     *
+     * @param expressions
+     * @return
+     */
+    protected static Serializable[] compileMultipleContents(@Nonnull List<String> expressions) {
+        Serializable[] ces = new Serializable[expressions.size()];
+        ParserContext ctx = ParserContextHolder.get();
+        if (ctx != null) {
+            for (int i = 0; i < ces.length; i++) {
+                ces[i] = compileExpression(expressions.get(i), ctx);
+            }
+        }
+        else {
+            for (int i = 0; i < ces.length; i++) {
+                ces[i] = compileExpression(expressions.get(i));
+            }
+        }
+        return ces;
+    }
+
+    protected static Object[] executeAllExpression(List<? extends Serializable> exprs, Object ctx, VariableResolverFactory factory) {
+        if (isEmpty(exprs)) {
+            return new Object[]{};
+        }
+        Object[] result = new Object[exprs.size()];
+        for (int i = 0; i < exprs.size(); i++) {
+            result[i] = executeExpression(ctx, ctx, factory);
+        }
+        return result;
+    }
 
     /**
      * 式を分割する.
@@ -65,11 +106,11 @@ public abstract class CustomNode extends Node {
                 case '{':
                 case '"':
                 case '\'':
-                    i = ParseTools.balancedCapture(contents, i, ch);
+                    i = balancedCapture(contents, i, ch);
                     break;
                 default:
                     if (ch == delim) {
-                        expr.add(ParseTools.createStringTrimmed(contents, start, i - start));
+                        expr.add(createStringTrimmed(contents, start, i - start));
                         start = i + 1;
                     }
                     break;
@@ -77,7 +118,7 @@ public abstract class CustomNode extends Node {
         }
 
         if (start < to) {
-            expr.add(ParseTools.createStringTrimmed(contents, start, to - start));
+            expr.add(createStringTrimmed(contents, start, to - start));
         }
         return expr;
     }
@@ -128,7 +169,7 @@ public abstract class CustomNode extends Node {
      *
      * @return ノード名.
      */
-    @Nonnull
+@Nonnull
     public abstract String name();
 
     /**
@@ -145,9 +186,34 @@ public abstract class CustomNode extends Node {
     @Override
     public String toString() {
         return arrayToString(getClass().getSimpleName(), name, "{",
-                             (contents == null ? "" : new String(contents)),
-                             "} (start=", begin, ";end=", end, ")");
+                                                               (contents == null ? "" : new String(contents)),
+                                                               "} (start=", begin, ";end=", end, ")");
 
+    }
+
+    /**
+     * 式を区切ってそれぞれコンパイル.
+     *
+     * @param delim
+     * @param args
+     * @return
+     */
+    protected MultiValueMap<String, Serializable> compileMappedContents(char delim, String... args) {
+        List<String> exprs = splitExpression(contents, delim);
+        MultiValueMap<String, Serializable> result = new LinkedMultiValueMap<>(exprs.size());
+        for (int i = 0; i < exprs.size(); i++) {
+            String expr = exprs.get(i);
+            String varname = getOrDefault(args, i, "value");
+            KeyValuePair<String, String> pair = Misc.splitKeyValue(expr, ":=", true);
+            if (pair == null) {
+                result.add(varname, compileSingleContents(expr.toCharArray()));
+            }
+            else {
+                char[] cs = pair.getValue().toCharArray();
+                result.add(pair.getKey(), compileSingleContents(cs));
+            }
+        }
+        return result;
     }
 
     /**
@@ -162,40 +228,29 @@ public abstract class CustomNode extends Node {
     }
 
     /**
-     * 複数の式をそれぞれコンパイル.
-     *
-     * @param expressions
-     * @return
-     */
-    protected static Serializable[] compileMultipleContents(@Nonnull List<String> expressions) {
-        Serializable[] ces = new Serializable[expressions.size()];
-        ParserContext ctx = ParserContextHolder.get();
-        if (ctx != null) {
-            for (int i = 0; i < ces.length; i++) {
-                ces[i] = MVEL.compileExpression(expressions.get(i), ctx);
-            }
-        }
-        else {
-            for (int i = 0; i < ces.length; i++) {
-                ces[i] = MVEL.compileExpression(expressions.get(i));
-            }
-        }
-        return ces;
-    }
-
-    /**
      * 単一式のコンパイル.
      *
      * @return
      */
     @Nonnull
     protected Serializable compileSingleContents() {
+        return compileSingleContents(contents);
+    }
+
+    /**
+     * 単一式のコンパイル.
+     *
+     * @param expr
+     * @return
+     */
+    @Nonnull
+    protected Serializable compileSingleContents(char[] expr) {
         ParserContext ctx = ParserContextHolder.get();
         if (ctx != null) {
-            return MVEL.compileExpression(contents, ctx);
+            return compileExpression(expr, ctx);
         }
         else {
-            return MVEL.compileExpression(contents);
+            return compileExpression(expr);
         }
     }
 

@@ -23,24 +23,30 @@
  */
 package info.naiv.lab.java.jmt.template.mvel.node;
 
-import info.naiv.lab.java.jmt.Arguments;
+import info.naiv.lab.java.jmt.Misc;
+import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import java.io.Serializable;
+import java.util.Arrays;
 import static java.util.Arrays.copyOfRange;
 import java.util.Locale;
 import org.mvel2.MVEL;
+import static org.mvel2.MVEL.executeExpression;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.util.TemplateOutputStream;
+import org.springframework.util.MultiValueMap;
 
 /**
  *
  * @author enlo
  */
-public class FormatNode extends CustomNode {
+public class FormatNode extends MultiCompiledExpressionNode {
 
     private static final long serialVersionUID = -2569912311939889318L;
 
-    private Serializable[] ces;
+    public FormatNode() {
+        super(',', "format");
+    }
 
     @Override
     public String name() {
@@ -48,40 +54,39 @@ public class FormatNode extends CustomNode {
     }
 
     @Override
-    protected void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Object[] items = MVEL.executeAllExpression(ces, ctx, factory);
-        if (items[0] instanceof CharSequence) {
-            String format = items[0].toString();
-            if (1 < items.length) {
-                String value = String.format(format, copyOfRange(items, 1, items.length));
-                appender.append(value);
-            }
-            else {
-                appender.append(format);
-            }
+    protected void doEval(MultiValueMap<String, Serializable> compiledExpressions, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+
+        String format = null;
+        if (compiledExpressions.containsKey("format")) {
+            format = executeExpression(compiledExpressions.getFirst("format"), ctx, factory, String.class);
         }
-        else if (items[0] instanceof Locale) {
-            Locale locale = (Locale) items[0];
-            String format = items[1].toString();
-            if (2 < items.length) {
-                String value = String.format(locale, format, copyOfRange(items, 2, items.length));
+        Locale locale = null;
+        if (compiledExpressions.containsKey("locale")) {
+            Object lc = executeExpression(compiledExpressions.getFirst("locale"), ctx, factory);
+            locale = Misc.toLocale(lc, null);
+        }
+        Object[] values;
+        if (compiledExpressions.containsKey("value")) {
+            values = executeAllExpression(compiledExpressions.get("value"), ctx, factory);
+        }
+        else {
+            values = new Object[]{};
+        }
+
+        if (isNotEmpty(format)) {
+            if (locale == null) {
+                String value = String.format(format, values);
                 appender.append(value);
             }
             else {
-                appender.append(format);
+                String value = String.format(locale, format, values);
+                appender.append(value);
             }
         }
         else {
-            appender.append(String.format("%s", items[0]));
+            String value = Arrays.toString(values);
+            appender.append(value);
         }
-
-    }
-
-    @Override
-    protected void onSetContents() {
-        super.onSetContents();
-        ces = compileMultipleContents(',');
-        Arguments.nonEmpty(ces, "contents");
     }
 
 }

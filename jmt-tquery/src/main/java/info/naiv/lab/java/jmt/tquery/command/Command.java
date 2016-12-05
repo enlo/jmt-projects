@@ -52,7 +52,7 @@ public interface Command extends Cloneable, Serializable {
      *
      * @return パラメータリスト.
      */
-    List<CommandParameter> getParameters();
+    CommandParameters getParameters();
 
     /**
      *

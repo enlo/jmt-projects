@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
-import com.sun.org.apache.xerces.internal.impl.xs.opti.DefaultNode;
 import info.naiv.lab.java.jmt.template.mvel.MvelCustomNodesProvider;
 import info.naiv.lab.java.jmt.template.mvel.node.DefaultCustomNodesProvider;
 import java.util.Map;

@@ -24,87 +24,45 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
  *
  * @author enlo
  */
-public class CommandParameters extends ArrayList<CommandParameter> implements Cloneable, Serializable {
+public interface CommandParameters extends Collection<CommandParameter>, Serializable {
 
-    private static final long serialVersionUID = -8025210291274076721L;
+    void addCapacity(int capacity);
 
-    public CommandParameters() {
-    }
+    String addNamedValue(String name, Object value);
 
-    public CommandParameters(Collection<? extends CommandParameter> c) {
-        super(c);
-    }
+    String addNamedValue(String name, Object value, Object typeHint);
 
-    public CommandParameters(int initialCapacity) {
-        super(initialCapacity);
-    }
+    String addValue(Object value);
 
-    public void addCapacity(int capacity) {
-        ensureCapacity(size() + capacity);
-    }
+    String addValue(Object value, Object typeHint);
 
-    public String addNamedValue(String name, Object value) {
-        CommandParameter p = new CommandParameter(name, value);
-        add(p);
-        return p.getKey();
-    }
+    String addValueWithPrefix(String prefix, Object value);
 
-    public String addValue(Object value) {
-        int index = size();
-        CommandParameter p = new CommandParameter(index, value);
-        add(p);
-        return p.getKey();
-    }
+    String addValueWithPrefix(String prefix, Object value, Object typeHint);
 
-    public String addValueWithPrefix(String prefix, Object value) {
-        int index = size();
-        String name = prefix + index;
-        return addNamedValue(name, value);
-    }
+    CommandParameters copy();
 
-    public static CommandParametersBuilder builder() {
-        return new CommandParametersBuilder();
-    }
+    CommandParameter get(int index);
 
-    public static CommandParametersBuilder builder(Object... args) {
-        CommandParametersBuilder builder = new CommandParametersBuilder(args.length);
-        for (Object arg : args) {
-            builder.addValue(arg);
-        }
-        return builder;
-    }
+    CommandParameter remove(int index);
+
+    CommandParameter set(int index, CommandParameter element);
 
     @Override
-    public CommandParameter[] toArray() {
-        CommandParameter[] result = new CommandParameter[size()];
-        return super.toArray(result);
-    }
-
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public CommandParameters clone() {
-        return (CommandParameters) super.clone();
-    }
+    CommandParameter[] toArray();
 
     /**
      * コマンドパラメーターをマップに変換する.
      *
      * @return コマンドパラメーターリスト
      */
-    public Map<String, Object> toMap() {
-        Map<String, Object> result = new HashMap<>(size());
-        for (CommandParameter p : this) {
-            result.put(p.getKey(), p.getValue());
-        }
-        return result;
-    }
+    Map<String, Object> toMap();
+
 }

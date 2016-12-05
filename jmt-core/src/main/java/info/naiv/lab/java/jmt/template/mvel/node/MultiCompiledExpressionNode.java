@@ -21,12 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.tquery.template.mvel.node;
+package info.naiv.lab.java.jmt.template.mvel.node;
 
-import info.naiv.lab.java.jmt.template.mvel.node.MultiCompiledExpressionNode;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
 import java.io.Serializable;
-import org.mvel2.MVEL;
 import org.mvel2.integration.VariableResolverFactory;
 import org.mvel2.templates.TemplateRuntime;
 import org.mvel2.templates.util.TemplateOutputStream;
@@ -36,35 +33,47 @@ import org.springframework.util.MultiValueMap;
  *
  * @author enlo
  */
-public class BindNode extends MultiCompiledExpressionNode {
+public abstract class MultiCompiledExpressionNode extends CustomNode {
 
     private static final long serialVersionUID = 1L;
 
-    public BindNode(){
-        super(',', "value", "type");
+    private MultiValueMap<String, Serializable> ceMap;
+
+    private final char delimiter;
+    private final String[] args;
+
+    public MultiCompiledExpressionNode(char delimiter, String... args) {
+        this.delimiter = delimiter;
+        this.args = args;
     }
-    
-    @Override
-    public String name() {
-        return "bind";
+
+    protected void checkContents(MultiValueMap<String, Serializable> ceMap) {
+        if (ceMap.isEmpty()) {
+            throw new IllegalArgumentException("contents is empty");
+        }
     }
 
     @Override
-    protected void doEval(MultiValueMap<String, Serializable> compiledExpressions, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        Serializable valueItem = compiledExpressions.getFirst("value");
-        Serializable typeItem = compiledExpressions.getFirst("type");
-        Object value = MVEL.executeExpression(valueItem, ctx, factory);
-        QueryContext context = ((QueryContext) ctx);
+    protected final void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+        doEval(ceMap, runtime, appender, ctx, factory);
+    }
 
-        String bound;
-        if (typeItem == null) {
-            bound = context.getParameterBinder().bind(value, context);
-        }
-        else {
-            Object typeHint = MVEL.executeExpression(typeItem, ctx, factory);
-            bound = context.getParameterBinder().bind(value, context, typeHint);
-        }
-        appender.append(bound);
+    /**
+     * 式の実行.
+     *
+     * @param compiledExpressions
+     * @param runtime
+     * @param appender
+     * @param ctx
+     * @param factory
+     */
+    protected abstract void doEval(MultiValueMap<String, Serializable> compiledExpressions, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
+
+    @Override
+    protected final void onSetContents() {
+        super.onSetContents();
+        ceMap = compileMappedContents(delimiter, args);
+        checkContents(ceMap);
     }
 
 }

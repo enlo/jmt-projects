@@ -24,12 +24,16 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.tquery.QueryContext;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
+import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
+import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.NamedParameterBinder;
+import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryTemplate;
+import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryTemplateBuilder;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.lang.model.util.Types;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
@@ -44,6 +48,8 @@ import org.mvel2.templates.TemplateRuntime;
  * @author enlo
  */
 public class BindNodeTest {
+
+    MvelQueryTemplateBuilder builder = new MvelQueryTemplateBuilder();
 
     public BindNodeTest() {
     }
@@ -69,12 +75,12 @@ public class BindNodeTest {
         map.put("category", category);
         map.put("names", names);
 
-        CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
+        MvelQueryTemplate templ = (MvelQueryTemplate) builder.build("template1", template);
         QueryContext ctx = new QueryContext();
-        String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
+        String actualSql = (String) TemplateRuntime.execute(templ.getTemplate(), ctx, map);
 
         assertThat(actualSql, is(expectedSql));
-        assertThat(ctx.getParameters(), contains(CommandParameters.builder(category, names.get(0), names.get(1), names.get(2)).toArray()));
+        assertThat(ctx.getParameters(), contains(DefaultCommandParameters.builder(category, names.get(0), names.get(1), names.get(2)).toArray()));
     }
 
     /**
@@ -111,6 +117,40 @@ public class BindNodeTest {
         assertThat(named, hasEntry(":p1", (Object) names.get(0)));
         assertThat(named, hasEntry(":p2", (Object) names.get(1)));
         assertThat(named, hasEntry(":p3", (Object) names.get(2)));
+    }
+
+    /**
+     * Test of eval method, of class BindNode.
+     */
+    @Test
+    public void testEval_2() {
+
+        String template
+                = "select * from Users where category = @bind{ category }"
+                + " and (@foreach{ name : names } name = @bind{name, type:=java.sql.Types.VARCHAR } @end{ 'or' })";
+
+        int category = 1;
+        List<String> names = Arrays.asList("jone", "doe", "mike");
+
+        String expectedSql
+                = "select * from Users where category = ?"
+                + " and ( name = ? or name = ? or name = ? )";
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("category", category);
+        map.put("names", names);
+
+        CompiledTemplate templ = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
+        QueryContext ctx = new QueryContext();
+        String actualSql = (String) TemplateRuntime.execute(templ, ctx, map);
+
+        assertThat(actualSql, is(expectedSql));
+        assertThat(ctx.getParameters(), contains(
+                   DefaultCommandParameters.builder(
+                           category,
+                           new CommandParameter(1, names.get(0), java.sql.Types.VARCHAR),
+                           new CommandParameter(2, names.get(1), java.sql.Types.VARCHAR),
+                           new CommandParameter(3, names.get(2), java.sql.Types.VARCHAR)).toArray()));
     }
 
 }

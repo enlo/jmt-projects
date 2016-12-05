@@ -20,14 +20,12 @@ public class MvelExpressiveProperties extends Properties {
 
     private final LookupVariableResolverFactory factory;
     private final Map<String, CompiledTemplate> templates = new ConcurrentHashMap<>();
-    private final Lookup thisLookup;
 
     /**
      * Constructor.
      */
     public MvelExpressiveProperties() {
-        this.thisLookup = new PropertiesLookup(this);
-        this.factory = new LookupVariableResolverFactory(thisLookup);
+        this.factory = new LookupVariableResolverFactory(new PropertiesLookup(this));
     }
 
     /**
@@ -37,8 +35,7 @@ public class MvelExpressiveProperties extends Properties {
      */
     public MvelExpressiveProperties(Properties defaults) {
         super(defaults);
-        this.thisLookup = new PropertiesLookup(this);
-        this.factory = new LookupVariableResolverFactory(thisLookup);
+        this.factory = new LookupVariableResolverFactory(new PropertiesLookup(this));
     }
 
     @Override

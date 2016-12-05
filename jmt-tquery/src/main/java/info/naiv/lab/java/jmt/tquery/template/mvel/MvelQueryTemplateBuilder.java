@@ -21,47 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template.mvel.node;
+package info.naiv.lab.java.jmt.tquery.template.mvel;
 
-import java.io.Serializable;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplateBuilder;
+import info.naiv.lab.java.jmt.tquery.command.Command;
+import info.naiv.lab.java.jmt.tquery.template.mvel.node.TQueryCustomNodesProvider;
+import java.util.Arrays;
+import java.util.List;
+import org.mvel2.ParserContext;
+import org.mvel2.templates.CompiledTemplate;
 
 /**
  *
  * @author enlo
  */
-public abstract class SingleCompiledExpressionNode extends CustomNode {
+public class MvelQueryTemplateBuilder extends AbstractMvelTemplateBuilder<Command> {
 
-    private static final long serialVersionUID = 3910458366256711303L;
+    List<Class<?>> importClasses = Arrays.<Class<?>>asList(java.sql.Types.class);
 
-    private Serializable ce;
+    public MvelQueryTemplateBuilder() {
+        this.setCustomNodesProvider(new TQueryCustomNodesProvider());
+    }
 
-    protected void checkContents(Serializable ce) {
+    public void setImportClasses(Class<?>... importClasses) {
+        this.importClasses = Arrays.asList(importClasses);
     }
 
     @Override
-    protected final void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        doEval(ce, runtime, appender, ctx, factory);
+    protected MvelQueryTemplate build(String name, CompiledTemplate template) {
+        return new MvelQueryTemplate(name, template);
     }
 
-    /**
-     * 式の実行.
-     *
-     * @param compiledExpression
-     * @param runtime
-     * @param appender
-     * @param ctx
-     * @param factory
-     */
-    protected abstract void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
-
     @Override
-    protected void onSetContents() {
-        super.onSetContents();
-        ce = compileSingleContents();
-        checkContents(ce);
+    protected ParserContext initParserContext(ParserContext ctx) {
+        ctx = super.initParserContext(ctx);
+        for (Class<?> cls : importClasses) {
+            ctx.addImport(cls.getSimpleName(), cls);
+        }
+        ctx.addImport("jdbcTypes", java.sql.Types.class);
+        return ctx;
     }
 
 }

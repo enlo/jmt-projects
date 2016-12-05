@@ -21,47 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template.mvel.node;
+package info.naiv.lab.java.jmt;
 
 import java.io.Serializable;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 /**
  *
  * @author enlo
+ * @param <TKey>
+ * @param <TValue>
  */
-public abstract class SingleCompiledExpressionNode extends CustomNode {
+@Data
+@RequiredArgsConstructor(staticName = "of")
+@AllArgsConstructor(staticName = "of")
+public class KeyValuePair<TKey, TValue> implements Map.Entry<TKey, TValue>, Serializable {
 
-    private static final long serialVersionUID = 3910458366256711303L;
+    private static final long serialVersionUID = 1L;
 
-    private Serializable ce;
-
-    protected void checkContents(Serializable ce) {
-    }
-
-    @Override
-    protected final void doEval(TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        doEval(ce, runtime, appender, ctx, factory);
-    }
-
-    /**
-     * 式の実行.
-     *
-     * @param compiledExpression
-     * @param runtime
-     * @param appender
-     * @param ctx
-     * @param factory
-     */
-    protected abstract void doEval(Serializable compiledExpression, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory);
+    private final TKey key;
+    private TValue value;
 
     @Override
-    protected void onSetContents() {
-        super.onSetContents();
-        ce = compileSingleContents();
-        checkContents(ce);
+    public TValue setValue(TValue value) {
+        TValue oldVal = this.value;
+        this.value = value;
+        return oldVal;
     }
 
 }

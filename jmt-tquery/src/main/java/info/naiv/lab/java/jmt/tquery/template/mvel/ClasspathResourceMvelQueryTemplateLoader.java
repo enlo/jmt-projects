@@ -31,5 +31,11 @@ import info.naiv.lab.java.jmt.template.ClasspathResourceTemplateLoader;
  */
 public class ClasspathResourceMvelQueryTemplateLoader
         extends ClasspathResourceTemplateLoader<MvelQueryTemplate> {
+
+    public ClasspathResourceMvelQueryTemplateLoader() {    
+        setTemplateBuilder(new MvelQueryTemplateBuilder());
+    }
+    
+    
     
 }

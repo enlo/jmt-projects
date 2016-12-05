@@ -93,6 +93,7 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
     @Nonnull
     protected CompiledTemplate compile(char[] template) {
         ParserContext ctx = ParserContext.create();
+        ctx = callInitParserContext(ctx);
         return MvelTemplateUtils.compile(template, ctx, customNodesProvider);
     }
 
@@ -103,11 +104,16 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
      * @return
      */
     @CheckReturnValue
-    protected ParserContext initParserContext(ParserContext ctx) {
+    private ParserContext callInitParserContext(ParserContext ctx) {
+        ctx = initParserContext(ctx);
         if (parserContextInitializer != null) {
             ctx = parserContextInitializer.apply(ctx);
         }
         return ctx;
     }
 
+    @CheckReturnValue
+    protected ParserContext initParserContext(ParserContext ctx) {
+        return ctx;
+    }
 }

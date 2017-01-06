@@ -23,9 +23,6 @@
  */
 package info.naiv.lab.java.jmt;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.Properties;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
@@ -45,7 +42,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
  */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({System.class, ResolvableProperties.class, PropertiesPlaceholderResolver.class})
-public class ResolvablePropertiesTest {
+public class ResolvablePropertiesTest extends ExtendPropertiesTest {
 
     Properties prop;
 
@@ -79,39 +76,33 @@ public class ResolvablePropertiesTest {
      * Test of fix method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testFix() {
-        ResolvableProperties p = testTarget;
-
+        ExtendProperties p = testTarget;
         Properties fixed = p.fix();
-
         assertThat(fixed.getProperty("itemName"), is("@property"));
         assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
-
         assertThat(fixed.getProperty("itemName", "none"), is("@property"));
         assertThat(fixed.getProperty("itemNameOther", "none"), is("none"));
         assertThat(fixed.getProperty("itemNameOther", null), is(nullValue()));
-
         assertThat(fixed.getProperty("itemName1"), is("@systemProp"));
         assertThat(fixed.getProperty("itemName2"), is("@env"));
         assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
-
         p.setProperty("itemNameOther", "");
         assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
         assertThat(fixed.getProperty("itemName3"), is("${itemNameOther}"));
-
         assertThat(fixed.getProperty("itemNameOther", "${itemName1}"), is("${itemName1}"));
         assertThat(fixed.getProperty("itemNameOther", "${itemName2}"), is("${itemName2}"));
         assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
-
         assertThat(fixed.getProperty("itemName3", "none"), is("${itemNameOther}"));
         assertThat(fixed.getProperty("itemNameOther", "${itemName3}"), is("${itemName3}"));
-
     }
 
     /**
      * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testGetProperty_String() {
 
         ResolvableProperties p = testTarget;
@@ -133,6 +124,7 @@ public class ResolvablePropertiesTest {
      * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testGetProperty_String_String() {
         ResolvableProperties p = testTarget;
 
@@ -153,18 +145,9 @@ public class ResolvablePropertiesTest {
         assertThat(p.getProperty("itemNameOther", "${itemName3}"), is(""));
     }
 
-    /**
-     *
-     * @throws IOException
-     */
-    @Test
-    public void testSerialize() throws IOException {
-
-        ResolvableProperties resProps = new ResolvableProperties();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try (ObjectOutputStream os = new ObjectOutputStream(stream)) {
-            os.writeObject(resProps);
-        }
-
+    @Override
+    protected ExtendProperties newInstance() {
+        return new ResolvableProperties();
     }
+
 }

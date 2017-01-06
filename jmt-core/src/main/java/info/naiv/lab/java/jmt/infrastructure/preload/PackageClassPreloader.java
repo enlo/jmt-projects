@@ -46,7 +46,7 @@ public class PackageClassPreloader extends AbstractClassPreloader {
 
     @Getter
     @NonNull
-    Set<String> extractPattern = new HashSet<>();
+    Set<String> excludePatterns = new HashSet<>();
 
     /**
      *
@@ -57,12 +57,12 @@ public class PackageClassPreloader extends AbstractClassPreloader {
 
     /**
      *
-     * @param extractPattern
+     * @param excludePattern
      */
-    public void setExtractPattern(Collection<String> extractPattern) {
-        this.extractPattern = new HashSet<>(extractPattern);
+    public void setExcludePatterns(Collection<String> excludePattern) {
+        this.excludePatterns = new HashSet<>(excludePattern);
         Set<TypeFilter> newFilters = new HashSet<>();
-        for (String pattern : this.extractPattern) {
+        for (String pattern : this.excludePatterns) {
             newFilters.add(new RegexPatternTypeFilter(Pattern.compile(pattern)));
         }
         resolver.getExcludeTypeFilters().clear();

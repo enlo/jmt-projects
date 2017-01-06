@@ -3,7 +3,6 @@ package info.naiv.lab.java.jmt;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Arguments.nonMinus;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
-import info.naiv.lab.java.jmt.annotation.Nonempty;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
 import info.naiv.lab.java.jmt.fx.Consumer1;
@@ -97,6 +96,12 @@ public abstract class Misc {
         return iter;
     }
 
+    /**
+     *
+     * @param value
+     * @param defaultValue
+     * @return
+     */
     public static int asInt(Object value, int defaultValue) {
         if (value instanceof Number) {
             return ((Number) value).intValue();
@@ -212,8 +217,7 @@ public abstract class Misc {
      * @return
      */
     @Nonnull
-    public static <T>
-            Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
+    public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
         return IterationUtils.filter(iterable, predicate);
     }
 
@@ -327,6 +331,14 @@ public abstract class Misc {
         return keys;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param list
+     * @param index
+     * @param defaultValue
+     * @return
+     */
     public static <T> T getOrDefault(List<T> list, int index, T defaultValue) {
         nonMinus(index, "index");
         if (list != null && index < list.size()) {
@@ -335,6 +347,14 @@ public abstract class Misc {
         return defaultValue;
     }
 
+    /**
+     *
+     * @param <T>
+     * @param array
+     * @param index
+     * @param defaultValue
+     * @return
+     */
     public static <T> T getOrDefault(T[] array, int index, T defaultValue) {
         nonMinus(index, "index");
         if (array != null && index < array.length) {
@@ -878,8 +898,15 @@ public abstract class Misc {
         }
     }
 
+    /**
+     *
+     * @param text
+     * @param delim
+     * @param trim
+     * @return
+     */
     @CheckForNull
-    public static KeyValuePair<String, String> splitKeyValue(String text, @Nonempty String delim, boolean trim) {
+    public static KeyValuePair<String, String> splitKeyValue(String text, String delim, boolean trim) {
         nonEmpty(delim, "delim");
         if (isEmpty(text)) {
             return null;
@@ -1442,6 +1469,11 @@ public abstract class Misc {
         }
     }
 
+    /**
+     *
+     * @param objects
+     * @return
+     */
     public static List<String> toStringList(Iterable<?> objects) {
         ArrayList<String> result = new ArrayList<>();
         if (objects != null) {

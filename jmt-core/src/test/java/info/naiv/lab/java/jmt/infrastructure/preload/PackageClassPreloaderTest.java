@@ -53,9 +53,9 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
      * Test of getExtractPattern method, of class PackageClassPreloader.
      */
     @Test
-    public void testGetExtractPattern() {
+    public void testGetExcludePattern() {
         PackageClassPreloader instance = newConcrete();
-        assertThat(instance.getExtractPattern(), is(empty()));
+        assertThat(instance.getExcludePatterns(), is(empty()));
     }
 
     @Override
@@ -83,7 +83,7 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
         loader.setScanPackages(Arrays.asList("info.naiv.lab.java.jmt.infrastructure.preload.test1",
                                              "info.naiv.lab.java.jmt.infrastructure.preload.test2"));
 
-        loader.setExtractPattern(Arrays.asList(".*[4-5]"));
+        loader.setExcludePatterns(Arrays.asList(".*[4-5]"));
         Set<Class<?>> classes = loader.preload();
         assertThat(classes, is(containsInAnyOrder(TestClass1.class,
                                                   TestClass2.class,
@@ -93,13 +93,13 @@ public class PackageClassPreloaderTest extends AbstractClassPreloaderTest {
     }
 
     /**
-     * Test of setExtractPattern method, of class PackageClassPreloader.
+     * Test of setExcludePattern method, of class PackageClassPreloader.
      */
     @Test
-    public void testSetExtractPattern() {
+    public void testSetExcludePatterns() {
         PackageClassPreloader loader = newConcrete();
-        loader.setExtractPattern(Arrays.asList("a", "b", "b", "c"));
-        assertThat(loader.getExtractPattern(), is(containsInAnyOrder("a", "b", "c")));
+        loader.setExcludePatterns(Arrays.asList("a", "b", "b", "c"));
+        assertThat(loader.getExcludePatterns(), is(containsInAnyOrder("a", "b", "c")));
     }
 
     /**

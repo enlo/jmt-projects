@@ -27,8 +27,10 @@ import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import static java.util.Arrays.sort;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import static java.util.Objects.deepEquals;
@@ -43,6 +45,65 @@ import lombok.RequiredArgsConstructor;
  * @author enlo
  */
 public class ClassicArrayUtils {
+
+    public static class Bytes {
+
+        public static byte[] toPrimitives(@Nonnull Byte[] data) {
+            int size = data.length;
+            byte[] result = new byte[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data[i];
+            }
+            return result;
+        }
+
+        public static byte[] toPrimitives(@Nonnull List<Byte> data) {
+            int size = data.size();
+            byte[] result = new byte[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data.get(i);
+            }
+            return result;
+        }
+    }
+
+    public static class Ints {
+
+        public static int[] toPrimitives(Integer[] data) {
+            int size = data.length;
+            int[] result = new int[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data[i];
+            }
+            return result;
+        }
+
+        public static int[] toPrimitives(List<Integer> data) {
+            int size = data.size();
+            int[] result = new int[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data.get(i);
+            }
+            return result;
+        }
+    }
+
+    /**
+     * 配列を拡張して値を追加する.
+     *
+     * @param <T>
+     * @param array
+     * @param append
+     * @return
+     */
+    @Nonnull
+    public static <T> T[] arrayAppend(@Nonnull T[] array, T... append) {
+        int off = array.length;
+        int newlength = off + append.length;
+        T[] result = Arrays.copyOf(array, newlength);
+        System.arraycopy(append, 0, result, off, append.length);
+        return result;
+    }
 
     /**
      * 配列を {@link Iterable} に変換する.
@@ -357,6 +418,9 @@ public class ClassicArrayUtils {
         return false;
     }
 
+    private ClassicArrayUtils() {
+    }
+
     /**
      * 配列用 Iterator.
      *
@@ -408,9 +472,6 @@ public class ClassicArrayUtils {
             return new ArrayIterator<>(array);
         }
 
-    }
-
-    private ClassicArrayUtils() {
     }
 
 }

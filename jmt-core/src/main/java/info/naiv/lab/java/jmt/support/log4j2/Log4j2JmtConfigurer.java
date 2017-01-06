@@ -23,10 +23,10 @@
  */
 package info.naiv.lab.java.jmt.support.log4j2;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import java.net.URI;
 import java.util.Properties;
+import lombok.NonNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LoggerContext;
 
@@ -50,8 +50,7 @@ public class Log4j2JmtConfigurer {
      *
      * @param jmtProperties
      */
-    public static void configure(Properties jmtProperties) {
-        nonNull(jmtProperties, "jmtProperties");
+    public static void configure(@NonNull Properties jmtProperties) {
         String location = jmtProperties.getProperty(LOG4J2_CONFIG_PATH_KEY);
         doConfigure(jmtProperties, location);
     }
@@ -61,8 +60,7 @@ public class Log4j2JmtConfigurer {
      * @param jmtProperties
      * @param resourcePath
      */
-    public static void configure(Properties jmtProperties, String resourcePath) {
-        nonNull(jmtProperties, "jmtProperties");
+    public static void configure(@NonNull Properties jmtProperties, String resourcePath) {
         doConfigure(jmtProperties, resourcePath);
     }
 

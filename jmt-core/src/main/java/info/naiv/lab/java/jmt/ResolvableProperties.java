@@ -23,27 +23,18 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.nio.charset.Charset;
 import java.util.Properties;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.NonNull;
-import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.support.EncodedResource;
-import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 /**
  *
  * @author enlo
  */
 @EqualsAndHashCode(callSuper = true)
-public class ResolvableProperties extends Properties {
+public class ResolvableProperties extends ExtendProperties {
 
     private static final PropertiesPlaceholderResolver defaultResolver = PropertiesPlaceholderResolver.DEFAULT;
     private static final long serialVersionUID = 1L;
@@ -87,112 +78,6 @@ public class ResolvableProperties extends Properties {
         return (ResolvableProperties) super.clone();
     }
 
-    /**
-     * プロパティの内容を固定化したものを戻す.
-     *
-     * @return 固定したプロパティ.
-     */
-    @Nonnull
-    public Properties fix() {
-        Properties props = new Properties();
-        for (String key : this.stringPropertyNames()) {
-            props.setProperty(key, this.getProperty(key));
-        }
-        return props;
-    }
-
-    @Override
-    public String getProperty(String key, String defaultValue) {
-        return getPropertyCore(key, defaultValue);
-    }
-
-    @Override
-    public String getProperty(String key) {
-        return getPropertyCore(key, null);
-    }
-
-    /**
-     * リソースからプロパティを読み込み.
-     *
-     * @see PropertiesLoaderUtils#fillProperties(java.util.Properties,
-     * org.springframework.core.io.Resource)
-     * @param uriLocation URI 文字列.
-     * @return
-     * @throws IOException
-     */
-    @Nonnull
-    public ResolvableProperties loadFromResource(@Nonnull String uriLocation) throws IOException {
-        String path = eval(uriLocation);
-        Resource res = (new DefaultResourceLoader()).getResource(path);
-        PropertiesLoaderUtils.fillProperties(this, res);
-        return this;
-    }
-
-    /**
-     *
-     * @param uriLocation
-     * @param charset
-     * @return
-     * @throws IOException
-     */
-    @Nonnull
-    public ResolvableProperties loadFromResource(String uriLocation, Charset charset) throws IOException {
-        String path = eval(uriLocation);
-        Resource r = (new DefaultResourceLoader()).getResource(path);
-        EncodedResource er = new EncodedResource(r, charset);
-        PropertiesLoaderUtils.fillProperties(this, er);
-        return this;
-    }
-
-    /**
-     *
-     * @param propertyName
-     * @param value
-     * @return
-     */
-    @Nonnull
-    public ResolvableProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
-        if (isNotBlank(value)) {
-            setProperty(propertyName, value);
-        }
-        return this;
-    }
-
-    /**
-     *
-     * @return
-     */
-    @Nonnull
-    public ConcurrentMap<String, String> toMap() {
-        ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
-        for (String key : this.stringPropertyNames()) {
-            result.put(key, this.getProperty(key));
-        }
-        return result;
-    }
-
-    /**
-     * プロパティを取得し、プレイスホルダーを評価する.
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    private String getPropertyCore(String key, String defaultValue) {
-        String value = super.getProperty(key);
-        if (value == null) {
-            if (defaultValue == null) {
-                return null;
-            }
-            else {
-                return eval(defaultValue);
-            }
-        }
-        else {
-            return eval(value);
-        }
-    }
-
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
     }
@@ -203,6 +88,7 @@ public class ResolvableProperties extends Properties {
      * @param value 値
      * @return プレイスホルダー評価後の値
      */
+    @Override
     protected String eval(String value) {
         return resolver.resolve(this, value);
     }

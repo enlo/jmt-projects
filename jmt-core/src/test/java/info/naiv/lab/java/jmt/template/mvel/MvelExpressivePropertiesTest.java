@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.template.mvel;
 
+import info.naiv.lab.java.jmt.ExtendProperties;
+import info.naiv.lab.java.jmt.ExtendPropertiesTest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -49,7 +51,7 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @Slf4j
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({System.class, MvelExpressiveProperties.class})
-public class MvelExpressivePropertiesTest {
+public class MvelExpressivePropertiesTest extends ExtendPropertiesTest {
 
     Properties prop;
 
@@ -90,6 +92,7 @@ public class MvelExpressivePropertiesTest {
      * Test of fix method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testFix() {
         MvelExpressiveProperties p = testTarget;
 
@@ -127,6 +130,7 @@ public class MvelExpressivePropertiesTest {
      * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testGetProperty_String() {
 
         MvelExpressiveProperties p = testTarget;
@@ -148,16 +152,17 @@ public class MvelExpressivePropertiesTest {
      * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
+    @Override
     public void testGetProperty_String_String() {
         MvelExpressiveProperties p = testTarget;
 
-        assertThat(p.getProperty("itemName", "none"), is("property"));
-        assertThat(p.getProperty("itemNameOther", "none"), is("none"));
+        assertThat(p.getProperty("itemName", "default1"), is("property"));
+        assertThat(p.getProperty("itemNameOther", "default1"), is("default1"));
         assertThat(p.getProperty("itemNameOther", null), is(nullValue()));
 
-        assertThat(p.getProperty("itemName1", "none"), is("systemProp"));
-        assertThat(p.getProperty("itemName2", "none"), is("env"));
-        assertThat(p.getProperty("itemName3", "none"), is("none"));
+        assertThat(p.getProperty("itemName1", "default2"), is("systemProp"));
+        assertThat(p.getProperty("itemName2", "default2"), is("env"));
+        assertThat(p.getProperty("itemName3", "default2"), is("default2"));
 
         assertThat(p.getProperty("itemNameOther", "@{itemName1}"), is("systemProp"));
         assertThat(p.getProperty("itemNameOther", "@{itemName2}"), is("env"));
@@ -169,17 +174,9 @@ public class MvelExpressivePropertiesTest {
         assertThat(p.getProperty("itemNameOther", "@{itemName3}"), is(""));
     }
 
-    /**
-     *
-     * @throws IOException
-     */
-    @Test
-    public void testSerialize() throws IOException {
-        MvelExpressiveProperties resProps = new MvelExpressiveProperties();
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        try (ObjectOutputStream os = new ObjectOutputStream(stream)) {
-            os.writeObject(resProps);
-        }
+    @Override
+    protected ExtendProperties newInstance() {
+        return new MvelExpressiveProperties();
     }
 
 }

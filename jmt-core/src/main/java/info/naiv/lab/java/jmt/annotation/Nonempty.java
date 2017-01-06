@@ -42,8 +42,15 @@ import javax.annotation.meta.When;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Nonempty {
 
+    /**
+     *
+     * @return
+     */
     When when() default When.ALWAYS;
 
+    /**
+     *
+     */
     static class Checker implements TypeQualifierValidator<Nonempty> {
 
         @Override

@@ -36,6 +36,12 @@ import lombok.NonNull;
  */
 public class Lazy<T> implements Supplier<T> {
 
+    /**
+     *
+     * @param <T>
+     * @param initializer
+     * @return
+     */
     @Nonnull
     public static <T> Lazy<T> of(@NonNull final Supplier<? extends T> initializer) {
         return new Lazy<T>() {
@@ -50,9 +56,16 @@ public class Lazy<T> implements Supplier<T> {
 
     T value;
 
+    /**
+     *
+     */
     public Lazy() {
     }
 
+    /**
+     *
+     * @param value
+     */
     public Lazy(T value) {
         this.value = value;
         this.initialized.set(true);
@@ -85,6 +98,10 @@ public class Lazy<T> implements Supplier<T> {
         return hash;
     }
 
+    /**
+     *
+     * @return
+     */
     public T initialValue() {
         return null;
     }

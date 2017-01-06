@@ -25,7 +25,9 @@ package info.naiv.lab.java.jmt.support.spring;
 
 import info.naiv.lab.java.jmt.ResolvableProperties;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -37,11 +39,13 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 public class ResolvablePropertiesFactoryBean extends PropertiesFactoryBean implements FactoryBean<Properties> {
 
     @Setter
-    boolean fixProperties = true;
+    protected boolean fixProperties = true;
+
+    protected List<String> defaultPropertiesLocations;
 
     @Override
     protected Properties mergeProperties() throws IOException {
-        Properties p = super.mergeProperties();
+        Properties p = super.mergeProperties();        
         ResolvableProperties rp = new ResolvableProperties(p);
         if (fixProperties) {
             return rp.fix();

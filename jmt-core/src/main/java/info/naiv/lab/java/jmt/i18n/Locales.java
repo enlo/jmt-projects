@@ -23,8 +23,6 @@
  */
 package info.naiv.lab.java.jmt.i18n;
 
-import info.naiv.lab.java.jmt.KeyValuePair;
-import info.naiv.lab.java.jmt.Misc;
 import java.util.IllformedLocaleException;
 import java.util.Locale;
 import java.util.regex.Matcher;

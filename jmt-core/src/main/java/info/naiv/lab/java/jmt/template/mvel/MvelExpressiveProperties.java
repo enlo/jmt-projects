@@ -1,5 +1,6 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
+import info.naiv.lab.java.jmt.ExtendProperties;
 import static info.naiv.lab.java.jmt.Misc.isBlank;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.io.Serializable;
@@ -14,7 +15,7 @@ import org.mvel2.templates.TemplateRuntime;
  *
  * @author enlo
  */
-public class MvelExpressiveProperties extends Properties {
+public class MvelExpressiveProperties extends ExtendProperties {
 
     private static final long serialVersionUID = -2208239490931819164L;
 
@@ -51,37 +52,12 @@ public class MvelExpressiveProperties extends Properties {
     }
 
     /**
-     * プロパティの内容を固定化したものを戻す.
-     *
-     * @return 固定したプロパティ.
-     */
-    public Properties fix() {
-        Properties props = new Properties();
-        for (String key : this.stringPropertyNames()) {
-            String value = this.getProperty(key);
-            if (value != null) {
-                props.setProperty(key, value);
-            }
-        }
-        return props;
-    }
-
-    @Override
-    public String getProperty(String key, String defaultValue) {
-        return eval(super.getProperty(key, defaultValue));
-    }
-
-    @Override
-    public String getProperty(String key) {
-        return eval(super.getProperty(key));
-    }
-
-    /**
      * Placeholder を実際の値に変換し、戻す.
      *
      * @param value 値
      * @return Placeholder 評価後の値
      */
+    @Override
     protected String eval(String value) {
         if (isBlank(value)) {
             return value;
@@ -92,21 +68,6 @@ public class MvelExpressiveProperties extends Properties {
             templates.put(value, template);
         }
         return (String) TemplateRuntime.execute(template, null, factory);
-    }
-
-    /**
-     * プロパティを取得し、プレイスホルダーを評価する.
-     *
-     * @param key
-     * @param defaultValue
-     * @return
-     */
-    protected final String getPropertyCore(String key, String defaultValue) {
-        String value = super.getProperty(key);
-        if (value == null) {
-            return defaultValue;
-        }
-        return value;
     }
 
     private static class PropertiesLookup implements Lookup<String, String>, Serializable {

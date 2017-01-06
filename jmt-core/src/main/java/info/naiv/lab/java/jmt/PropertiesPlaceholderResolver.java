@@ -87,6 +87,7 @@ public class PropertiesPlaceholderResolver implements Serializable {
         });
     }
 
+    @SuppressWarnings("unused")
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
         helper = new PropertyPlaceholderHelper(prefix, suffix);

@@ -1,7 +1,6 @@
 package info.naiv.lab.java.jmt;
 
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
-import static info.naiv.lab.java.jmt.Arguments.nonMinus;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.parseCalendar;
@@ -43,6 +42,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashSet;
+import java.util.IllformedLocaleException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +53,7 @@ import java.util.Set;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
+import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
@@ -61,7 +62,8 @@ import org.springframework.core.io.Resource;
  * @author enlo
  */
 @Slf4j
-public abstract class Misc {
+@UtilityClass
+public class Misc {
 
     /**
      * リストにオブジェクトが存在しない場合追加する.
@@ -193,6 +195,34 @@ public abstract class Misc {
      */
     public static <T extends Comparable<T>> boolean containsCompareEquals(Iterable<? extends T> items, T valueToFind) {
         return IterationUtils.containsCompareEquals(items, valueToFind);
+    }
+
+    /**
+     * Bean から Bean へプロパティをコピーする.
+     *
+     * @param source
+     * @param dest
+     * @param ignoreProperties
+     */
+    public static void copyProperties(@NonNull Object source, @NonNull Object dest, String... ignoreProperties) {
+        Class<?> sourceType = source.getClass();
+        Class<?> destType = dest.getClass();
+        copyProperties(sourceType, destType, source, dest, ignoreProperties);
+    }
+
+    /**
+     * Bean から Bean へプロパティをコピーする.
+     *
+     * @param sourceType
+     * @param destType
+     * @param source
+     * @param dest
+     * @param ignoreProperties
+     */
+    public static void copyProperties(Class<?> sourceType, Class<?> destType, Object source, Object dest, String... ignoreProperties) {
+        SimpleBeanCopierFactory
+                .createInstance(sourceType, destType, ignoreProperties)
+                .copyProperties(source, dest);
     }
 
     /**
@@ -340,8 +370,7 @@ public abstract class Misc {
      * @return
      */
     public static <T> T getOrDefault(List<T> list, int index, T defaultValue) {
-        nonMinus(index, "index");
-        if (list != null && index < list.size()) {
+        if (list != null && 0 <= index && index < list.size()) {
             return list.get(index);
         }
         return defaultValue;
@@ -356,8 +385,7 @@ public abstract class Misc {
      * @return
      */
     public static <T> T getOrDefault(T[] array, int index, T defaultValue) {
-        nonMinus(index, "index");
-        if (array != null && index < array.length) {
+        if (array != null && 0 <= index && index < array.length) {
             return array[index];
         }
         return defaultValue;
@@ -1306,7 +1334,13 @@ public abstract class Misc {
     public static Locale toLocale(Object locale, Locale defaultLocale) {
         if (locale instanceof CharSequence) {
             String localeString = locale.toString();
-            return Locales.toLocale(localeString);
+            try {
+                return Locales.toLocale(localeString);
+            }
+            catch (IllformedLocaleException ex) {
+                logger.warn("illformed locale. {}", localeString, ex);
+                return defaultLocale;
+            }
         }
         else if (locale instanceof Locale) {
             return (Locale) locale;
@@ -1504,6 +1538,4 @@ public abstract class Misc {
         }
     }
 
-    private Misc() {
-    }
 }

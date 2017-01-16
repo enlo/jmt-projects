@@ -40,6 +40,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -1550,6 +1551,16 @@ public class MiscTest {
      */
     @Test
     public void testGetOrDefault_3args_1() {
+        String[] arr = null;
+        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(arr, 0, "B"), is("B"));
+        assertThat(Misc.getOrDefault(arr, 1, "C"), is("C"));
+        arr = new String[]{"X", "Y", "Z"};
+        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(arr, 0, "B"), is("X"));
+        assertThat(Misc.getOrDefault(arr, 1, "C"), is("Y"));
+        assertThat(Misc.getOrDefault(arr, 2, "D"), is("Z"));
+        assertThat(Misc.getOrDefault(arr, 3, "E"), is("E"));
     }
 
     /**
@@ -1557,6 +1568,16 @@ public class MiscTest {
      */
     @Test
     public void testGetOrDefault_3args_2() {
+        List<String> list = null;
+        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(list, 0, "B"), is("B"));
+        assertThat(Misc.getOrDefault(list, 1, "C"), is("C"));
+        list = Arrays.asList("X", "Y", "Z");
+        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(list, 0, "B"), is("X"));
+        assertThat(Misc.getOrDefault(list, 1, "C"), is("Y"));
+        assertThat(Misc.getOrDefault(list, 2, "D"), is("Z"));
+        assertThat(Misc.getOrDefault(list, 3, "E"), is("E"));
     }
 
     /**
@@ -1564,6 +1585,28 @@ public class MiscTest {
      */
     @Test
     public void testToLocale() {
+        assertThat(Misc.toLocale(null, Locale.ENGLISH), is(Locale.ENGLISH));
+        assertThat(Misc.toLocale("ja_JP", Locale.ENGLISH), is(Locale.JAPAN));
+        assertThat(Misc.toLocale(Locale.CANADA, Locale.ENGLISH), is(Locale.CANADA));
+        Locale.Builder lb = new Locale.Builder();
+        lb.setRegion("GB");
+        lb.setLanguage("en");
+        assertThat(Misc.toLocale(lb, Locale.ENGLISH), is(Locale.UK));
+        assertThat(Misc.toLocale(1, Locale.ENGLISH), is(Locale.ENGLISH));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_3args() {
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_5args() {
     }
 
 }

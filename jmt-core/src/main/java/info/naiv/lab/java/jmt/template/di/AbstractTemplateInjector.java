@@ -8,7 +8,7 @@ import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.TemplateLoader;
 import info.naiv.lab.java.jmt.template.annotation.InjectTemplate;
 import info.naiv.lab.java.jmt.template.annotation.TemplateCategoryOf;
-import java.lang.reflect.Field;
+import java.lang.reflect.Member;
 import java.nio.charset.Charset;
 import javax.annotation.CheckForNull;
 import lombok.Getter;
@@ -58,13 +58,13 @@ public abstract class AbstractTemplateInjector {
     /**
      *
      * @param anno
-     * @param field
+     * @param member
      * @return
      */
-    protected String getName(InjectTemplate anno, Field field) {
+    protected String getName(InjectTemplate anno, Member member) {
         String name = anno.name();
         if (isBlank(name)) {
-            name = field.getName();
+            name = member.getName();
         }
         return name;
     }
@@ -76,7 +76,7 @@ public abstract class AbstractTemplateInjector {
      * @param field
      * @return
      */
-    protected Template getTemplate(InjectTemplate anno, TemplateCategoryOf categoryAnno, Field field) {
+    protected Template getTemplate(InjectTemplate anno, TemplateCategoryOf categoryAnno, Member field) {
         TemplateLoader templ = getTemplateLoader(anno);
         if (templ != null) {
             String category = getCategory(anno, categoryAnno);

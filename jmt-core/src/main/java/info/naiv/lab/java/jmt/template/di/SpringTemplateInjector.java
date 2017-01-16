@@ -38,7 +38,10 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.MethodCallback;
+import org.springframework.util.ReflectionUtils.MethodFilter;
 import static org.springframework.util.ReflectionUtils.doWithFields;
+import static org.springframework.util.ReflectionUtils.doWithMethods;
+import static org.springframework.util.ReflectionUtils.invokeMethod;
 import static org.springframework.util.ReflectionUtils.makeAccessible;
 
 /**
@@ -57,7 +60,10 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-        doWithFields(bean.getClass(), new Callback(bean));
+        Class<?> clz = bean.getClass();
+        Callback cb = new Callback(bean);
+        doWithFields(clz, cb);
+        doWithMethods(clz, cb, cb);
         return bean;
     }
 
@@ -87,7 +93,7 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
         }
     }
 
-    private class Callback implements FieldCallback, MethodCallback {
+    private class Callback implements FieldCallback, MethodCallback, MethodFilter {
 
         final Object bean;
         final TemplateCategoryOf category;
@@ -109,6 +115,21 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
 
         @Override
         public void doWith(Method method) throws IllegalArgumentException, IllegalAccessException {
+            makeAccessible(method);
+            InjectTemplate anno = method.getAnnotation(InjectTemplate.class);
+            Template templ = getTemplate(anno, category, method);
+            invokeMethod(method, bean, templ);
+        }
+
+        @Override
+        public boolean matches(Method method) {
+            InjectTemplate anno = method.getAnnotation(InjectTemplate.class);
+            if (anno == null) {
+                return false;
+            }
+
+            Class<?>[] paramTypes = method.getParameterTypes();
+            return paramTypes.length == 1 && paramTypes[0].isAssignableFrom(Template.class);
         }
     }
 

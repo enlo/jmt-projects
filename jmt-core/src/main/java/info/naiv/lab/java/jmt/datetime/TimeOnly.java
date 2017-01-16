@@ -24,10 +24,12 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.Constants;
+import info.naiv.lab.java.jmt.SimpleBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getTimePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
 import java.util.Calendar;
 import java.util.Date;
+import org.springframework.core.convert.converter.Converter;
 
 /**
  *
@@ -36,6 +38,18 @@ import java.util.Date;
 public class TimeOnly extends java.sql.Time {
 
     private static final long serialVersionUID = 1L;
+
+    public static class DateToTimeOnlyConverter implements Converter<Date, TimeOnly> {
+
+        @Override
+        public TimeOnly convert(Date source) {
+            return TimeOnly.valueOf(source);
+        }
+    }
+    
+    static {
+        SimpleBeanCopierFactory.registerConverter(new DateToTimeOnlyConverter());
+    }
 
     /**
      *
@@ -90,12 +104,24 @@ public class TimeOnly extends java.sql.Time {
     @Override
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
     public TimeOnly clone() {
-        return (TimeOnly) super.clone(); //To change body of generated methods, choose Tools | Templates.
+        return (TimeOnly) super.clone();
     }
 
     @Override
     public void setTime(long time) {
         long mills = time % Constants.DAY_IN_MILLS;
         super.setTime(mills);
+    }
+
+    public static TimeOnly valueOf(Date date) {
+        if (date instanceof TimeOnly) {
+            return ((TimeOnly) date).clone();
+        }
+        else if (date == null) {
+            return new TimeOnly(0);
+        }
+        else {
+            return new TimeOnly(date);
+        }
     }
 }

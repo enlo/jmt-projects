@@ -23,10 +23,13 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
+import info.naiv.lab.java.jmt.SimpleBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.createDate;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
 import java.util.Date;
+import javax.annotation.Nonnull;
+import org.springframework.core.convert.converter.Converter;
 
 /**
  *
@@ -35,6 +38,18 @@ import java.util.Date;
 public class DateOnly extends java.sql.Date {
 
     private static final long serialVersionUID = 1L;
+
+    public static class DateToDateOnlyConverter implements Converter<Date, DateOnly> {
+
+        @Override
+        public DateOnly convert(Date source) {
+            return DateOnly.valueOf(source);
+        }
+    }
+
+    static {
+        SimpleBeanCopierFactory.registerConverter(new DateToDateOnlyConverter());
+    }
 
     /**
      *
@@ -81,4 +96,22 @@ public class DateOnly extends java.sql.Date {
         super.setTime(newValue.getTime());
     }
 
+    /**
+     * 日付を取得する.
+     *
+     * @param date 日付. null の場合は0Lで初期化する.
+     * @return 日付
+     */
+    @Nonnull
+    public static DateOnly valueOf(Date date) {
+        if (date instanceof DateOnly) {
+            return ((DateOnly) date).clone();
+        }
+        else if (date == null) {
+            return new DateOnly(0);
+        }
+        else {
+            return new DateOnly(date);
+        }
+    }
 }

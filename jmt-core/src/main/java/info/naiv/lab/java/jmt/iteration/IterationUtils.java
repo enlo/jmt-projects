@@ -87,6 +87,10 @@ public class IterationUtils {
         return r;
     }
 
+    public static <T> long count(Iterator<T> iter, Predicate1<? super T> predicate) {
+        return count(filter(iter, predicate));
+    }
+
     /**
      *
      * フィルター

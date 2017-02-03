@@ -31,6 +31,10 @@ import java.lang.reflect.InvocationTargetException;
  */
 public interface MethodInvoker {
 
+    final int ARGC_MAX = 0xFF;
+
+    boolean checkParameterCount(int argc);
+
     Class<?>[] getParameterTypes();
 
     /**

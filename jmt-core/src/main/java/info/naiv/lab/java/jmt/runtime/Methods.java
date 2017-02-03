@@ -81,6 +81,11 @@ public class Methods {
         }
 
         @Override
+        public boolean checkParameterCount(int argc) {
+            return parameterTypes.length == argc;
+        }
+
+        @Override
         public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             Object[] newArgs = arrayAppend(bound, args);
             return method.invoke(target, newArgs);
@@ -103,11 +108,15 @@ public class Methods {
         }
 
         @Override
+        public boolean checkParameterCount(int argc) {
+            return parameterTypes.length == argc;
+        }
+
+        @Override
         public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             Object[] newArgs = arrayAppend(bound, args);
             return mi.invoke(target, newArgs);
         }
-
     }
 
 }

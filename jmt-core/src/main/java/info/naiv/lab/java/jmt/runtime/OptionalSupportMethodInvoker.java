@@ -25,54 +25,34 @@ package info.naiv.lab.java.jmt.runtime;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.copyOfRangeToTypedArray;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.createTypedArray;
+import info.naiv.lab.java.jmt.tuple.Tuple3;
+import info.naiv.lab.java.jmt.tuple.Tuples;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import javax.annotation.Nonnull;
+import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
+import lombok.Value;
 import org.springframework.util.ClassUtils;
 
 /**
  *
  * @author enlo
  */
-public final class OptionalSupportMethodInvoker implements MethodInvoker {
+@Value
+@EqualsAndHashCode(of = "method")
+public class OptionalSupportMethodInvoker implements MethodInvoker {
 
-    final ArgsResolver argsResolver;
-
-    final Method method;
-    final Parameter[] params;
-
-    public OptionalSupportMethodInvoker(@Nonnull Method method) {
-        this.method = method;
-
-        Annotation[][] paramAnnos = method.getParameterAnnotations();
-        Class<?>[] paramTypes = method.getParameterTypes();
-
-        this.params = makeParams(paramTypes, paramAnnos);
-        this.argsResolver = method.isVarArgs() ? new VarArgsResolver() : new ArgsResolver();
-    }
-
-    @Override
-    public Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
-    }
-
-    @Override
-    public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        Object[] newArgs = argsResolver.resolve(args);
-        return method.invoke(target, newArgs);
-    }
-
-    private boolean checkVarArgs(Class<?>[] paramTypes, int i) {
-        if (method.isVarArgs()) {
+    private static boolean checkVarArgs(Method m, Class<?>[] paramTypes, int i) {
+        if (m.isVarArgs()) {
             return (i == (paramTypes.length - 1));
         }
         return false;
     }
 
-    private boolean makeOptional(Parameter p, Annotation[] annotations, boolean isVarArgs) {
+    private static boolean makeOptional(Parameter p, Annotation[] annotations, boolean isVarArgs) {
         if (isVarArgs) {
             p.optional = true;
             p.defaultValue = Array.newInstance(p.type.getComponentType(), 0);
@@ -93,19 +73,82 @@ public final class OptionalSupportMethodInvoker implements MethodInvoker {
         return false;
     }
 
-    private Parameter[] makeParams(Class<?>[] paramTypes, Annotation[][] paramAnnos) {
+    private static Tuple3<Parameter[], Integer, Integer> makeParams(Method m, Class<?>[] paramTypes, Annotation[][] paramAnnos) {
         Parameter[] result = new Parameter[paramTypes.length];
         boolean checkOptional = true;
+        int nonOptional = 0;
         for (int i = paramAnnos.length - 1; 0 <= i; i--) {
             Annotation[] anno = paramAnnos[i];
             Parameter p = new Parameter();
             p.type = paramTypes[i];
             if (checkOptional) {
-                checkOptional = makeOptional(p, anno, checkVarArgs(paramTypes, i));
+                checkOptional = makeOptional(p, anno, checkVarArgs(m, paramTypes, i));
+                if (!checkOptional) {
+                    nonOptional++;
+                }
+            }
+            else {
+                nonOptional++;
             }
             result[i] = p;
         }
-        return result;
+        return Tuples.tie(result, nonOptional, m.isVarArgs() ? ARGC_MAX : result.length);
+    }
+
+    final int argcMax;
+    final int argcMin;
+    final ArgsResolver argsResolver;
+    final Method method;
+    final Parameter[] params;
+
+    public OptionalSupportMethodInvoker(@Nonnull Method method) {
+        this.method = method;
+
+        Annotation[][] paramAnnos = method.getParameterAnnotations();
+        Class<?>[] paramTypes = method.getParameterTypes();
+
+        Tuple3<Parameter[], Integer, Integer> tx = makeParams(method, paramTypes, paramAnnos);
+        this.params = tx.getValue1();
+        this.argcMax = tx.getValue2();
+        this.argcMin = tx.getValue3();
+        this.argsResolver = method.isVarArgs() ? new VarArgsResolver() : new ArgsResolver();
+    }
+
+    @Override
+    public boolean checkParameterCount(int argc) {
+        return argcMax <= argc && argc <= argcMin;
+    }
+
+    @Override
+    public Class<?>[] getParameterTypes() {
+        return method.getParameterTypes();
+    }
+
+    @Override
+    public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        Object[] newArgs = argsResolver.resolve(args);
+        return method.invoke(target, newArgs);
+    }
+
+    private static class Parameter {
+
+        Object defaultValue;
+        Method factory;
+        boolean optional;
+        Class<?> type;
+
+        @SneakyThrows
+        public Object valueOf(Object val) {
+            if (optional) {
+                if (ClassUtils.isAssignableValue(type, val)) {
+                    return val;
+                }
+                else if (factory != null) {
+                    return factory.invoke(null, val);
+                }
+            }
+            return val;
+        }
     }
 
     private class ArgsResolver {
@@ -131,27 +174,6 @@ public final class OptionalSupportMethodInvoker implements MethodInvoker {
             for (int i = 0; i < argc; i++) {
                 dest[i] = params[i].valueOf(args[i]);
             }
-        }
-    }
-
-    private class Parameter {
-
-        Object defaultValue;
-        Method factory;
-        boolean optional;
-        Class<?> type;
-
-        @SneakyThrows
-        public Object valueOf(Object val) {
-            if (optional) {
-                if (ClassUtils.isAssignableValue(type, val)) {
-                    return val;
-                }
-                else if (factory != null) {
-                    return factory.invoke(null, val);
-                }
-            }
-            return val;
         }
     }
 

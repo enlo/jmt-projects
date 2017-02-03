@@ -46,6 +46,8 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
     @Getter
     private static final DefaultCustomNodesProvider globalInstance;
 
+    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
+
     static {
 
         Map<String, Class<? extends Node>> nodes = new HashMap<>();
@@ -55,7 +57,6 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
         NODES = Collections.unmodifiableMap(nodes);
         globalInstance = new DefaultCustomNodesProvider();
     }
-    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
 
     public DefaultCustomNodesProvider() {
         nodes.putAll(NODES);

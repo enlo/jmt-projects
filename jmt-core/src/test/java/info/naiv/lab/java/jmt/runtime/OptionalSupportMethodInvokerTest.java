@@ -32,6 +32,7 @@ import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.springframework.util.ClassUtils;
 
 /**
  *
@@ -40,6 +41,48 @@ import org.junit.Test;
 public class OptionalSupportMethodInvokerTest {
 
     public OptionalSupportMethodInvokerTest() {
+    }
+
+    /**
+     * Test of checkParameterCount method, of class
+     * OptionalSupportMethodInvoker.
+     */
+    @Test
+    public void testCheckParameterCount() {
+        Method[] ms = TestClass.class.getDeclaredMethods();
+        for (Method m : ms) {
+            MethodInvoker mi = new OptionalSupportMethodInvoker(m);
+            String nm = m.getName();
+            switch (nm) {
+                case "s1":
+                    assertThat(nm, mi.checkParameterCount(0), is(true));
+                    assertThat(nm, mi.checkParameterCount(1), is(false));
+                    break;
+                case "s2":
+                    assertThat(nm, mi.checkParameterCount(0), is(false));
+                    assertThat(nm, mi.checkParameterCount(1), is(true));
+                    assertThat(nm, mi.checkParameterCount(2), is(false));
+                    break;
+                case "s3":
+                    assertThat(nm, mi.checkParameterCount(1), is(false));
+                    assertThat(nm, mi.checkParameterCount(2), is(true));
+                    assertThat(nm, mi.checkParameterCount(MethodInvoker.ARGC_MAX), is(true));
+                    assertThat(nm, mi.checkParameterCount(MethodInvoker.ARGC_MAX + 1), is(false));
+                    break;
+                case "s4":
+                    assertThat(nm, mi.checkParameterCount(0), is(false));
+                    assertThat(nm, mi.checkParameterCount(1), is(true));
+                    assertThat(nm, mi.checkParameterCount(2), is(true));
+                    assertThat(nm, mi.checkParameterCount(3), is(false));
+                    break;
+                case "s5":
+                    assertThat(nm, mi.checkParameterCount(0), is(false));
+                    assertThat(nm, mi.checkParameterCount(1), is(true));
+                    assertThat(nm, mi.checkParameterCount(MethodInvoker.ARGC_MAX), is(true));
+                    assertThat(nm, mi.checkParameterCount(MethodInvoker.ARGC_MAX + 1), is(false));
+                    break;
+            }
+        }
     }
 
     /**
@@ -52,6 +95,20 @@ public class OptionalSupportMethodInvokerTest {
             MethodInvoker mi = new OptionalSupportMethodInvoker(m);
             assertThat(m.getName(), mi.getParameterTypes(), is(mi.getParameterTypes()));
         }
+    }
+
+    /**
+     * Test of invoke method, of class OptionalSupportMethodInvoker.
+     *
+     * @throws java.lang.Exception
+     */
+    @Test
+    public void testInvoke() throws Exception {
+
+        Method m = ClassUtils.getMethod(Integer.class, "toString");
+        MethodInvoker mi = new OptionalSupportMethodInvoker(m);
+        assertThat(mi.invoke(1), is((Object) "1"));
+
     }
 
     /**
@@ -114,14 +171,14 @@ public class OptionalSupportMethodInvokerTest {
                    @SneakyThrows
                    @Override
                    public void accept(OptionalSupportMethodInvoker a1) {
-                       assertThat("s3(2)", a1.invoke(null, 2), is(nullValue()));
-                       assertThat("s3(2)", TestClass.s3c, is(2));
-                       assertThat("s3(1, 2)", a1.invoke(null, 1, 2), is(nullValue()));
-                       assertThat("s3(1, 2)", TestClass.s3c, is(3));
+                       assertThat("s3(2, -1)", a1.invoke(null, 2, -1), is(nullValue()));
+                       assertThat("s3(2, -1)", TestClass.s3c, is(1));
                        assertThat("s3(1, 2, 3)", a1.invoke(null, 1, 2, 3), is(nullValue()));
                        assertThat("s3(1, 2, 3)", TestClass.s3c, is(6));
-                       assertThat("s3(0, {1, 2})", a1.invoke(null, 0, new int[]{1, 2}), is(nullValue()));
-                       assertThat("s3(0, {1, 2})", TestClass.s3c, is(3));
+                       assertThat("s3(1, 2, 3, 4)", a1.invoke(null, 1, 2, 3, 4), is(nullValue()));
+                       assertThat("s3(1, 2, 3, 4)", TestClass.s3c, is(10));
+                       assertThat("s3(0, 1, {2, 3})", a1.invoke(null, 0, 1, new int[]{2, 3}), is(nullValue()));
+                       assertThat("s3(0, 1, {2, 3})", TestClass.s3c, is(6));
                    }
                });
     }
@@ -278,8 +335,9 @@ public class OptionalSupportMethodInvokerTest {
             s2c += x;
         }
 
-        public static void s3(int x, int... more) {
+        public static void s3(int x, int y, int... more) {
             s3c = x;
+            s3c += y;
             for (int a : more) {
                 s3c += a;
             }
@@ -324,4 +382,5 @@ public class OptionalSupportMethodInvokerTest {
         private TestClass() {
         }
     }
+
 }

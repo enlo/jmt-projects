@@ -71,6 +71,17 @@ public class SizedBytes implements Serializable, Cloneable {
         this.data = os.toByteArray();
     }
 
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public SizedBytes clone() {
+        try {
+            return (SizedBytes) super.clone(); //To change body of generated methods, choose Tools | Templates.
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
     @Nonnull
     public ByteArrayInputStream newInputStream() {
         return new ByteArrayInputStream(data, 0, size);
@@ -85,16 +96,4 @@ public class SizedBytes implements Serializable, Cloneable {
         return Arrays.copyOf(data, size);
     }
 
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public SizedBytes clone() {
-        try {
-            return (SizedBytes) super.clone(); //To change body of generated methods, choose Tools | Templates.
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
-    }
-
-    
 }

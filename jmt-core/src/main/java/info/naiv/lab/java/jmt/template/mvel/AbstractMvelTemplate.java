@@ -28,7 +28,6 @@ import info.naiv.lab.java.jmt.collection.Lookup;
 import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
 import org.mvel2.integration.VariableResolverFactory;
@@ -75,17 +74,6 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
     @Override
     public TResult merge() {
         return merge(new HashMap<String, Object>());
-    }
-
-    /**
-     * テンプレートから実際のオブジェクトを取得
-     *
-     * @param context
-     * @param factory
-     * @return
-     */
-    protected Object execute(TContext context, VariableResolverFactory factory) {
-        return TemplateRuntime.execute(template, context, factory, templateRegistry);
     }
 
     @Override
@@ -148,5 +136,16 @@ public abstract class AbstractMvelTemplate<TResult, TContext> implements MvelTem
      * @return
      */
     protected abstract TResult createResult(Object result, TContext context);
+
+    /**
+     * テンプレートから実際のオブジェクトを取得
+     *
+     * @param context
+     * @param factory
+     * @return
+     */
+    protected Object execute(TContext context, VariableResolverFactory factory) {
+        return TemplateRuntime.execute(template, context, factory, templateRegistry);
+    }
 
 }

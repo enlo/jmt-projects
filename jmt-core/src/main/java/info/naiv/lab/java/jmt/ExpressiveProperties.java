@@ -36,10 +36,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.EncodedResource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 
-/**
- *
- * @author enlo
- */
 public abstract class ExpressiveProperties extends Properties {
 
     private static final long serialVersionUID = 1L;
@@ -51,31 +47,36 @@ public abstract class ExpressiveProperties extends Properties {
         super(defaults);
     }
 
-    /**
-     *
-     * @param propertyName
-     * @param value
-     * @return
-     */
-    @Nonnull
-    public ExpressiveProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
-        if (isNotBlank(value)) {
-            setProperty(propertyName, value);
-        }
-        return this;
+    @Override
+    public synchronized Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
+     * プロパティの内容を固定化したものを戻す.
      *
-     * @return
+     * @return 固定したプロパティ.
      */
     @Nonnull
-    public ConcurrentMap<String, String> toMap() {
-        ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
+    public Properties fix() {
+        Properties props = new Properties();
         for (String key : this.stringPropertyNames()) {
-            result.put(key, this.getProperty(key));
+            String value = this.getProperty(key);
+            if (value != null) {
+                props.setProperty(key, value);
+            }
         }
-        return result;
+        return props;
+    }
+
+    @Override
+    public final String getProperty(String key, String defaultValue) {
+        return getPropertyCore(key, defaultValue);
+    }
+
+    @Override
+    public final String getProperty(String key) {
+        return getPropertyCore(key, null);
     }
 
     /**
@@ -128,30 +129,30 @@ public abstract class ExpressiveProperties extends Properties {
     }
 
     /**
-     * プロパティの内容を固定化したものを戻す.
      *
-     * @return 固定したプロパティ.
+     * @param propertyName
+     * @param value
+     * @return
      */
     @Nonnull
-    public Properties fix() {
-        Properties props = new Properties();
-        for (String key : this.stringPropertyNames()) {
-            String value = this.getProperty(key);
-            if (value != null) {
-                props.setProperty(key, value);
-            }
+    public ExpressiveProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
+        if (isNotBlank(value)) {
+            setProperty(propertyName, value);
         }
-        return props;
+        return this;
     }
 
-    @Override
-    public final String getProperty(String key, String defaultValue) {
-        return getPropertyCore(key, defaultValue);
-    }
-
-    @Override
-    public final String getProperty(String key) {
-        return getPropertyCore(key, null);
+    /**
+     *
+     * @return
+     */
+    @Nonnull
+    public ConcurrentMap<String, String> toMap() {
+        ConcurrentMap<String, String> result = new ConcurrentHashMap<>();
+        for (String key : this.stringPropertyNames()) {
+            result.put(key, this.getProperty(key));
+        }
+        return result;
     }
 
     /**

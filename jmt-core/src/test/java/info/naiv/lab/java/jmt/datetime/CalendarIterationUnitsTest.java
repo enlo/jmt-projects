@@ -40,25 +40,24 @@ public class CalendarIterationUnitsTest {
     }
 
     /**
-     * Test of truncate method, of class CalendarIterationUnits.
-     */
-    @Test
-    public void testTruncate() {
-        Calendar cal = createCalendar(2016, 10, 24, 17, 42, 37, 357);
-
-        assertThat(DAY1.name(), DAY1.truncate(cal), is(createCalendar(2016, 10, 24)));
-        assertThat(HOUR1.name(), HOUR1.truncate(cal), is(createCalendar(2016, 10, 24, 17, 0, 0, 0)));
-        assertThat(HOUR12.name(), HOUR12.truncate(cal), is(createCalendar(2016, 10, 24, 12, 0, 0, 0)));
-        assertThat(HOUR2.name(), HOUR2.truncate(cal), is(createCalendar(2016, 10, 24, 16, 0, 0, 0)));
-        assertThat(HOUR3.name(), HOUR3.truncate(cal), is(createCalendar(2016, 10, 24, 15, 0, 0, 0)));
-        assertThat(HOUR4.name(), HOUR4.truncate(cal), is(createCalendar(2016, 10, 24, 16, 0, 0, 0)));
-    }
-
-    /**
      * Test of advance method, of class CalendarIterationUnits.
      */
     @Test
     public void testAdvance() {
+    }
+
+    /**
+     * Test of compare method, of class CalendarIterationUnits.
+     */
+    @Test
+    public void testCompare() {
+    }
+
+    /**
+     * Test of distance method, of class CalendarIterationUnits.
+     */
+    @Test
+    public void testDistance() {
     }
 
     /**
@@ -76,17 +75,18 @@ public class CalendarIterationUnitsTest {
     }
 
     /**
-     * Test of distance method, of class CalendarIterationUnits.
+     * Test of truncate method, of class CalendarIterationUnits.
      */
     @Test
-    public void testDistance() {
-    }
+    public void testTruncate() {
+        Calendar cal = createCalendar(2016, 10, 24, 17, 42, 37, 357);
 
-    /**
-     * Test of compare method, of class CalendarIterationUnits.
-     */
-    @Test
-    public void testCompare() {
+        assertThat(DAY1.name(), DAY1.truncate(cal), is(createCalendar(2016, 10, 24)));
+        assertThat(HOUR1.name(), HOUR1.truncate(cal), is(createCalendar(2016, 10, 24, 17, 0, 0, 0)));
+        assertThat(HOUR12.name(), HOUR12.truncate(cal), is(createCalendar(2016, 10, 24, 12, 0, 0, 0)));
+        assertThat(HOUR2.name(), HOUR2.truncate(cal), is(createCalendar(2016, 10, 24, 16, 0, 0, 0)));
+        assertThat(HOUR3.name(), HOUR3.truncate(cal), is(createCalendar(2016, 10, 24, 15, 0, 0, 0)));
+        assertThat(HOUR4.name(), HOUR4.truncate(cal), is(createCalendar(2016, 10, 24, 16, 0, 0, 0)));
     }
 
 }

@@ -53,11 +53,11 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
     private static final String[] MILLS = {"MS", "MIL", "MILLI", "MILLIS", "MILLISEC", "MILLISECOND", "MILLISECONDS"};
     private static final String[] MINS = {"M", "MIN", "MINUTE", "MINUTES"};
     private static final String[] NANOS = {"N", "NS", "NANO", "NANOS", "NANOSEC", "NANOSECOND", "NANOSECONDS"};
-    private static final String[] SECS = {"S", "SEC", "SECOND", "SECONDS"};
     private static final Pattern PATTERN = Pattern.compile("^(\\+|-)?(\\d+)(\\w+)?$", Pattern.CASE_INSENSITIVE);
-    private static final long serialVersionUID = -5609761961762572788L;
+    private static final String[] SECS = {"S", "SEC", "SECOND", "SECONDS"};
 
     private static final Map<TimeUnit, String[]> UNIT_MAP;
+    private static final long serialVersionUID = -5609761961762572788L;
 
     static {
         Map<TimeUnit, String[]> m = new HashMap<>();
@@ -126,8 +126,8 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
         }
     }
 
-    private final long value;
     private final TimeUnit unit;
+    private final long value;
 
     public TimeSpan(long value, @NonNull TimeUnit unit) {
         this.value = value;
@@ -140,12 +140,12 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
     }
 
     @Nonnull
-    public TimeSpan newValue(long value) {
+    public TimeSpan newUnit(TimeUnit unit) {
         return new TimeSpan(value, unit);
     }
 
     @Nonnull
-    public TimeSpan newUnit(TimeUnit unit) {
+    public TimeSpan newValue(long value) {
         return new TimeSpan(value, unit);
     }
 

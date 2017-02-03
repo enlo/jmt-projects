@@ -90,6 +90,11 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
         }
 
         @Override
+        public Bound<T> clone() {
+            return super.clone(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
         public Bound<T> construct(T newValue) {
             return new ClosedLowerBound<>(newValue);
         }
@@ -109,6 +114,11 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
 
         public ClosedUpperBound(T value) {
             super(value, BoundType.CLOSED);
+        }
+
+        @Override
+        public Bound<T> clone() {
+            return super.clone(); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
@@ -134,6 +144,11 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
         }
 
         @Override
+        public Bound<T> clone() {
+            return super.clone(); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        @Override
         public Bound<T> construct(T newValue) {
             return new NoBound<>();
         }
@@ -153,6 +168,11 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
 
         public OpenLowerBound(T value) {
             super(value, BoundType.OPEN);
+        }
+
+        @Override
+        public Bound<T> clone() {
+            return super.clone(); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
@@ -176,6 +196,11 @@ public abstract class Bound<T extends Comparable<T>> implements Cloneable, Seria
 
         public OpenUpperBound(T value) {
             super(value, BoundType.OPEN);
+        }
+
+        @Override
+        public Bound<T> clone() {
+            return super.clone(); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override

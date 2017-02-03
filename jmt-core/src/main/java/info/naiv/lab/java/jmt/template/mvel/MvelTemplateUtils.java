@@ -35,7 +35,7 @@ import org.mvel2.templates.res.Node;
  * @author enlo
  */
 public class MvelTemplateUtils {
-    
+
     @Nonnull
     public static CompiledTemplate compile(@Nonnull char[] template,
                                            ParserContext context,
@@ -52,6 +52,9 @@ public class MvelTemplateUtils {
         }
         finally {
             ParserContextHolder.pop();
-        }        
+        }
+    }
+
+    private MvelTemplateUtils() {
     }
 }

@@ -61,10 +61,9 @@ import org.springframework.util.AntPathMatcher;
 public class NIOUtilsTest {
 
     @Rule
-    public TemporaryFolder tempFolder = new TemporaryFolder();
-
-    @Rule
     public TemporaryFolder destTempFolder = new TemporaryFolder();
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
 
     /**
      *

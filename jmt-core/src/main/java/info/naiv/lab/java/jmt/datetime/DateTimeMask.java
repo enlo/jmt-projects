@@ -38,37 +38,29 @@ public enum DateTimeMask {
      * マスクしない.
      */
     NO_MASK {
-                @Override
-                public Calendar mask(Calendar date) {
-                    return date;
-                }
-            },
+        @Override
+        public Calendar mask(Calendar date) {
+            return date;
+        }
+    },
     /**
      * 時刻をマスク.
      */
     TIME_MASK {
-                @Override
-                public Calendar mask(Calendar date) {
-                    return ClassicDateUtils.clearTimePart((Calendar) date.clone());
-                }
-            },
+        @Override
+        public Calendar mask(Calendar date) {
+            return ClassicDateUtils.clearTimePart((Calendar) date.clone());
+        }
+    },
     /**
      * 日付をマスク.
      */
     DATE_MASK {
-                @Override
-                public Calendar mask(Calendar date) {
-                    return ClassicDateUtils.clearDatePart((Calendar) date.clone());
-                }
-            };
-
-    /**
-     *
-     * @param date
-     * @return
-     */
-    @Nonnull
-    public abstract Calendar mask(Calendar date);
+        @Override
+        public Calendar mask(Calendar date) {
+            return ClassicDateUtils.clearDatePart((Calendar) date.clone());
+        }
+    };
 
     /**
      * 範囲比較.
@@ -84,5 +76,13 @@ public enum DateTimeMask {
         Calendar maskedTo = mask(to);
         return Misc.between(maskedTarget, maskedFrom, maskedTo);
     }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
+    @Nonnull
+    public abstract Calendar mask(Calendar date);
 
 }

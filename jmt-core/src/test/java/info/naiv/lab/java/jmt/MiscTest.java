@@ -147,6 +147,18 @@ public class MiscTest {
     }
 
     /**
+     * Test of asInt method, of class Misc.
+     */
+    @Test
+    public void testAsInt() {
+        assertThat(Misc.asInt(null, -1), is(-1));
+        assertThat(Misc.asInt("", 2), is(2));
+        assertThat(Misc.asInt("", 0), is(0));
+        assertThat(Misc.asInt("4", 0), is(4));
+        assertThat(Misc.asInt(new BigDecimal("5.5"), 0), is(5));
+    }
+
+    /**
      * Test of between method, of class Misc.
      */
     @Test
@@ -280,6 +292,91 @@ public class MiscTest {
 
         list = Arrays.asList(new BigDecimal("1.0"), new BigDecimal("2.0"));
         assertThat(Misc.contains(list, predicate), is(false));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_2args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_3args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d, "name");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_3args_2() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d, "name", "id");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(0));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_4args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(0));
+        assertThat(d.getTel(), is(nullValue()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_5args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d, "name", "id");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(0));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(0));
+        assertThat(d.getTel(), is(nullValue()));
     }
 
     /**
@@ -526,6 +623,40 @@ public class MiscTest {
     }
 
     /**
+     * Test of getOrDefault method, of class Misc.
+     */
+    @Test
+    public void testGetOrDefault_3args_1() {
+        String[] arr = null;
+        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(arr, 0, "B"), is("B"));
+        assertThat(Misc.getOrDefault(arr, 1, "C"), is("C"));
+        arr = new String[]{"X", "Y", "Z"};
+        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(arr, 0, "B"), is("X"));
+        assertThat(Misc.getOrDefault(arr, 1, "C"), is("Y"));
+        assertThat(Misc.getOrDefault(arr, 2, "D"), is("Z"));
+        assertThat(Misc.getOrDefault(arr, 3, "E"), is("E"));
+    }
+
+    /**
+     * Test of getOrDefault method, of class Misc.
+     */
+    @Test
+    public void testGetOrDefault_3args_2() {
+        List<String> list = null;
+        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(list, 0, "B"), is("B"));
+        assertThat(Misc.getOrDefault(list, 1, "C"), is("C"));
+        list = Arrays.asList("X", "Y", "Z");
+        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
+        assertThat(Misc.getOrDefault(list, 0, "B"), is("X"));
+        assertThat(Misc.getOrDefault(list, 1, "C"), is("Y"));
+        assertThat(Misc.getOrDefault(list, 2, "D"), is("Z"));
+        assertThat(Misc.getOrDefault(list, 3, "E"), is("E"));
+    }
+
+    /**
      * Test of isBlank method, of class Misc.
      */
     @Test
@@ -628,6 +759,16 @@ public class MiscTest {
         assertThat("NEWLINE", Misc.isNotBlank(Constants.CRLF), is(false));
         assertThat("ZWNBSP", Misc.isNotBlank(Constants.ZWNBSP), is(false));
         assertThat("a", Misc.isNotBlank("a"), is(true));
+    }
+
+    /**
+     * Test of isNotEmpty method, of class Misc.
+     */
+    @Test
+    public void testIsNotEmpty_CharSequence() {
+        assertThat(Misc.isNotEmpty((String) null), is(false));
+        assertThat(Misc.isNotEmpty(""), is(false));
+        assertThat(Misc.isNotEmpty("A"), is(true));
     }
 
     /**
@@ -922,6 +1063,17 @@ public class MiscTest {
     }
 
     /**
+     * Test of nullOf method, of class Misc.
+     */
+    @Test
+    public void testNullOf() {
+        assertThat(Misc.nullOf(Object.class), is(nullValue()));
+        assertThat(Misc.nullOf(String.class), is(nullValue()));
+        assertThat(Misc.nullOf(Integer.class), is(nullValue()));
+        assertThat(Misc.nullOf(int[].class), is(nullValue()));
+    }
+
+    /**
      * Test of objectToDouble method, of class Misc.
      */
     @Test
@@ -964,6 +1116,26 @@ public class MiscTest {
         assertThat(Misc.objectToLong(ival, 0), is(0L));
         ival = 4.5;
         assertThat(Misc.objectToLong(ival, 0), is(4L));
+    }
+
+    /**
+     * Test of removeByteOrderMark method, of class Misc.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testRemoveByteOrderMark() throws IOException {
+        Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
+        Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
+        try (InputStream nobomis = nobomres.getInputStream();
+             InputStream bomis = bomres.getInputStream()) {
+            String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
+            String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
+            assertThat(bomtext, is(not(nobomtext)));
+
+            String actual = Misc.removeByteOrderMark(bomtext);
+            assertThat(actual, is(nobomtext));
+        }
     }
 
     /**
@@ -1035,6 +1207,94 @@ public class MiscTest {
         assertThat(Misc.resolveClassName("java.lang.String"), is(clz1));
         assertThat(Misc.resolveClassName("java.lang.Integer"), is(clz2));
         assertThat(Misc.resolveClassName("test.Sample"), is(Optional.EMPTY));
+    }
+
+    /**
+     * Test of splitKeyValue method, of class Misc.
+     */
+    @Test
+    public void testSplitKeyValue() {
+
+        String text1 = "abc = 1234";
+        String text2 = "abc := 1234";
+        String text3 = "abc ::= 1234";
+
+        assertThat(Misc.splitKeyValue(text1, "=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text1, "=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(text2, "=", true), is(KeyValuePair.of("abc :", "1234")));
+        assertThat(Misc.splitKeyValue(text2, ":=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text2, ":=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(text2, "::=", false), is(nullValue()));
+        assertThat(Misc.splitKeyValue(text3, "::=", true), is(KeyValuePair.of("abc", "1234")));
+        assertThat(Misc.splitKeyValue(text3, "::=", false), is(KeyValuePair.of("abc ", " 1234")));
+        assertThat(Misc.splitKeyValue(null, "::=", false), is(nullValue()));
+        assertThat(Misc.splitKeyValue("", ":=", false), is(nullValue()));
+
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_ByteBuffer_Charset() {
+        Charset cs1 = StandardCharsets.UTF_8;
+        Charset cs2 = StandardCharsets.UTF_16;
+        ByteBuffer nil = null;
+        ByteBuffer utf8 = cs1.encode("いろはにほへと");
+        ByteBuffer utf16 = cs2.encode("いろはにほへと");
+
+        assertThat(Misc.stringize(nil, cs1), is(""));
+        assertThat(Misc.stringize(nil, cs2), is(""));
+        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
+        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_Object() {
+        assertThat(Misc.stringize(Misc.nullOf(Object.class)), is(""));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_Object_Format() {
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        String sym = format.getCurrency().getSymbol();
+        assertThat(Misc.stringize(null, format), is(""));
+        assertThat(Misc.stringize(123456789, null), is("123456789"));
+        assertThat(Misc.stringize(123456789, format), is(sym + "123,456,789"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_byteArr_Charset() {
+        Charset cs1 = StandardCharsets.UTF_8;
+        Charset cs2 = StandardCharsets.UTF_16;
+        byte[] nil = null;
+        byte[] utf8 = "いろはにほへと".getBytes(cs1);
+        byte[] utf16 = "いろはにほへと".getBytes(cs2);
+
+        assertThat(Misc.stringize(nil, cs1), is(""));
+        assertThat(Misc.stringize(nil, cs2), is(""));
+        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
+        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
+    }
+
+    /**
+     * Test of stringize method, of class Misc.
+     */
+    @Test
+    public void testStringize_charArr() {
+        assertThat(Misc.stringize(Misc.nullOf(char[].class)), is(""));
+        assertThat(Misc.stringize(new char[]{}), is(""));
+        assertThat(Misc.stringize(new char[]{'A'}), is("A"));
+        assertThat(Misc.stringize(new char[]{'A', 'B'}), is("AB"));
     }
 
     /**
@@ -1153,6 +1413,17 @@ public class MiscTest {
     }
 
     /**
+     * Test of toCharArray method, of class Misc.
+     */
+    @Test
+    public void testToCharArray() {
+        assertArrayEquals(new char[]{}, Misc.toCharArray(null));
+        assertArrayEquals(new char[]{}, Misc.toCharArray(""));
+        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray("ABC"));
+        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray(CharBuffer.wrap("ABC")));
+    }
+
+    /**
      * Test of toDate method, of class Misc.
      */
     @Test
@@ -1259,6 +1530,21 @@ public class MiscTest {
     }
 
     /**
+     * Test of toLocale method, of class Misc.
+     */
+    @Test
+    public void testToLocale() {
+        assertThat(Misc.toLocale(null, Locale.ENGLISH), is(Locale.ENGLISH));
+        assertThat(Misc.toLocale("ja_JP", Locale.ENGLISH), is(Locale.JAPAN));
+        assertThat(Misc.toLocale(Locale.CANADA, Locale.ENGLISH), is(Locale.CANADA));
+        Locale.Builder lb = new Locale.Builder();
+        lb.setRegion("GB");
+        lb.setLanguage("en");
+        assertThat(Misc.toLocale(lb, Locale.ENGLISH), is(Locale.UK));
+        assertThat(Misc.toLocale(1, Locale.ENGLISH), is(Locale.ENGLISH));
+    }
+
+    /**
      * Test of toLong method, of class Misc.
      */
     @Test
@@ -1335,6 +1621,21 @@ public class MiscTest {
     }
 
     /**
+     * Test of toStringList method, of class Misc.
+     */
+    @Test
+    public void testToStringList() {
+        Collection<?> items = Arrays.asList(1, "AAA", 2.5);
+        assertThat(Misc.toStringList(items), contains("1", "AAA", "2.5"));
+
+        Iterable<?> iter = Iteratee.of("abc", 22.0, "あいう");
+        assertThat(Misc.toStringList(iter), contains("abc", "22.0", "あいう"));
+
+        assertThat(Misc.toStringList(null), is(empty()));
+        assertThat(Misc.toStringList(Collections.emptyList()), is(empty()));
+    }
+
+    /**
      * Test of toString method, of class Misc.
      */
     @Test
@@ -1396,308 +1697,6 @@ public class MiscTest {
     @Test
     public void testToURL_2() throws MalformedURLException {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
-    }
-
-    /**
-     * Test of stringize method, of class Misc.
-     */
-    @Test
-    public void testStringize_charArr() {
-        assertThat(Misc.stringize(Misc.nullOf(char[].class)), is(""));
-        assertThat(Misc.stringize(new char[]{}), is(""));
-        assertThat(Misc.stringize(new char[]{'A'}), is("A"));
-        assertThat(Misc.stringize(new char[]{'A', 'B'}), is("AB"));
-    }
-
-    /**
-     * Test of stringize method, of class Misc.
-     */
-    @Test
-    public void testStringize_Object() {
-        assertThat(Misc.stringize(Misc.nullOf(Object.class)), is(""));
-    }
-
-    /**
-     * Test of stringize method, of class Misc.
-     */
-    @Test
-    public void testStringize_byteArr_Charset() {
-        Charset cs1 = StandardCharsets.UTF_8;
-        Charset cs2 = StandardCharsets.UTF_16;
-        byte[] nil = null;
-        byte[] utf8 = "いろはにほへと".getBytes(cs1);
-        byte[] utf16 = "いろはにほへと".getBytes(cs2);
-
-        assertThat(Misc.stringize(nil, cs1), is(""));
-        assertThat(Misc.stringize(nil, cs2), is(""));
-        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
-        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
-    }
-
-    /**
-     * Test of stringize method, of class Misc.
-     */
-    @Test
-    public void testStringize_ByteBuffer_Charset() {
-        Charset cs1 = StandardCharsets.UTF_8;
-        Charset cs2 = StandardCharsets.UTF_16;
-        ByteBuffer nil = null;
-        ByteBuffer utf8 = cs1.encode("いろはにほへと");
-        ByteBuffer utf16 = cs2.encode("いろはにほへと");
-
-        assertThat(Misc.stringize(nil, cs1), is(""));
-        assertThat(Misc.stringize(nil, cs2), is(""));
-        assertThat("UTF8", Misc.stringize(utf8, cs1), is("いろはにほへと"));
-        assertThat("UTF16", Misc.stringize(utf16, cs2), is("いろはにほへと"));
-    }
-
-    /**
-     * Test of stringize method, of class Misc.
-     */
-    @Test
-    public void testStringize_Object_Format() {
-        NumberFormat format = NumberFormat.getCurrencyInstance();
-        String sym = format.getCurrency().getSymbol();
-        assertThat(Misc.stringize(null, format), is(""));
-        assertThat(Misc.stringize(123456789, null), is("123456789"));
-        assertThat(Misc.stringize(123456789, format), is(sym + "123,456,789"));
-    }
-
-    /**
-     * Test of toCharArray method, of class Misc.
-     */
-    @Test
-    public void testToCharArray() {
-        assertArrayEquals(new char[]{}, Misc.toCharArray(null));
-        assertArrayEquals(new char[]{}, Misc.toCharArray(""));
-        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray("ABC"));
-        assertArrayEquals(new char[]{'A', 'B', 'C'}, Misc.toCharArray(CharBuffer.wrap("ABC")));
-    }
-
-    /**
-     * Test of nullOf method, of class Misc.
-     */
-    @Test
-    public void testNullOf() {
-        assertThat(Misc.nullOf(Object.class), is(nullValue()));
-        assertThat(Misc.nullOf(String.class), is(nullValue()));
-        assertThat(Misc.nullOf(Integer.class), is(nullValue()));
-        assertThat(Misc.nullOf(int[].class), is(nullValue()));
-    }
-
-    /**
-     * Test of isNotEmpty method, of class Misc.
-     */
-    @Test
-    public void testIsNotEmpty_CharSequence() {
-        assertThat(Misc.isNotEmpty((String) null), is(false));
-        assertThat(Misc.isNotEmpty(""), is(false));
-        assertThat(Misc.isNotEmpty("A"), is(true));
-    }
-
-    /**
-     * Test of splitKeyValue method, of class Misc.
-     */
-    @Test
-    public void testSplitKeyValue() {
-
-        String text1 = "abc = 1234";
-        String text2 = "abc := 1234";
-        String text3 = "abc ::= 1234";
-
-        assertThat(Misc.splitKeyValue(text1, "=", true), is(KeyValuePair.of("abc", "1234")));
-        assertThat(Misc.splitKeyValue(text1, "=", false), is(KeyValuePair.of("abc ", " 1234")));
-        assertThat(Misc.splitKeyValue(text2, "=", true), is(KeyValuePair.of("abc :", "1234")));
-        assertThat(Misc.splitKeyValue(text2, ":=", true), is(KeyValuePair.of("abc", "1234")));
-        assertThat(Misc.splitKeyValue(text2, ":=", false), is(KeyValuePair.of("abc ", " 1234")));
-        assertThat(Misc.splitKeyValue(text2, "::=", false), is(nullValue()));
-        assertThat(Misc.splitKeyValue(text3, "::=", true), is(KeyValuePair.of("abc", "1234")));
-        assertThat(Misc.splitKeyValue(text3, "::=", false), is(KeyValuePair.of("abc ", " 1234")));
-        assertThat(Misc.splitKeyValue(null, "::=", false), is(nullValue()));
-        assertThat(Misc.splitKeyValue("", ":=", false), is(nullValue()));
-
-    }
-
-    /**
-     * Test of toStringList method, of class Misc.
-     */
-    @Test
-    public void testToStringList() {
-        Collection<?> items = Arrays.asList(1, "AAA", 2.5);
-        assertThat(Misc.toStringList(items), contains("1", "AAA", "2.5"));
-
-        Iterable<?> iter = Iteratee.of("abc", 22.0, "あいう");
-        assertThat(Misc.toStringList(iter), contains("abc", "22.0", "あいう"));
-
-        assertThat(Misc.toStringList(null), is(empty()));
-        assertThat(Misc.toStringList(Collections.emptyList()), is(empty()));
-    }
-
-    /**
-     * Test of asInt method, of class Misc.
-     */
-    @Test
-    public void testAsInt() {
-        assertThat(Misc.asInt(null, -1), is(-1));
-        assertThat(Misc.asInt("", 2), is(2));
-        assertThat(Misc.asInt("", 0), is(0));
-        assertThat(Misc.asInt("4", 0), is(4));
-        assertThat(Misc.asInt(new BigDecimal("5.5"), 0), is(5));
-    }
-
-    /**
-     * Test of getOrDefault method, of class Misc.
-     */
-    @Test
-    public void testGetOrDefault_3args_1() {
-        String[] arr = null;
-        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
-        assertThat(Misc.getOrDefault(arr, 0, "B"), is("B"));
-        assertThat(Misc.getOrDefault(arr, 1, "C"), is("C"));
-        arr = new String[]{"X", "Y", "Z"};
-        assertThat(Misc.getOrDefault(arr, -1, "A"), is("A"));
-        assertThat(Misc.getOrDefault(arr, 0, "B"), is("X"));
-        assertThat(Misc.getOrDefault(arr, 1, "C"), is("Y"));
-        assertThat(Misc.getOrDefault(arr, 2, "D"), is("Z"));
-        assertThat(Misc.getOrDefault(arr, 3, "E"), is("E"));
-    }
-
-    /**
-     * Test of getOrDefault method, of class Misc.
-     */
-    @Test
-    public void testGetOrDefault_3args_2() {
-        List<String> list = null;
-        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
-        assertThat(Misc.getOrDefault(list, 0, "B"), is("B"));
-        assertThat(Misc.getOrDefault(list, 1, "C"), is("C"));
-        list = Arrays.asList("X", "Y", "Z");
-        assertThat(Misc.getOrDefault(list, -1, "A"), is("A"));
-        assertThat(Misc.getOrDefault(list, 0, "B"), is("X"));
-        assertThat(Misc.getOrDefault(list, 1, "C"), is("Y"));
-        assertThat(Misc.getOrDefault(list, 2, "D"), is("Z"));
-        assertThat(Misc.getOrDefault(list, 3, "E"), is("E"));
-    }
-
-    /**
-     * Test of toLocale method, of class Misc.
-     */
-    @Test
-    public void testToLocale() {
-        assertThat(Misc.toLocale(null, Locale.ENGLISH), is(Locale.ENGLISH));
-        assertThat(Misc.toLocale("ja_JP", Locale.ENGLISH), is(Locale.JAPAN));
-        assertThat(Misc.toLocale(Locale.CANADA, Locale.ENGLISH), is(Locale.CANADA));
-        Locale.Builder lb = new Locale.Builder();
-        lb.setRegion("GB");
-        lb.setLanguage("en");
-        assertThat(Misc.toLocale(lb, Locale.ENGLISH), is(Locale.UK));
-        assertThat(Misc.toLocale(1, Locale.ENGLISH), is(Locale.ENGLISH));
-    }
-
-    /**
-     * Test of copyProperties method, of class Misc.
-     */
-    @Test
-    public void testCopyProperties_2args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(s, d);
-        assertThat(d.getDate(), is(s.getDate()));
-        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
-        assertThat(d.getDest(), is(nullValue()));
-        assertThat(d.getId(), is(s.getId()));
-        assertThat(d.getName(), is(s.getName()));
-        assertThat(d.getAge(), is(s.getAge()));
-        assertThat(d.getTel(), is(s.getTel()));
-    }
-
-    /**
-     * Test of copyProperties method, of class Misc.
-     */
-    @Test
-    public void testCopyProperties_3args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(s, d, "name");
-        assertThat(d.getDate(), is(s.getDate()));
-        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
-        assertThat(d.getDest(), is(nullValue()));
-        assertThat(d.getId(), is(s.getId()));
-        assertThat(d.getName(), is(nullValue()));
-        assertThat(d.getAge(), is(s.getAge()));
-        assertThat(d.getTel(), is(s.getTel()));
-    }
-
-    /**
-     * Test of copyProperties method, of class Misc.
-     */
-    @Test
-    public void testCopyProperties_3args_2() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(s, d, "name", "id");
-        assertThat(d.getDate(), is(s.getDate()));
-        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
-        assertThat(d.getDest(), is(nullValue()));
-        assertThat(d.getId(), is(0));
-        assertThat(d.getName(), is(nullValue()));
-        assertThat(d.getAge(), is(s.getAge()));
-        assertThat(d.getTel(), is(s.getTel()));
-    }
-
-    /**
-     * Test of copyProperties method, of class Misc.
-     */
-    @Test
-    public void testCopyProperties_4args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d);
-        assertThat(d.getDate(), is(s.getDate()));
-        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
-        assertThat(d.getDest(), is(nullValue()));
-        assertThat(d.getId(), is(s.getId()));
-        assertThat(d.getName(), is(s.getName()));
-        assertThat(d.getAge(), is(0));
-        assertThat(d.getTel(), is(nullValue()));
-    }
-    
-    /**
-     * Test of copyProperties method, of class Misc.
-     */
-    @Test
-    public void testCopyProperties_5args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d, "name", "id");
-        assertThat(d.getDate(), is(s.getDate()));
-        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
-        assertThat(d.getDest(), is(nullValue()));
-        assertThat(d.getId(), is(0));
-        assertThat(d.getName(), is(nullValue()));
-        assertThat(d.getAge(), is(0));
-        assertThat(d.getTel(), is(nullValue()));
-    }
-    
-
-    /**
-     * Test of removeByteOrderMark method, of class Misc.
-     *
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testRemoveByteOrderMark() throws IOException {
-        Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
-        Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
-        try (InputStream nobomis = nobomres.getInputStream();
-             InputStream bomis = bomres.getInputStream()) {
-            String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
-            String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
-            assertThat(bomtext, is(not(nobomtext)));
-
-            String actual = Misc.removeByteOrderMark(bomtext);
-            assertThat(actual, is(nobomtext));
-        }
     }
 
 }

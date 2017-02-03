@@ -44,18 +44,13 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
 
     private static final StringJoiner joiner = StringJoiner.valueOf("/");
 
-    @Getter
-    private String rootPath;
-
     @NonNull
     @Getter
     @Setter(AccessLevel.PROTECTED)
     private ResourcePatternResolver resolver;
 
-    @Override
-    protected ResourceLoader getResourceLoader() {
-        return resolver;
-    }
+    @Getter
+    private String rootPath;
 
     /**
      *
@@ -87,6 +82,11 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
         }
         String pattern = joiner.join(new String[]{ResourceLoader.CLASSPATH_URL_PREFIX, rootPath, category, globPattern}).toString();
         return resolver.getResources(pattern);
+    }
+
+    @Override
+    protected ResourceLoader getResourceLoader() {
+        return resolver;
     }
 
     /**

@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.infrastructure;
 
 import java.util.Collection;
 import javax.annotation.Nonnull;
-import lombok.NonNull;
 
 /**
  * サービス提供

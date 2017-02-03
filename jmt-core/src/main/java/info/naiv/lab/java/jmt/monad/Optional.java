@@ -47,9 +47,8 @@ import lombok.Value;
 @Value
 public class Optional<T> implements Iterable<T>, Serializable {
 
-    private static final long serialVersionUID = 1L;
-
     public static final Optional EMPTY = new Optional(null);
+    private static final long serialVersionUID = 1L;
 
     /**
      * 空の Optional
@@ -59,7 +58,7 @@ public class Optional<T> implements Iterable<T>, Serializable {
      */
     @Nonnull
     public static <T> Optional<T> empty() {
-        return (Optional<T>) EMPTY;
+        return EMPTY;
     }
 
     @Nonnull

@@ -48,10 +48,6 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 public class URLClassLoaderBuilder {
 
-    final Set<URL> jarFiles = new CopyOnWriteArraySet<>();
-
-    ClassLoader parentClassLoader = this.getClass().getClassLoader();
-
     /**
      *
      * @return URLClassLoaderBuilder instance.
@@ -61,10 +57,9 @@ public class URLClassLoaderBuilder {
         return new URLClassLoaderBuilder();
     }
 
-    public URLClassLoaderBuilder setParentClassLoader(@NonNull ClassLoader parentClassLoader) {
-        this.parentClassLoader = parentClassLoader;
-        return this;
-    }
+    final Set<URL> jarFiles = new CopyOnWriteArraySet<>();
+
+    ClassLoader parentClassLoader = this.getClass().getClassLoader();
 
     @Nonnull
     public URLClassLoaderBuilder addDirectory(String directory) throws IOException {
@@ -107,18 +102,23 @@ public class URLClassLoaderBuilder {
         return urlLoader;
     }
 
+    @Nonnull
+    public URLClassLoaderBuilder removeJars(@NonNull Collection<URL> paths) {
+        jarFiles.removeAll(paths);
+        return this;
+    }
+
+    public URLClassLoaderBuilder setParentClassLoader(@NonNull ClassLoader parentClassLoader) {
+        this.parentClassLoader = parentClassLoader;
+        return this;
+    }
+
     protected void listJarFiles(Path directory) throws IOException {
         List<Path> found = listPaths(directory, "**.jar", 1);
         for (Path p : found) {
             URL u = p.toUri().toURL();
             jarFiles.add(u);
         }
-    }
-
-    @Nonnull
-    public URLClassLoaderBuilder removeJars(@NonNull Collection<URL> paths) {
-        jarFiles.removeAll(paths);
-        return this;
     }
 
     @Nonnull

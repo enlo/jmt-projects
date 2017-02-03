@@ -39,20 +39,14 @@ import org.junit.Before;
  */
 public class ServiceConnectionTest {
 
+    protected ServiceContainer container;
+
     public ServiceConnectionTest() {
     }
-
-    protected ServiceContainer container;
 
     @Before
     public void initContainer() {
         container = ServiceProviders.newServiceContainer();
-    }
-
-    @Value
-    protected static class TestObj {
-
-        int value;
     }
 
     /**
@@ -60,7 +54,6 @@ public class ServiceConnectionTest {
      */
     @Test
     public void testClose() {
-        System.out.println("close");
 
         ServiceConnection instance = container.registerService(new TestObj(1));
         TestObj obj = container.resolveService(TestObj.class);
@@ -73,6 +66,35 @@ public class ServiceConnectionTest {
         obj = container.resolveService(TestObj.class);
         assertThat("closed", obj, is(nullValue()));
         assertThat("closed", instance.isClosed(), is(true));
+    }
+
+    @Test
+    public void testClose_MT() throws InterruptedException, ExecutionException {
+        int threadCount = 10;
+        int repeatCount = threadCount * 3;
+        final Object lock = new Object();
+        final ServiceConnection instance = container.registerService(new TestObj(1));
+        ExecutorService e = Executors.newFixedThreadPool(threadCount);
+        List<Future<Integer>> list = e.invokeAll(toList(repeat(repeatCount, new Callable<Integer>() {
+                                                           @Override
+                                                           public Integer call() {
+                                                               int r = 0;
+                                                               synchronized (lock) {
+                                                                   if (!instance.isClosed()) {
+                                                                       instance.getContainer();
+                                                                       r = 1;
+                                                                   }
+                                                               }
+                                                               instance.close();
+                                                               return r;
+                                                           }
+                                                       })));
+        int i = 0;
+        for (Future<Integer> f : list) {
+            i += f.get();
+        }
+        assertThat(i, is(greaterThanOrEqualTo(1)));
+        assertThat(i, is(lessThan(threadCount)));
     }
 
     /**
@@ -140,7 +162,6 @@ public class ServiceConnectionTest {
      */
     @Test
     public void testIsClosed() {
-        System.out.println("close");
 
         ServiceConnection instance = container.registerService(new TestObj(1));
         assertThat("pre-close", instance.isClosed(), is(false));
@@ -158,7 +179,6 @@ public class ServiceConnectionTest {
      */
     @Test
     public void testIsClosed_2() throws Exception {
-        System.out.println("close");
 
         ServiceConnection instance = container.registerService(new TestObj(1));
         assertThat("pre-close", instance.isClosed(), is(false));
@@ -168,32 +188,9 @@ public class ServiceConnectionTest {
         assertThat("closed", instance.isClosed(), is(true));
     }
 
-    @Test
-    public void testClose_MT() throws InterruptedException, ExecutionException {
-        int threadCount = 10;
-        int repeatCount = threadCount * 3;
-        final Object lock = new Object();
-        final ServiceConnection instance = container.registerService(new TestObj(1));
-        ExecutorService e = Executors.newFixedThreadPool(threadCount);
-        List<Future<Integer>> list = e.invokeAll(toList(repeat(repeatCount, new Callable<Integer>() {
-            @Override
-            public Integer call() {
-                int r = 0;
-                synchronized (lock) {
-                    if (!instance.isClosed()) {
-                        instance.getContainer();
-                        r = 1;
-                    }
-                }
-                instance.close();
-                return r;
-            }
-        })));
-        int i = 0;
-        for (Future<Integer> f : list) {
-            i += f.get();
-        }
-        assertThat(i, is(greaterThanOrEqualTo(1)));
-        assertThat(i, is(lessThan(threadCount)));
+    @Value
+    protected static class TestObj {
+
+        int value;
     }
 }

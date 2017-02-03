@@ -46,7 +46,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class JdbcDriverLoader {
-    
+
     @NonNull
     private final ClassLoader parentClassLoader;
 

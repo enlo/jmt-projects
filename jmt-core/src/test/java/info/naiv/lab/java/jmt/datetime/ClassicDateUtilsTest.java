@@ -670,6 +670,24 @@ public class ClassicDateUtilsTest {
     }
 
     /**
+     * Test of isEpochDatePart method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testIsEpochDatePart() {
+        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
+        assertThat(ClassicDateUtils.isEpochDatePart(epoch), is(true));
+    }
+
+    /**
+     * Test of isEpochTimePart method, of class ClassicDateUtils.
+     */
+    @Test
+    public void testIsEpochTimePart() {
+        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
+        assertThat(ClassicDateUtils.isEpochTimePart(epoch), is(true));
+    }
+
+    /**
      * Test of isSameDay method, of class ClassicDateUtils.
      */
     @Test
@@ -814,21 +832,4 @@ public class ClassicDateUtilsTest {
         assertThat(ix, actual, is(expected.getTime()));
     }
 
-    /**
-     * Test of isEpochDatePart method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testIsEpochDatePart() {
-        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
-        assertThat(ClassicDateUtils.isEpochDatePart(epoch), is(true));
-    }
-
-    /**
-     * Test of isEpochTimePart method, of class ClassicDateUtils.
-     */
-    @Test
-    public void testIsEpochTimePart() {
-        Calendar epoch = (Calendar) ClassicDateUtils.LOCAL_EPOC_CALENDAR.clone();
-        assertThat(ClassicDateUtils.isEpochTimePart(epoch), is(true));
-    }
 }

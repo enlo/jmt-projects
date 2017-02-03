@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.infrastructure.component;
 
 import info.naiv.lab.java.jmt.Misc;
 import static info.naiv.lab.java.jmt.Misc.isLoadable;
-import javax.annotation.Nonnull;
 import lombok.extern.slf4j.Slf4j;
 
 /**

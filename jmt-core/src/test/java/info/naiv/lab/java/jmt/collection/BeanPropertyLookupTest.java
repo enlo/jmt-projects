@@ -40,36 +40,8 @@ import org.springframework.beans.BeansException;
  */
 public class BeanPropertyLookupTest {
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class TestUser {
-
-        String name;
-
-        int age;
-
-        String address;
-
-        boolean enabled;
-
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    class TestAddress {
-
-        String postal;
-        String country;
-        String pref;
-        String city;
-        String street;
-
-    }
-
-    TestUser testUser1;
     BeanPropertyLookup testLookup1;
+    TestUser testUser1;
 
     public BeanPropertyLookupTest() {
     }
@@ -150,6 +122,35 @@ public class BeanPropertyLookupTest {
 
         BeanPropertyLookup bpl = new BeanPropertyLookup(new TestAddress());
         assertThat(bpl.size(), is(6));
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    class TestAddress {
+
+        String city;
+        String country;
+        String postal;
+        String pref;
+        String street;
+    }
+
+    @Data
+    @NoArgsConstructor
+    class TestUser {
+
+        String address;
+        int age;
+        boolean enabled;
+        String name;
+
+        TestUser(String name, int age, String address, boolean enabled) {
+            this.name = name;
+            this.age = age;
+            this.address = address;
+            this.enabled = enabled;
+        }
     }
 
 }

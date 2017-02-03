@@ -44,17 +44,17 @@ import lombok.Setter;
  */
 public class WorkingDayCalculator {
 
-    @Getter
-    @Setter
-    @NonNull
-    WorkingDaySettings settings;
-
     private final Predicate1<Calendar> workingDayPredicate = new Predicate1<Calendar>() {
         @Override
         public boolean test(Calendar obj) {
             return settings.isWorkingDay(obj);
         }
     };
+
+    @Getter
+    @Setter
+    @NonNull
+    WorkingDaySettings settings;
 
     public WorkingDayCalculator() {
         this.settings = WorkingDaySettings.newInstance();
@@ -85,6 +85,26 @@ public class WorkingDayCalculator {
             }
         }
         return result;
+    }
+
+    /**
+     * 指定された週の最初の営業日を取得する.週の開始日が休日の場合、翌平日を戻す.
+     *
+     * @param cal カレンダー
+     * @return 週の最初の営業日.
+     */
+    @Nonnull
+    public Calendar computeFirstBizDayOfWeek(@NonNull Calendar cal) {
+        Calendar base = (Calendar) cal.clone();
+        int fdow = settings.getWeekSettings().getFirstDayOfWeek();
+        int dow = base.get(DAY_OF_WEEK);
+        int mod = (dow < fdow) ? Constants.SEVEN_DAYS : 0;
+        base.setFirstDayOfWeek(fdow);
+        base.add(DAY_OF_MONTH, fdow - dow - mod);
+        while (settings.isHoliday(base)) {
+            base.add(DAY_OF_MONTH, 1);
+        }
+        return base;
     }
 
     /**
@@ -127,26 +147,6 @@ public class WorkingDayCalculator {
             result.add(DAY_OF_MONTH, shift);
         }
         return result;
-    }
-
-    /**
-     * 指定された週の最初の営業日を取得する.週の開始日が休日の場合、翌平日を戻す.
-     *
-     * @param cal カレンダー
-     * @return 週の最初の営業日.
-     */
-    @Nonnull
-    public Calendar computeFirstBizDayOfWeek(@NonNull Calendar cal) {
-        Calendar base = (Calendar) cal.clone();
-        int fdow = settings.getWeekSettings().getFirstDayOfWeek();
-        int dow = base.get(DAY_OF_WEEK);
-        int mod = (dow < fdow) ? Constants.SEVEN_DAYS : 0;
-        base.setFirstDayOfWeek(fdow);
-        base.add(DAY_OF_MONTH, fdow - dow - mod);
-        while (settings.isHoliday(base)) {
-            base.add(DAY_OF_MONTH, 1);
-        }
-        return base;
     }
 
 }

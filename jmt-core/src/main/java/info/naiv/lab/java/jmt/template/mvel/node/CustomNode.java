@@ -169,7 +169,7 @@ public abstract class CustomNode extends Node {
      *
      * @return ノード名.
      */
-@Nonnull
+    @Nonnull
     public abstract String name();
 
     /**
@@ -186,8 +186,8 @@ public abstract class CustomNode extends Node {
     @Override
     public String toString() {
         return arrayToString(getClass().getSimpleName(), name, "{",
-                                                               (contents == null ? "" : new String(contents)),
-                                                               "} (start=", begin, ";end=", end, ")");
+                             (contents == null ? "" : new String(contents)),
+                             "} (start=", begin, ";end=", end, ")");
 
     }
 

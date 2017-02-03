@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,8 +41,8 @@ import lombok.Setter;
 @Setter
 public class MethodInvokerFactory {
 
-    private static final Object STATIC_LOCK = new Object();
     private static final ConcurrentMap<Class<?>, Map<String, List<MethodInvoker>>> METHOD_CHACHE = new ConcurrentHashMap<>();
+    private static final Object STATIC_LOCK = new Object();
 
     private boolean ignoreCase = false;
 
@@ -80,7 +79,7 @@ public class MethodInvokerFactory {
                         name = name.toLowerCase();
                     }
                     List<MethodInvoker> mil = result.get(name);
-                    if(mil == null){
+                    if (mil == null) {
                         mil = new ArrayList<>();
                         result.put(name, mil);
                     }
@@ -97,5 +96,4 @@ public class MethodInvokerFactory {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

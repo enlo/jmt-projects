@@ -41,67 +41,67 @@ public enum DateTimePattern {
      * 日付のみのパターン.
      */
     DATE_PATTERN("(?<year>\\d{3,})[\\-/.](?<month>\\d{1,2})[\\-/.](?<date>\\d{1,2})") {
-                @Override
-                protected void toCalendar(Matcher m, Calendar out) {
-                    out.set(Calendar.YEAR, Integer.parseInt(m.group("year")));
-                    out.set(Calendar.MONTH, Integer.parseInt(m.group("month")) - 1);
-                    out.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group("date")));
-                }
-            },
+        @Override
+        protected void toCalendar(Matcher m, Calendar out) {
+            out.set(Calendar.YEAR, Integer.parseInt(m.group("year")));
+            out.set(Calendar.MONTH, Integer.parseInt(m.group("month")) - 1);
+            out.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group("date")));
+        }
+    },
     /**
      * 日付のみのパターン. (短縮年)
      */
     DATE_PATTERN_SY("(?<year>\\d{1,2})[\\-/.](?<month>\\d{1,2})[\\-/.](?<date>\\d{1,2})") {
 
-                @Override
-                protected void toCalendar(Matcher m, Calendar out) {
-                    int year = Integer.parseInt(m.group("year"));
-                    year = ClassicDateUtils.getShortYearConverter().convert(year, ClassicDateUtils.now());
-                    out.set(Calendar.YEAR, year);
-                    out.set(Calendar.MONTH, Integer.parseInt(m.group("month")) - 1);
-                    out.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group("date")));
-                }
-            },
+        @Override
+        protected void toCalendar(Matcher m, Calendar out) {
+            int year = Integer.parseInt(m.group("year"));
+            year = ClassicDateUtils.getShortYearConverter().convert(year, ClassicDateUtils.now());
+            out.set(Calendar.YEAR, year);
+            out.set(Calendar.MONTH, Integer.parseInt(m.group("month")) - 1);
+            out.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group("date")));
+        }
+    },
     /**
      * 時刻のみのパターン.
      */
     TIME_PATTERN("(?<hour>\\d{1,2}):(?<min>\\d{1,2})(:(?<sec>\\d{1,2}))?([.](?<ms>\\d{1,3}))?(?<tz>[+-][0-9:]+)?") {
 
-                @Override
-                protected void toCalendar(Matcher m, Calendar out) {
-                    out.set(Calendar.HOUR_OF_DAY, Integer.parseInt(m.group("hour")));
-                    out.set(Calendar.MINUTE, Integer.parseInt(m.group("min")));
-                    out.set(Calendar.SECOND, toInt(m.group("sec"), 0));
-                    out.set(Calendar.MILLISECOND, toInt(m.group("ms"), 0));
-                    String tz = m.group("tz");
-                    if (isNotEmpty(tz)) {
-                        out.setTimeZone(TimeZone.getTimeZone("GMT" + tz));
-                    }
-                }
+        @Override
+        protected void toCalendar(Matcher m, Calendar out) {
+            out.set(Calendar.HOUR_OF_DAY, Integer.parseInt(m.group("hour")));
+            out.set(Calendar.MINUTE, Integer.parseInt(m.group("min")));
+            out.set(Calendar.SECOND, toInt(m.group("sec"), 0));
+            out.set(Calendar.MILLISECOND, toInt(m.group("ms"), 0));
+            String tz = m.group("tz");
+            if (isNotEmpty(tz)) {
+                out.setTimeZone(TimeZone.getTimeZone("GMT" + tz));
+            }
+        }
 
-            },
+    },
     /**
      * 日付と時刻のパターン.
      */
     DATETIME_PATTERN(DATE_PATTERN, TIME_PATTERN) {
 
-                @Override
-                protected void toCalendar(Matcher m, Calendar out) {
-                    DATE_PATTERN.toCalendar(m, out);
-                    TIME_PATTERN.toCalendar(m, out);
-                }
-            },
+        @Override
+        protected void toCalendar(Matcher m, Calendar out) {
+            DATE_PATTERN.toCalendar(m, out);
+            TIME_PATTERN.toCalendar(m, out);
+        }
+    },
     /**
      * 日付と時刻のパターン. (短縮年)
      */
     DATETIME_PATTERN_SY(DATE_PATTERN_SY, TIME_PATTERN) {
 
-                @Override
-                protected void toCalendar(Matcher m, Calendar out) {
-                    DATE_PATTERN_SY.toCalendar(m, out);
-                    TIME_PATTERN.toCalendar(m, out);
-                }
-            };
+        @Override
+        protected void toCalendar(Matcher m, Calendar out) {
+            DATE_PATTERN_SY.toCalendar(m, out);
+            TIME_PATTERN.toCalendar(m, out);
+        }
+    };
 
     private final String basePattern;
     private final Pattern pattern;

@@ -39,9 +39,10 @@ import org.springframework.util.ClassUtils;
  */
 public final class OptionalSupportMethodInvoker implements MethodInvoker {
 
+    final ArgsResolver argsResolver;
+
     final Method method;
     final Parameter[] params;
-    final ArgsResolver argsResolver;
 
     public OptionalSupportMethodInvoker(@Nonnull Method method) {
         this.method = method;
@@ -107,27 +108,6 @@ public final class OptionalSupportMethodInvoker implements MethodInvoker {
         return result;
     }
 
-    private class Parameter {
-
-        Class<?> type;
-        boolean optional;
-        Object defaultValue;
-        Method factory;
-
-        @SneakyThrows
-        public Object valueOf(Object val) {
-            if (optional) {
-                if (ClassUtils.isAssignableValue(type, val)) {
-                    return val;
-                }
-                else if (factory != null) {
-                    return factory.invoke(null, val);
-                }
-            }
-            return val;
-        }
-    }
-
     private class ArgsResolver {
 
         public Object[] resolve(Object[] args) {
@@ -151,6 +131,27 @@ public final class OptionalSupportMethodInvoker implements MethodInvoker {
             for (int i = 0; i < argc; i++) {
                 dest[i] = params[i].valueOf(args[i]);
             }
+        }
+    }
+
+    private class Parameter {
+
+        Object defaultValue;
+        Method factory;
+        boolean optional;
+        Class<?> type;
+
+        @SneakyThrows
+        public Object valueOf(Object val) {
+            if (optional) {
+                if (ClassUtils.isAssignableValue(type, val)) {
+                    return val;
+                }
+                else if (factory != null) {
+                    return factory.invoke(null, val);
+                }
+            }
+            return val;
         }
     }
 

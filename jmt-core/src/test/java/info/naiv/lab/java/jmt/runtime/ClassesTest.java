@@ -37,11 +37,6 @@ public class ClassesTest {
     public ClassesTest() {
     }
 
-    static interface TestClass {
-
-        String value();
-    }
-
     /**
      * Test of unwrapProxy method, of class Classes.
      */
@@ -56,6 +51,11 @@ public class ClassesTest {
         TestClass pobj2 = mock(TestClass.class);
         assertThat("cglib proxy", Classes.isProxyClass(pobj2.getClass()), is(true));
 
+    }
+
+    static interface TestClass {
+
+        String value();
     }
 
 }

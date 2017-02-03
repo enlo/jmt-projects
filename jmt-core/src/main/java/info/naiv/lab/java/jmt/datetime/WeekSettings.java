@@ -23,7 +23,7 @@ public final class WeekSettings implements Serializable, Cloneable {
     public static final WeekSettings DEFAULT = new WeekSettings(SUNDAY, SUNDAY, new int[]{SATURDAY});
 
     /**
-     * 既定の設定. 日曜始まり、日曜法定休、土曜休
+     * 休日なし設定. 日曜始まり、法定休なし
      */
     public static final WeekSettings NO_HOLIDAY = new WeekSettings(SUNDAY, -1, new int[]{});
 

@@ -38,8 +38,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SimpleRangeLimiter<T extends Comparable<T>> implements RangeLimiter<T> {
 
-    T min;
     T max;
+    T min;
 
     public SimpleRangeLimiter(@Nonnull Range<T> range) {
         min = range.getMinValue();

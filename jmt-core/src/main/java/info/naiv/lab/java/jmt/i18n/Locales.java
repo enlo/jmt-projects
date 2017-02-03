@@ -30,11 +30,47 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
 
-/**
- *
- * @author enlo
- */
 public class Locales {
+
+    @Nonnull
+    public static Locale toLocale(@NonNull String localeString) {
+        Locale.Builder builder = new Locale.Builder();
+        try {
+            builder.setLanguageTag(localeString);
+            return builder.build();
+        }
+        catch (IllformedLocaleException ex) {
+            if (localeString.toLowerCase().equals("default")) {
+                return Locale.getDefault();
+            }
+            // language.
+            String[] parts = localeString.split("_");
+            builder.setLanguage(parts[0]);
+            if (1 < parts.length) {
+                builder.setRegion(parts[1]);
+            }
+            if (2 < parts.length) {
+                if (parts[2].startsWith("#")) {
+                    // script and extensions.
+                    parseScriptAndExtension(builder, parts[2]);
+                }
+                else {
+                    // variant.
+                    try {
+                        builder.setVariant(parts[2]);
+                    }
+                    catch (IllformedLocaleException ex2) {
+                        return new Locale(parts[0], parts[1], parts[2]);
+                    }
+                }
+            }
+            if (3 < parts.length) {
+                // script and extensions.
+                parseScriptAndExtension(builder, parts[3]);
+            }
+            return builder.build();
+        }
+    }
 
     private static void parseScriptAndExtension(@Nonnull Locale.Builder builder, @Nonnull String script) {
         if (script.startsWith("#")) {
@@ -79,43 +115,6 @@ public class Locales {
         }
     }
 
-    @Nonnull
-    public static Locale toLocale(@NonNull String localeString) {
-        Locale.Builder builder = new Locale.Builder();
-        try {
-            builder.setLanguageTag(localeString);
-            return builder.build();
-        }
-        catch (IllformedLocaleException ex) {
-            if (localeString.toLowerCase().equals("default")) {
-                return Locale.getDefault();
-            }
-            // language.
-            String[] parts = localeString.split("_");
-            builder.setLanguage(parts[0]);
-            if (1 < parts.length) {
-                builder.setRegion(parts[1]);
-            }
-            if (2 < parts.length) {
-                if (parts[2].startsWith("#")) {
-                    // script and extensions.
-                    parseScriptAndExtension(builder, parts[2]);
-                }
-                else {
-                    // variant.
-                    try {
-                        builder.setVariant(parts[2]);
-                    }
-                    catch (IllformedLocaleException ex2) {
-                        return new Locale(parts[0], parts[1], parts[2]);
-                    }
-                }
-            }
-            if (3 < parts.length) {
-                // script and extensions.
-                parseScriptAndExtension(builder, parts[3]);
-            }
-            return builder.build();
-        }
+    private Locales() {
     }
 }

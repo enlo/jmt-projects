@@ -119,129 +119,129 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
      *
      */
     WEEK1(Calendar.WEEK_OF_MONTH, 1) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateWeek(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return advanceWeek(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceWeek(x, y, multi);
-                }
-                
-            },
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateWeek(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return advanceWeek(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceWeek(x, y, multi);
+        }
+
+    },
     /**
      *
      */
     WEEK4(Calendar.WEEK_OF_MONTH, 4) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateWeek(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return advanceWeek(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceWeek(x, y, multi);
-                }
-                
-            },
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateWeek(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return advanceWeek(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceWeek(x, y, multi);
+        }
+
+    },
     /**
      *
      */
     WEEK6(Calendar.WEEK_OF_MONTH, 6) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateWeek(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return advanceWeek(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceWeek(x, y, multi);
-                }
-                
-            },
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateWeek(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return advanceWeek(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceWeek(x, y, multi);
+        }
+
+    },
     /**
      *
      */
     MONTH1(Calendar.MONTH, 1) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateMonth(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return truncateMonth(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceMonth(x, y, multi);
-                }
-            },
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateMonth(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return truncateMonth(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceMonth(x, y, multi);
+        }
+    },
     /**
      *
      */
     MONTH3(Calendar.MONTH, 3) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateMonth(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return truncateMonth(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceMonth(x, y, multi);
-                }
-            },
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateMonth(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return truncateMonth(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceMonth(x, y, multi);
+        }
+    },
     /**
      *
      */
     MONTH6(Calendar.MONTH, 6) {
-                
-                @Override
-                protected Calendar truncateCore(Calendar cal) {
-                    return truncateMonth(cal, multi);
-                }
-                
-                @Override
-                protected Calendar advanceCore(Calendar c, long x) {
-                    return truncateMonth(c, multi * x);
-                }
-                
-                @Override
-                protected long distanceCore(Calendar x, Calendar y) {
-                    return distanceMonth(x, y, multi);
-                }
-            },;
-    
+
+        @Override
+        protected Calendar truncateCore(Calendar cal) {
+            return truncateMonth(cal, multi);
+        }
+
+        @Override
+        protected Calendar advanceCore(Calendar c, long x) {
+            return truncateMonth(c, multi * x);
+        }
+
+        @Override
+        protected long distanceCore(Calendar x, Calendar y) {
+            return distanceMonth(x, y, multi);
+        }
+    },;
+
     int calendarType;
     long multi;
-    
+
     private CalendarIterationUnits(int calendarType, long multi) {
         this.calendarType = calendarType;
         this.multi = multi;
@@ -292,7 +292,7 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         long r = d / multi + (d % multi != 0 ? 1 : 0);
         return r;
     }
-    
+
     @Override
     public final Calendar truncate(Calendar cal) {
         return truncateCore((Calendar) cal.clone());
@@ -395,12 +395,12 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         Calendar c = truncate(cal);
         return advanceCore(c, x);
     }
-    
+
     @Override
     public final Calendar next(Calendar value) {
         return advance(value, 1);
     }
-    
+
     @Override
     public final Calendar prior(Calendar value) {
         return advance(value, -1);
@@ -418,10 +418,10 @@ public enum CalendarIterationUnits implements IterationUnit<Calendar> {
         Calendar y = truncate(rhs);
         return distanceCore(x, y);
     }
-    
+
     @Override
     public final int compare(Calendar o1, Calendar o2) {
         return truncate(o1).compareTo(truncate(o2));
     }
-    
+
 }

@@ -25,11 +25,26 @@ package info.naiv.lab.java.jmt.tuple;
 
 import lombok.Value;
 
-/**
- *
- * @author enlo
- */
 public class Tuples {
+
+    public static <T> Tuple1<T> tie(T value) {
+        return new Tuple1Impl(value);
+    }
+
+    public static <T1, T2> Tuple2<T1, T2> tie(T1 value1, T2 value2) {
+        return new Tuple2Impl(value1, value2);
+    }
+
+    public static <T1, T2, T3> Tuple3<T1, T2, T3> tie(T1 value1, T2 value2, T3 value3) {
+        return new Tuple3Impl(value1, value2, value3);
+    }
+
+    public static <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> tie(T1 value1, T2 value2, T3 value3, T4 value4) {
+        return new Tuple4Impl(value1, value2, value3, value4);
+    }
+
+    private Tuples() {
+    }
 
     @Value
     public static class Tuple1Impl<T> implements Tuple1<T> {
@@ -59,22 +74,6 @@ public class Tuples {
         T2 value2;
         T3 value3;
         T4 value4;
-    }
-
-    public static <T> Tuple1<T> tie(T value) {
-        return new Tuple1Impl(value);
-    }
-
-    public static <T1, T2> Tuple2<T1, T2> tie(T1 value1, T2 value2) {
-        return new Tuple2Impl(value1, value2);
-    }
-
-    public static <T1, T2, T3> Tuple3<T1, T2, T3> tie(T1 value1, T2 value2, T3 value3) {
-        return new Tuple3Impl(value1, value2, value3);
-    }
-
-    public static <T1, T2, T3, T4> Tuple4<T1, T2, T3, T4> tie(T1 value1, T2 value2, T3 value3, T4 value4) {
-        return new Tuple4Impl(value1, value2, value3, value4);
     }
 
 }

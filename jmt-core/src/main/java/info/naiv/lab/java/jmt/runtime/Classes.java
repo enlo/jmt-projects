@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.runtime;
 
 import java.lang.reflect.Proxy;
 import lombok.NonNull;
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ClassUtils;
 
@@ -34,11 +33,13 @@ import org.springframework.util.ClassUtils;
  * @author enlo
  */
 @Slf4j
-@UtilityClass
 public class Classes {
 
     public static boolean isProxyClass(@NonNull Class<?> clazz) {
         return (Proxy.isProxyClass(clazz) || ClassUtils.isCglibProxyClass(clazz));
+    }
+
+    private Classes() {
     }
 
 }

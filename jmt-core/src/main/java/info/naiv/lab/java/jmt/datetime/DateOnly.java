@@ -39,16 +39,27 @@ public class DateOnly extends java.sql.Date {
 
     private static final long serialVersionUID = 1L;
 
-    public static class DateToDateOnlyConverter implements Converter<Date, DateOnly> {
-
-        @Override
-        public DateOnly convert(Date source) {
-            return DateOnly.valueOf(source);
-        }
-    }
-
     static {
         SimpleBeanCopierFactory.registerConverter(new DateToDateOnlyConverter());
+    }
+
+    /**
+     * 日付を取得する.
+     *
+     * @param date 日付. null の場合は0Lで初期化する.
+     * @return 日付
+     */
+    @Nonnull
+    public static DateOnly valueOf(Date date) {
+        if (date instanceof DateOnly) {
+            return ((DateOnly) date).clone();
+        }
+        else if (date == null) {
+            return new DateOnly(0);
+        }
+        else {
+            return new DateOnly(date);
+        }
     }
 
     /**
@@ -96,22 +107,11 @@ public class DateOnly extends java.sql.Date {
         super.setTime(newValue.getTime());
     }
 
-    /**
-     * 日付を取得する.
-     *
-     * @param date 日付. null の場合は0Lで初期化する.
-     * @return 日付
-     */
-    @Nonnull
-    public static DateOnly valueOf(Date date) {
-        if (date instanceof DateOnly) {
-            return ((DateOnly) date).clone();
-        }
-        else if (date == null) {
-            return new DateOnly(0);
-        }
-        else {
-            return new DateOnly(date);
+    public static class DateToDateOnlyConverter implements Converter<Date, DateOnly> {
+
+        @Override
+        public DateOnly convert(Date source) {
+            return DateOnly.valueOf(source);
         }
     }
 }

@@ -264,15 +264,15 @@ public class JapaneseHalfAndFullUtils {
 
         return convert(source, new ConvertCallback() {
 
-            @Override
-            public int convert(IntBuffer buf, int prev, int ch) {
-                int x = doConvertHalfKanaToFullKana(ch, prev, buf);
-                if (x != ch) {
-                    return x;
-                }
-                return convertHalfToFull(ch);
-            }
-        });
+                   @Override
+                   public int convert(IntBuffer buf, int prev, int ch) {
+                       int x = doConvertHalfKanaToFullKana(ch, prev, buf);
+                       if (x != ch) {
+                           return x;
+                       }
+                       return convertHalfToFull(ch);
+                   }
+               });
     }
 
     /**

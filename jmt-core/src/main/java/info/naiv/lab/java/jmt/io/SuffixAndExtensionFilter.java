@@ -47,7 +47,7 @@ public class SuffixAndExtensionFilter extends SimpleFilenamePatternFilter implem
         boolean hasName = isNotBlank(name);
         boolean hasSuffix = isNotBlank(suffix);
         boolean hasExtension = isNotBlank(extension);
-        if(!hasName && !hasSuffix && !hasExtension) {
+        if (!hasName && !hasSuffix && !hasExtension) {
             throw new IllegalArgumentException("no name, no suffix, no extension. ");
         }
         if (hasName) {

@@ -44,59 +44,6 @@ import lombok.NonNull;
  */
 public class ClassicArrayUtils {
 
-    public static class Bytes {
-
-        public static byte[] toPrimitives(@Nonnull Byte[] data) {
-            int size = data.length;
-            byte[] result = new byte[size];
-            for (int i = 0; i < size; i++) {
-                result[i] = data[i];
-            }
-            return result;
-        }
-
-        public static byte[] toPrimitives(@Nonnull List<Byte> data) {
-            int size = data.size();
-            byte[] result = new byte[size];
-            for (int i = 0; i < size; i++) {
-                result[i] = data.get(i);
-            }
-            return result;
-        }
-    }
-
-    public static class Ints {
-
-        public static int[] toPrimitives(Integer[] data) {
-            int size = data.length;
-            int[] result = new int[size];
-            for (int i = 0; i < size; i++) {
-                result[i] = data[i];
-            }
-            return result;
-        }
-
-        public static int[] toPrimitives(List<Integer> data) {
-            int size = data.size();
-            int[] result = new int[size];
-            for (int i = 0; i < size; i++) {
-                result[i] = data.get(i);
-            }
-            return result;
-        }
-    }
-
-    public static <T> T arrayFindFirst(T[] array, @NonNull Predicate1<T> predicate) {
-        if (array != null) {
-            for (T obj : array) {
-                if (predicate.test(obj)) {
-                    return obj;
-                }
-            }
-        }
-        return null;
-    }
-
     /**
      * 配列を拡張して値を追加する.
      *
@@ -308,6 +255,17 @@ public class ClassicArrayUtils {
         return true;
     }
 
+    public static <T> T arrayFindFirst(T[] array, @NonNull Predicate1<T> predicate) {
+        if (array != null) {
+            for (T obj : array) {
+                if (predicate.test(obj)) {
+                    return obj;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * 条件を満たす要素のインデックスを取得する.
      *
@@ -393,6 +351,33 @@ public class ClassicArrayUtils {
     }
 
     /**
+     * @see Arrays#copyOfRange(T[], int, int)
+     * @param <T>
+     * @param componentType
+     * @param array
+     * @param from
+     * @param to
+     * @return
+     */
+    @Nonnull
+    @SuppressWarnings("SuspiciousSystemArraycopy")
+    public static <T> Object copyOfRangeToTypedArray(@Nonnull Class<?> componentType, @Nonnull T[] array, int from, int to) {
+        int newlen = to - from;
+        Arguments.nonNegative(newlen, "(to - from)");
+        Object dest = Array.newInstance(componentType, newlen);
+        int max = Math.min(array.length - from, newlen);
+        if (componentType.isPrimitive()) {
+            for (int i = 0, j = from; i < max; i++, j++) {
+                Array.set(dest, i, array[j]);
+            }
+        }
+        else {
+            arraycopy(array, from, dest, 0, max);
+        }
+        return dest;
+    }
+
+    /**
      * 配列を作成する.
      *
      * @param <T>
@@ -437,33 +422,6 @@ public class ClassicArrayUtils {
     }
 
     /**
-     * @see Arrays#copyOfRange(T[], int, int)
-     * @param <T>
-     * @param componentType
-     * @param array
-     * @param from
-     * @param to
-     * @return
-     */
-    @Nonnull
-    @SuppressWarnings("SuspiciousSystemArraycopy")
-    public static <T> Object copyOfRangeToTypedArray(@Nonnull Class<?> componentType, @Nonnull T[] array, int from, int to) {
-        int newlen = to - from;
-        Arguments.nonNegative(newlen, "(to - from)");
-        Object dest = Array.newInstance(componentType, newlen);
-        int max = Math.min(array.length - from, newlen);
-        if (componentType.isPrimitive()) {
-            for (int i = 0, j = from; i < max; i++, j++) {
-                Array.set(dest, i, array[j]);
-            }
-        }
-        else {
-            arraycopy(array, from, dest, 0, max);
-        }
-        return dest;
-    }
-
-    /**
      * オブジェクトが指定された型の配列かどうかをチェックする.
      *
      * @param <T> 型パラメータT
@@ -483,6 +441,54 @@ public class ClassicArrayUtils {
     }
 
     private ClassicArrayUtils() {
+    }
+
+    public static class Bytes {
+
+        public static byte[] toPrimitives(@Nonnull Byte[] data) {
+            int size = data.length;
+            byte[] result = new byte[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data[i];
+            }
+            return result;
+        }
+
+        public static byte[] toPrimitives(@Nonnull List<Byte> data) {
+            int size = data.size();
+            byte[] result = new byte[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data.get(i);
+            }
+            return result;
+        }
+
+        private Bytes() {
+        }
+    }
+
+    public static class Ints {
+
+        public static int[] toPrimitives(Integer[] data) {
+            int size = data.length;
+            int[] result = new int[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data[i];
+            }
+            return result;
+        }
+
+        public static int[] toPrimitives(List<Integer> data) {
+            int size = data.size();
+            int[] result = new int[size];
+            for (int i = 0; i < size; i++) {
+                result[i] = data.get(i);
+            }
+            return result;
+        }
+
+        private Ints() {
+        }
     }
 
 }

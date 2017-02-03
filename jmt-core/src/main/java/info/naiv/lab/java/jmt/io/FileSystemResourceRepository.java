@@ -52,13 +52,13 @@ import org.springframework.core.io.ResourceLoader;
 @Slf4j
 public class FileSystemResourceRepository extends AbstractResourceRepository {
 
-    final ConcurrentMap<String, Path> categories = new ConcurrentHashMap<>();
-    @NonNull
-    Path rootDirectory;
-
     @NonNull
     @Setter(AccessLevel.PROTECTED)
     protected ResourceLoader resourceLoader;
+
+    final ConcurrentMap<String, Path> categories = new ConcurrentHashMap<>();
+    @NonNull
+    Path rootDirectory;
 
     /**
      *

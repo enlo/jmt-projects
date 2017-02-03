@@ -24,14 +24,13 @@
 package info.naiv.lab.java.jmt.template.di;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author enlo
  */
 public class CdiDependentTemplateInjectorTest {
-    
+
     public CdiDependentTemplateInjectorTest() {
     }
 
@@ -41,5 +40,5 @@ public class CdiDependentTemplateInjectorTest {
     @Test
     public void testGetService() {
     }
-    
+
 }

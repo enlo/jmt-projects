@@ -136,6 +136,26 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
     }
 
     /**
+     * ForEach.  <br>
+     * 処理の途中で{@link BreakException}を投げると break と同じ効果があり、<br>
+     * 処理の途中で{@link ContinueException}を投げると break と同じ効果.
+     *
+     * @param action
+     */
+    public void each(Consumer1<? super T> action) {
+        Misc.forEach(value, action);
+    }
+
+    /**
+     * ForEach.
+     *
+     * @param action
+     */
+    public void each(Consumer2<? super T, LoopCondition> action) {
+        Misc.forEach(value, action);
+    }
+
+    /**
      * フィルター処理.
      *
      * @param predicate 述語オブジェクト
@@ -219,26 +239,6 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
             result.put(keyResolver.apply(v), v);
         }
         return result;
-    }
-
-    /**
-     * ForEach.  <br>
-     * 処理の途中で{@link BreakException}を投げると break と同じ効果があり、<br>
-     * 処理の途中で{@link ContinueException}を投げると break と同じ効果.
-     *
-     * @param action
-     */
-    public void each(Consumer1<? super T> action) {
-        Misc.forEach(value, action);
-    }
-
-    /**
-     * ForEach.
-     *
-     * @param action
-     */
-    public void each(Consumer2<? super T, LoopCondition> action) {
-        Misc.forEach(value, action);
     }
 
 }

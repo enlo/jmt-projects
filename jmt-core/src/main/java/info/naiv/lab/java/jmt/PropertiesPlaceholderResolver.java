@@ -80,11 +80,11 @@ public class PropertiesPlaceholderResolver implements Serializable {
             return value;
         }
         return helper.replacePlaceholders(value, new PropertyPlaceholderHelper.PlaceholderResolver() {
-            @Override
-            public String resolvePlaceholder(String placeholderName) {
-                return resolveProperty(props, placeholderName);
-            }
-        });
+                                      @Override
+                                      public String resolvePlaceholder(String placeholderName) {
+                                          return resolveProperty(props, placeholderName);
+                                      }
+                                  });
     }
 
     @SuppressWarnings("unused")

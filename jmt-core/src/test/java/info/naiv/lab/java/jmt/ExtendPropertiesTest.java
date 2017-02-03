@@ -37,8 +37,6 @@ public abstract class ExtendPropertiesTest {
     public ExtendPropertiesTest() {
     }
 
-    protected abstract ExpressiveProperties newInstance();
-
     /**
      * Test of fix method, of class ResolvableProperties.
      */
@@ -55,7 +53,7 @@ public abstract class ExtendPropertiesTest {
      * Test of getProperty method, of class ResolvableProperties.
      */
     @Test
-    public abstract void testGetProperty_String_String();    
+    public abstract void testGetProperty_String_String();
 
     /**
      *
@@ -69,5 +67,7 @@ public abstract class ExtendPropertiesTest {
             os.writeObject(resProps);
         }
     }
-    
+
+    protected abstract ExpressiveProperties newInstance();
+
 }

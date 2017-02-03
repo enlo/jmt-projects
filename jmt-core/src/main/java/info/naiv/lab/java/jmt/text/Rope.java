@@ -247,15 +247,6 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
         return endsWith(rhs.source.elements(), offset);
     }
 
-    private boolean endsWith(UnicodeScalar[] search, int offset) {
-        int len = search.length;
-        int idx = source.elements().length - offset - len;
-        if (idx < 0) {
-            return false;
-        }
-        return arrayCompareTo(source.elements(), idx, len, search, 0, len) == 0;
-    }
-
     /**
      * 指定された文字位置にある文字を取得する.
      *
@@ -427,6 +418,11 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
         return replace(searchString, replacement, -1);
     }
 
+    @Nonnull
+    public Iterator<String> reverseIterator() {
+        return new Iter(source.reverseIterator());
+    }
+
     /**
      * 右から指定長の文字列を取得.
      *
@@ -529,9 +525,13 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
         return new Rope(source.isDecomposed(), uc);
     }
 
-    @Nonnull
-    public Iterator<String> reverseIterator() {
-        return new Iter(source.reverseIterator());
+    private boolean endsWith(UnicodeScalar[] search, int offset) {
+        int len = search.length;
+        int idx = source.elements().length - offset - len;
+        if (idx < 0) {
+            return false;
+        }
+        return arrayCompareTo(source.elements(), idx, len, search, 0, len) == 0;
     }
 
     private boolean startsWith(UnicodeScalar[] search, int offset) {
@@ -545,13 +545,13 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
 
     static class Iter extends MappingIterator<UnicodeScalar, String> {
 
-        public Iter(Iterator<UnicodeScalar> arg0) {
+        Iter(Iterator<UnicodeScalar> arg0) {
             super(arg0, new Function1<UnicodeScalar, String>() {
-                @Override
-                public String apply(UnicodeScalar a1) {
-                    return a1.getElement();
-                }
-            });
+              @Override
+              public String apply(UnicodeScalar a1) {
+                  return a1.getElement();
+              }
+          });
         }
 
     }

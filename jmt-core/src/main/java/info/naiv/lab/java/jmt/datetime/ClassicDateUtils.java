@@ -54,6 +54,7 @@ public class ClassicDateUtils {
      *
      */
     public static final int[] TIME_PART_FIELDS = {HOUR_OF_DAY, MINUTE, SECOND, MILLISECOND};
+    public static final TimeZone TZ_UTC = TimeZone.getTimeZone("UTC");
 
     /**
      *
@@ -64,8 +65,6 @@ public class ClassicDateUtils {
      *
      */
     public static final Date UTC_EPOC_DATE;
-
-    public static final TimeZone TZ_UTC = TimeZone.getTimeZone("UTC");
 
     static {
         LOCAL_EPOC_DATE = Timestamp.valueOf("1970-01-01 00:00:00");

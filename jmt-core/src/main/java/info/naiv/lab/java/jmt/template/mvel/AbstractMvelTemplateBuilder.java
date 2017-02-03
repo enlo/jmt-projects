@@ -75,6 +75,21 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
     }
 
     /**
+     * ParserContextの初期化.
+     *
+     * @param ctx
+     * @return
+     */
+    @CheckReturnValue
+    private ParserContext callInitParserContext(ParserContext ctx) {
+        ctx = initParserContext(ctx);
+        if (parserContextInitializer != null) {
+            ctx = parserContextInitializer.apply(ctx);
+        }
+        return ctx;
+    }
+
+    /**
      * CompiledTemplate から Template を作成する.
      *
      * @param name
@@ -95,21 +110,6 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
         ParserContext ctx = ParserContext.create();
         ctx = callInitParserContext(ctx);
         return MvelTemplateUtils.compile(template, ctx, customNodesProvider);
-    }
-
-    /**
-     * ParserContextの初期化.
-     *
-     * @param ctx
-     * @return
-     */
-    @CheckReturnValue
-    private ParserContext callInitParserContext(ParserContext ctx) {
-        ctx = initParserContext(ctx);
-        if (parserContextInitializer != null) {
-            ctx = parserContextInitializer.apply(ctx);
-        }
-        return ctx;
     }
 
     @CheckReturnValue

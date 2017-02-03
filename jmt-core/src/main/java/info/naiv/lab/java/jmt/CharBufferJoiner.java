@@ -132,12 +132,12 @@ public class CharBufferJoiner extends AbstractJoiner<CharSequence, CharBuffer> {
      */
     public CharBufferJoiner(int capacity, @NonNull final CharSequence delim) {
         super(new SimpleAdder(), new Adder<CharSequence, CharBuffer>() {
-            @Override
-            public CharBuffer add(CharBuffer obj, CharSequence value, int idx) {
-                obj.append(delim);
-                return addCharSequence(obj, value);
-            }
-        });
+          @Override
+          public CharBuffer add(CharBuffer obj, CharSequence value, int idx) {
+              obj.append(delim);
+              return addCharSequence(obj, value);
+          }
+      });
         this.capacity = capacity;
     }
 

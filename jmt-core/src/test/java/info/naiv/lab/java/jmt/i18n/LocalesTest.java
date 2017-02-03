@@ -25,8 +25,6 @@ package info.naiv.lab.java.jmt.i18n;
 
 import java.util.Locale;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.not;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
 

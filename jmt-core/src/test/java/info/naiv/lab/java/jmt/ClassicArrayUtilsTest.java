@@ -63,12 +63,13 @@ public class ClassicArrayUtilsTest {
      */
     public ClassicArrayUtilsTest() {
     }
+
     /**
      * Test of arrayAppend method, of class ClassicArrayUtils.
      */
     @Test
     public void testArrayAppend() {
-        
+
         Date d = new Date();
         Object[] base = {"1", 1, d};
         assertThat(ClassicArrayUtils.arrayAppend(base), is(new Object[]{"1", 1, d}));
@@ -270,6 +271,7 @@ public class ClassicArrayUtilsTest {
         assertThat("13", arrayEqualsInRange(arr1, 4, arr2, 1, 2), is(false));
         assertThat("14", arrayEqualsInRange(arr1, 4, arr2, 2, 1), is(true));
     }
+
     /**
      * Test of arrayFindFirst method, of class ClassicArrayUtils.
      */
@@ -292,6 +294,7 @@ public class ClassicArrayUtilsTest {
                    ClassicArrayUtils.arrayFindFirst(vals, StandardFunctions.<Object>isAssignableTo(Long.class)),
                    is(nullValue()));
     }
+
     /**
      * Test of arrayIndexOf method, of class ClassicArrayUtils.
      */
@@ -303,6 +306,7 @@ public class ClassicArrayUtilsTest {
         assertThat(ClassicArrayUtils.arrayIndexOf(array, 34), is(7));
         assertThat(ClassicArrayUtils.arrayIndexOf(array, 30), is(-1));
     }
+
     /**
      * Test of arrayIndexOf method, of class ClassicArrayUtils.
      */
@@ -359,6 +363,7 @@ public class ClassicArrayUtilsTest {
         assertThat("{ 123, 456 }", ClassicArrayUtils.asObjectArray(a3), is(arrayContaining((Object) 123, 456)));
 
     }
+
     /**
      * Test of copyOfRangeToTypedArray method, of class ClassicArrayUtils.
      */
@@ -378,10 +383,10 @@ public class ClassicArrayUtilsTest {
 
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(Integer.class, array, 0, 8);
         assertThat((Integer[]) actual, is(allOf(arrayWithSize(8), arrayContaining(array))));
-        
+
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(Integer.class, array, 0, 9);
         assertThat((Integer[]) actual, is(allOf(arrayWithSize(9), arrayContaining(1, 2, 3, 5, 8, 13, 21, 34, null))));
-        
+
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(int.class, array, 0, 0);
         assertThat((int[]) actual, is(new int[]{}));
 
@@ -389,11 +394,11 @@ public class ClassicArrayUtilsTest {
         assertThat((int[]) actual, is(new int[]{1}));
 
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(int.class, array, 1, 3);
-        assertThat((int[]) actual, is(new int[]{2,3}));
+        assertThat((int[]) actual, is(new int[]{2, 3}));
 
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(int.class, array, 0, 8);
         assertThat((int[]) actual, is(new int[]{1, 2, 3, 5, 8, 13, 21, 34}));
-        
+
         actual = ClassicArrayUtils.copyOfRangeToTypedArray(int.class, array, 0, 9);
         assertThat((int[]) actual, is(new int[]{1, 2, 3, 5, 8, 13, 21, 34, 0}));
     }
@@ -415,7 +420,6 @@ public class ClassicArrayUtilsTest {
         assertThat(actual, is(allOf(arrayWithSize(3), arrayContaining("A", "B", "C"))));
 
     }
-
 
     /**
      * Test of createTypedArray method, of class ClassicArrayUtils.
@@ -442,6 +446,7 @@ public class ClassicArrayUtilsTest {
         actual = createTypedArray(int.class, 1, 2, 3);
         assertThat((int[]) actual, is(new int[]{1, 2, 3}));
     }
+
     /**
      * Test of isArrayOf method, of class ClassicArrayUtils.
      */
@@ -449,10 +454,10 @@ public class ClassicArrayUtilsTest {
     public void testIsArrayOf() {
         String a1 = "123";
         assertThat("String(123)", ClassicArrayUtils.isArrayOf(a1, String.class), is(false));
-        
+
         String[] a2 = {"123", "456"};
         assertThat("{ '123', '456' }", ClassicArrayUtils.isArrayOf(a2, String.class), is(true));
-        
+
         int[] a3 = {123, 456};
         assertThat("{ 123, 456 }", ClassicArrayUtils.isArrayOf(a3, String.class), is(false));
     }

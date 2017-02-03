@@ -140,27 +140,12 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         parentTemplateLoader = (TemplateLoader<TResult>) parentLoader;
     }
 
-    /**
-     *
-     * @param templ
-     */
-    protected void send(Template<TResult> templ) {
-        if (templ != null) {
-            for (TemplateLoaderListener<TResult> listener : listnenrs) {
-                listener.onLoadTemplate(templ);
-            }
+    protected String buildName(String category, String name) {
+        if (isBlank(category)) {
+            return name;
         }
-    }
-
-    /**
-     *
-     * @param templ
-     */
-    protected void sendAll(Iterable<Template<TResult>> templ) {
-        if (templ != null) {
-            for (Template<TResult> t : templ) {
-                send(t);
-            }
+        else {
+            return StringJoiner.DOTTED.joinItems(category, name).toString();
         }
     }
 
@@ -208,12 +193,27 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
         }
     }
 
-    protected String buildName(String category, String name) {
-        if (isBlank(category)) {
-            return name;
+    /**
+     *
+     * @param templ
+     */
+    protected void send(Template<TResult> templ) {
+        if (templ != null) {
+            for (TemplateLoaderListener<TResult> listener : listnenrs) {
+                listener.onLoadTemplate(templ);
+            }
         }
-        else {
-            return StringJoiner.DOTTED.joinItems(category, name).toString();
+    }
+
+    /**
+     *
+     * @param templ
+     */
+    protected void sendAll(Iterable<Template<TResult>> templ) {
+        if (templ != null) {
+            for (Template<TResult> t : templ) {
+                send(t);
+            }
         }
     }
 

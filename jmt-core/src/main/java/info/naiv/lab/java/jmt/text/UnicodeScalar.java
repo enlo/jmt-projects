@@ -41,10 +41,9 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
 
     private static final long serialVersionUID = -2284780948159534496L;
 
+    private final Lazy<String> decomposed;
     @Getter
     private final String element;
-
-    private final Lazy<String> decomposed;
 
     UnicodeScalar(@NonNull final String element) {
         this(false, element);
@@ -60,6 +59,21 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
         return element.charAt(index);
     }
 
+    @Override
+    public UnicodeScalar clone() {
+        try {
+            return (UnicodeScalar) super.clone();
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
+    @Override
+    public int compareTo(UnicodeScalar o) {
+        return decomposed.get().compareTo(o.decomposed.get());
+    }
+
     @Nonnull
     public String getDecomposed() {
         return decomposed.get();
@@ -71,11 +85,6 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
     }
 
     @Override
-    public int compareTo(UnicodeScalar o) {
-        return decomposed.get().compareTo(o.decomposed.get());
-    }
-
-    @Override
     public CharSequence subSequence(int start, int end) {
         return element.subSequence(start, end);
     }
@@ -83,16 +92,6 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
     @Override
     public String toString() {
         return element;
-    }
-
-    @Override
-    public UnicodeScalar clone() {
-        try {
-            return (UnicodeScalar) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
     }
 
     class Decomp extends Lazy<String> {

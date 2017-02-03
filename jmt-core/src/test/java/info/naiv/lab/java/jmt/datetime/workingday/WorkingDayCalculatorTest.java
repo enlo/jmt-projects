@@ -23,8 +23,6 @@
  */
 package info.naiv.lab.java.jmt.datetime.workingday;
 
-import info.naiv.lab.java.jmt.datetime.workingday.WorkingDayCalculator;
-import info.naiv.lab.java.jmt.datetime.workingday.WorkingDaySettings;
 import info.naiv.lab.java.jmt.datetime.WeekSettings;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
 import java.util.Calendar;
@@ -56,10 +54,61 @@ public class WorkingDayCalculatorTest {
     }
 
     /**
+     * Test of computeFirstBizDayOfWeek method, of class WorkingDayCalculator.
+     */
+    @Test
+    public void testComputeFirstBizDayOfWeek() {
+        WorkingDaySettings ws = WorkingDaySettings.newInstance();
+        doTestComputeFirstBizDayOfWeek(1, ws, ClassicDateUtils.createCalendar(2015, 3, 14), ClassicDateUtils.createCalendar(2015, 3, 9));
+        doTestComputeFirstBizDayOfWeek(2, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(3, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(4, ws, ClassicDateUtils.createCalendar(2015, 3, 20), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(5, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(6, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 23));
+
+        ws.setWeekSettings(new WeekSettings(Calendar.MONDAY, Calendar.SUNDAY));
+        doTestComputeFirstBizDayOfWeek(7, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 9));
+        doTestComputeFirstBizDayOfWeek(8, ws, ClassicDateUtils.createCalendar(2015, 3, 16), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(9, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(10, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(11, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 16));
+        doTestComputeFirstBizDayOfWeek(12, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 23));
+
+        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
+        doTestComputeFirstBizDayOfWeek(13, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
+        doTestComputeFirstBizDayOfWeek(14, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 18));
+        doTestComputeFirstBizDayOfWeek(15, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 18));
+        doTestComputeFirstBizDayOfWeek(16, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 18));
+        doTestComputeFirstBizDayOfWeek(17, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 18));
+        doTestComputeFirstBizDayOfWeek(18, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 18));
+
+        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
+        ws.addHolidays(ClassicDateUtils.createCalendar(2015, 3, 18));
+        doTestComputeFirstBizDayOfWeek(19, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
+        doTestComputeFirstBizDayOfWeek(20, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 19));
+        doTestComputeFirstBizDayOfWeek(21, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 19));
+
+    }
+
+    /**
      * Test of countWorkingDays method, of class WorkingDayCalculator.
      */
     @Test
     public void testCountWorkingDays() {
+    }
+
+    /**
+     * Test of getSettings method, of class WorkingDayCalculator.
+     */
+    @Test
+    public void testGetSettings() {
+    }
+
+    /**
+     * Test of setSettings method, of class WorkingDayCalculator.
+     */
+    @Test
+    public void testSetSettings() {
     }
 
     /**
@@ -93,18 +142,6 @@ public class WorkingDayCalculatorTest {
         assertThat(ix, actual, is(comparesEqualTo(expected)));
     }
 
-    private void doTestShiftIfHoliday(int i, WorkingDaySettings ws, Calendar in, Calendar expected) {
-        WorkingDayCalculator calc = new WorkingDayCalculator(ws);
-        Calendar saved = (Calendar) in.clone();
-        Calendar actual = calc.shiftIfHoliday(in);
-
-        String ix = Integer.toString(i);
-        assertThat(ix, saved, is(in));
-        assertThat(ix, actual, is(notNullValue()));
-        assertThat(ix, actual, is(not(sameInstance(in))));
-        assertThat(ix, actual, is(comparesEqualTo(expected)));
-    }
-
     private void doTestComputeFirstBizDayOfWeek(int i, WorkingDaySettings ws, Calendar in, Calendar expected) {
         WorkingDayCalculator calc = new WorkingDayCalculator(ws);
         Calendar saved = (Calendar) in.clone();
@@ -116,55 +153,16 @@ public class WorkingDayCalculatorTest {
         assertThat(ix, actual, is(comparesEqualTo(expected)));
     }
 
-    /**
-     * Test of computeFirstBizDayOfWeek method, of class WorkingDayCalculator.
-     */
-    @Test
-    public void testComputeFirstBizDayOfWeek() {
-        WorkingDaySettings ws = WorkingDaySettings.newInstance();
-        doTestComputeFirstBizDayOfWeek(1, ws, ClassicDateUtils.createCalendar(2015, 3, 14), ClassicDateUtils.createCalendar(2015, 3, 9));
-        doTestComputeFirstBizDayOfWeek(2, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(3, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(4, ws, ClassicDateUtils.createCalendar(2015, 3, 20), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(5, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(6, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 23));
+    private void doTestShiftIfHoliday(int i, WorkingDaySettings ws, Calendar in, Calendar expected) {
+        WorkingDayCalculator calc = new WorkingDayCalculator(ws);
+        Calendar saved = (Calendar) in.clone();
+        Calendar actual = calc.shiftIfHoliday(in);
 
-        ws.setWeekSettings(new WeekSettings(Calendar.MONDAY, Calendar.SUNDAY));
-        doTestComputeFirstBizDayOfWeek(7, ws, ClassicDateUtils.createCalendar(2015, 3, 15), ClassicDateUtils.createCalendar(2015, 3, 9));
-        doTestComputeFirstBizDayOfWeek(8, ws, ClassicDateUtils.createCalendar(2015, 3, 16), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(9, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(10, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(11, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 16));
-        doTestComputeFirstBizDayOfWeek(12, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 23));
-
-        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
-        doTestComputeFirstBizDayOfWeek(13, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
-        doTestComputeFirstBizDayOfWeek(14, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(15, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(16, ws, ClassicDateUtils.createCalendar(2015, 3, 21), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(17, ws, ClassicDateUtils.createCalendar(2015, 3, 22), ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(18, ws, ClassicDateUtils.createCalendar(2015, 3, 23), ClassicDateUtils.createCalendar(2015, 3, 18));
-
-        ws.setWeekSettings(new WeekSettings(Calendar.WEDNESDAY, Calendar.SUNDAY));
-        ws.getHolidays().add(ClassicDateUtils.createCalendar(2015, 3, 18));
-        doTestComputeFirstBizDayOfWeek(19, ws, ClassicDateUtils.createCalendar(2015, 3, 17), ClassicDateUtils.createCalendar(2015, 3, 11));
-        doTestComputeFirstBizDayOfWeek(20, ws, ClassicDateUtils.createCalendar(2015, 3, 18), ClassicDateUtils.createCalendar(2015, 3, 19));
-        doTestComputeFirstBizDayOfWeek(21, ws, ClassicDateUtils.createCalendar(2015, 3, 19), ClassicDateUtils.createCalendar(2015, 3, 19));
-
-    }
-
-    /**
-     * Test of getSettings method, of class WorkingDayCalculator.
-     */
-    @Test
-    public void testGetSettings() {
-    }
-
-    /**
-     * Test of setSettings method, of class WorkingDayCalculator.
-     */
-    @Test
-    public void testSetSettings() {
+        String ix = Integer.toString(i);
+        assertThat(ix, saved, is(in));
+        assertThat(ix, actual, is(notNullValue()));
+        assertThat(ix, actual, is(not(sameInstance(in))));
+        assertThat(ix, actual, is(comparesEqualTo(expected)));
     }
 
 }

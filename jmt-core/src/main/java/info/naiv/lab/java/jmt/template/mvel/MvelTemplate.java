@@ -39,8 +39,8 @@ public interface MvelTemplate<TResult> extends Template<TResult> {
 
     /**
      * TemplateResistry の登録.
-     * 
-     * @param templateRegistry 
+     *
+     * @param templateRegistry
      */
     void setTemplateRegistry(TemplateRegistry templateRegistry);
 }

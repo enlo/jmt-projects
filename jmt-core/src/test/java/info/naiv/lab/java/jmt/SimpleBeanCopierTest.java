@@ -38,46 +38,6 @@ import static org.junit.Assert.*;
  */
 public class SimpleBeanCopierTest {
 
-    @Data
-    static class TestBeanD {
-
-        private int id;
-        private String name;
-        private Date date;
-        private DateOnly dateOnly;
-        private String dest;
-        private boolean valid;
-
-    }
-
-    @Data
-    static class TestBeanS {
-
-        private int id = 1;
-        private String name = "CopyPropertiesTest";
-        private Date date = new Date();
-        private Date dateOnly = new Date();
-        private String src = "source";
-        private boolean valid = true;
-    }
-
-    @Data
-    @EqualsAndHashCode(callSuper = true)
-    static class TestBeanD2 extends TestBeanD {
-
-        private int age;
-        private String tel;
-
-    }
-
-    @Data
-    @EqualsAndHashCode(callSuper = true)
-    static class TestBeanS2 extends TestBeanS {
-
-        private int age = 40;
-        private String tel = "1234-567-890";
-    }
-
     public SimpleBeanCopierTest() {
     }
 
@@ -130,8 +90,7 @@ public class SimpleBeanCopierTest {
         assertThat(d.getAge(), is(s.getAge()));
         assertThat(d.getTel(), is(s.getTel()));
     }
-    
-    
+
     /**
      * Test of copyProperties method, of class SimpleBeanCopier.
      */
@@ -148,5 +107,44 @@ public class SimpleBeanCopierTest {
         assertThat(d.getName(), is(s.getName()));
         assertThat(d.getAge(), is(0));
         assertThat(d.getTel(), is(nullValue()));
+    }
+
+    @Data
+    static class TestBeanD {
+
+        private Date date;
+        private DateOnly dateOnly;
+        private String dest;
+        private int id;
+        private String name;
+        private boolean valid;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    static class TestBeanD2 extends TestBeanD {
+
+        private int age;
+        private String tel;
+
+    }
+
+    @Data
+    static class TestBeanS {
+
+        private Date date = new Date();
+        private Date dateOnly = new Date();
+        private int id = 1;
+        private String name = "CopyPropertiesTest";
+        private String src = "source";
+        private boolean valid = true;
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    static class TestBeanS2 extends TestBeanS {
+
+        private int age = 40;
+        private String tel = "1234-567-890";
     }
 }

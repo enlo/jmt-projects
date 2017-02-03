@@ -31,9 +31,13 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.empty;
+import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.sameInstance;
 import org.junit.After;
 import static org.junit.Assert.assertThat;
 import org.junit.Before;
@@ -66,6 +70,68 @@ public class WorkingDaySettingsTest {
     }
 
     /**
+     * Test of addExtractHolidays method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testAddExtractHolidays() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        Calendar cal1 = ClassicDateUtils.createCalendar(2015, 1, 2);
+        Calendar cal2 = ClassicDateUtils.createCalendar(2016, 4, 10);
+        instance.addExtractHolidays(cal1, cal2);
+        assertThat(instance.getExtractHolidays(), containsInAnyOrder(cal1, cal2));
+    }
+
+    /**
+     * Test of addHolidays method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testAddHolidays() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        Calendar cal1 = ClassicDateUtils.createCalendar(2015, 1, 2);
+        Calendar cal2 = ClassicDateUtils.createCalendar(2016, 4, 10);
+        instance.addHolidays(cal1, cal2);
+        assertThat(instance.getHolidays(), containsInAnyOrder(cal1, cal2));
+    }
+
+    /**
+     * Test of clone method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testClone() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        WorkingDaySettings cloned = instance.clone();
+        assertThat(cloned, is(not(sameInstance(instance))));
+        assertThat(cloned, is(instance));
+    }
+
+    /**
+     * Test of getExtractHolidays method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testGetExtractHolidays() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        assertThat(instance.getExtractHolidays(), is(emptyIterable()));
+    }
+
+    /**
+     * Test of getHolidays method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testGetHolidays() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        assertThat(instance.getHolidays(), is(emptyIterable()));
+    }
+
+    /**
+     * Test of getWeekSettings method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testGetWeekSettings() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        assertThat(instance.getWeekSettings(), is(WeekSettings.DEFAULT));
+    }
+
+    /**
      * Test of isHoliday method, of class WorkingDaySettings.
      */
     @Test
@@ -82,9 +148,32 @@ public class WorkingDaySettingsTest {
         assertThat(instance.isHoliday(cal1), is(false));
         assertThat(instance.isHoliday(cal2), is(true));
 
-        instance.getHolidays().add(ClassicDateUtils.createCalendar(2015, 1, 1));
+        instance.addHolidays(ClassicDateUtils.createCalendar(2015, 1, 1));
         assertThat(instance.isHoliday(cal1), is(true));
         assertThat(instance.isHoliday(cal2), is(true));
+    }
+
+    /**
+     * Test of isShiftForward method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testIsShiftForward() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        assertThat(instance.isShiftForward(), is(true));
+    }
+
+    /**
+     * Test of isWorkingDay method, of class WorkingDaySettings.
+     */
+    @Test
+    public void testIsWorkingDay() {
+        WorkingDaySettings instance = WorkingDaySettings.newInstance();
+        Calendar cal = ClassicDateUtils.createCalendar(2015, 1, 2);
+        assertThat(instance.isWorkingDay(cal), is(true));
+        instance.addHolidays(cal);
+        assertThat(instance.isWorkingDay(cal), is(false));
+        instance.addExtractHolidays(cal);
+        assertThat(instance.isWorkingDay(cal), is(true));
     }
 
     /**
@@ -106,10 +195,11 @@ public class WorkingDaySettingsTest {
     @Test
     public void testSetExtractHolidays() {
         Set<Calendar> extractHolidays = new HashSet<>();
-        extractHolidays.add(ClassicDateUtils.createCalendar(2015, 1, 1));
+        Calendar item = ClassicDateUtils.createCalendar(2015, 1, 1);
+        extractHolidays.add(item);
         WorkingDaySettings instance = WorkingDaySettings.newInstance();
         instance.setExtractHolidays(extractHolidays);
-        assertThat(instance.getExtractHolidays(), is(extractHolidays));
+        assertThat(instance.getExtractHolidays(), is(containsInAnyOrder(item)));
     }
 
     /**
@@ -132,6 +222,8 @@ public class WorkingDaySettingsTest {
         WorkingDaySettings instance = WorkingDaySettings.newInstance();
         instance.setShiftForward(false);
         assertThat(instance.isShiftForward(), is(false));
+        instance.setShiftForward(true);
+        assertThat(instance.isShiftForward(), is(true));
     }
 
     /**

@@ -36,11 +36,11 @@ import org.springframework.util.MultiValueMap;
 public abstract class MultiCompiledExpressionNode extends CustomNode {
 
     private static final long serialVersionUID = 1L;
+    private final String[] args;
 
     private MultiValueMap<String, Serializable> ceMap;
 
     private final char delimiter;
-    private final String[] args;
 
     public MultiCompiledExpressionNode(char delimiter, String... args) {
         this.delimiter = delimiter;

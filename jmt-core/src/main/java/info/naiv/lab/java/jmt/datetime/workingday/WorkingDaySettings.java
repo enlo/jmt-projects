@@ -28,8 +28,10 @@ import info.naiv.lab.java.jmt.datetime.SameDayPredicate;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.contains;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Calendar;
 import static java.util.Calendar.DAY_OF_WEEK;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
@@ -67,10 +69,10 @@ public class WorkingDaySettings implements Cloneable, Serializable {
 
     /**
      * コンストラクタ
-     * 
-     * @param weekSettings  週設定
-     * @param holidays  休日リスト
-     * @param extractHolidays   休日/休日リストから除外する休日
+     *
+     * @param weekSettings 週設定
+     * @param holidays 休日リスト
+     * @param extractHolidays 休日/休日リストから除外する休日
      * @param shiftForward 休日の際に営業日をどちらにずらすか
      */
     public WorkingDaySettings(WeekSettings weekSettings,
@@ -83,6 +85,14 @@ public class WorkingDaySettings implements Cloneable, Serializable {
         this.shiftForward = shiftForward;
     }
 
+    public boolean addExtractHolidays(Calendar... extractHolidays) {
+        return this.extractHolidays.addAll(Arrays.asList(extractHolidays));
+    }
+
+    public boolean addHolidays(Calendar... holidays) {
+        return this.holidays.addAll(Arrays.asList(holidays));
+    }
+
     @Override
     @SneakyThrows
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
@@ -92,12 +102,12 @@ public class WorkingDaySettings implements Cloneable, Serializable {
 
     @Nonnull
     public Set<Calendar> getExtractHolidays() {
-        return extractHolidays;
+        return Collections.unmodifiableSet(extractHolidays);
     }
 
     @Nonnull
     public Set<Calendar> getHolidays() {
-        return holidays;
+        return Collections.unmodifiableSet(holidays);
     }
 
     @Nonnull

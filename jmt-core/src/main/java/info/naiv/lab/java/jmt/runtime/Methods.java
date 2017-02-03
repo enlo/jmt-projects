@@ -63,14 +63,17 @@ public class Methods {
         return new MethodInvokerBinder(mi, new Object[]{arg1});
     }
 
+    private Methods() {
+    }
+
     @Value
     static class MethodBinder implements MethodInvoker {
 
-        Method method;
         Object[] bound;
+        Method method;
         Class<?>[] parameterTypes;
 
-        public MethodBinder(Method method, Object[] bound) {
+        MethodBinder(Method method, Object[] bound) {
             this.method = method;
             this.bound = bound;
             Class<?>[] ptypes = method.getParameterTypes();
@@ -88,11 +91,11 @@ public class Methods {
     @Value
     static class MethodInvokerBinder implements MethodInvoker {
 
-        MethodInvoker mi;
         Object[] bound;
+        MethodInvoker mi;
         Class<?>[] parameterTypes;
 
-        public MethodInvokerBinder(MethodInvoker mi, Object[] bound) {
+        MethodInvokerBinder(MethodInvoker mi, Object[] bound) {
             this.mi = mi;
             this.bound = bound;
             Class<?>[] ptypes = mi.getParameterTypes();
@@ -106,4 +109,5 @@ public class Methods {
         }
 
     }
+
 }

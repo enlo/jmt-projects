@@ -45,9 +45,9 @@ import lombok.NonNull;
 public class RecursiveFileCopier extends SimpleFileVisitor<Path> {
 
     final Deque<Path> depth;
-    final Path sourcePath;
     final Path destPath;
     final CopyOption[] options;
+    final Path sourcePath;
 
     /**
      * @param sourcePath

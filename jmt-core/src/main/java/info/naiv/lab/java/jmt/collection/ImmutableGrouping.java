@@ -33,7 +33,7 @@ import lombok.Value;
 public class ImmutableGrouping<TKey, TValue> implements Grouping<TKey, TValue> {
 
     TKey key;
-    
+
     @NonNull
     Iteratee<TValue> values;
 

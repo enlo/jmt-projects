@@ -39,16 +39,20 @@ public class TimeOnly extends java.sql.Time {
 
     private static final long serialVersionUID = 1L;
 
-    public static class DateToTimeOnlyConverter implements Converter<Date, TimeOnly> {
-
-        @Override
-        public TimeOnly convert(Date source) {
-            return TimeOnly.valueOf(source);
-        }
-    }
-    
     static {
         SimpleBeanCopierFactory.registerConverter(new DateToTimeOnlyConverter());
+    }
+
+    public static TimeOnly valueOf(Date date) {
+        if (date instanceof TimeOnly) {
+            return ((TimeOnly) date).clone();
+        }
+        else if (date == null) {
+            return new TimeOnly(0);
+        }
+        else {
+            return new TimeOnly(date);
+        }
     }
 
     /**
@@ -113,15 +117,11 @@ public class TimeOnly extends java.sql.Time {
         super.setTime(mills);
     }
 
-    public static TimeOnly valueOf(Date date) {
-        if (date instanceof TimeOnly) {
-            return ((TimeOnly) date).clone();
-        }
-        else if (date == null) {
-            return new TimeOnly(0);
-        }
-        else {
-            return new TimeOnly(date);
+    public static class DateToTimeOnlyConverter implements Converter<Date, TimeOnly> {
+
+        @Override
+        public TimeOnly convert(Date source) {
+            return TimeOnly.valueOf(source);
         }
     }
 }

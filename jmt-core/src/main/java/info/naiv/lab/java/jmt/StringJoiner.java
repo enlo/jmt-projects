@@ -112,6 +112,7 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
     }
 
     private static class DelimAdder implements Adder<Object, StringBuilder> {
+
         private final String delim;
 
         DelimAdder(String delim) {
@@ -130,7 +131,6 @@ public class StringJoiner extends AbstractStringBuilderJoiner<Object> {
         public StringBuilder add(StringBuilder obj, Object value, int idx) {
             return obj.append(value);
         }
-
 
     }
 }

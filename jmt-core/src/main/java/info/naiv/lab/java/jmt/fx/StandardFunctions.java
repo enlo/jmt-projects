@@ -57,6 +57,15 @@ public class StandardFunctions {
         }
     };
 
+    public static Predicate1<Annotation> annotationOf(final Class<? extends Annotation> clazz) {
+        return new Predicate1<Annotation>() {
+            @Override
+            public boolean test(Annotation obj) {
+                return obj != null && clazz.isAssignableFrom(obj.getClass());
+            }
+        };
+    }
+
     /**
      *
      * @param pattern
@@ -165,15 +174,6 @@ public class StandardFunctions {
         return new Predicate1<T>() {
             @Override
             public boolean test(T obj) {
-                return obj != null && clazz.isAssignableFrom(obj.getClass());
-            }
-        };
-    }
-
-    public static Predicate1<Annotation> annotationOf(final Class<? extends Annotation> clazz) {
-        return new Predicate1<Annotation>() {
-            @Override
-            public boolean test(Annotation obj) {
                 return obj != null && clazz.isAssignableFrom(obj.getClass());
             }
         };

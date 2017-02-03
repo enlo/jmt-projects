@@ -103,13 +103,13 @@ public class SimpleBeanCopier {
     @Value
     protected static final class PropertyEntry {
 
-        Method srcRead;
-        Method dstWrite;
-        TypeDescriptor srcType;
         TypeDescriptor dstType;
+        Method dstWrite;
         boolean noConversion;
+        Method srcRead;
+        TypeDescriptor srcType;
 
-        public PropertyEntry(PropertyDescriptor srcProp, Method srcRead, PropertyDescriptor dstProp, Method dstWrite) {
+        PropertyEntry(PropertyDescriptor srcProp, Method srcRead, PropertyDescriptor dstProp, Method dstWrite) {
             this.srcRead = srcRead;
             if (!Modifier.isPublic(this.srcRead.getDeclaringClass().getModifiers())) {
                 this.srcRead.setAccessible(true);

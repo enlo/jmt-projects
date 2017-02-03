@@ -31,7 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
 
 /**
  *
@@ -72,7 +71,7 @@ public class FileDeleter implements Callable<Map<Path, Exception>> {
                 return;
             }
             catch (IOException ex) {
-                last = ex;                
+                last = ex;
             }
         }
         if (last != null) {

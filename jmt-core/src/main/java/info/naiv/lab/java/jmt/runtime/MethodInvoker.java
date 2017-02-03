@@ -32,7 +32,7 @@ import java.lang.reflect.InvocationTargetException;
 public interface MethodInvoker {
 
     Class<?>[] getParameterTypes();
-    
+
     /**
      * メソッド呼び出し.
      *

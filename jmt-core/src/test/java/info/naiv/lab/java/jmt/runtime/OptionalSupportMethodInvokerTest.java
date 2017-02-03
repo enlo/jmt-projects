@@ -264,6 +264,16 @@ public class OptionalSupportMethodInvokerTest {
             ++s1c;
         }
 
+        public static long s10(int x, Optional<Integer> y, int... more) {
+            for (int a : y) {
+                x += a;
+            }
+            for (int a : more) {
+                x += a;
+            }
+            return x;
+        }
+
         public static void s2(int x) {
             s2c += x;
         }
@@ -311,14 +321,7 @@ public class OptionalSupportMethodInvokerTest {
             return BigDecimal.valueOf(x + y.orElse(0));
         }
 
-        public static long s10(int x, Optional<Integer> y, int... more) {
-            for (int a : y) {
-                x += a;
-            }
-            for (int a : more) {
-                x += a;
-            }
-            return x;
+        private TestClass() {
         }
     }
 }

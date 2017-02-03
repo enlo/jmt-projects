@@ -43,7 +43,7 @@ public class ProxyServiceConnection extends AbstractServiceConnection {
      * @param tag
      */
     public ProxyServiceConnection(@NonNull Holder<?> serviceHolder, int priority,
-                                 @Nonnull AbstractServiceContainer container, Tag tag) {
+                                  @Nonnull AbstractServiceContainer container, Tag tag) {
         super(priority, container, tag);
         this.serviceHolder = serviceHolder;
     }

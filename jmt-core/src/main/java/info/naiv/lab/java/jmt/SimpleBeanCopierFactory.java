@@ -72,6 +72,9 @@ public class SimpleBeanCopierFactory {
         defaultConversionService.addConverter(converter);
     }
 
+    private SimpleBeanCopierFactory() {
+    }
+
     @Value
     static final class Key {
 
@@ -80,7 +83,7 @@ public class SimpleBeanCopierFactory {
         private final GenericConversionService conversionService;
         private final String[] ignoreProperties;
 
-        public Key(Class<?> srcType, Class<?> dstType, GenericConversionService conversionService, String[] ignoreProperties) {
+        Key(Class<?> srcType, Class<?> dstType, GenericConversionService conversionService, String[] ignoreProperties) {
             this.clsSrc = srcType;
             this.clsDst = dstType;
             this.conversionService = conversionService;

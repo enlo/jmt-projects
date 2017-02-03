@@ -62,6 +62,18 @@ public class TimeOnlyTest {
         ServiceProviders.getThreadContainer().registerService(currentDateProvider);
     }
 
+    @Test
+    public void testConversion() {
+        /*
+        TargetClass.valueOf(SourceClass) が定義されている場合、
+        Spring の ObjectToObjectConverter によって自動変換される.
+         */
+        Date now = new Date();
+        ConversionService conversionService = new DefaultConversionService();
+        TimeOnly actual = conversionService.convert(now, TimeOnly.class);
+        assertThat(actual, is(TimeOnly.valueOf(now)));
+    }
+
     /**
      *
      */
@@ -139,18 +151,6 @@ public class TimeOnlyTest {
         int ms = cal.get(Calendar.MILLISECOND);
         Date expected = new TimeOnly(hour, min, sec, ms);
         assertThat(actual, is(expected));
-    }
-
-    @Test
-    public void testConversion() {
-        /*
-            TargetClass.valueOf(SourceClass) が定義されている場合、
-            Spring の ObjectToObjectConverter によって自動変換される.
-        */
-        Date now = new Date();
-        ConversionService conversionService = new DefaultConversionService();
-        TimeOnly actual = conversionService.convert(now, TimeOnly.class);
-        assertThat(actual, is(TimeOnly.valueOf(now)));
     }
 
 }

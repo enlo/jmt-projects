@@ -40,47 +40,16 @@ import org.springframework.util.StreamUtils;
  */
 public class SizedBytesTest {
 
+    byte[] sliced;
+    byte[] source;
+
     public SizedBytesTest() {
     }
-
-    byte[] source;
-    byte[] sliced;
 
     @Before
     public void setUp() {
         source = "あいうえおABC漢字".getBytes();
         sliced = Arrays.copyOf(source, 10);
-    }
-
-    /**
-     * Test of newInputStream method, of class SizedBytes.
-     *
-     * @throws java.io.IOException
-     */
-    @Test
-    public void testNewInputStream() throws IOException {
-        SizedBytes sz1 = new SizedBytes(source);
-        ByteArrayInputStream bais1 = sz1.newInputStream();
-        assertThat(StreamUtils.copyToByteArray(bais1), is(source));
-
-        SizedBytes sz2 = new SizedBytes(10, source);
-        ByteArrayInputStream bais2 = sz2.newInputStream();
-        assertThat(StreamUtils.copyToByteArray(bais2), is(sliced));
-    }
-
-    /**
-     * Test of toByteArray method, of class SizedBytes.
-     */
-    @Test
-    public void testToByteArray() {
-        SizedBytes sz1 = new SizedBytes(source);
-        byte[] actual1 = sz1.toByteArray();
-        assertThat(actual1, is(not(sameInstance(source))));
-        assertThat(actual1, is(source));
-
-        SizedBytes sz2 = new SizedBytes(10, source);
-        byte[] actual2 = sz2.toByteArray();
-        assertThat(actual2, is(sliced));
     }
 
     /**
@@ -118,6 +87,37 @@ public class SizedBytesTest {
 
         SizedBytes sz2 = new SizedBytes(10, source);
         assertThat(sz2.getSize(), is(10));
+    }
+
+    /**
+     * Test of newInputStream method, of class SizedBytes.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testNewInputStream() throws IOException {
+        SizedBytes sz1 = new SizedBytes(source);
+        ByteArrayInputStream bais1 = sz1.newInputStream();
+        assertThat(StreamUtils.copyToByteArray(bais1), is(source));
+
+        SizedBytes sz2 = new SizedBytes(10, source);
+        ByteArrayInputStream bais2 = sz2.newInputStream();
+        assertThat(StreamUtils.copyToByteArray(bais2), is(sliced));
+    }
+
+    /**
+     * Test of toByteArray method, of class SizedBytes.
+     */
+    @Test
+    public void testToByteArray() {
+        SizedBytes sz1 = new SizedBytes(source);
+        byte[] actual1 = sz1.toByteArray();
+        assertThat(actual1, is(not(sameInstance(source))));
+        assertThat(actual1, is(source));
+
+        SizedBytes sz2 = new SizedBytes(10, source);
+        byte[] actual2 = sz2.toByteArray();
+        assertThat(actual2, is(sliced));
     }
 
 }

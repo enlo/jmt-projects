@@ -62,6 +62,18 @@ public class DateOnlyTest {
         ServiceProviders.getThreadContainer().registerService(currentDateProvider);
     }
 
+    @Test
+    public void testConversion() {
+        /*
+        TargetClass.valueOf(SourceClass) が定義されている場合、
+        Spring の ObjectToObjectConverter によって自動変換される.
+         */
+        Date now = new Date();
+        ConversionService conversionService = new DefaultConversionService();
+        DateOnly actual = conversionService.convert(now, DateOnly.class);
+        assertThat(actual, is(DateOnly.valueOf(now)));
+    }
+
     /**
      *
      */
@@ -124,18 +136,6 @@ public class DateOnlyTest {
         actual.setTime(now.getTime());
         Date expected = getDatePart(now);
         assertThat(actual, is(expected));
-    }
-
-    @Test
-    public void testConversion() {
-        /*
-            TargetClass.valueOf(SourceClass) が定義されている場合、
-            Spring の ObjectToObjectConverter によって自動変換される.
-        */
-        Date now = new Date();
-        ConversionService conversionService = new DefaultConversionService();
-        DateOnly actual = conversionService.convert(now, DateOnly.class);
-        assertThat(actual, is(DateOnly.valueOf(now)));
     }
 
 }

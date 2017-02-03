@@ -43,10 +43,10 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
      */
     public static final Map<String, Class<? extends Node>> NODES;
 
-    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
-
     @Getter
     private static final DefaultCustomNodesProvider globalInstance;
+
+    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
 
     static {
 
@@ -67,13 +67,9 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
         this.nodes.putAll(nodes);
     }
 
-    protected final void addNodes(Map<String, Class<? extends Node>> nodes) {
-        this.nodes.putAll(nodes);
-    }
-
     @Override
     public Map<String, Class<? extends Node>> getCustomNodes() {
-        return nodes;
+        return Collections.unmodifiableMap(nodes);
     }
 
     public Class<? extends Node> registerNode(String name, Class<? extends Node> node) {
@@ -82,5 +78,9 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
 
     public boolean unregisterNode(String name, Class<? extends Node> node) {
         return nodes.remove(name, node);
+    }
+
+    protected final void addNodes(Map<String, Class<? extends Node>> nodes) {
+        this.nodes.putAll(nodes);
     }
 }

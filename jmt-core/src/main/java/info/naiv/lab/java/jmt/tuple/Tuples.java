@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.tuple;
 
-import lombok.Getter;
 import lombok.Value;
 
 /**

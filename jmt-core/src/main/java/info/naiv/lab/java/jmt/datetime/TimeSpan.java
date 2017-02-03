@@ -26,8 +26,6 @@ package info.naiv.lab.java.jmt.datetime;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
 import static info.naiv.lab.java.jmt.Misc.isBlank;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
-import info.naiv.lab.java.jmt.monad.Optional;
-import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collections;
@@ -40,6 +38,7 @@ import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.Value;
+import info.naiv.lab.java.jmt.monad.Optional;
 
 /**
  *
@@ -55,7 +54,7 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
     private static final String[] MINS = {"M", "MIN", "MINUTE", "MINUTES"};
     private static final String[] NANOS = {"N", "NS", "NANO", "NANOS", "NANOSEC", "NANOSECOND", "NANOSECONDS"};
     private static final String[] SECS = {"S", "SEC", "SECOND", "SECONDS"};
-    private static final Pattern pattern = Pattern.compile("^(\\+|-)?(\\d+)(\\w+)?$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern PATTERN = Pattern.compile("^(\\+|-)?(\\d+)(\\w+)?$", Pattern.CASE_INSENSITIVE);
     private static final long serialVersionUID = -5609761961762572788L;
 
     private static final Map<TimeUnit, String[]> UNIT_MAP;
@@ -83,7 +82,7 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
         if (isBlank(value)) {
             throw new ParseException("value is empty.", 0);
         }
-        Matcher m = pattern.matcher(value.trim());
+        Matcher m = PATTERN.matcher(value.trim());
         if (!m.matches()) {
             throw new ParseException("invalid pattern.", 0);
         }
@@ -120,10 +119,10 @@ public class TimeSpan implements Serializable, Comparable<TimeSpan> {
     @Nonnull
     public static Optional<TimeSpan> tryParse(String value) {
         try {
-            return OptionalImpl.of(parse(value));
+            return Optional.of(parse(value));
         }
         catch (ParseException | RuntimeException ex) {
-            return OptionalImpl.<TimeSpan>empty();
+            return Optional.<TimeSpan>empty();
         }
     }
 

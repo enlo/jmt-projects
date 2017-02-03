@@ -27,7 +27,6 @@ import info.naiv.lab.java.jmt.ResolvableProperties;
 import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
-import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;

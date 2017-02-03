@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.template.mvel;
 
-import info.naiv.lab.java.jmt.ExtendProperties;
+import info.naiv.lab.java.jmt.ExpressiveProperties;
 import info.naiv.lab.java.jmt.ExtendPropertiesTest;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -175,7 +175,7 @@ public class MvelExpressivePropertiesTest extends ExtendPropertiesTest {
     }
 
     @Override
-    protected ExtendProperties newInstance() {
+    protected ExpressiveProperties newInstance() {
         return new MvelExpressiveProperties();
     }
 

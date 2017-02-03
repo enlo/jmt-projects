@@ -1,6 +1,6 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
-import info.naiv.lab.java.jmt.ExtendProperties;
+import info.naiv.lab.java.jmt.ExpressiveProperties;
 import static info.naiv.lab.java.jmt.Misc.isBlank;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.io.Serializable;
@@ -15,7 +15,7 @@ import org.mvel2.templates.TemplateRuntime;
  *
  * @author enlo
  */
-public class MvelExpressiveProperties extends ExtendProperties {
+public class MvelExpressiveProperties extends ExpressiveProperties {
 
     private static final long serialVersionUID = -2208239490931819164L;
 

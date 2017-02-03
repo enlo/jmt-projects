@@ -24,11 +24,8 @@
 package info.naiv.lab.java.jmt.jdbc.driver;
 
 import java.sql.*;
-import java.util.Properties;
-import java.util.logging.Logger;
+import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
-import lombok.NonNull;
-import lombok.ToString;
 
 /**
  * 異なる ClassLoader から取得した JDBC Driver を、<br>
@@ -36,50 +33,11 @@ import lombok.ToString;
  *
  * @author enlo
  */
-@EqualsAndHashCode
-@ToString
-public class JdbcDriverProxy implements Driver {
+@EqualsAndHashCode(callSuper = true)
+public class JdbcDriverProxy extends Jdbc4DriverProxy {
 
-    @NonNull
-    private final Driver driver;
-
-    public JdbcDriverProxy(Driver driver) {
-        this.driver = driver;
-    }
-
-    @Override
-    public boolean acceptsURL(String url) throws SQLException {
-        return driver.acceptsURL(url);
-    }
-
-    @Override
-    public Connection connect(String url, Properties info) throws SQLException {
-        return driver.connect(url, info);
-    }
-
-    @Override
-    public int getMajorVersion() {
-        return driver.getMajorVersion();
-    }
-
-    @Override
-    public int getMinorVersion() {
-        return driver.getMinorVersion();
-    }
-
-    @Override
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
-        return driver.getParentLogger();
-    }
-
-    @Override
-    public DriverPropertyInfo[] getPropertyInfo(String url, Properties info) throws SQLException {
-        return driver.getPropertyInfo(url, info);
-    }
-
-    @Override
-    public boolean jdbcCompliant() {
-        return driver.jdbcCompliant();
+    public JdbcDriverProxy(@Nonnull Driver driver) {
+        super(driver);
     }
 
 }

@@ -26,7 +26,9 @@ package info.naiv.lab.java.jmt;
 import info.naiv.lab.java.jmt.runtime.Classes;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.Value;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.core.convert.support.DefaultConversionService;
@@ -38,8 +40,12 @@ import org.springframework.core.convert.support.GenericConversionService;
  */
 public class SimpleBeanCopierFactory {
 
-    private static final ConcurrentMap<Key, SimpleBeanCopier> cache = new ConcurrentHashMap<>();
-    private static final GenericConversionService defaultConversionService = new DefaultConversionService();
+    private static final ConcurrentMap<Key, SimpleBeanCopier> CACHE = new ConcurrentHashMap<>();
+
+    @Getter
+    @Setter
+    @NonNull
+    private static GenericConversionService defaultConversionService = new DefaultConversionService();
 
     public static SimpleBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, GenericConversionService conversionService, String... ignoreProperties) {
         if (Classes.isProxyClass(srcType) || Classes.isProxyClass(dstType)) {
@@ -48,12 +54,12 @@ public class SimpleBeanCopierFactory {
             return newInst;
         }
         Key key = new Key(srcType, dstType, conversionService, ignoreProperties);
-        if (cache.containsKey(key)) {
-            return cache.get(key);
+        if (CACHE.containsKey(key)) {
+            return CACHE.get(key);
         }
         else {
             SimpleBeanCopier newInst = new SimpleBeanCopier(srcType, dstType, conversionService, ignoreProperties);
-            cache.put(key, newInst);
+            CACHE.put(key, newInst);
             return newInst;
         }
     }

@@ -27,6 +27,7 @@ import info.naiv.lab.java.jmt.range.Range;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -34,14 +35,11 @@ import lombok.Data;
  * @param <T>
  */
 @Data
+@NoArgsConstructor
 public class SimpleRangeLimiter<T extends Comparable<T>> implements RangeLimiter<T> {
 
     T min;
     T max;
-
-    public SimpleRangeLimiter() {
-
-    }
 
     public SimpleRangeLimiter(@Nonnull Range<T> range) {
         min = range.getMinValue();

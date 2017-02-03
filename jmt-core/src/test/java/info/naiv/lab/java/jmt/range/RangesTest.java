@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.range;
 
 import info.naiv.lab.java.jmt.IterationUnit;
-import info.naiv.lab.java.jmt.StandardIterationUnits;
+import info.naiv.lab.java.jmt.iteration.StandardIterationUnits;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;

@@ -78,7 +78,7 @@ public class ResolvablePropertiesTest extends ExtendPropertiesTest {
     @Test
     @Override
     public void testFix() {
-        ExtendProperties p = testTarget;
+        ExpressiveProperties p = testTarget;
         Properties fixed = p.fix();
         assertThat(fixed.getProperty("itemName"), is("@property"));
         assertThat(fixed.getProperty("itemNameOther"), is(nullValue()));
@@ -146,7 +146,7 @@ public class ResolvablePropertiesTest extends ExtendPropertiesTest {
     }
 
     @Override
-    protected ExtendProperties newInstance() {
+    protected ExpressiveProperties newInstance() {
         return new ResolvableProperties();
     }
 

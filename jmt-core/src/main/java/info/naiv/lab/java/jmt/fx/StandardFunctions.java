@@ -26,10 +26,10 @@ package info.naiv.lab.java.jmt.fx;
 import info.naiv.lab.java.jmt.Holder;
 import info.naiv.lab.java.jmt.Misc;
 import static java.lang.Integer.parseInt;
+import java.lang.annotation.Annotation;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.ThreadSafe;
 
 /**
  *
@@ -157,6 +157,24 @@ public class StandardFunctions {
             @Override
             public T apply(Holder<T> a1) {
                 return a1.getContent();
+            }
+        };
+    }
+
+    public static <T> Predicate1<? super T> isAssignableTo(final Class<? extends T> clazz) {
+        return new Predicate1<T>() {
+            @Override
+            public boolean test(T obj) {
+                return obj != null && clazz.isAssignableFrom(obj.getClass());
+            }
+        };
+    }
+
+    public static Predicate1<Annotation> annotationOf(final Class<? extends Annotation> clazz) {
+        return new Predicate1<Annotation>() {
+            @Override
+            public boolean test(Annotation obj) {
+                return obj != null && clazz.isAssignableFrom(obj.getClass());
             }
         };
     }

@@ -8,7 +8,6 @@ import info.naiv.lab.java.jmt.fx.Function2;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.monad.Iteratee;
-import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -99,7 +98,7 @@ public class IterationUtils {
      */
     @Nonnull
     public static <T> Iteratee<T> filter(Iterable<T> iterable, Predicate1<? super T> predicate) {
-        return new IterateeImpl<>(iterable, predicate);
+        return new Iteratee<>(iterable, predicate);
     }
 
     /**
@@ -126,7 +125,7 @@ public class IterationUtils {
      */
     @Nonnull
     public static <T> Iteratee<T> filterNonNull(Iterable<T> iterable) {
-        return new IterateeImpl<>(iterable, StandardFunctions.<T>nonNull());
+        return new Iteratee<>(iterable, StandardFunctions.<T>nonNull());
     }
 
     /**
@@ -196,11 +195,11 @@ public class IterationUtils {
      */
     public static <T, R> List<R> forEach(Iterable<T> iter, @NonNull final Function1<? super T, R> func) {
         return forEach(iter, new LoopFunction<T, R>() {
-            @Override
-            public R apply(T a1, LoopCondition a2) {
-                return func.apply(a1);
-            }
-        });
+                   @Override
+                   public R apply(T a1, LoopCondition a2) {
+                       return func.apply(a1);
+                   }
+               });
     }
 
     /**
@@ -306,7 +305,7 @@ public class IterationUtils {
         return new Iterable<U>() {
             @Override
             public Iterator<U> iterator() {
-                return new MappingIterator<>(iter.iterator(), mapper);
+                return new MappingIterator<T, U>(iter.iterator(), mapper);
             }
         };
     }

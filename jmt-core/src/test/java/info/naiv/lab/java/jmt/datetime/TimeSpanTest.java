@@ -1,7 +1,6 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.monad.Optional;
-import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.text.ParseException;
 import java.util.concurrent.TimeUnit;
 import static org.hamcrest.Matchers.is;
@@ -203,12 +202,12 @@ public class TimeSpanTest {
         Optional<TimeSpan> ts5 = TimeSpan.tryParse(null);
         Optional<TimeSpan> ts6 = TimeSpan.tryParse("10");
 
-        assertThat("ts1", ts1, is(OptionalImpl.of(new TimeSpan(100, TimeUnit.SECONDS))));
+        assertThat("ts1", ts1, is(Optional.of(new TimeSpan(100, TimeUnit.SECONDS))));
         assertThat("ts2", ts2, is(Optional.EMPTY));
         assertThat("ts3", ts3, is(Optional.EMPTY));
         assertThat("ts4", ts4, is(Optional.EMPTY));
         assertThat("ts5", ts5, is(Optional.EMPTY));
-        assertThat("ts6", ts6, is(OptionalImpl.of(new TimeSpan(10, TimeUnit.MILLISECONDS))));
+        assertThat("ts6", ts6, is(Optional.of(new TimeSpan(10, TimeUnit.MILLISECONDS))));
     }
 
 }

@@ -23,11 +23,16 @@
  */
 package info.naiv.lab.java.jmt.concurrent;
 
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
+import lombok.Value;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -53,6 +58,7 @@ public class WaitForZeroTest {
         w4z.count.register();
         w4z.countDown();
         assertThat(w4z.await(), is(true));
+        assertThat(w4z.count.getUnarrivedParties(), is(1));
     }
 
     /**
@@ -64,6 +70,7 @@ public class WaitForZeroTest {
         w4z.countUp();
         w4z.count.arriveAndDeregister();
         assertThat(w4z.await(), is(true));
+        assertThat(w4z.count.getUnarrivedParties(), is(1));
     }
 
     /**
@@ -73,6 +80,25 @@ public class WaitForZeroTest {
     public void testCtor() {
         WaitForZero w4z = new WaitForZero();
         assertThat(w4z.await(), is(true));
+        assertThat(w4z.count.getUnarrivedParties(), is(1));
+    }
+
+    @Test
+    public void testDoAwait() throws Exception {
+
+        final List<Integer> numbers = new CopyOnWriteArrayList<>();
+        final WaitForZero value = new WaitForZero(5);
+        ExecutorService pool = Executors.newFixedThreadPool(3);
+        pool.submit(new TestRunnable(1, numbers, value));
+        pool.submit(new TestRunnable(2, numbers, value));
+        pool.submit(new TestRunnable(3, numbers, value));
+        pool.submit(new TestRunnable(4, numbers, value));
+        pool.submit(new TestRunnable(5, numbers, value));
+        assertThat(value.await(), is(true));
+        numbers.add(6);
+        assertThat(numbers, hasSize(6));
+        assertThat(numbers, containsInAnyOrder(1, 2, 3, 4, 5, 6));
+        assertThat(numbers.get(5), is(6));
     }
 
     /**
@@ -99,11 +125,16 @@ public class WaitForZeroTest {
         ExecutorService pool = Executors.newSingleThreadExecutor();
         for (int i = 0; i < 4; i++) {
             value.countUp();
+            assertThat("Post count up", value.count.getUnarrivedParties(), is(2 + i));
             pool.submit(task);
         }
         assertThat(x.get(), is(0));
         assertThat(value.doAwait(), is(true));
+        assertThat("getUnarrivedParties", value.count.getUnarrivedParties(), is(1));
         assertThat(x.get(), is(4));
+        // もう一回カウントダウン.
+        assertThat(value.doAwait(), is(true));
+        assertThat("getUnarrivedParties", value.count.getUnarrivedParties(), is(1));
     }
 
     /**
@@ -134,6 +165,7 @@ public class WaitForZeroTest {
         }
 
         value.doAwait(100, TimeUnit.MILLISECONDS);
+        assertThat("getUnarrivedParties", value.count.getUnarrivedParties(), is(1));
     }
 
     /**
@@ -165,6 +197,26 @@ public class WaitForZeroTest {
 
         assertThat(x.get(), is(0));
         assertThat(value.doAwait(200, TimeUnit.MILLISECONDS), is(true));
+        assertThat("getUnarrivedParties", value.count.getUnarrivedParties(), is(1));
         assertThat(x.get(), is(4));
+    }
+
+    @Value
+    static class TestRunnable implements Runnable {
+
+        int n;
+        List<Integer> numbers;
+        WaitForZero w4z;
+
+        @Override
+        public void run() {
+            try {
+                Thread.sleep(100);
+                numbers.add(n);
+            }
+            catch (InterruptedException ex) {
+            }
+            w4z.countDown();
+        }
     }
 }

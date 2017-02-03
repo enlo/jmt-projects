@@ -36,6 +36,8 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.support.DefaultConversionService;
 
 /**
  *
@@ -137,6 +139,18 @@ public class TimeOnlyTest {
         int ms = cal.get(Calendar.MILLISECOND);
         Date expected = new TimeOnly(hour, min, sec, ms);
         assertThat(actual, is(expected));
+    }
+
+    @Test
+    public void testConversion() {
+        /*
+            TargetClass.valueOf(SourceClass) が定義されている場合、
+            Spring の ObjectToObjectConverter によって自動変換される.
+        */
+        Date now = new Date();
+        ConversionService conversionService = new DefaultConversionService();
+        TimeOnly actual = conversionService.convert(now, TimeOnly.class);
+        assertThat(actual, is(TimeOnly.valueOf(now)));
     }
 
 }

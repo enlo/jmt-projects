@@ -23,12 +23,12 @@
  */
 package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.nio.file.Watchable;
 import java.util.Map;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import info.naiv.lab.java.jmt.monad.Optional;
 
 /**
  * カテゴリーと名称を指定して {@link Resource} を取得する. <br>

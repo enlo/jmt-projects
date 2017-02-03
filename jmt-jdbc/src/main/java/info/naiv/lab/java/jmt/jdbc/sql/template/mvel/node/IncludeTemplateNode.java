@@ -38,6 +38,8 @@ import org.mvel2.templates.util.TemplateOutputStream;
  */
 public class IncludeTemplateNode extends CustomNode {
 
+    private static final long serialVersionUID = 1L;
+
     @Override
     protected void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
         if (value instanceof MvelSqlTemplate) {
@@ -46,7 +48,7 @@ public class IncludeTemplateNode extends CustomNode {
             String compiled = (String) TemplateRuntime.execute(ct, ctx, factory);
             appender.append(compiled);
         }
-        else if (value instanceof SqlTemplate) {            
+        else if (value instanceof SqlTemplate) {
             SqlTemplate templ = (SqlTemplate) value;
             Query ct = templ.merge(ctx.getParameterSource());
             appender.append(ct.getMergedSql());

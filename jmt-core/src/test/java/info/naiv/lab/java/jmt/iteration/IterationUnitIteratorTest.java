@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.iteration;
 
-import info.naiv.lab.java.jmt.StandardIterationUnits;
 import java.util.Iterator;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;

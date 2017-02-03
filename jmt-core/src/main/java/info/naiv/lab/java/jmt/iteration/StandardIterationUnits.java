@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.iteration;
 
+import info.naiv.lab.java.jmt.IterationUnit;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;

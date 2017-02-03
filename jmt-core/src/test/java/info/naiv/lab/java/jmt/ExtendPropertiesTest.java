@@ -26,10 +26,6 @@ package info.naiv.lab.java.jmt;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.Properties;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
@@ -41,7 +37,7 @@ public abstract class ExtendPropertiesTest {
     public ExtendPropertiesTest() {
     }
 
-    protected abstract ExtendProperties newInstance();
+    protected abstract ExpressiveProperties newInstance();
 
     /**
      * Test of fix method, of class ResolvableProperties.
@@ -67,7 +63,7 @@ public abstract class ExtendPropertiesTest {
      */
     @Test
     public void testSerialize() throws IOException {
-        ExtendProperties resProps = newInstance();
+        ExpressiveProperties resProps = newInstance();
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         try (final ObjectOutputStream os = new ObjectOutputStream(stream)) {
             os.writeObject(resProps);

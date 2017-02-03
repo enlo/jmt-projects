@@ -41,20 +41,20 @@ import org.junit.Test;
  *
  * @author enlo
  */
-public class IterateeImplTest {
+public class IterateeTest {
 
     /**
      *
      */
-    public IterateeImplTest() {
+    public IterateeTest() {
     }
 
     /**
-     * Test of bind method, of class IterateeImpl.
+     * Test of bind method, of class Iteratee.
      */
     @Test
     public void testBind() {
-        IterateeImpl<Integer> im = IterateeImpl.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         final StringBuilder sb = new StringBuilder();
         assertThat(im.bind(new Consumer1<Integer>() {
             @Override
@@ -66,11 +66,11 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of bind method, of class IterateeImpl.
+     * Test of bind method, of class Iteratee.
      */
     @Test
     public void testBind_empty() {
-        IterateeImpl<Integer> im = IterateeImpl.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         final StringBuilder sb = new StringBuilder();
         assertThat(im.bind(new Consumer1<Integer>() {
             @Override
@@ -82,20 +82,20 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of empty method, of class IterateeImpl.
+     * Test of empty method, of class Iteratee.
      */
     @Test
     public void testEmpty() {
-        IterateeImpl<Integer> im = IterateeImpl.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         assertThat(im, is(emptyIterable()));
     }
 
     /**
-     * Test of filter method, of class IterateeImpl.
+     * Test of filter method, of class Iteratee.
      */
     @Test
     public void testFilter() {
-        IterateeImpl<Integer> im = IterateeImpl.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         assertThat(im.filter(new Predicate1<Integer>() {
             @Override
             public boolean test(Integer obj) {
@@ -105,11 +105,11 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of filter method, of class IterateeImpl.
+     * Test of filter method, of class Iteratee.
      */
     @Test
     public void testFilter_empty() {
-        IterateeImpl<Integer> im = IterateeImpl.of();
+        Iteratee<Integer> im = Iteratee.of();
         assertThat(im.filter(new Predicate1<Integer>() {
             @Override
             public boolean test(Integer obj) {
@@ -119,51 +119,51 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of flatMap method, of class IterateeImpl.
+     * Test of flatMap method, of class Iteratee.
      */
     @Test
     public void testFlatMap() {
         List<Integer> l1 = Arrays.asList(1, 2, 3);
         List<Integer> l2 = Arrays.asList(4, 5, 6);
-        IterateeImpl<List<Integer>> im = IterateeImpl.of(l1, l2);
-        assertThat(im.flatMap(new Function1<List<Integer>, IterateeImpl<Integer>>() {
+        Iteratee<List<Integer>> im = Iteratee.of(l1, l2);
+        assertThat(im.flatMap(new Function1<List<Integer>, Iteratee<Integer>>() {
             @Override
-            public IterateeImpl<Integer> apply(List<Integer> obj) {
-                return IterateeImpl.of(obj);
+            public Iteratee<Integer> apply(List<Integer> obj) {
+                return Iteratee.of(obj);
             }
         }), is(contains(1, 2, 3, 4, 5, 6)));
     }
 
     /**
-     * Test of flatMap method, of class IterateeImpl.
+     * Test of flatMap method, of class Iteratee.
      */
     @Test
     public void testFlatMap_empty() {
-        IterateeImpl<List<Integer>> im = IterateeImpl.empty();
-        assertThat(im.flatMap(new Function1<List<Integer>, IterateeImpl<Integer>>() {
+        Iteratee<List<Integer>> im = Iteratee.empty();
+        assertThat(im.flatMap(new Function1<List<Integer>, Iteratee<Integer>>() {
             @Override
-            public IterateeImpl<Integer> apply(List<Integer> obj) {
-                return IterateeImpl.of(obj);
+            public Iteratee<Integer> apply(List<Integer> obj) {
+                return Iteratee.of(obj);
             }
         }), is(emptyIterable()));
     }
 
     /**
-     * Test of iterator method, of class IterateeImpl.
+     * Test of iterator method, of class Iteratee.
      */
     @Test
     public void testIterator() {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        IterateeImpl<Integer> im = new IterateeImpl(list);
+        Iteratee<Integer> im = new Iteratee(list);
         assertThat(im, contains(1, 2, 3));
     }
 
     /**
-     * Test of map method, of class IterateeImpl.
+     * Test of map method, of class Iteratee.
      */
     @Test
     public void testMap() {
-        IterateeImpl<Integer> im = IterateeImpl.of(1, 2, 3, 4, 5);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5);
         assertThat(im.map(new Function1<Integer, String>() {
             @Override
             public String apply(Integer obj) {
@@ -173,11 +173,11 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of map method, of class IterateeImpl.
+     * Test of map method, of class Iteratee.
      */
     @Test
     public void testMap_empty() {
-        IterateeImpl<Integer> im = IterateeImpl.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         assertThat(im.map(new Function1<Integer, String>() {
             @Override
             public String apply(Integer obj) {
@@ -187,51 +187,51 @@ public class IterateeImplTest {
     }
 
     /**
-     * Test of of method, of class IterateeImpl.
+     * Test of of method, of class Iteratee.
      */
     @Test
     public void testOf_GenericType() {
         String[] list = {"1", "2", "3"};
-        IterateeImpl<String> im = IterateeImpl.of(list);
+        Iteratee<String> im = Iteratee.of(list);
         assertThat(im, contains("1", "2", "3"));
     }
 
     /**
-     * Test of of method, of class IterateeImpl.
+     * Test of of method, of class Iteratee.
      */
     @Test
     public void testOf_Iterable() {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        IterateeImpl<Integer> im = IterateeImpl.of(list);
+        Iteratee<Integer> im = Iteratee.of(list);
         assertThat(im, contains(1, 2, 3));
     }
 
     /**
-     * Test of toList method, of class IterateeImpl.
+     * Test of toList method, of class Iteratee.
      */
     @Test
     public void testToList() {
-        IterateeImpl<Integer> im = IterateeImpl.of(10, 20, 30);
+        Iteratee<Integer> im = Iteratee.of(10, 20, 30);
         List<Integer> list = im.toList();
         assertThat(list, is(contains(10, 20, 30)));
     }
 
     /**
-     * Test of toList method, of class IterateeImpl.
+     * Test of toList method, of class Iteratee.
      */
     @Test
     public void testToList_empty() {
-        IterateeImpl<Integer> im = IterateeImpl.empty();
+        Iteratee<Integer> im = Iteratee.empty();
         List<Integer> list = im.toList();
         assertThat(list, is(emptyIterable()));
     }
 
     /**
-     * Test of toMap method, of class IterateeImpl.
+     * Test of toMap method, of class Iteratee.
      */
     @Test
     public void testToMap() {
-        IterateeImpl<Integer> im = IterateeImpl.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Iteratee<Integer> im = Iteratee.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Map<String, Integer> map = im.toMap(new Function1<Integer, String>() {
             @Override
             public String apply(Integer a1) {

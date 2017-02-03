@@ -52,7 +52,7 @@ public class AutoCreateHolder<T> extends MutableHolder<T> {
      * @param clazz 値の型.
      */
     public AutoCreateHolder(@Nonnull Class<? extends T> clazz) {
-        this(null, clazz, StandardFunctions.newInstance(clazz));
+        this(null, clazz, StandardFunctions.<T>newInstance(clazz));
     }
 
     /**

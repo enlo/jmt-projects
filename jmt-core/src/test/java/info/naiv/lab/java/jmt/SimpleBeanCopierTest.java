@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt;
 import info.naiv.lab.java.jmt.datetime.DateOnly;
 import java.util.Date;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import org.junit.Test;
@@ -60,6 +61,23 @@ public class SimpleBeanCopierTest {
         private boolean valid = true;
     }
 
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    static class TestBeanD2 extends TestBeanD {
+
+        private int age;
+        private String tel;
+
+    }
+
+    @Data
+    @EqualsAndHashCode(callSuper = true)
+    static class TestBeanS2 extends TestBeanS {
+
+        private int age = 40;
+        private String tel = "1234-567-890";
+    }
+
     public SimpleBeanCopierTest() {
     }
 
@@ -79,4 +97,56 @@ public class SimpleBeanCopierTest {
         assertThat(d.getName(), is(s.getName()));
     }
 
+    /**
+     * Test of copyProperties method, of class SimpleBeanCopier.
+     */
+    @Test
+    public void testCopyProperties_2() {
+        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD.class);
+        TestBeanD d = new TestBeanD();
+        TestBeanS2 s = new TestBeanS2();
+        beanCopier.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+    }
+
+    /**
+     * Test of copyProperties method, of class SimpleBeanCopier.
+     */
+    @Test
+    public void testCopyProperties_3() {
+        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD2.class);
+        TestBeanD2 d = new TestBeanD2();
+        TestBeanS2 s = new TestBeanS2();
+        beanCopier.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+    
+    
+    /**
+     * Test of copyProperties method, of class SimpleBeanCopier.
+     */
+    @Test
+    public void testCopyProperties_4() {
+        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS.class, TestBeanD2.class);
+        TestBeanD2 d = new TestBeanD2();
+        TestBeanS2 s = new TestBeanS2();
+        beanCopier.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(0));
+        assertThat(d.getTel(), is(nullValue()));
+    }
 }

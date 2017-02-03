@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2015 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,34 +23,63 @@
  */
 package info.naiv.lab.java.jmt.monad;
 
+import info.naiv.lab.java.jmt.iteration.SingleIterator;
 import info.naiv.lab.java.jmt.fx.Consumer1;
+import info.naiv.lab.java.jmt.fx.Supplier;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.fx.Supplier;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Iterator;
+import static java.util.Objects.requireNonNull;
 import java.util.Set;
-import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import lombok.NonNull;
+import lombok.Value;
 
 /**
+ * Java7向け Optional monad.
  *
  * @author enlo
  * @param <T>
  */
-public interface Optional<T> extends Iterable<T>, Serializable {
+@Value
+public class Optional<T> implements Iterable<T>, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    public static final Optional EMPTY = new Optional(null);
 
     /**
+     * 空の Optional
      *
+     * @param <T> 型T
+     * @return 空のOptional
      */
-    Optional EMPTY = new OptionalImpl(null);
+    @Nonnull
+    public static <T> Optional<T> empty() {
+        return (Optional<T>) EMPTY;
+    }
 
-    /**
-     *
-     * @param consumer
-     * @return
-     */
-    Optional<T> bind(@Nonnull Consumer1<? super T> consumer);
+    @Nonnull
+    public static <T> Optional<T> of(@NonNull T value) {
+        return new Optional<>(value);
+    }
+
+    @Nonnull
+    public static <T> Optional<T> ofNullable(@Nullable T value) {
+        return new Optional<>(value);
+    }
+
+    T value;
+
+    public Optional<T> bind(Consumer1<? super T> consumer) {
+        if (isPresent()) {
+            consumer.accept(value);
+        }
+        return this;
+    }
 
     /**
      * フィルター処理.
@@ -60,7 +89,9 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * そうでなければ {@link #empty()}
      */
     @Nonnull
-    Optional<T> filter(@Nonnull Predicate1<? super T> predicate);
+    public Optional<T> filter(Predicate1<? super T> predicate) {
+        return isPresent() && predicate.test(value) ? this : Optional.<T>empty();
+    }
 
     /**
      * フラットマップ.
@@ -70,82 +101,96 @@ public interface Optional<T> extends Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    <U> Optional<U> flatMap(@Nonnull Function1<? super T, ? extends Optional<U>> mapper);
+    public <U> Optional<U> flatMap(Function1<? super T, ? extends Optional<U>> mapper) {
+        if (isPresent()) {
+            Optional<U> result = mapper.apply(value);
+            if (result != null) {
+                return result;
+            }
+        }
+        return Optional.<U>empty();
+    }
 
     /**
      *
-     * @return null ではない値
+     * @return 値
      */
-    @Nonnull
-    T get();
+    public T get() {
+        return requireNonNull(value);
+    }
 
-    /**
-     *
-     * @return null かもしれない値
-     */
-    @CheckForNull
-    T getOrNull();
+    public T getOrNull() {
+        return value;
+    }
 
-    /**
-     *
-     * @param consumer
-     */
-    void ifPresent(@Nonnull Consumer1<? super T> consumer);
+    public void ifPresent(Consumer1<? super T> consumer) {
+        if (isPresent()) {
+            consumer.accept(value);
+        }
+    }
 
     /**
      *
      * @return 値が null でなければ true.
      */
-    boolean isPresent();
+    public boolean isPresent() {
+        return value != null;
+    }
 
-    @Nonnull
     @Override
-    Iterator<T> iterator();
-
-    /**
-     *
-     * @param <U>
-     * @param mapper
-     * @return
-     */
     @Nonnull
-    <U> Optional<U> map(@Nonnull Function1<? super T, ? extends U> mapper);
+    public Iterator<T> iterator() {
+        return new SingleIterator<>(isPresent(), value);
+    }
 
     @Nonnull
-    <X> X match(@Nonnull Function1<? super T, X> some, @Nonnull Supplier<X> none);
+    public <U> Optional<U> map(Function1<? super T, ? extends U> mapper) {
+        if (isPresent()) {
+            return Optional.ofNullable(mapper.apply(value));
+        }
+        else {
+            return Optional.<U>empty();
+        }
+    }
 
-    void match(@Nonnull Consumer1<? super T> some, @Nonnull Runnable none);
+    public void match(Consumer1<? super T> some, Runnable none) {
+        if (isPresent()) {
+            some.accept(value);
+        }
+        else {
+            none.run();
+        }
+    }
 
-    /**
-     *
-     * @param other
-     * @return
-     */
+    public <X> X match(Function1<? super T, X> some, Supplier<X> none) {
+        return requireNonNull(isPresent() ? some.apply(value) : none.get());
+    }
+
     @Nonnull
-    T orElse(@Nonnull T other);
+    public T orElse(T other) {
+        return isPresent() ? value : other;
+    }
 
-    /**
-     *
-     * @param other
-     * @return
-     */
     @Nonnull
-    T orElseGet(@Nonnull Supplier<? extends T> other);
+    public T orElseGet(Supplier<? extends T> other) {
+        return isPresent() ? value : other.get();
+    }
 
-    /**
-     *
-     * @param <X>
-     * @param exceptionSupplier
-     * @return
-     * @throws X
-     */
     @Nonnull
-    <X extends Throwable> T orElseThrow(@Nonnull Supplier<? extends X> exceptionSupplier) throws X;
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        if (isPresent()) {
+            return value;
+        }
+        throw exceptionSupplier.get();
+    }
 
-    /**
-     *
-     * @return
-     */
     @Nonnull
-    Set<T> toSet();
+    public Set<T> toSet() {
+        Set<T> result = new HashSet<>();
+        if (isPresent()) {
+            result.add(value);
+        }
+        return result;
+    }
+
 }

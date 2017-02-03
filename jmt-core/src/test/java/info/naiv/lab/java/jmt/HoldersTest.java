@@ -125,14 +125,6 @@ public class HoldersTest {
     }
 
     /**
-     * Test of of method, of class Holders.
-     */
-    @Test(expected = NullPointerException.class)
-    public void testOf02() {
-        Holders.of(null);
-    }
-
-    /**
      *
      */
     public static class Fixture {

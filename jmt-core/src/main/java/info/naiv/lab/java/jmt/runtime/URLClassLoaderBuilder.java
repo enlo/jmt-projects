@@ -124,6 +124,12 @@ public class URLClassLoaderBuilder {
     @Nonnull
     protected URLClassLoader newClassLoader() throws IOException {
         URL[] array = new URL[jarFiles.size()];
+        if (logger.isDebugEnabled()) {
+            for (URL url : array) {
+                logger.debug("load jar file -> {} .", url);
+            }
+        }
+
         ClassLoader p = this.parentClassLoader;
         URLClassLoader cl = URLClassLoader.newInstance(jarFiles.toArray(array), p);
         return cl;

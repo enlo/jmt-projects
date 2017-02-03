@@ -35,8 +35,6 @@ import org.mvel2.templates.util.TemplateOutputStream;
  */
 public class BindManyNode extends CustomNode {
 
-    private static final StringJoiner joiner = StringJoiner.valueOf(", ");
-
     private static final long serialVersionUID = 1L;
 
     /**

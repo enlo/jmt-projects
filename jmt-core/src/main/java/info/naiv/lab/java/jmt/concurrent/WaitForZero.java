@@ -26,11 +26,13 @@ package info.naiv.lab.java.jmt.concurrent;
 import java.util.concurrent.Phaser;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.concurrent.ThreadSafe;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
  * @author enlo
  */
+@Slf4j
 @ThreadSafe
 public class WaitForZero extends AbstractAwaitable {
 
@@ -48,12 +50,8 @@ public class WaitForZero extends AbstractAwaitable {
      * @param initialValue
      */
     public WaitForZero(int initialValue) {
-        this.count = new Phaser(initialValue + 1) {
-            @Override
-            protected boolean onAdvance(int phase, int registeredParties) {
-                return false;
-            }
-        };
+        // 待機カウント数 + カウントダウン待機用
+        this.count = new Phaser(initialValue + 1);
     }
 
     /**

@@ -22,7 +22,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         
         <!-- for Dependencies -->
-        <powermockito.version>1.6.3</powermockito.version>
+        <powermockito.version>1.6.6</powermockito.version>
         <hamcrest-junit.version>2.0.0.0</hamcrest-junit.version>
 
         <!-- for Plugins -->        
@@ -52,7 +52,7 @@
             <dependency>
                 <groupId>io.spring.platform</groupId>
                 <artifactId>platform-bom</artifactId>
-                <version>2.0.3.RELEASE</version>
+                <version>2.0.8.RELEASE</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -66,7 +66,7 @@
                 <artifactId>lombok</artifactId>
                 <version>1.16.12</version> 
                 <scope>provided</scope>
-            </dependency>
+            </dependency>            
             <dependency>
                 <groupId>org.hamcrest</groupId>
                 <artifactId>hamcrest-junit</artifactId>

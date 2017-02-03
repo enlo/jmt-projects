@@ -5,6 +5,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.datetime.DateOnly;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
@@ -14,9 +15,7 @@ import info.naiv.lab.java.jmt.iteration.BreakException;
 import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.monad.Iteratee;
-import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import info.naiv.lab.java.jmt.monad.Optional;
-import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -303,11 +302,11 @@ public class MiscTest {
     public void testFilter() {
         List<Integer> list = Arrays.asList(1, 2, 3, 3, 4, 4, 5, 8);
         Iterable<Integer> a1 = Misc.filter(list, new Predicate1<Integer>() {
-            @Override
-            public boolean test(Integer obj) {
-                return obj % 2 == 0;
-            }
-        });
+                                       @Override
+                                       public boolean test(Integer obj) {
+                                           return obj % 2 == 0;
+                                       }
+                                   });
         assertThat(a1, is(contains(2, 4, 4, 8)));
     }
 
@@ -327,11 +326,11 @@ public class MiscTest {
     @Test
     public void testFilter3() {
         Iterable<Integer> a1 = Misc.filter(null, new Predicate1<Integer>() {
-            @Override
-            public boolean test(Integer obj) {
-                return obj % 2 == 0;
-            }
-        });
+                                       @Override
+                                       public boolean test(Integer obj) {
+                                           return obj % 2 == 0;
+                                       }
+                                   });
         assertThat(a1, is(emptyIterable()));
     }
 
@@ -695,11 +694,11 @@ public class MiscTest {
         in.add(36);
         assertThat(
                 Misc.map(result, in, new Function1<Integer, String>() {
-                    @Override
-                    public String apply(Integer a1) {
-                        return a1.toString();
-                    }
-                }), is(sameInstance(result)));
+                     @Override
+                     public String apply(Integer a1) {
+                         return a1.toString();
+                     }
+                 }), is(sameInstance(result)));
         assertThat(in.size(), is(3));
         assertThat(in, is(containsInAnyOrder(12, 24, 36)));
         assertThat(result.size(), is(3));
@@ -718,11 +717,11 @@ public class MiscTest {
         in.put("C", 36);
         assertThat(
                 Misc.map(result, in, new Function1<Integer, String>() {
-                    @Override
-                    public String apply(Integer a1) {
-                        return a1.toString();
-                    }
-                }), is(sameInstance(result)));
+                     @Override
+                     public String apply(Integer a1) {
+                         return a1.toString();
+                     }
+                 }), is(sameInstance(result)));
         assertThat(in.size(), is(3));
         assertThat(in, hasEntry("A", 12));
         assertThat(in, hasEntry("B", 24));
@@ -747,11 +746,11 @@ public class MiscTest {
         in.add(6);
         Iterable<Integer> it = in;
         Iterable<Integer> result = Misc.map(it, new Function1<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer a1) {
-                return a1 % 3;
-            }
-        });
+                                        @Override
+                                        public Integer apply(Integer a1) {
+                                            return a1 % 3;
+                                        }
+                                    });
         assertThat(in.size(), is(6));
         assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
         assertThat(result, is(contains(1, 2, 0, 1, 2, 0)));
@@ -770,11 +769,11 @@ public class MiscTest {
         in.add(5);
         in.add(6);
         List<Integer> result = Misc.map(in, new Function1<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer a1) {
-                return a1 % 3;
-            }
-        });
+                                    @Override
+                                    public Integer apply(Integer a1) {
+                                        return a1 % 3;
+                                    }
+                                });
         assertThat(in.size(), is(6));
         assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
         assertThat(result.size(), is(6));
@@ -794,11 +793,11 @@ public class MiscTest {
         in.add(5);
         in.add(6);
         Set<Integer> result = Misc.map(in, new Function1<Integer, Integer>() {
-            @Override
-            public Integer apply(Integer a1) {
-                return a1 % 3;
-            }
-        });
+                                   @Override
+                                   public Integer apply(Integer a1) {
+                                       return a1 % 3;
+                                   }
+                               });
         assertThat(in.size(), is(6));
         assertThat(in, is(containsInAnyOrder(1, 2, 3, 4, 5, 6)));
         assertThat(result.size(), is(3));
@@ -867,13 +866,13 @@ public class MiscTest {
      */
     @Test
     public void testNewInstance_Optional() {
-        Optional<Class<String>> clz1 = OptionalImpl.of(String.class);
+        Optional<Class<String>> clz1 = Optional.of(String.class);
         Optional<String> opt1 = Misc.newInstance(clz1);
         assertThat(opt1.isPresent(), is(true));
         assertThat(opt1.get(), is(instanceOf(String.class)));
         assertThat(opt1.get(), is((Object) ""));
 
-        Optional opt2 = Misc.newInstance(OptionalImpl.EMPTY);
+        Optional opt2 = Misc.newInstance(Optional.EMPTY);
         assertThat(opt2.isPresent(), is(false));
     }
 
@@ -1012,8 +1011,8 @@ public class MiscTest {
         PowerMockito.spy(Class.class);
         PowerMockito.spy(Misc.class);
 
-        Optional<Class<?>> clz1 = OptionalImpl.<Class<?>>of(String.class);
-        Optional<Class<?>> clz2 = OptionalImpl.<Class<?>>of(Integer.class);
+        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
         assertThat(Misc.resolveClassName("java.lang.String", false, cl), is(clz1));
         assertThat(Misc.resolveClassName("java.lang.Integer", true, cl), is(clz2));
 
@@ -1023,7 +1022,7 @@ public class MiscTest {
         PowerMockito.verifyStatic(times(1));
         Class.forName("java.lang.Integer", true, cl);
 
-        assertThat(Misc.resolveClassName("test.Sample", true, cl), is(OptionalImpl.EMPTY));
+        assertThat(Misc.resolveClassName("test.Sample", true, cl), is(Optional.EMPTY));
     }
 
     /**
@@ -1031,11 +1030,11 @@ public class MiscTest {
      */
     @Test
     public void testResolveClassName_String() {
-        Optional<Class<?>> clz1 = OptionalImpl.<Class<?>>of(String.class);
-        Optional<Class<?>> clz2 = OptionalImpl.<Class<?>>of(Integer.class);
+        Optional<Class<?>> clz1 = Optional.<Class<?>>of(String.class);
+        Optional<Class<?>> clz2 = Optional.<Class<?>>of(Integer.class);
         assertThat(Misc.resolveClassName("java.lang.String"), is(clz1));
         assertThat(Misc.resolveClassName("java.lang.Integer"), is(clz2));
-        assertThat(Misc.resolveClassName("test.Sample"), is(OptionalImpl.EMPTY));
+        assertThat(Misc.resolveClassName("test.Sample"), is(Optional.EMPTY));
     }
 
     /**
@@ -1527,7 +1526,7 @@ public class MiscTest {
         Collection<?> items = Arrays.asList(1, "AAA", 2.5);
         assertThat(Misc.toStringList(items), contains("1", "AAA", "2.5"));
 
-        Iterable<?> iter = IterateeImpl.of("abc", 22.0, "あいう");
+        Iterable<?> iter = Iteratee.of("abc", 22.0, "あいう");
         assertThat(Misc.toStringList(iter), contains("abc", "22.0", "あいう"));
 
         assertThat(Misc.toStringList(null), is(empty()));
@@ -1599,14 +1598,106 @@ public class MiscTest {
      * Test of copyProperties method, of class Misc.
      */
     @Test
-    public void testCopyProperties_3args() {
+    public void testCopyProperties_2args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
     }
 
     /**
      * Test of copyProperties method, of class Misc.
      */
     @Test
+    public void testCopyProperties_3args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d, "name");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_3args_2() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(s, d, "name", "id");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(0));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
+    }
+
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
+    public void testCopyProperties_4args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(s.getName()));
+        assertThat(d.getAge(), is(0));
+        assertThat(d.getTel(), is(nullValue()));
+    }
+    
+    /**
+     * Test of copyProperties method, of class Misc.
+     */
+    @Test
     public void testCopyProperties_5args() {
+        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
+        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d, "name", "id");
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(0));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(0));
+        assertThat(d.getTel(), is(nullValue()));
+    }
+    
+
+    /**
+     * Test of removeByteOrderMark method, of class Misc.
+     *
+     * @throws java.io.IOException
+     */
+    @Test
+    public void testRemoveByteOrderMark() throws IOException {
+        Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
+        Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");
+        try (InputStream nobomis = nobomres.getInputStream();
+             InputStream bomis = bomres.getInputStream()) {
+            String nobomtext = IOUtils.toString(nobomis, StandardCharsets.UTF_8);
+            String bomtext = IOUtils.toString(bomis, StandardCharsets.UTF_8);
+            assertThat(bomtext, is(not(nobomtext)));
+
+            String actual = Misc.removeByteOrderMark(bomtext);
+            assertThat(actual, is(nobomtext));
+        }
     }
 
 }

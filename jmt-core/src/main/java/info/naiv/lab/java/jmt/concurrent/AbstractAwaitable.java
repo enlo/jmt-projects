@@ -35,16 +35,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractAwaitable implements Awaitable {
 
-    private static final ThreadLocal<Exception> lastException = new ThreadLocal<>();
+    private static final ThreadLocal<Exception> LAST_EXCEPTION = new ThreadLocal<>();
 
     @Override
     public final boolean await() {
         try {
-            lastException.set(null);
+            LAST_EXCEPTION.set(null);
             return doAwait();
         }
         catch (Exception ex) {
-            lastException.set(ex);
+            LAST_EXCEPTION.set(ex);
             logger.warn("failed on await. {} ", ex.getMessage());
             return false;
         }
@@ -53,11 +53,11 @@ public abstract class AbstractAwaitable implements Awaitable {
     @Override
     public final boolean await(long timeout, @NonNull TimeUnit unit) {
         try {
-            lastException.set(null);
+            LAST_EXCEPTION.set(null);
             return doAwait(timeout, unit);
         }
         catch (Exception ex) {
-            lastException.set(ex);
+            LAST_EXCEPTION.set(ex);
             logger.warn("failed on await. (timeout={}, unit={}) {} ", timeout, unit, ex.getMessage());
             return false;
         }
@@ -65,7 +65,7 @@ public abstract class AbstractAwaitable implements Awaitable {
 
     @Override
     public final Exception lastException() {
-        return lastException.get();
+        return LAST_EXCEPTION.get();
     }
 
     /**

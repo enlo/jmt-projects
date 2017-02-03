@@ -23,22 +23,20 @@
  */
 package info.naiv.lab.java.jmt;
 
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import static java.lang.System.arraycopy;
 import java.lang.reflect.Array;
+import static java.lang.reflect.Array.getLength;
 import java.util.Arrays;
 import static java.util.Arrays.sort;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Objects;
 import static java.util.Objects.deepEquals;
 import javax.annotation.CheckForNull;
 import javax.annotation.Nonnull;
-import lombok.AccessLevel;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -88,6 +86,17 @@ public class ClassicArrayUtils {
         }
     }
 
+    public static <T> T arrayFindFirst(T[] array, @NonNull Predicate1<T> predicate) {
+        if (array != null) {
+            for (T obj : array) {
+                if (predicate.test(obj)) {
+                    return obj;
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * 配列を拡張して値を追加する.
      *
@@ -101,12 +110,14 @@ public class ClassicArrayUtils {
         int off = array.length;
         int newlength = off + append.length;
         T[] result = Arrays.copyOf(array, newlength);
-        System.arraycopy(append, 0, result, off, append.length);
+        arraycopy(append, 0, result, off, append.length);
         return result;
     }
 
     /**
      * 配列を {@link Iterable} に変換する.
+     *
+     * @see Arrays#asList(java.lang.Object...)
      *
      * @param <T>
      * @param array
@@ -114,7 +125,7 @@ public class ClassicArrayUtils {
      */
     @Nonnull
     public static <T> Iterable<T> arrayAsIterable(@Nonnull T[] array) {
-        return new ArrayIterable<>(array);
+        return Arrays.asList(array);
     }
 
     /**
@@ -371,7 +382,7 @@ public class ClassicArrayUtils {
         else if (array != null) {
             Class<?> clazz = array.getClass();
             if (clazz.isArray()) {
-                int length = Array.getLength(array);
+                int length = getLength(array);
                 result = new Object[length];
                 for (int i = 0; i < length; i++) {
                     result[i] = Array.get(array, i);
@@ -392,11 +403,64 @@ public class ClassicArrayUtils {
     @Nonnull
     @SuppressWarnings(value = "unchecked")
     public static <T> T[] createArray(T first, T... more) {
-        assert more != null;
-        T[] array = (T[]) Array.newInstance(more.getClass().getComponentType(), more.length + 1);
-        Array.set(array, 0, first);
-        arraycopy(more, 0, array, 1, more.length);
-        return array;
+        Class<?> componentType;
+        if (first != null) {
+            componentType = first.getClass();
+        }
+        else {
+            componentType = more.getClass().getComponentType();
+        }
+        return (T[]) createTypedArray(componentType, first, more);
+    }
+
+    @Nonnull
+    @SuppressWarnings("SuspiciousSystemArraycopy")
+    public static <T> Object createTypedArray(@Nonnull Class<?> componentType, T first, T... more) {
+        if (isEmpty(more)) {
+            Object array = Array.newInstance(componentType, 1);
+            Array.set(array, 0, first);
+            return array;
+        }
+        else {
+            Object array = Array.newInstance(componentType, more.length + 1);
+            Array.set(array, 0, first);
+            if (componentType.isPrimitive()) {
+                for (int i = 0, j = 1; i < more.length; i++, j++) {
+                    Array.set(array, j, more[i]);
+                }
+            }
+            else {
+                arraycopy(more, 0, array, 1, more.length);
+            }
+            return array;
+        }
+    }
+
+    /**
+     * @see Arrays#copyOfRange(T[], int, int)
+     * @param <T>
+     * @param componentType
+     * @param array
+     * @param from
+     * @param to
+     * @return
+     */
+    @Nonnull
+    @SuppressWarnings("SuspiciousSystemArraycopy")
+    public static <T> Object copyOfRangeToTypedArray(@Nonnull Class<?> componentType, @Nonnull T[] array, int from, int to) {
+        int newlen = to - from;
+        Arguments.nonNegative(newlen, "(to - from)");
+        Object dest = Array.newInstance(componentType, newlen);
+        int max = Math.min(array.length - from, newlen);
+        if (componentType.isPrimitive()) {
+            for (int i = 0, j = from; i < max; i++, j++) {
+                Array.set(dest, i, array[j]);
+            }
+        }
+        else {
+            arraycopy(array, from, dest, 0, max);
+        }
+        return dest;
     }
 
     /**
@@ -419,59 +483,6 @@ public class ClassicArrayUtils {
     }
 
     private ClassicArrayUtils() {
-    }
-
-    /**
-     * 配列用 Iterator.
-     *
-     * @author enlo
-     * @param <T>
-     */
-    @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-    public static final class ArrayIterator<T> implements Iterator<T> {
-
-        @NonNull
-        final T[] array;
-        int i = 0;
-
-        @Override
-        public boolean hasNext() {
-            return i < array.length;
-        }
-
-        @Override
-        public T next() {
-            if (array.length <= i) {
-                throw new NoSuchElementException();
-            }
-            return array[i++];
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-    }
-
-    /**
-     * 配列用 Iterable.
-     *
-     * @param <T>
-     */
-    static final class ArrayIterable<T> implements Iterable<T> {
-
-        final T[] array;
-
-        ArrayIterable(T[] array) {
-            this.array = array;
-        }
-
-        @Override
-        public Iterator<T> iterator() {
-            return new ArrayIterator<>(array);
-        }
-
     }
 
 }

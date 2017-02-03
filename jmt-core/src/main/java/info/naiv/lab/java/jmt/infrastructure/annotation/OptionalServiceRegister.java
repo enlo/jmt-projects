@@ -46,7 +46,7 @@ import org.springframework.core.type.filter.TypeFilter;
 @Slf4j
 public class OptionalServiceRegister {
 
-    private static final TypeFilter filter = new AnnotationTypeFilter(OptionalService.class);
+    private static final TypeFilter FILTER = new AnnotationTypeFilter(OptionalService.class);
 
     @Getter
     final AnnotationMetadataSetResolver resolver = new AnnotationMetadataSetResolver();
@@ -55,7 +55,7 @@ public class OptionalServiceRegister {
      *
      */
     public OptionalServiceRegister() {
-        resolver.getIncludeTypeFilters().add(filter);
+        resolver.getIncludeTypeFilters().add(FILTER);
     }
 
     /**

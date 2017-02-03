@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.io;
 
 import info.naiv.lab.java.jmt.monad.Optional;
-import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,17 +79,17 @@ public class FileSystemResourceRepository extends AbstractResourceRepository {
 
     @Override
     public Optional<Watchable> getWatchable() {
-        return OptionalImpl.<Watchable>of(rootDirectory);
+        return Optional.<Watchable>of(rootDirectory);
     }
 
     @Override
     public Optional<Watchable> getWatchable(String category) {
         Path path = getCategoryPath(category);
         if (path != null && Files.exists(path)) {
-            return OptionalImpl.<Watchable>of(path);
+            return Optional.<Watchable>of(path);
         }
         else {
-            return OptionalImpl.<Watchable>empty();
+            return Optional.<Watchable>empty();
         }
     }
 

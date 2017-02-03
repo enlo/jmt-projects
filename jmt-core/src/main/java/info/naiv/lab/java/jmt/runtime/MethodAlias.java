@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2017 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.range;
+package info.naiv.lab.java.jmt.runtime;
 
-import info.naiv.lab.java.jmt.iteration.StandardIterationUnits;
-import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
  *
  * @author enlo
  */
-public class DateRanges {
+@Documented
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.PARAMETER)
+public @interface MethodAlias {
 
-    /**
-     *
-     * @param amount
-     * @return
-     */
-    public static Range<Date> beforeDays(int amount) {
-        Date max = ClassicDateUtils.now().getTime();
-        Date min = ClassicDateUtils.add(max, -amount, TimeUnit.DAYS);
-        return Ranges.closedOpenRange(min, max, StandardIterationUnits.DATE);
-    }
-
-    private DateRanges() {
-    }
+    String[] value();
 }

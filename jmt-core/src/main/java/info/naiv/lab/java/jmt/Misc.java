@@ -20,7 +20,6 @@ import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.mark.Nop;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
-import info.naiv.lab.java.jmt.monad.OptionalImpl;
 import java.io.IOException;
 import java.io.InputStream;
 import static java.lang.Character.isSpaceChar;
@@ -612,7 +611,7 @@ public class Misc {
      */
     @Nonnull
     public static <T, U> Iterable<U> map(final Iterable<T> iter, @Nonnull final Function1<? super T, ? extends U> mapper) {
-        return IterationUtils.map(iter, mapper);
+        return IterationUtils.<T, U>map(iter, mapper);
     }
 
     /**
@@ -740,10 +739,10 @@ public class Misc {
     @Nonnull
     public static <T> Optional<T> newInstance(@Nonnull Optional<Class<T>> clazz) {
         if (clazz.isPresent()) {
-            return OptionalImpl.ofNullable(newInstance(clazz.get()));
+            return Optional.ofNullable(newInstance(clazz.get()));
         }
         else {
-            return OptionalImpl.<T>empty();
+            return Optional.<T>empty();
         }
     }
 
@@ -860,11 +859,23 @@ public class Misc {
 
     /**
      * 先頭の ZWNBSP (BOM) を除外.
+     * use {@link #removeByteOrderMark(java.lang.String) }
      *
      * @param value 文字列
      * @return 先頭から ZWNBSP を除外した文字列.
      */
+    @Deprecated
     public static String removeZwnbsp(String value) {
+        return removeByteOrderMark(value);
+    }
+
+    /**
+     * 先頭の ZWNBSP (BOM) を除外.
+     *
+     * @param value 文字列
+     * @return 先頭から ZWNBSP を除外した文字列.
+     */
+    public static String removeByteOrderMark(String value) {
         if (isEmpty(value)) {
             return value;
         }
@@ -898,11 +909,11 @@ public class Misc {
     @Nonnull
     public static Optional<Class<?>> resolveClassName(@Nonnull String className) {
         try {
-            return OptionalImpl.<Class<?>>ofNullable(Class.forName(className));
+            return Optional.<Class<?>>ofNullable(Class.forName(className));
         }
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. className:{} throws:{}", className, ex.getMessage());
-            return OptionalImpl.<Class<?>>empty();
+            return Optional.<Class<?>>empty();
         }
     }
 
@@ -918,11 +929,11 @@ public class Misc {
     public static Optional<Class<?>> resolveClassName(@Nonnull String className, boolean initialize, ClassLoader classLoader) {
         try {
             Class clz = Class.forName(className, initialize, classLoader);
-            return OptionalImpl.<Class<?>>ofNullable(clz);
+            return Optional.<Class<?>>ofNullable(clz);
         }
         catch (ClassNotFoundException ex) {
             logger.debug("class load failed. className:{} throws:{}", className, ex.getMessage());
-            return OptionalImpl.<Class<?>>empty();
+            return Optional.<Class<?>>empty();
         }
     }
 

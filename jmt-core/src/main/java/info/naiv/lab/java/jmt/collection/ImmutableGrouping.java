@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.collection;
 
 import info.naiv.lab.java.jmt.monad.Iteratee;
-import info.naiv.lab.java.jmt.monad.IterateeImpl;
 import java.util.Iterator;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
@@ -45,7 +44,7 @@ public class ImmutableGrouping<TKey, TValue> implements Grouping<TKey, TValue> {
 
     public ImmutableGrouping(TKey key, @Nonnull Iterable<TValue> values) {
         this.key = key;
-        this.values = IterateeImpl.of(values);
+        this.values = Iteratee.of(values);
     }
 
     @Override

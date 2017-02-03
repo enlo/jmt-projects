@@ -23,8 +23,8 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
-import info.naiv.lab.java.jmt.monad.Iteratee;
 import javax.annotation.Nonnull;
+import info.naiv.lab.java.jmt.monad.Iteratee;
 
 /**
  *

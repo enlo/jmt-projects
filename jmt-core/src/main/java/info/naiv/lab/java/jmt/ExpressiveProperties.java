@@ -40,14 +40,14 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
  *
  * @author enlo
  */
-public abstract class ExtendProperties extends Properties {
+public abstract class ExpressiveProperties extends Properties {
 
     private static final long serialVersionUID = 1L;
 
-    public ExtendProperties() {
+    public ExpressiveProperties() {
     }
 
-    public ExtendProperties(Properties defaults) {
+    public ExpressiveProperties(Properties defaults) {
         super(defaults);
     }
 
@@ -58,7 +58,7 @@ public abstract class ExtendProperties extends Properties {
      * @return
      */
     @Nonnull
-    public ExtendProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
+    public ExpressiveProperties setPropertyIfValueNotBlank(@Nonnull String propertyName, String value) {
         if (isNotBlank(value)) {
             setProperty(propertyName, value);
         }
@@ -88,7 +88,7 @@ public abstract class ExtendProperties extends Properties {
      * @throws IOException
      */
     @Nonnull
-    public ExtendProperties loadFromResource(@NonNull String uriLocation) throws IOException {
+    public ExpressiveProperties loadFromResource(@NonNull String uriLocation) throws IOException {
         return loadFromResources(uriLocation);
     }
 
@@ -100,12 +100,12 @@ public abstract class ExtendProperties extends Properties {
      * @throws IOException
      */
     @Nonnull
-    public ExtendProperties loadFromResource(@NonNull String uriLocation, @NonNull Charset charset) throws IOException {
+    public ExpressiveProperties loadFromResource(@NonNull String uriLocation, @NonNull Charset charset) throws IOException {
         return loadFromResources(charset, uriLocation);
     }
 
     @Nonnull
-    public ExtendProperties loadFromResources(@NonNull Charset charset, String... uriLocations) throws IOException {
+    public ExpressiveProperties loadFromResources(@NonNull Charset charset, String... uriLocations) throws IOException {
         DefaultResourceLoader drl = new DefaultResourceLoader();
         for (String uriLocation : uriLocations) {
             String path = eval(uriLocation);
@@ -117,7 +117,7 @@ public abstract class ExtendProperties extends Properties {
     }
 
     @Nonnull
-    public ExtendProperties loadFromResources(String... uriLocations) throws IOException {
+    public ExpressiveProperties loadFromResources(String... uriLocations) throws IOException {
         DefaultResourceLoader drl = new DefaultResourceLoader();
         for (String uriLocation : uriLocations) {
             String path = eval(uriLocation);

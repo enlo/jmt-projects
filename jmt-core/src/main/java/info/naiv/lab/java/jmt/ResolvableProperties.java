@@ -34,7 +34,7 @@ import lombok.NonNull;
  * @author enlo
  */
 @EqualsAndHashCode(callSuper = true)
-public class ResolvableProperties extends ExtendProperties {
+public class ResolvableProperties extends ExpressiveProperties {
 
     private static final PropertiesPlaceholderResolver defaultResolver = PropertiesPlaceholderResolver.DEFAULT;
     private static final long serialVersionUID = 1L;

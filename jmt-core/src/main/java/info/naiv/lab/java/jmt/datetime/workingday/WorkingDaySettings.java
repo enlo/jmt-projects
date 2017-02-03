@@ -101,12 +101,12 @@ public class WorkingDaySettings implements Cloneable, Serializable {
     }
 
     @Nonnull
-    public Set<Calendar> getExtractHolidays() {
+    public Iterable<Calendar> getExtractHolidays() {
         return Collections.unmodifiableSet(extractHolidays);
     }
 
     @Nonnull
-    public Set<Calendar> getHolidays() {
+    public Iterable<Calendar> getHolidays() {
         return Collections.unmodifiableSet(holidays);
     }
 

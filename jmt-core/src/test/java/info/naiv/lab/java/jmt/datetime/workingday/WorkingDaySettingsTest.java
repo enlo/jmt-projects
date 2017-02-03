@@ -31,8 +31,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.empty;
 import static org.hamcrest.Matchers.emptyIterable;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.not;
@@ -183,8 +183,8 @@ public class WorkingDaySettingsTest {
     public void testNewInstance() {
         WorkingDaySettings actual = WorkingDaySettings.newInstance();
         assertThat(actual, is(notNullValue()));
-        assertThat(actual.getExtractHolidays(), is(empty()));
-        assertThat(actual.getHolidays(), is(empty()));
+        assertThat(actual.getExtractHolidays(), is(emptyIterable()));
+        assertThat(actual.getHolidays(), is(emptyIterable()));
         assertThat(actual.getWeekSettings(), is(WeekSettings.DEFAULT));
         assertThat(actual.isShiftForward(), is(true));
     }
@@ -208,10 +208,11 @@ public class WorkingDaySettingsTest {
     @Test
     public void testSetHolidays() {
         Set<Calendar> holidays = new HashSet<>();
-        holidays.add(ClassicDateUtils.createCalendar(2015, 1, 1));
+        Calendar cal = ClassicDateUtils.createCalendar(2015, 1, 1);
+        holidays.add(cal);
         WorkingDaySettings instance = WorkingDaySettings.newInstance();
         instance.setHolidays(holidays);
-        assertThat(instance.getHolidays(), is(holidays));
+        assertThat(instance.getHolidays(), is(contains(cal)));
     }
 
     /**

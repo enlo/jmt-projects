@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -35,6 +36,19 @@ public interface MethodInvoker {
 
     boolean checkParameterCount(int argc);
 
+    /**
+     * アノテーションの取得.
+     *
+     * @param <A>
+     * @param annotationClass
+     * @return
+     */
+    <A extends Annotation> A getAnnotation(Class<A> annotationClass);
+
+    /**
+     *
+     * @return パラメータタイプの取得.
+     */
     Class<?>[] getParameterTypes();
 
     /**

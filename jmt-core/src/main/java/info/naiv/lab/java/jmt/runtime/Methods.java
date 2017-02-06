@@ -25,6 +25,7 @@ package info.naiv.lab.java.jmt.runtime;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayAppend;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -86,6 +87,11 @@ public class Methods {
         }
 
         @Override
+        public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+            return method.getAnnotation(annotationClass);
+        }
+
+        @Override
         public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             Object[] newArgs = arrayAppend(bound, args);
             return method.invoke(target, newArgs);
@@ -110,6 +116,11 @@ public class Methods {
         @Override
         public boolean checkParameterCount(int argc) {
             return parameterTypes.length == argc;
+        }
+
+        @Override
+        public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+            return mi.getAnnotation(annotationClass);
         }
 
         @Override

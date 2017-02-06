@@ -91,6 +91,19 @@ public class MethodInvokerRegistry implements MultiValueLookup<String, MethodInv
         }
     }
 
+    protected Iterable<String> resolveNames(Method m) {
+        List<String> list = new ArrayList<>();
+        list.add(m.getName());
+
+        MethodAlias alias = m.getAnnotation(MethodAlias.class);
+        if (alias != null) {
+            for (String aname : alias.value()) {
+                list.add(aname);
+            }
+        }
+        return list;
+    }
+
     protected MethodInvoker createMethodInvoker(Method m) {
         return new OptionalSupportMethodInvoker(m);
     }
@@ -115,14 +128,10 @@ public class MethodInvokerRegistry implements MultiValueLookup<String, MethodInv
             Method[] methods = targetClass.getDeclaredMethods();
             result = new HashMap<>(methods.length);
             for (Method m : methods) {
-                MethodAlias alias = m.getAnnotation(MethodAlias.class);
-                if (alias != null) {
-                    for (String aname : alias.value()) {
-                        registerInvoker(result, aname, m);
-                    }
+                Iterable<String> names = resolveNames(m);
+                for (String name : names) {
+                    registerInvoker(result, name, m);
                 }
-                String name = m.getName();
-                registerInvoker(result, name, m);
             }
             METHOD_CHACHE.put(targetClass, result);
             return result;

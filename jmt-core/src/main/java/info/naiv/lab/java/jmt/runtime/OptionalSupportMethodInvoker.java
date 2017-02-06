@@ -120,6 +120,11 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
     }
 
     @Override
+    public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
+        return method.getAnnotation(annotationClass);
+    }
+
+    @Override
     public Class<?>[] getParameterTypes() {
         return method.getParameterTypes();
     }

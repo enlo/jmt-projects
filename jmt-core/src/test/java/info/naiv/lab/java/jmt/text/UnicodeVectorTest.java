@@ -51,9 +51,9 @@ public class UnicodeVectorTest {
     @Test
     public void testCharAt() {
         UnicodeVector instance = new UnicodeVector("\u0065\u0301㋐");
-        assertThat(instance.charAt(0), is('\u0065'));
-        assertThat(instance.charAt(1), is('\u0301'));
-        assertThat(instance.charAt(2), is('\u32D0'));
+        assertThat(instance.asCharSequence().charAt(0), is('\u0065'));
+        assertThat(instance.asCharSequence().charAt(1), is('\u0301'));
+        assertThat(instance.asCharSequence().charAt(2), is('\u32D0'));
     }
 
     /**
@@ -226,7 +226,7 @@ public class UnicodeVectorTest {
     @Test
     public void testLength() {
         UnicodeVector instance = new UnicodeVector("\u0065\u0301㋐");
-        assertThat(instance.length(), is(3));
+        assertThat(instance.length(), is(2));
     }
 
     /**
@@ -249,9 +249,9 @@ public class UnicodeVectorTest {
     @Test
     public void testSubSequence() {
         UnicodeVector instance = new UnicodeVector("\u0065\u0301㋐");
-        assertThat(instance.subSequence(0, 1), is((CharSequence) "\u0065"));
-        assertThat(instance.subSequence(1, 2), is((CharSequence) "\u0301"));
-        assertThat(instance.subSequence(1, 3), is((CharSequence) "\u0301㋐"));
+        assertThat(instance.asCharSequence().subSequence(0, 1), is((CharSequence) "\u0065"));
+        assertThat(instance.asCharSequence().subSequence(1, 2), is((CharSequence) "\u0301"));
+        assertThat(instance.asCharSequence().subSequence(1, 3), is((CharSequence) "\u0301㋐"));
     }
 
     /**

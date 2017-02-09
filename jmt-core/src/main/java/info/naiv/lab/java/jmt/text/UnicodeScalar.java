@@ -28,6 +28,7 @@ import java.io.Serializable;
 import static java.text.Normalizer.Form.NFD;
 import static java.text.Normalizer.normalize;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NonNull;
@@ -36,10 +37,29 @@ import lombok.NonNull;
  *
  * @author enlo
  */
+@ThreadSafe
 @EqualsAndHashCode(of = "element")
 public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScalar>, Serializable, Cloneable {
 
+    private static final UnicodeScalar[] PREPARED = new UnicodeScalar[0xFF];
+
     private static final long serialVersionUID = -2284780948159534496L;
+
+    static {
+        for (int c = 1; c < 0xFF; c++) {
+            PREPARED[c] = new UnicodeScalar(true, String.valueOf(c));
+        }
+    }
+
+    public static UnicodeScalar valueOf(CharSequence source, int i, int j) {
+        if (i == j) {
+            char ch = source.charAt(i);
+            if (0 <= ch && ch < 0xFF) {
+                return PREPARED[ch];
+            }
+        }
+        return new UnicodeScalar(source.subSequence(i, j).toString());
+    }
 
     private final Lazy<String> decomposed;
     @Getter
@@ -101,4 +121,5 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
             return normalize(element, NFD);
         }
     }
+
 }

@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.template;
 
+import info.naiv.lab.java.jmt.Initializer;
 import static info.naiv.lab.java.jmt.Misc.isBlank;
 import info.naiv.lab.java.jmt.StringJoiner;
 import java.io.IOException;
@@ -32,7 +33,6 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.Setter;
@@ -46,7 +46,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<TResult> {
 
-    private final AtomicBoolean initialized = new AtomicBoolean(false);
+    private final Initializer initializer = new Initializer() {
+        @Override
+        protected void doInitialize() {
+            initialize();
+        }
+    };
 
     private final Set<TemplateLoaderListener<TResult>> listnenrs = new ConcurrentSkipListSet<>();
     private TemplateLoader<TResult> parentTemplateLoader;
@@ -188,9 +193,7 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
      *
      */
     protected void needInitialize() {
-        if (initialized.compareAndSet(false, true)) {
-            initialize();
-        }
+        initializer.run();
     }
 
     /**

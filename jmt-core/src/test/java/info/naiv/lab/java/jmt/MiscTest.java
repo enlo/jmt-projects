@@ -766,7 +766,7 @@ public class MiscTest {
      */
     @Test
     public void testIsNotEmpty_CharSequence() {
-        assertThat(Misc.isNotEmpty((String) null), is(false));
+        assertThat(Misc.isNotEmpty((CharSequence) null), is(false));
         assertThat(Misc.isNotEmpty(""), is(false));
         assertThat(Misc.isNotEmpty("A"), is(true));
     }

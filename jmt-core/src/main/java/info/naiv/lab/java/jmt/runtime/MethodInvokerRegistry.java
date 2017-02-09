@@ -28,6 +28,7 @@ import info.naiv.lab.java.jmt.collection.MultiValueLookup;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,19 +92,6 @@ public class MethodInvokerRegistry implements MultiValueLookup<String, MethodInv
         }
     }
 
-    protected Iterable<String> resolveNames(Method m) {
-        List<String> list = new ArrayList<>();
-        list.add(m.getName());
-
-        MethodAlias alias = m.getAnnotation(MethodAlias.class);
-        if (alias != null) {
-            for (String aname : alias.value()) {
-                list.add(aname);
-            }
-        }
-        return list;
-    }
-
     protected MethodInvoker createMethodInvoker(Method m) {
         return new OptionalSupportMethodInvoker(m);
     }
@@ -149,6 +137,16 @@ public class MethodInvokerRegistry implements MultiValueLookup<String, MethodInv
         }
         MethodInvoker mi = createMethodInvoker(m);
         mil.add(mi);
+    }
+
+    protected Iterable<String> resolveNames(Method m) {
+        List<String> list = new ArrayList<>();
+        list.add(m.getName());
+        MethodAlias alias = m.getAnnotation(MethodAlias.class);
+        if (alias != null) {
+            list.addAll(Arrays.asList(alias.value()));
+        }
+        return list;
     }
 
 }

@@ -40,6 +40,7 @@ import static java.util.Arrays.copyOfRange;
 import java.util.Iterator;
 import java.util.List;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -48,8 +49,9 @@ import lombok.Getter;
  *
  * @author enlo
  */
+@ThreadSafe
 @EqualsAndHashCode(of = "source")
-public final class UnicodeVector implements CharSequence, Comparable<UnicodeVector>, Cloneable, Iterable<UnicodeScalar>, Serializable {
+public final class UnicodeVector implements Comparable<UnicodeVector>, Cloneable, Iterable<UnicodeScalar>, Serializable {
 
     private static final long serialVersionUID = 4034478541129542140L;
 
@@ -88,9 +90,8 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
         this.elements = elements;
     }
 
-    @Override
-    public char charAt(int index) {
-        return source.charAt(index);
+    public CharSequence asCharSequence() {
+        return source;
     }
 
     @Override
@@ -126,6 +127,14 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
         return elements.get();
     }
 
+    public UnicodeScalar get(int index) {
+        return elements()[index];
+    }
+
+    public String getString(int index) {
+        return elements()[index].getElement();
+    }
+
     public boolean isEmpty() {
         return source.isEmpty();
     }
@@ -135,19 +144,13 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
         return arrayAsIterable(elements()).iterator();
     }
 
-    @Override
     public int length() {
-        return source.length();
+        return elements().length;
     }
 
     @Nonnull
     public Iterator<UnicodeScalar> reverseIterator() {
         return new ReverseIterator<>(asList(elements()));
-    }
-
-    @Override
-    public CharSequence subSequence(int start, int end) {
-        return source.subSequence(start, end);
     }
 
     /**
@@ -198,7 +201,7 @@ public final class UnicodeVector implements CharSequence, Comparable<UnicodeVect
         BreakIterator it = getCharacterInstance();
         it.setText(source);
         for (int p = it.first(), i = it.next(); i != DONE; p = i, i = it.next()) {
-            result.add(new UnicodeScalar(source.substring(p, i)));
+            result.add(UnicodeScalar.valueOf(source, p, i));
         }
         UnicodeScalar[] array = new UnicodeScalar[result.size()];
         return result.toArray(array);

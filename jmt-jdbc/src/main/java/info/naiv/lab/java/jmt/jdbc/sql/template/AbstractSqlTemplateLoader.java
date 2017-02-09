@@ -23,13 +23,13 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template;
 
+import info.naiv.lab.java.jmt.Initializer;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,12 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
     @Setter
     private Dialect dialect;
 
-    private final AtomicBoolean initialized = new AtomicBoolean(false);
+    private final Initializer initializer = new Initializer() {
+        @Override
+        protected void doInitialize() {
+            initialize();
+        }
+    };
 
     private SqlTemplateLoader parentLoader;
 
@@ -163,9 +168,7 @@ public abstract class AbstractSqlTemplateLoader implements SqlTemplateLoader {
      *
      */
     protected void needInitialize() {
-        if (initialized.compareAndSet(false, true)) {
-            initialize();
-        }
+        initializer.run();
     }
 
 }

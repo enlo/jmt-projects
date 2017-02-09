@@ -25,8 +25,8 @@ package info.naiv.lab.java.jmt;
 
 import info.naiv.lab.java.jmt.fx.Supplier;
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.ThreadSafe;
 import lombok.NonNull;
 
 /**
@@ -34,6 +34,7 @@ import lombok.NonNull;
  * @author enlo
  * @param <T>
  */
+@ThreadSafe
 public class Lazy<T> implements Supplier<T> {
 
     /**
@@ -52,9 +53,14 @@ public class Lazy<T> implements Supplier<T> {
         };
     }
 
-    final AtomicBoolean initialized = new AtomicBoolean(false);
+    private final Initializer initializer = new Initializer() {
+        @Override
+        protected void doInitialize() {
+            value = initialValue();
+        }
+    };
 
-    T value;
+    private T value;
 
     /**
      *
@@ -68,26 +74,21 @@ public class Lazy<T> implements Supplier<T> {
      */
     public Lazy(T value) {
         this.value = value;
-        this.initialized.set(true);
+        this.initializer.setInitialized();
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
+    public final boolean equals(Object obj) {
+        if (obj instanceof Lazy) {
+            final Lazy<?> other = (Lazy<?>) obj;
+            return Objects.equals(this.get(), other.get());
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final Lazy<?> other = (Lazy<?>) obj;
-        return Objects.equals(this.get(), other.get());
+        return false;
     }
 
     @Override
     public final T get() {
-        if (initialized.compareAndSet(false, true)) {
-            value = initialValue();
-        }
+        initializer.run();
         return value;
     }
 
@@ -98,17 +99,24 @@ public class Lazy<T> implements Supplier<T> {
         return hash;
     }
 
-    /**
-     *
-     * @return
-     */
-    public T initialValue() {
-        return null;
+    public final boolean isInitialized() {
+        return initializer.isInitialized();
     }
 
     @Override
     public final String toString() {
-        return Objects.toString(value);
+        return Objects.toString(get());
     }
 
+    /**
+     *
+     * @return
+     */
+    protected T initialValue() {
+        return null;
+    }
+
+    protected T rawValue() {
+        return value;
+    }
 }

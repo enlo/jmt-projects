@@ -41,7 +41,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Rope. 文字列を正規化したうえで、サロゲートペアまで含めて比較を行う. String より処理が重いので Rope.
+ * UniCord. 文字列を正規化したうえで、サロゲートペアまで含めて比較を行う. String より処理が重いので Cord.
  *
  * @author enlo
  *
@@ -49,14 +49,14 @@ import lombok.RequiredArgsConstructor;
 @ThreadSafe
 @EqualsAndHashCode
 @RequiredArgsConstructor
-public final class Rope implements Comparable<Rope>, Iterable<String>, Serializable {
+public final class UniCord implements Comparable<UniCord>, Iterable<String>, Serializable {
 
     /**
      * 大小文字を無視する比較
      */
-    public static final Comparator<? super Rope> CASE_INSENSITIVE_ORDER = new Comparator<Rope>() {
+    public static final Comparator<? super UniCord> CASE_INSENSITIVE_ORDER = new Comparator<UniCord>() {
         @Override
-        public int compare(Rope o1, Rope o2) {
+        public int compare(UniCord o1, UniCord o2) {
             return o1.toLowerCase().compareNormalized(o2.toLowerCase());
         }
     };
@@ -64,7 +64,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     /**
      * 空の文字列.
      */
-    public static final Rope EMPTY = new Rope("");
+    public static final UniCord EMPTY = new UniCord("");
     private static final int BUFFER = 64;
 
     /**
@@ -80,8 +80,8 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 比較結果.
      */
     public static int compareNormalized(String lpStr1, String lpStr2) {
-        Rope left = new Rope(lpStr1);
-        Rope right = new Rope(lpStr2);
+        UniCord left = new UniCord(lpStr1);
+        UniCord right = new UniCord(lpStr2);
         return left.compareNormalized(right);
     }
 
@@ -92,7 +92,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param rhs 比較する文字列2
      * @return 一致すれば true.
      */
-    public static boolean equalsIgnoreCase(Rope lhs, Rope rhs) {
+    public static boolean equalsIgnoreCase(UniCord lhs, UniCord rhs) {
         if (lhs == rhs) {
             return true;
         }
@@ -112,18 +112,18 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param str 対象文字列
      * @return 文字列が null か 空なら true.
      */
-    public static boolean isEmpty(Rope str) {
+    public static boolean isEmpty(UniCord str) {
         return str == null || str.source.length() == 0;
     }
 
     /**
-     * Rope を作成.
+     * UniCord を作成.
      *
      * @param value 元のオブジェクト.
      * @return 値
      */
     @Nonnull
-    public static Rope valueOf(Object value) {
+    public static UniCord valueOf(Object value) {
         if (value == null) {
             return EMPTY;
         }
@@ -133,18 +133,18 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     }
 
     /**
-     * Rope を作成.
+     * UniCord を作成.
      *
      * @param value 元のオブジェクト.
      * @return 値
      */
     @Nonnull
-    public static Rope valueOf(String value) {
+    public static UniCord valueOf(String value) {
         if (Misc.isEmpty(value)) {
             return EMPTY;
         }
         else {
-            return new Rope(value);
+            return new UniCord(value);
         }
     }
 
@@ -155,7 +155,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      *
      * @param source 元の文字列.
      */
-    public Rope(String source) {
+    public UniCord(String source) {
         this(false, source);
     }
 
@@ -165,7 +165,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param doDecompose 分解するか
      * @param source 元の文字列.
      */
-    public Rope(boolean doDecompose, String source) {
+    public UniCord(boolean doDecompose, String source) {
         if (doDecompose) {
             this.source = new UnicodeVector(true, normalize(source, NFD));
         }
@@ -181,24 +181,24 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param other 比較する文字列.
      * @return 比較結果.
      */
-    public int compareNormalized(Rope other) {
+    public int compareNormalized(UniCord other) {
         return this.decompose().compareTo(other.decompose());
     }
 
     @Override
-    public int compareTo(Rope o) {
+    public int compareTo(UniCord o) {
         return source.compareTo(o.source);
     }
 
     /**
      * 文字列が存在するかどうか.
      *
-     * @see Rope#indexOf(Rope)
+     * @see UniCord#indexOf(Rope)
      *
      * @param search 検索対象
      * @return 検索対象が存在すればtrue. ただし、検索対象が空なら常にfalse.
      */
-    public boolean contains(Rope search) {
+    public boolean contains(UniCord search) {
         if (isEmpty(search)) {
             return false;
         }
@@ -208,7 +208,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
     /**
      * 文字列が存在するかどうか.
      *
-     * @see Rope#indexOf(Rope)
+     * @see UniCord#indexOf(Rope)
      *
      * @param search 検索対象
      * @return 検索対象が存在すればtrue. ただし、検索対象が空なら常にfalse.
@@ -226,12 +226,12 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 文字列を正規分解した結果
      */
     @Nonnull
-    public Rope decompose() {
+    public UniCord decompose() {
         if (source.isDecomposed()) {
             return this;
         }
         else {
-            return new Rope(true, source.getSource());
+            return new UniCord(true, source.getSource());
         }
     }
 
@@ -243,7 +243,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 指定された文字列で終了していれば true.
      */
     public boolean endsWith(String str, int offset) {
-        Rope rhs = new Rope(str).decompose();
+        UniCord rhs = new UniCord(str).decompose();
         return endsWith(rhs.source.elements(), offset);
     }
 
@@ -275,7 +275,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param searchString 検索する文字列
      * @return 見つかった位置。見つからない場合は-1.
      */
-    public int indexOf(@Nonnull Rope searchString) {
+    public int indexOf(@Nonnull UniCord searchString) {
         return indexOf(searchString, 0);
     }
 
@@ -286,7 +286,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param offset 検索開始位置
      * @return 見つかった位置。見つからない場合は-1.
      */
-    public int indexOf(@Nonnull Rope searchString, int offset) {
+    public int indexOf(@Nonnull UniCord searchString, int offset) {
         UnicodeScalar[] search = searchString.decompose().source.elements();
         for (int i = offset; i < source.elements().length; i++) {
             if (startsWith(search, i)) {
@@ -322,7 +322,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @param searchString 検索する文字列
      * @return 文字列が見つかった先頭からの位置。見つからなければ-1
      */
-    public int lastIndexOf(@Nonnull Rope searchString) {
+    public int lastIndexOf(@Nonnull UniCord searchString) {
         UnicodeScalar[] search = searchString.decompose().source.elements();
         for (int i = source.elements().length - 1; 0 <= i; i--) {
             if (startsWith(search, i)) {
@@ -340,7 +340,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 見つかった位置
      */
     public int lastIndexOf(String str) {
-        Rope rhs = new Rope(str);
+        UniCord rhs = new UniCord(str);
         return lastIndexOf(rhs);
     }
 
@@ -375,7 +375,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 置換された文字列
      */
     @Nonnull
-    public Rope replace(Rope searchString, Rope replacement, int max) {
+    public UniCord replace(UniCord searchString, UniCord replacement, int max) {
         if (isEmpty(searchString) || replacement == null || max == 0) {
             return this;
         }
@@ -401,7 +401,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
             end = indexOf(searchString, start);
         }
         buf.append(substring(start));
-        return new Rope(buf.toString());
+        return new UniCord(buf.toString());
     }
 
     /**
@@ -414,7 +414,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 置換された文字列
      */
     @Nonnull
-    public Rope replaceAll(Rope searchString, Rope replacement) {
+    public UniCord replaceAll(UniCord searchString, UniCord replacement) {
         return replace(searchString, replacement, -1);
     }
 
@@ -442,7 +442,7 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return 開始しているなら true.
      */
     public boolean startsWith(String str, int offset) {
-        Rope rhs = new Rope(str).decompose();
+        UniCord rhs = new UniCord(str).decompose();
         return startsWith(rhs.source.elements(), offset);
     }
 
@@ -475,9 +475,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return すべて小文字に変換した文字列.
      */
     @Nonnull
-    public Rope toLowerCase() {
+    public UniCord toLowerCase() {
         String lc = source.getSource().toLowerCase(Locale.getDefault());
-        return new Rope(source.isDecomposed(), lc);
+        return new UniCord(source.isDecomposed(), lc);
     }
 
     /**
@@ -487,9 +487,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return すべて小文字に変換した文字列
      */
     @Nonnull
-    public Rope toLowerCase(Locale locale) {
+    public UniCord toLowerCase(Locale locale) {
         String lc = source.getSource().toLowerCase(locale);
-        return new Rope(source.isDecomposed(), lc);
+        return new UniCord(source.isDecomposed(), lc);
     }
 
     /*
@@ -508,9 +508,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return すべて小文字に変換した文字列.
      */
     @Nonnull
-    public Rope toUpperCase() {
+    public UniCord toUpperCase() {
         String uc = source.getSource().toUpperCase(Locale.getDefault());
-        return new Rope(source.isDecomposed(), uc);
+        return new UniCord(source.isDecomposed(), uc);
     }
 
     /**
@@ -520,9 +520,9 @@ public final class Rope implements Comparable<Rope>, Iterable<String>, Serializa
      * @return すべて小文字に変換した文字列.
      */
     @Nonnull
-    public Rope toUpperCase(Locale locale) {
+    public UniCord toUpperCase(Locale locale) {
         String uc = source.getSource().toUpperCase(locale);
-        return new Rope(source.isDecomposed(), uc);
+        return new UniCord(source.isDecomposed(), uc);
     }
 
     private boolean endsWith(UnicodeScalar[] search, int offset) {

@@ -35,27 +35,27 @@ import org.junit.Test;
  *
  * @author enlo
  */
-public class RopeTest {
+public class UniCordTest {
 
     static final String NULL_STRING = null;
 
     /**
      *
      */
-    public RopeTest() {
+    public UniCordTest() {
     }
 
     /**
-     * Test of compareNormalized method, of class Rope.
+     * Test of compareNormalized method, of class UniCord.
      */
     @Test
     public void testCompareNormalized_Rope() {
-        Rope left1 = new Rope("あいうえお");
-        Rope left2 = new Rope("か\u3099");
-        Rope right1 = new Rope("あいうえ");
-        Rope right2 = new Rope("あいうえお");
-        Rope right3 = new Rope("あいうえおか");
-        Rope right4 = new Rope("が");
+        UniCord left1 = new UniCord("あいうえお");
+        UniCord left2 = new UniCord("か\u3099");
+        UniCord right1 = new UniCord("あいうえ");
+        UniCord right2 = new UniCord("あいうえお");
+        UniCord right3 = new UniCord("あいうえおか");
+        UniCord right4 = new UniCord("が");
         assertThat(left1.compareTo(right1) > 0, is(true));
         assertThat(left1.compareNormalized(right1) > 0, is(true));
         assertThat(left1.compareNormalized(right2) == 0, is(true));
@@ -64,7 +64,7 @@ public class RopeTest {
     }
 
     /**
-     * Test of compareNormalized method, of class Rope.
+     * Test of compareNormalized method, of class UniCord.
      */
     @Test
     public void testCompareNormalized_String_String() {
@@ -74,44 +74,44 @@ public class RopeTest {
         String right2 = "あいうえお";
         String right3 = "あいうえおか";
         String right4 = "が";
-        assertThat(Rope.compareNormalized(left1, right1) > 0, is(true));
-        assertThat(Rope.compareNormalized(left1, right2) == 0, is(true));
-        assertThat(Rope.compareNormalized(left1, right3) < 0, is(true));
-        assertThat(Rope.compareNormalized(left2, right4) == 0, is(true));
+        assertThat(UniCord.compareNormalized(left1, right1) > 0, is(true));
+        assertThat(UniCord.compareNormalized(left1, right2) == 0, is(true));
+        assertThat(UniCord.compareNormalized(left1, right3) < 0, is(true));
+        assertThat(UniCord.compareNormalized(left2, right4) == 0, is(true));
     }
 
     /**
-     * Test of compareTo method, of class Rope.
+     * Test of compareTo method, of class UniCord.
      */
     @Test
     public void testCompareTo() {
         String[] source = {"ABC", "abc", "cdef", "1234"};
         for (String s : source) {
-            Rope l = Rope.valueOf(s);
-            Rope k = Rope.valueOf("abc");
+            UniCord l = UniCord.valueOf(s);
+            UniCord k = UniCord.valueOf("abc");
             assertThat(s, l.compareTo(k), is(s.compareTo("abc")));
         }
     }
 
     /**
-     * Test of contains method, of class Rope.
+     * Test of contains method, of class UniCord.
      */
     @Test
     public void testContains_Rope() {
-        Rope str = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
 
-        assertThat(str.contains(Rope.valueOf("が")), is(true));
-        assertThat(str.contains(Rope.valueOf("か\u3099")), is(true));
-        assertThat(str.contains(Rope.valueOf("が美")), is(true));
-        assertThat(str.contains(Rope.valueOf("が馬")), is(false));
+        assertThat(str.contains(UniCord.valueOf("が")), is(true));
+        assertThat(str.contains(UniCord.valueOf("か\u3099")), is(true));
+        assertThat(str.contains(UniCord.valueOf("が美")), is(true));
+        assertThat(str.contains(UniCord.valueOf("が馬")), is(false));
     }
 
     /**
-     * Test of contains method, of class Rope.
+     * Test of contains method, of class UniCord.
      */
     @Test
     public void testContains_String() {
-        Rope str = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.contains("が"), is(true));
         assertThat(str.contains("か\u3099"), is(true));
         assertThat(str.contains("が美"), is(true));
@@ -119,13 +119,13 @@ public class RopeTest {
     }
 
     /**
-     * Test of decompose method, of class Rope.
+     * Test of decompose method, of class UniCord.
      */
     @Test
     public void testDecompose() {
-        Rope expected = new Rope("か\u3099");
-        Rope source = new Rope("が");
-        Rope actual = source.decompose();
+        UniCord expected = new UniCord("か\u3099");
+        UniCord source = new UniCord("が");
+        UniCord actual = source.decompose();
         assertThat(actual, is(expected));
     }
 
@@ -135,18 +135,18 @@ public class RopeTest {
      */
     @Test
     public void testDecompose2() {
-        Rope source = new Rope("が");
-        Rope expected = source.decompose();
-        Rope actual = expected.decompose();
+        UniCord source = new UniCord("が");
+        UniCord expected = source.decompose();
+        UniCord actual = expected.decompose();
         assertThat(actual, is(sameInstance(expected)));
     }
 
     /**
-     * Test of endsWith method, of class Rope.
+     * Test of endsWith method, of class UniCord.
      */
     @Test
     public void testEndsWith() {
-        Rope left = new Rope("あいうえお");
+        UniCord left = new UniCord("あいうえお");
         String right1 = ("いうえお");
         String right2 = ("あいうえお");
         String right3 = ("ああいうえお");
@@ -159,47 +159,47 @@ public class RopeTest {
     }
 
     /**
-     * Test of endsWith method, of class Rope.
+     * Test of endsWith method, of class UniCord.
      */
     @Test
     public void testEndsWith_String_int() {
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.endsWith("\uD867\uDE3Dか\u3099", 1), is(false));
         assertThat(str.endsWith("\uD867\uDE3Dか\u3099", 3), is(true));
     }
 
     /**
-     * Test of equals method, of class Rope.
+     * Test of equals method, of class UniCord.
      */
     @Test
     public void testEquals() {
-        Rope left = new Rope("あいうえお");
-        Rope right = new Rope("あいうえお");
+        UniCord left = new UniCord("あいうえお");
+        UniCord right = new UniCord("あいうえお");
         assertThat(left.hashCode(), is(right.hashCode()));
         assertThat(left, is(right));
     }
 
     /**
-     * Test of equalsIgnoreCase method, of class Rope.
+     * Test of equalsIgnoreCase method, of class UniCord.
      */
     @Test
     public void testEqualsIgnoreCase() {
 
-        Rope lhs = Rope.valueOf("AbcdＡｂあiIう");
-        Rope rhs = Rope.valueOf("ABCDＡＢあIIう");
-        assertThat(Rope.equalsIgnoreCase(null, null), is(true));
-        assertThat(Rope.equalsIgnoreCase(lhs, rhs), is(true));
-        assertThat(Rope.equalsIgnoreCase(null, rhs), is(false));
-        assertThat(Rope.equalsIgnoreCase(lhs, null), is(false));
-        assertThat(Rope.equalsIgnoreCase(lhs, Rope.valueOf("ABCDＡＢあI")), is(false));
+        UniCord lhs = UniCord.valueOf("AbcdＡｂあiIう");
+        UniCord rhs = UniCord.valueOf("ABCDＡＢあIIう");
+        assertThat(UniCord.equalsIgnoreCase(null, null), is(true));
+        assertThat(UniCord.equalsIgnoreCase(lhs, rhs), is(true));
+        assertThat(UniCord.equalsIgnoreCase(null, rhs), is(false));
+        assertThat(UniCord.equalsIgnoreCase(lhs, null), is(false));
+        assertThat(UniCord.equalsIgnoreCase(lhs, UniCord.valueOf("ABCDＡＢあI")), is(false));
     }
 
     /**
-     * Test of getAt method, of class Rope.
+     * Test of getAt method, of class UniCord.
      */
     @Test
     public void testGetAt() {
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         String actual1 = str.getAt(2);
         String actual2 = str.getAt(3);
         assertThat(actual1, is("\uD867\uDE3D"));
@@ -207,105 +207,105 @@ public class RopeTest {
     }
 
     /**
-     * Test of getBreakIterator method, of class Rope.
+     * Test of getBreakIterator method, of class UniCord.
      */
     @Test
     public void testGetBreakIterator() {
-        Rope instance = new Rope("あいう");
+        UniCord instance = new UniCord("あいう");
         Object iterType = BreakIterator.getCharacterInstance().getClass();
         BreakIterator result = instance.getBreakIterator();
         assertThat(result.getClass(), is(iterType));
     }
 
     /**
-     * Test of hashCode method, of class Rope.
+     * Test of hashCode method, of class UniCord.
      */
     @Test
     public void testHashCode() {
-        Rope left = new Rope("あいうえお");
-        Rope right = new Rope("あいうえお");
+        UniCord left = new UniCord("あいうえお");
+        UniCord right = new UniCord("あいうえお");
         assertThat(left.hashCode(), is(right.hashCode()));
     }
 
     /**
-     * Test of indexOf method, of class Rope.
+     * Test of indexOf method, of class UniCord.
      */
     @Test
     public void testIndexOf_Rope() {
-        Rope key = Rope.valueOf("が");
-        Rope str = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord key = UniCord.valueOf("が");
+        UniCord str = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.indexOf(key), is(3));
     }
 
     /**
-     * Test of indexOf method, of class Rope.
+     * Test of indexOf method, of class UniCord.
      */
     @Test
     public void testIndexOf_Rope_int() {
-        Rope key = Rope.valueOf("が");
-        Rope str = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord key = UniCord.valueOf("が");
+        UniCord str = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.indexOf(key, 3), is(3));
         assertThat(str.indexOf(key, 4), is(-1));
 
         String find = "え";
         String source = "あいうえお";
-        Rope rfind = Rope.valueOf(find);
-        Rope rsource = Rope.valueOf(source);
+        UniCord rfind = UniCord.valueOf(find);
+        UniCord rsource = UniCord.valueOf(source);
         assertThat(rsource.indexOf(rfind, 3), is(source.indexOf(find, 3)));
     }
 
     /**
-     * Test of indexOf method, of class Rope.
+     * Test of indexOf method, of class UniCord.
      */
     @Test
     public void testIndexOf_String() {
-        Rope str = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.indexOf("が"), is(3));
     }
 
     /**
-     * Test of indexOf method, of class Rope.
+     * Test of indexOf method, of class UniCord.
      */
     @Test
     public void testIndexOf_String_int() {
         String source = "あいうえおかき";
         String key = "お";
         int offset = 2;
-        Rope str = new Rope(source);
+        UniCord str = new UniCord(source);
         int expected = source.indexOf(key, offset);
-        int actual = str.indexOf(Rope.valueOf(key), offset);
+        int actual = str.indexOf(UniCord.valueOf(key), offset);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of isEmpty method, of class Rope.
+     * Test of isEmpty method, of class UniCord.
      */
     @Test
     public void testIsEmpty_0args() {
-        assertThat(Rope.EMPTY.isEmpty(), is(true));
-        assertThat(Rope.valueOf("").isEmpty(), is(true));
-        assertThat(Rope.valueOf(" ").isEmpty(), is(false));
-        assertThat(Rope.valueOf(1).isEmpty(), is(false));
+        assertThat(UniCord.EMPTY.isEmpty(), is(true));
+        assertThat(UniCord.valueOf("").isEmpty(), is(true));
+        assertThat(UniCord.valueOf(" ").isEmpty(), is(false));
+        assertThat(UniCord.valueOf(1).isEmpty(), is(false));
     }
 
     /**
-     * Test of isEmpty method, of class Rope.
+     * Test of isEmpty method, of class UniCord.
      */
     @Test
     public void testIsEmpty_Rope() {
 
-        assertThat(Rope.isEmpty(null), is(true));
-        assertThat(Rope.isEmpty(Rope.EMPTY), is(true));
-        assertThat(Rope.isEmpty(Rope.valueOf("")), is(true));
-        assertThat(Rope.isEmpty(Rope.valueOf(" ")), is(false));
+        assertThat(UniCord.isEmpty(null), is(true));
+        assertThat(UniCord.isEmpty(UniCord.EMPTY), is(true));
+        assertThat(UniCord.isEmpty(UniCord.valueOf("")), is(true));
+        assertThat(UniCord.isEmpty(UniCord.valueOf(" ")), is(false));
     }
 
     /**
-     * Test of iterator method, of class Rope.
+     * Test of iterator method, of class UniCord.
      */
     @Test
     public void testIterator() {
-        Rope instance = Rope.valueOf("この\uD867\uDE3Dか\u3099美味い");
+        UniCord instance = UniCord.valueOf("この\uD867\uDE3Dか\u3099美味い");
         Iterator<String> result = instance.iterator();
         assertThat(result.hasNext(), is(true));
         assertThat(result.next(), is("こ"));
@@ -325,106 +325,106 @@ public class RopeTest {
     }
 
     /**
-     * Test of lastIndexOf method, of class Rope.
+     * Test of lastIndexOf method, of class UniCord.
      */
     @Test
     public void testLastIndexOf_Rope() {
         String source = "あいうえおかき";
         String key = "うえ";
-        Rope str = new Rope(source);
+        UniCord str = new UniCord(source);
         int expected = source.lastIndexOf(key);
-        int actual = str.lastIndexOf(new Rope(key));
+        int actual = str.lastIndexOf(new UniCord(key));
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of lastIndexOf method, of class Rope.
+     * Test of lastIndexOf method, of class UniCord.
      */
     @Test
     public void testLastIndexOf_String() {
         String key = "が美";
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.lastIndexOf(key), is(3));
     }
 
     /**
-     * Test of left method, of class Rope.
+     * Test of left method, of class UniCord.
      */
     @Test
     public void testLeft() {
-        Rope str = new Rope("この\uD867\uDE3Dが美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dが美味い");
         String expected = "この\uD867\uDE3Dが";
         String actual = str.left(4);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of left method, of class Rope.
+     * Test of left method, of class UniCord.
      */
     @Test
     public void testLeft_2() {
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         String expected = "この\uD867\uDE3Dか\u3099";
         String actual = str.left(4);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of length method, of class Rope.
+     * Test of length method, of class UniCord.
      */
     @Test
     public void testLength() {
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         assertThat(str.length(), is(7));
 
-        str = new Rope("");
+        str = new UniCord("");
         assertThat(str.length(), is(0));
     }
 
     /**
-     * Test of replace method, of class Rope.
+     * Test of replace method, of class UniCord.
      */
     @Test
     public void testReplace() {
         int n = 2;
-        Rope search = new Rope("が美味い");
-        Rope replacement = new Rope("がまずい");
-        Rope source = new Rope("この\uD867\uDE3Dか\u3099美味い。この\uD867\uDE3Dが美味い。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
-        Rope expected = new Rope("この\uD867\uDE3Dがまずい。この\uD867\uDE3Dがまずい。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
-        Rope actual = source.replace(search, replacement, n);
+        UniCord search = new UniCord("が美味い");
+        UniCord replacement = new UniCord("がまずい");
+        UniCord source = new UniCord("この\uD867\uDE3Dか\u3099美味い。この\uD867\uDE3Dが美味い。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
+        UniCord expected = new UniCord("この\uD867\uDE3Dがまずい。この\uD867\uDE3Dがまずい。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
+        UniCord actual = source.replace(search, replacement, n);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of replaceAll method, of class Rope.
+     * Test of replaceAll method, of class UniCord.
      */
     @Test
     public void testReplaceAll() {
-        Rope search = new Rope("が美味い");
-        Rope replacement = new Rope("がまずい");
-        Rope source = new Rope("この\uD867\uDE3Dか\u3099美味い。この\uD867\uDE3Dが美味い。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
+        UniCord search = new UniCord("が美味い");
+        UniCord replacement = new UniCord("がまずい");
+        UniCord source = new UniCord("この\uD867\uDE3Dか\u3099美味い。この\uD867\uDE3Dが美味い。この\uD867\uDE3Dか\u3099美味い。大事なことなので3度言いました");
         String expected = "この\uD867\uDE3Dがまずい。この\uD867\uDE3Dがまずい。この\uD867\uDE3Dがまずい。大事なことなので3度言いました";
-        Rope actual = source.replaceAll(search, replacement);
+        UniCord actual = source.replaceAll(search, replacement);
         assertThat(actual.toString(), is(expected));
     }
 
     /**
-     * Test of right method, of class Rope.
+     * Test of right method, of class UniCord.
      */
     @Test
     public void testRight() {
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         String expected = "か\u3099美味い";
         String actual = str.right(4);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of startsWith method, of class Rope.
+     * Test of startsWith method, of class UniCord.
      */
     @Test
     public void testStartsWith() {
-        Rope left = new Rope("あいうえお");
+        UniCord left = new UniCord("あいうえお");
         String right1 = ("あいうえ");
         String right2 = ("あいうえお");
         String right3 = ("あいうえおお");
@@ -437,51 +437,51 @@ public class RopeTest {
     }
 
     /**
-     * Test of substring method, of class Rope.
+     * Test of substring method, of class UniCord.
      */
     @Test
     public void testSubstring_int() {
         String source = "あいうえおか";
         String expected = source.substring(2);
-        String actual = Rope.valueOf(source).substring(2);
+        String actual = UniCord.valueOf(source).substring(2);
         assertThat(actual, is(expected));
 
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         expected = "か\u3099美味い";
         actual = str.substring(3);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of substring method, of class Rope.
+     * Test of substring method, of class UniCord.
      */
     @Test
     public void testSubstring_int_int() {
         String source = "あいうえおか";
         String expected = source.substring(1, 3);
-        String actual = Rope.valueOf(source).substring(1, 3);
+        String actual = UniCord.valueOf(source).substring(1, 3);
         assertThat(actual, is(expected));
 
-        Rope str = new Rope("この\uD867\uDE3Dか\u3099美味い");
+        UniCord str = new UniCord("この\uD867\uDE3Dか\u3099美味い");
         expected = "か\u3099美";
         actual = str.substring(3, 5);
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of toLowerCase method, of class Rope.
+     * Test of toLowerCase method, of class UniCord.
      */
     @Test
     public void testToLowerCase_0args() {
         String source = "AbcdＡｂあiIう";
         String expected = "abcdａｂあiiう";
-        Rope instance = Rope.valueOf(source);
-        Rope result = instance.toLowerCase();
+        UniCord instance = UniCord.valueOf(source);
+        UniCord result = instance.toLowerCase();
         assertThat(result.toString(), is(expected));
     }
 
     /**
-     * Test of toLowerCase method, of class Rope.
+     * Test of toLowerCase method, of class UniCord.
      */
     @Test
     public void testToLowerCase_Locale() {
@@ -490,36 +490,36 @@ public class RopeTest {
 
         String source = "AbcdＡｂあiIう";
         String expected = "abcdａｂあiıう";
-        Rope instance = Rope.valueOf(source);
-        Rope result = instance.toLowerCase(locale);
+        UniCord instance = UniCord.valueOf(source);
+        UniCord result = instance.toLowerCase(locale);
         assertThat(result.toString(), is(expected));
     }
 
     /**
-     * Test of toString method, of class Rope.
+     * Test of toString method, of class UniCord.
      */
     @Test
     public void testToString() {
         String expected = "あいうえお";
-        Rope str = new Rope(expected);
+        UniCord str = new UniCord(expected);
         String actual = str.toString();
         assertThat(actual, is(expected));
     }
 
     /**
-     * Test of toUpperCase method, of class Rope.
+     * Test of toUpperCase method, of class UniCord.
      */
     @Test
     public void testToUpperCase_0args() {
         String source = "AbcdＡｂあiIう";
         String expected = "ABCDＡＢあIIう";
-        Rope instance = Rope.valueOf(source);
-        Rope result = instance.toUpperCase();
+        UniCord instance = UniCord.valueOf(source);
+        UniCord result = instance.toUpperCase();
         assertThat(result.toString(), is(expected));
     }
 
     /**
-     * Test of toUpperCase method, of class Rope.
+     * Test of toUpperCase method, of class UniCord.
      */
     @Test
     public void testToUpperCase_Locale() {
@@ -528,31 +528,31 @@ public class RopeTest {
 
         String source = "AbcdＡｂあiIう";
         String expected = "ABCDＡＢあİIう";
-        Rope instance = Rope.valueOf(source);
-        Rope result = instance.toUpperCase(locale);
+        UniCord instance = UniCord.valueOf(source);
+        UniCord result = instance.toUpperCase(locale);
         assertThat(result.toString(), is(expected));
     }
 
     /**
-     * Test of valueOf method, of class Rope.
+     * Test of valueOf method, of class UniCord.
      */
     @Test
     public void testValueOf_Object() {
-        assertThat(Rope.valueOf((Object) null), is(sameInstance(Rope.EMPTY)));
-        assertThat(Rope.valueOf(123), is(new Rope("123")));
-        assertThat(Rope.valueOf(12.5), is(new Rope("12.5")));
-        assertThat(Rope.valueOf(Rope.EMPTY), is(sameInstance(Rope.EMPTY)));
+        assertThat(UniCord.valueOf((Object) null), is(sameInstance(UniCord.EMPTY)));
+        assertThat(UniCord.valueOf(123), is(new UniCord("123")));
+        assertThat(UniCord.valueOf(12.5), is(new UniCord("12.5")));
+        assertThat(UniCord.valueOf(UniCord.EMPTY), is(sameInstance(UniCord.EMPTY)));
     }
 
     /**
-     * Test of valueOf method, of class Rope.
+     * Test of valueOf method, of class UniCord.
      */
     @Test
     public void testValueOf_String() {
-        assertThat(Rope.valueOf(NULL_STRING), is(sameInstance(Rope.EMPTY)));
-        assertThat(Rope.valueOf(""), is(sameInstance(Rope.EMPTY)));
-        assertThat(Rope.valueOf(" "), is(new Rope(" ")));
-        assertThat(Rope.valueOf("123"), is(new Rope("123")));
+        assertThat(UniCord.valueOf(NULL_STRING), is(sameInstance(UniCord.EMPTY)));
+        assertThat(UniCord.valueOf(""), is(sameInstance(UniCord.EMPTY)));
+        assertThat(UniCord.valueOf(" "), is(new UniCord(" ")));
+        assertThat(UniCord.valueOf("123"), is(new UniCord("123")));
     }
 
 }

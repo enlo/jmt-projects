@@ -98,6 +98,16 @@ public class StandardFunctions {
         };
     }
 
+    @Nonnull
+    public static <T> Supplier<T> constantSuplier(final T value) {
+        return new Supplier<T>() {
+            @Override
+            public T get() {
+                return value;
+            }
+        };
+    }
+
     /**
      *
      * @param defaultValue
@@ -118,6 +128,18 @@ public class StandardFunctions {
                 catch (NumberFormatException e) {
                     return defaultValue;
                 }
+            }
+        };
+    }
+
+    @Nonnull
+    public static Supplier<Integer> counter(final int initialValue) {
+        return new Supplier<Integer>() {
+            private int count = initialValue;
+
+            @Override
+            public Integer get() {
+                return count++;
             }
         };
     }

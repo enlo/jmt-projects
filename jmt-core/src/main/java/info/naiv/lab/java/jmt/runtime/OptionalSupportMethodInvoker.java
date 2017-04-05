@@ -25,12 +25,14 @@ package info.naiv.lab.java.jmt.runtime;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.copyOfRangeToTypedArray;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.createTypedArray;
+import info.naiv.lab.java.jmt.runtime.MethodInvokerSupport.MethodCaller;
 import info.naiv.lab.java.jmt.tuple.Tuple3;
 import info.naiv.lab.java.jmt.tuple.Tuples;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
 import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
@@ -109,14 +111,14 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
 
         Tuple3<Parameter[], Integer, Integer> tx = makeParams(method, paramTypes, paramAnnos);
         this.params = tx.getValue1();
-        this.argcMax = tx.getValue2();
-        this.argcMin = tx.getValue3();
+        this.argcMin = tx.getValue2();
+        this.argcMax = tx.getValue3();
         this.argsResolver = method.isVarArgs() ? new VarArgsResolver() : new ArgsResolver();
     }
 
     @Override
     public boolean checkParameterCount(int argc) {
-        return argcMax <= argc && argc <= argcMin;
+        return argcMin <= argc && argc <= argcMax;
     }
 
     @Override
@@ -131,8 +133,29 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
 
     @Override
     public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+        if (args == null) {
+            args = new Object[]{};
+        }
         Object[] newArgs = argsResolver.resolve(args);
         return method.invoke(target, newArgs);
+    }
+
+    @Override
+    public Callable<Object> toCallable(final Object target, Object[] args) {
+        if (args == null) {
+            args = new Object[]{};
+        }
+        if (!method.getDeclaringClass().isAssignableFrom(target.getClass())) {
+            return null;
+        }
+        if (!checkParameterCount(args.length)) {
+            return null;
+        }
+        final Object[] newArgs = argsResolver.resolve(args);
+        if (!Methods.checkInvoke(method, newArgs)) {
+            return null;
+        }
+        return new MethodCaller(target, method, newArgs);
     }
 
     private static class Parameter {
@@ -143,7 +166,7 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
         Class<?> type;
 
         @SneakyThrows
-        public Object valueOf(Object val) {
+        public Object resolve(Object val) {
             if (optional) {
                 if (ClassUtils.isAssignableValue(type, val)) {
                     return val;
@@ -177,7 +200,7 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
 
         protected void copyArgs(Object[] dest, Object[] args, int argc) {
             for (int i = 0; i < argc; i++) {
-                dest[i] = params[i].valueOf(args[i]);
+                dest[i] = params[i].resolve(args[i]);
             }
         }
     }
@@ -220,4 +243,5 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
         }
 
     }
+
 }

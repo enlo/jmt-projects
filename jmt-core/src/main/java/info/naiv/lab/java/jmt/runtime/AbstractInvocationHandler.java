@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2015 enlo.
+ * Copyright 2017 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,49 +23,25 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
-import info.naiv.lab.java.jmt.fx.Function2;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.security.AccessControlContext;
 import java.security.AccessController;
 import java.security.PrivilegedExceptionAction;
-import lombok.Getter;
-import lombok.Setter;
 
 /**
  *
  * @author enlo
  */
-public class InterfaceImplementorInvocationHandler implements InvocationHandler {
+public abstract class AbstractInvocationHandler implements InvocationHandler {
 
     /**
      *
      */
     protected final AccessControlContext accCtrlContext;
 
-    /**
-     *
-     */
-    @Getter
-    @Setter
-    protected Function2<Method, Object[], ? extends Object> externalRunner;
-
-    /**
-     *
-     * @param accCtrlContext
-     */
-    public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext) {
-        this(accCtrlContext, null);
-    }
-
-    /**
-     *
-     * @param accCtrlContext
-     * @param externalRunner
-     */
-    public InterfaceImplementorInvocationHandler(AccessControlContext accCtrlContext, Function2<Method, Object[], ? extends Object> externalRunner) {
+    public AbstractInvocationHandler(AccessControlContext accCtrlContext) {
         this.accCtrlContext = accCtrlContext;
-        this.externalRunner = externalRunner;
     }
 
     @Override
@@ -105,11 +81,8 @@ public class InterfaceImplementorInvocationHandler implements InvocationHandler 
      * @param method
      * @param args
      * @return
+     * @throws java.lang.Exception
      */
-    protected Object internalInvoke(Method method, Object[] args) {
-        if (externalRunner != null) {
-            return externalRunner.apply(method, args);
-        }
-        return null;
-    }
+    protected abstract Object internalInvoke(Method method, Object[] args) throws Exception;
+
 }

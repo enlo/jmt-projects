@@ -631,7 +631,7 @@ public class Misc {
      * @return
      */
     @Nonnull
-    public static <T, U> Iterable<U> map(final Iterable<T> iter, @Nonnull final Function1<? super T, ? extends U> mapper) {
+    public static <T, U> Iterable<U> map(final Iterable<T> iter, @Nonnull final Function1<? super T, U> mapper) {
         return IterationUtils.<T, U>map(iter, mapper);
     }
 
@@ -649,7 +649,7 @@ public class Misc {
      */
     @Nonnull
     public static <Dest extends Map<K, R>, K, R, T>
-            Dest map(@NonNull Dest dest, Map<K, T> source, @Nonnull Function1<T, R> mapper) {
+            Dest map(@NonNull Dest dest, Map<K, T> source, @Nonnull Function1<? super T, R> mapper) {
         if (source != null) {
             for (Entry<K, T> e : source.entrySet()) {
                 K key = e.getKey();
@@ -669,7 +669,7 @@ public class Misc {
      * @return dest.
      */
     @Nonnull
-    public static <R, T> Set<R> map(Set<T> source, @Nonnull Function1<T, R> mapper) {
+    public static <R, T> Set<R> map(Set<T> source, @Nonnull Function1<? super T, R> mapper) {
         final Set<R> result = new HashSet<>(source.size());
         return map(result, source, mapper);
     }
@@ -684,7 +684,7 @@ public class Misc {
      * @return dest.
      */
     @Nonnull
-    public static <R, T> List<R> map(List<T> source, @Nonnull Function1<T, R> mapper) {
+    public static <R, T> List<R> map(List<T> source, @Nonnull Function1<? super T, R> mapper) {
         final List<R> result = new ArrayList<>(source.size());
         return map(result, source, mapper);
     }

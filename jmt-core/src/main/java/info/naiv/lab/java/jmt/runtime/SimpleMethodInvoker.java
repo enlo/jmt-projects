@@ -23,25 +23,16 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
-import java.lang.reflect.Proxy;
-import javax.annotation.Nonnull;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ClassUtils;
+import java.lang.reflect.Method;
 
 /**
  *
  * @author enlo
  */
-@Slf4j
-public class Classes {
+public class SimpleMethodInvoker extends MethodInvokerSupport implements MethodInvoker {
 
-    public static boolean isProxyClass(@NonNull Class<?> clazz) {
-        return (Proxy.isProxyClass(clazz) || ClassUtils.isCglibProxyClass(clazz));
-    }
-    
-
-    private Classes() {
+    public SimpleMethodInvoker(Method method) {
+        super(method);
     }
 
 }

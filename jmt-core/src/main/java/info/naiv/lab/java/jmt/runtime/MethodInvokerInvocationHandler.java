@@ -23,25 +23,36 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
-import java.lang.reflect.Proxy;
+import java.lang.reflect.Method;
+import java.security.AccessControlContext;
+import java.util.concurrent.Callable;
 import javax.annotation.Nonnull;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ClassUtils;
 
 /**
  *
  * @author enlo
  */
-@Slf4j
-public class Classes {
+public class MethodInvokerInvocationHandler extends AbstractInvocationHandler {
 
-    public static boolean isProxyClass(@NonNull Class<?> clazz) {
-        return (Proxy.isProxyClass(clazz) || ClassUtils.isCglibProxyClass(clazz));
+    private final Object target;
+    private final MethodInvokerRegistry mir;
+
+    public MethodInvokerInvocationHandler(@Nonnull Object target, AccessControlContext accCtrlContext) {
+        super(accCtrlContext);
+        this.target = target;
+        this.mir = new MethodInvokerRegistry(target.getClass(), false);
+        this.mir.prepare();
     }
-    
 
-    private Classes() {
+    @Override
+    protected Object internalInvoke(Method method, Object[] args) throws Exception {
+        for (MethodInvoker mi : mir.get(method.getName())) {
+            Callable<Object> c = mi.toCallable(target, args);
+            if (c != null) {
+                return c.call();
+            }
+        }
+        throw new IllegalStateException(method.getName() + " is missing.");
     }
 
 }

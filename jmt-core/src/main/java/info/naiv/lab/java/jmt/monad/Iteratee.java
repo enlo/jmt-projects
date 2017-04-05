@@ -208,8 +208,8 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
      * @return
      */
     @Nonnull
-    public <U> Iteratee<U> map(Function1<? super T, ? extends U> mapper) {
-        Iterable<U> it = Misc.<T, U>map(this, mapper);
+    public <U> Iteratee<U> map(Function1<? super T, U> mapper) {
+        Iterable<U> it = Misc.map(this, mapper);
         return new Iteratee<>(it);
     }
 

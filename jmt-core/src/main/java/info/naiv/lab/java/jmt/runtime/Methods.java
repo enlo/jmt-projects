@@ -26,11 +26,16 @@ package info.naiv.lab.java.jmt.runtime;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayAppend;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.security.AccessController;
 import java.util.Arrays;
+import java.util.concurrent.Callable;
+import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.Value;
+import static org.springframework.util.ClassUtils.isAssignable;
 
 /**
  *
@@ -44,7 +49,7 @@ public class Methods {
             throw new IllegalArgumentException("method is no arity.");
         }
         if (arg1 != null) {
-            if (!ptypes[0].isAssignableFrom(arg1.getClass())) {
+            if (!isAssignable(ptypes[0], arg1.getClass())) {
                 throw new IllegalArgumentException("arg1 is non compatible type.");
             }
         }
@@ -57,11 +62,54 @@ public class Methods {
             throw new IllegalArgumentException("method is no arity.");
         }
         if (arg1 != null) {
-            if (!ptypes[0].isAssignableFrom(arg1.getClass())) {
+            if (!isAssignable(ptypes[0], arg1.getClass())) {
                 throw new IllegalArgumentException("arg1 is non compatible type.");
             }
         }
         return new MethodInvokerBinder(mi, new Object[]{arg1});
+    }
+
+    public static <Duck> Duck duck(@Nonnull Object obj, Duck... dummy) {
+        Class<?> clazz = dummy.getClass().getComponentType();
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            return (Duck) obj;
+        }
+
+        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
+        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
+    }
+
+    public static <Duck> Duck duck(Class<Duck> clazz, Object obj) {
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            return (Duck) obj;
+        }
+        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
+        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
+    }
+
+    public static boolean checkInvoke(@Nonnull Method method, Object... args) {
+        Class<?>[] clzs = method.getParameterTypes();
+        if (clzs.length != args.length) {
+            return false;
+        }
+        for (int i = 0; i < clzs.length; i++) {
+            Class<?> clz = clzs[i];
+            Object arg = args[i];
+            if (arg == null) {
+                if (clz.isPrimitive()) {
+                    return false;
+                }
+            }
+            else if (!clz.isAssignableFrom(arg.getClass())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Nonnull
+    public static MethodInvoker toMethodInvoker(@Nonnull Method m) {
+        return new SimpleMethodInvoker(m);
     }
 
     private Methods() {
@@ -97,6 +145,12 @@ public class Methods {
             return method.invoke(target, newArgs);
         }
 
+        @Override
+        public Callable<Object> toCallable(Object target, Object... args) {
+            Object[] newArgs = arrayAppend(bound, args);
+            return (new MethodInvokerSupport(method)).toCallable(target, newArgs);
+        }
+
     }
 
     @Value
@@ -127,6 +181,12 @@ public class Methods {
         public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
             Object[] newArgs = arrayAppend(bound, args);
             return mi.invoke(target, newArgs);
+        }
+
+        @Override
+        public Callable<Object> toCallable(Object target, Object... args) {
+            Object[] newArgs = arrayAppend(bound, args);
+            return mi.toCallable(target, newArgs);
         }
     }
 

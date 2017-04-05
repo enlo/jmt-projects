@@ -25,6 +25,9 @@ package info.naiv.lab.java.jmt.runtime;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
+import java.util.concurrent.Callable;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -35,6 +38,16 @@ public interface MethodInvoker {
     final int ARGC_MAX = 0xFF;
 
     boolean checkParameterCount(int argc);
+
+    /**
+     * 渡された引数を用いて、メソッド呼び出しが可能と判断な場合、 Function オブジェクトを戻す.
+     *
+     * @param target ターゲット
+     * @param args 引数
+     * @return 呼び出しが可能と判断された場合は関数オブジェクト. それ以外は null
+     */
+    @CheckForNull
+    Callable<Object> toCallable(@Nonnull Object target, Object... args);
 
     /**
      * アノテーションの取得.

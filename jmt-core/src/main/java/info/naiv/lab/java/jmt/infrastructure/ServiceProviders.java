@@ -32,9 +32,9 @@ import javax.annotation.Nonnull;
  */
 public class ServiceProviders {
 
-    static final ServiceContainer systemContainer = new SystemServiceContainer();
+    static final ServiceContainer SYSTEM = new SystemServiceContainer();
 
-    static final ThreadLocal<ServiceContainer> threadLocalContainer = new InheritableThreadLocal<ServiceContainer>() {
+    static final ThreadLocal<ServiceContainer> THREADLOCAL = new InheritableThreadLocal<ServiceContainer>() {
         @Override
         protected ServiceContainer childValue(ServiceContainer parentValue) {
             return new ThreadSafeServiceContainer(parentValue);
@@ -52,7 +52,7 @@ public class ServiceProviders {
      */
     @Nonnull
     public static ServiceContainer getSystemContainer() {
-        return systemContainer;
+        return SYSTEM;
     }
 
     /**
@@ -61,7 +61,7 @@ public class ServiceProviders {
      */
     @Nonnull
     public static ServiceContainer getThreadContainer() {
-        return threadLocalContainer.get();
+        return THREADLOCAL.get();
     }
 
     /**
@@ -132,12 +132,12 @@ public class ServiceProviders {
      */
     @Nonnull
     public static ServiceContainer setThreadContainer(ServiceContainer container) {
-        ServiceContainer current = threadLocalContainer.get();
+        ServiceContainer current = THREADLOCAL.get();
         if (container == null) {
-            threadLocalContainer.remove();
+            THREADLOCAL.remove();
         }
         else {
-            threadLocalContainer.set(container);
+            THREADLOCAL.set(container);
         }
         return current;
     }

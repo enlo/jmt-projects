@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.Constants;
-import info.naiv.lab.java.jmt.SimpleBeanCopierFactory;
+import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getTimePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
 import java.util.Calendar;
@@ -40,7 +40,7 @@ public class TimeOnly extends java.sql.Time {
     private static final long serialVersionUID = 1L;
 
     static {
-        SimpleBeanCopierFactory.registerConverter(new DateToTimeOnlyConverter());
+        PDBasedBeanCopierFactory.registerConverter(new DateToTimeOnlyConverter());
     }
 
     public static TimeOnly valueOf(Date date) {

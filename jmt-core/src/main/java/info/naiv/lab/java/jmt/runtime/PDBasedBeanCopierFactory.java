@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.runtime;
 
 import info.naiv.lab.java.jmt.runtime.Classes;
 import java.util.concurrent.ConcurrentHashMap;
@@ -38,19 +38,19 @@ import org.springframework.core.convert.support.GenericConversionService;
  *
  * @author enlo
  */
-public class SimpleBeanCopierFactory {
+public class PDBasedBeanCopierFactory {
 
-    private static final ConcurrentMap<Key, SimpleBeanCopier> CACHE = new ConcurrentHashMap<>();
+    private static final ConcurrentMap<Key, PDBasedBeanCopier> CACHE = new ConcurrentHashMap<>();
 
     @Getter
     @Setter
     @NonNull
     private static GenericConversionService defaultConversionService = new DefaultConversionService();
 
-    public static SimpleBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, GenericConversionService conversionService, String... ignoreProperties) {
+    public static PDBasedBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, GenericConversionService conversionService, String... ignoreProperties) {
         if (Classes.isProxyClass(srcType) || Classes.isProxyClass(dstType)) {
             // Proxy の場合、一時的なものである可能性が高いので、いちいちキャッシュしない.
-            SimpleBeanCopier newInst = new SimpleBeanCopier(srcType, dstType, conversionService, ignoreProperties);
+            PDBasedBeanCopier newInst = new PDBasedBeanCopier(srcType, dstType, conversionService, ignoreProperties);
             return newInst;
         }
         Key key = new Key(srcType, dstType, conversionService, ignoreProperties);
@@ -58,13 +58,13 @@ public class SimpleBeanCopierFactory {
             return CACHE.get(key);
         }
         else {
-            SimpleBeanCopier newInst = new SimpleBeanCopier(srcType, dstType, conversionService, ignoreProperties);
+            PDBasedBeanCopier newInst = new PDBasedBeanCopier(srcType, dstType, conversionService, ignoreProperties);
             CACHE.put(key, newInst);
             return newInst;
         }
     }
 
-    public static SimpleBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, String... ignoreProperties) {
+    public static PDBasedBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, String... ignoreProperties) {
         return createInstance(srcType, dstType, defaultConversionService, ignoreProperties);
     }
 
@@ -72,7 +72,7 @@ public class SimpleBeanCopierFactory {
         defaultConversionService.addConverter(converter);
     }
 
-    private SimpleBeanCopierFactory() {
+    private PDBasedBeanCopierFactory() {
     }
 
     @Value

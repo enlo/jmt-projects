@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.SimpleBeanCopierFactory;
+import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.createDate;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
@@ -40,7 +40,7 @@ public class DateOnly extends java.sql.Date {
     private static final long serialVersionUID = 1L;
 
     static {
-        SimpleBeanCopierFactory.registerConverter(new DateToDateOnlyConverter());
+        PDBasedBeanCopierFactory.registerConverter(new DateToDateOnlyConverter());
     }
 
     /**

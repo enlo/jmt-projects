@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.runtime;
 
+import info.naiv.lab.java.jmt.BeanCopier;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -39,14 +40,14 @@ import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 
 /**
- * Bean をコピーするための仕組み.
+ * Bean を浅くコピーするための仕組み.
  * {@link BeanUtils#copyProperties(java.lang.Object, java.lang.Object, java.lang.String...) }
  * だと都度都度解析を行うため、必要となる部分をあらかじめキャッシュしておく.
  *
  * @author enlo
  */
 @Slf4j
-public class SimpleBeanCopier {
+public class PDBasedBeanCopier implements BeanCopier {
 
     protected final GenericConversionService conversionService;
     protected final Map<String, PropertyEntry> properties;
@@ -58,10 +59,10 @@ public class SimpleBeanCopier {
      * @param conversionService
      * @param ignoreProperties
      */
-    public SimpleBeanCopier(@NonNull Class<?> srcType,
-                            @NonNull Class<?> dstType,
-                            GenericConversionService conversionService,
-                            String... ignoreProperties) {
+    public PDBasedBeanCopier(@NonNull Class<?> srcType,
+                             @NonNull Class<?> dstType,
+                             GenericConversionService conversionService,
+                             String... ignoreProperties) {
         PropertyDescriptor[] wrkDstPds = BeanUtils.getPropertyDescriptors(dstType);
         this.properties = new HashMap<>(wrkDstPds.length);
         this.conversionService = conversionService;
@@ -87,6 +88,7 @@ public class SimpleBeanCopier {
      * @param source コピー元
      * @param dest コピー先
      */
+    @Override
     public void copyProperties(@NonNull Object source, @NonNull Object dest) {
         if (this.conversionService != null) {
             for (PropertyEntry pe : properties.values()) {

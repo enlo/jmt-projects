@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierFactory;
 import static info.naiv.lab.java.jmt.Arguments.nonEmpty;
 import static info.naiv.lab.java.jmt.Constants.ZWNBSP;
 import info.naiv.lab.java.jmt.datetime.ClassicDateUtils;
@@ -240,9 +241,7 @@ public class Misc {
      * @param ignoreProperties
      */
     public static void copyProperties(Class<?> sourceType, Class<?> destType, Object source, Object dest, String... ignoreProperties) {
-        SimpleBeanCopierFactory
-                .createInstance(sourceType, destType, ignoreProperties)
-                .copyProperties(source, dest);
+        getBeanCopier(sourceType, destType, ignoreProperties).copyProperties(source, dest);
     }
 
     /**
@@ -334,6 +333,19 @@ public class Misc {
             }
             return formatter.toString();
         }
+    }
+
+    /**
+     * BeanCopier を取得する.
+     *
+     * @param sourceType
+     * @param destType
+     * @param ignoreProperties
+     * @return
+     */
+    public static BeanCopier getBeanCopier(Class<?> sourceType, Class<?> destType, String... ignoreProperties) {
+        return PDBasedBeanCopierFactory
+                .createInstance(sourceType, destType, ignoreProperties);
     }
 
     /**

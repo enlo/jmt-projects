@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt;
+package info.naiv.lab.java.jmt.runtime;
 
 import info.naiv.lab.java.jmt.datetime.DateOnly;
 import java.util.Date;
@@ -36,17 +36,17 @@ import static org.junit.Assert.*;
  *
  * @author enlo
  */
-public class SimpleBeanCopierTest {
+public class PDBasedBeanCopierTest {
 
-    public SimpleBeanCopierTest() {
+    public PDBasedBeanCopierTest() {
     }
 
     /**
-     * Test of copyProperties method, of class SimpleBeanCopier.
+     * Test of copyProperties method, of class PDBasedBeanCopier.
      */
     @Test
     public void testCopyProperties() {
-        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS.class, TestBeanD.class);
+        PDBasedBeanCopier beanCopier = PDBasedBeanCopierFactory.createInstance(TestBeanS.class, TestBeanD.class);
         TestBeanD d = new TestBeanD();
         TestBeanS s = new TestBeanS();
         beanCopier.copyProperties(s, d);
@@ -58,11 +58,11 @@ public class SimpleBeanCopierTest {
     }
 
     /**
-     * Test of copyProperties method, of class SimpleBeanCopier.
+     * Test of copyProperties method, of class PDBasedBeanCopier.
      */
     @Test
     public void testCopyProperties_2() {
-        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD.class);
+        PDBasedBeanCopier beanCopier = PDBasedBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD.class);
         TestBeanD d = new TestBeanD();
         TestBeanS2 s = new TestBeanS2();
         beanCopier.copyProperties(s, d);
@@ -74,11 +74,11 @@ public class SimpleBeanCopierTest {
     }
 
     /**
-     * Test of copyProperties method, of class SimpleBeanCopier.
+     * Test of copyProperties method, of class PDBasedBeanCopier.
      */
     @Test
     public void testCopyProperties_3() {
-        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD2.class);
+        PDBasedBeanCopier beanCopier = PDBasedBeanCopierFactory.createInstance(TestBeanS2.class, TestBeanD2.class);
         TestBeanD2 d = new TestBeanD2();
         TestBeanS2 s = new TestBeanS2();
         beanCopier.copyProperties(s, d);
@@ -92,11 +92,11 @@ public class SimpleBeanCopierTest {
     }
 
     /**
-     * Test of copyProperties method, of class SimpleBeanCopier.
+     * Test of copyProperties method, of class PDBasedBeanCopier.
      */
     @Test
     public void testCopyProperties_4() {
-        SimpleBeanCopier beanCopier = SimpleBeanCopierFactory.createInstance(TestBeanS.class, TestBeanD2.class);
+        PDBasedBeanCopier beanCopier = PDBasedBeanCopierFactory.createInstance(TestBeanS.class, TestBeanD2.class);
         TestBeanD2 d = new TestBeanD2();
         TestBeanS2 s = new TestBeanS2();
         beanCopier.copyProperties(s, d);
@@ -110,7 +110,7 @@ public class SimpleBeanCopierTest {
     }
 
     @Data
-    static class TestBeanD {
+    public static class TestBeanD {
 
         private Date date;
         private DateOnly dateOnly;
@@ -122,7 +122,7 @@ public class SimpleBeanCopierTest {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    static class TestBeanD2 extends TestBeanD {
+    public static class TestBeanD2 extends TestBeanD {
 
         private int age;
         private String tel;
@@ -130,7 +130,7 @@ public class SimpleBeanCopierTest {
     }
 
     @Data
-    static class TestBeanS {
+    public static class TestBeanS {
 
         private Date date = new Date();
         private Date dateOnly = new Date();
@@ -142,7 +142,7 @@ public class SimpleBeanCopierTest {
 
     @Data
     @EqualsAndHashCode(callSuper = true)
-    static class TestBeanS2 extends TestBeanS {
+    public static class TestBeanS2 extends TestBeanS {
 
         private int age = 40;
         private String tel = "1234-567-890";

@@ -5,6 +5,7 @@
  */
 package info.naiv.lab.java.jmt;
 
+import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierTest;
 import info.naiv.lab.java.jmt.datetime.DateOnly;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
@@ -299,8 +300,8 @@ public class MiscTest {
      */
     @Test
     public void testCopyProperties_2args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
         Misc.copyProperties(s, d);
         assertThat(d.getDate(), is(s.getDate()));
         assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
@@ -316,8 +317,8 @@ public class MiscTest {
      */
     @Test
     public void testCopyProperties_3args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
         Misc.copyProperties(s, d, "name");
         assertThat(d.getDate(), is(s.getDate()));
         assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
@@ -333,8 +334,8 @@ public class MiscTest {
      */
     @Test
     public void testCopyProperties_3args_2() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
         Misc.copyProperties(s, d, "name", "id");
         assertThat(d.getDate(), is(s.getDate()));
         assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
@@ -350,9 +351,9 @@ public class MiscTest {
      */
     @Test
     public void testCopyProperties_4args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d);
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(PDBasedBeanCopierTest.TestBeanS.class, PDBasedBeanCopierTest.TestBeanD.class, s, d);
         assertThat(d.getDate(), is(s.getDate()));
         assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
         assertThat(d.getDest(), is(nullValue()));
@@ -367,9 +368,9 @@ public class MiscTest {
      */
     @Test
     public void testCopyProperties_5args() {
-        SimpleBeanCopierTest.TestBeanS2 s = new SimpleBeanCopierTest.TestBeanS2();
-        SimpleBeanCopierTest.TestBeanD2 d = new SimpleBeanCopierTest.TestBeanD2();
-        Misc.copyProperties(SimpleBeanCopierTest.TestBeanS.class, SimpleBeanCopierTest.TestBeanD.class, s, d, "name", "id");
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
+        Misc.copyProperties(PDBasedBeanCopierTest.TestBeanS.class, PDBasedBeanCopierTest.TestBeanD.class, s, d, "name", "id");
         assertThat(d.getDate(), is(s.getDate()));
         assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
         assertThat(d.getDest(), is(nullValue()));

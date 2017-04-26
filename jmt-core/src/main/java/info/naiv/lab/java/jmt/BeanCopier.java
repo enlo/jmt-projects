@@ -21,25 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt;
 
-import java.lang.reflect.Proxy;
-import lombok.NonNull;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ClassUtils;
+import javax.annotation.Nonnull;
 
 /**
  *
  * @author enlo
  */
-@Slf4j
-public class Classes {
+public interface BeanCopier {
 
-    public static boolean isProxyClass(@NonNull Class<?> clazz) {
-        return (Proxy.isProxyClass(clazz) || ClassUtils.isCglibProxyClass(clazz));
-    }
-
-    private Classes() {
-    }
-
+    /**
+     * プロパティのコピー
+     *
+     * @param source コピー元
+     * @param dest コピー先
+     */
+    void copyProperties(@Nonnull Object source, @Nonnull Object dest);
+    
 }

@@ -40,13 +40,12 @@ import javax.sql.DataSource;
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public class DataSourceCommandRunner<TResult> {
+public class DataSourceCommandRunner {
 
     DataSource dataSource;
 
-    public List<TResult> select(Command cmd, ResultSetMapper<TResult> mapper) throws SQLException {
+    public <TResult> List<TResult> select(Command cmd, ResultSetMapper<TResult> mapper) throws SQLException {
         try (Connection conn = dataSource.getConnection()) {
             PreparedStatement stmt = conn.prepareStatement(cmd.getQuery());
             CommandParameters params = cmd.getParameters();

@@ -28,8 +28,10 @@ import javax.annotation.Nonnull;
 /**
  *
  * @author enlo
+ * @param <TSource>
+ * @param <TDest>
  */
-public interface BeanCopier {
+public interface BeanCopier<TSource, TDest> {
 
     /**
      * プロパティのコピー
@@ -37,6 +39,6 @@ public interface BeanCopier {
      * @param source コピー元
      * @param dest コピー先
      */
-    void copyProperties(@Nonnull Object source, @Nonnull Object dest);
-    
+    void copyProperties(@Nonnull TSource source, @Nonnull TDest dest);
+
 }

@@ -92,7 +92,16 @@ public class ResultSetAccessHelper
     @Override
     public Object get(String key) {
         try {
-            return getObject(baseResultSet, key);
+            return getObject(key);
+        }
+        catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public Object get(String key, JDBCTypeTraits traits) {
+        try {
+            return getObject(key, traits);
         }
         catch (SQLException ex) {
             throw new RuntimeException(ex);
@@ -390,6 +399,21 @@ public class ResultSetAccessHelper
         return getLong(baseResultSet, columnName);
     }
 
+    public Class<?> getMappedType(String columnName) {
+        try {
+            Integer columnIndex = columnMap.get(columnName);
+            if (columnIndex == null) {
+                return null;
+            }
+
+            int type = metaData.getColumnType(columnIndex);
+            return JDBCTypeTraits.valueOf(type).getRecommendType();
+        }
+        catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     /**
      *
      * @param rs
@@ -466,6 +490,30 @@ public class ResultSetAccessHelper
         return getObject(baseResultSet, columnName);
     }
 
+    public <T> T getObject(@Nonnull String columnName, @Nonnull Class<T> hint) throws SQLException {
+        return getObject(baseResultSet, columnName, hint);
+    }
+
+    public Object getObject(@Nonnull String columnName, @Nonnull JDBCTypeTraits hint) throws SQLException {
+        return getObject(baseResultSet, columnName, hint);
+    }
+
+    public Object getObject(@Nonnull ResultSet rs, @Nonnull String columnName, @Nonnull JDBCTypeTraits hint) throws SQLException {
+        Integer columnIndex = columnMap.get(columnName);
+        if (columnIndex == null) {
+            return null;
+        }
+        return hint.getValueFromResultSet(rs, columnIndex);
+    }
+
+    public <T> T getObject(@Nonnull ResultSet rs, @Nonnull String columnName, @Nonnull Class<T> hint) throws SQLException {
+        Integer columnIndex = columnMap.get(columnName);
+        if (columnIndex == null) {
+            return null;
+        }
+        return rs.getObject(columnIndex, hint);
+    }
+
     /**
      *
      * @param rs
@@ -483,6 +531,11 @@ public class ResultSetAccessHelper
 
     public Ref getRef(@Nonnull String columnName) throws SQLException {
         return getRef(baseResultSet, columnName);
+    }
+
+    @Nonnull
+    public ResultSet getResultSet() {
+        return baseResultSet;
     }
 
     /**
@@ -616,25 +669,6 @@ public class ResultSetAccessHelper
 
     public URL getURL(@Nonnull String columnName) throws SQLException {
         return getURL(baseResultSet, columnName);
-    }
-
-    /**
-     *
-     * @param rs
-     * @param columnName
-     * @return
-     * @throws SQLException
-     */
-    public InputStream getUnicodeStream(@Nonnull ResultSet rs, @Nonnull String columnName) throws SQLException {
-        Integer columnIndex = columnMap.get(columnName);
-        if (columnIndex == null) {
-            return null;
-        }
-        return rs.getUnicodeStream(columnIndex);
-    }
-
-    public InputStream getUnicodeStream(@Nonnull String columnName) throws SQLException {
-        return getUnicodeStream(baseResultSet, columnName);
     }
 
 }

@@ -241,7 +241,8 @@ public class Misc {
      * @param ignoreProperties
      */
     public static void copyProperties(Class<?> sourceType, Class<?> destType, Object source, Object dest, String... ignoreProperties) {
-        getBeanCopier(sourceType, destType, ignoreProperties).copyProperties(source, dest);
+        BeanCopier copier = getBeanCopier(sourceType, destType, ignoreProperties);
+        copier.copyProperties(source, dest);
     }
 
     /**
@@ -338,12 +339,17 @@ public class Misc {
     /**
      * BeanCopier を取得する.
      *
+     * @param <TSource>
+     * @param <TDest>
      * @param sourceType
      * @param destType
      * @param ignoreProperties
      * @return
      */
-    public static BeanCopier getBeanCopier(Class<?> sourceType, Class<?> destType, String... ignoreProperties) {
+    public static <TSource, TDest>
+            BeanCopier<TSource, TDest> getBeanCopier(Class<TSource> sourceType,
+                                                     Class<TDest> destType,
+                                                     String... ignoreProperties) {
         return PDBasedBeanCopierFactory
                 .createInstance(sourceType, destType, ignoreProperties);
     }

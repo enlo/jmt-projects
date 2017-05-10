@@ -17,6 +17,7 @@ import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
+import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -576,6 +577,31 @@ public class MiscTest {
         byte[] data = "abcあかさ".getBytes(StandardCharsets.UTF_8);
         assertThat(Misc.formatBytes(data, "%02x"), is("616263e38182e3818be38195"));
         assertThat(Misc.formatBytes(data, "%02X"), is("616263E38182E3818BE38195"));
+    }
+
+    /**
+     * Test of getBeanCopier method, of class Misc.
+     */
+    @Test
+    public void testGetBeanCopier() {
+        BeanCopier<PDBasedBeanCopierTest.TestBeanS2, PDBasedBeanCopierTest.TestBeanD2> bcp
+                = Misc.getBeanCopier(PDBasedBeanCopierTest.TestBeanS2.class,
+                                     PDBasedBeanCopierTest.TestBeanD2.class,
+                                     "name");
+
+        assertThat(bcp, is(not(nullValue())));
+        assertThat(bcp, is(instanceOf(PDBasedBeanCopier.class)));
+
+        PDBasedBeanCopierTest.TestBeanS2 s = new PDBasedBeanCopierTest.TestBeanS2();
+        PDBasedBeanCopierTest.TestBeanD2 d = new PDBasedBeanCopierTest.TestBeanD2();
+        bcp.copyProperties(s, d);
+        assertThat(d.getDate(), is(s.getDate()));
+        assertThat(d.getDateOnly(), is(DateOnly.valueOf(s.getDateOnly())));
+        assertThat(d.getDest(), is(nullValue()));
+        assertThat(d.getId(), is(s.getId()));
+        assertThat(d.getName(), is(nullValue()));
+        assertThat(d.getAge(), is(s.getAge()));
+        assertThat(d.getTel(), is(s.getTel()));
     }
 
     /**

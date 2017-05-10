@@ -23,7 +23,6 @@
  */
 package info.naiv.lab.java.jmt.runtime;
 
-import info.naiv.lab.java.jmt.runtime.Classes;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import lombok.Getter;
@@ -47,7 +46,7 @@ public class PDBasedBeanCopierFactory {
     @NonNull
     private static GenericConversionService defaultConversionService = new DefaultConversionService();
 
-    public static PDBasedBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, GenericConversionService conversionService, String... ignoreProperties) {
+    public static <TSource, TDest> PDBasedBeanCopier createInstance(@NonNull Class<TSource> srcType, @NonNull Class<TDest> dstType, GenericConversionService conversionService, String... ignoreProperties) {
         if (Classes.isProxyClass(srcType) || Classes.isProxyClass(dstType)) {
             // Proxy の場合、一時的なものである可能性が高いので、いちいちキャッシュしない.
             PDBasedBeanCopier newInst = new PDBasedBeanCopier(srcType, dstType, conversionService, ignoreProperties);
@@ -58,13 +57,13 @@ public class PDBasedBeanCopierFactory {
             return CACHE.get(key);
         }
         else {
-            PDBasedBeanCopier newInst = new PDBasedBeanCopier(srcType, dstType, conversionService, ignoreProperties);
+            PDBasedBeanCopier<TSource, TDest> newInst = new PDBasedBeanCopier<>(srcType, dstType, conversionService, ignoreProperties);
             CACHE.put(key, newInst);
             return newInst;
         }
     }
 
-    public static PDBasedBeanCopier createInstance(@NonNull Class<?> srcType, @NonNull Class<?> dstType, String... ignoreProperties) {
+    public static <TSource, TDest> PDBasedBeanCopier<TSource, TDest> createInstance(@NonNull Class<TSource> srcType, @NonNull Class<TDest> dstType, String... ignoreProperties) {
         return createInstance(srcType, dstType, defaultConversionService, ignoreProperties);
     }
 

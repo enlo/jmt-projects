@@ -38,7 +38,7 @@ import lombok.Data;
 @Data
 public class NamedParameterBinder implements ParameterBinder {
 
-    private static final StringJoiner joiner = StringJoiner.valueOf(", ");
+    private static final StringJoiner JOINER = StringJoiner.valueOf(", ");
     private static final long serialVersionUID = 1L;
 
     private String prefix;
@@ -77,7 +77,7 @@ public class NamedParameterBinder implements ParameterBinder {
                 keys = addParameters(Arrays.asList(value), params);
             }
         }
-        return joiner.join(keys).toString();
+        return JOINER.join(keys).toString();
     }
 
     public List<String> addParameters(Iterable<?> items, CommandParameters params) {

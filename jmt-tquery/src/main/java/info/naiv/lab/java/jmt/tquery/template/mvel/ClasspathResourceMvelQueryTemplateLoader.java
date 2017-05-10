@@ -24,18 +24,17 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel;
 
 import info.naiv.lab.java.jmt.template.ClasspathResourceTemplateLoader;
+import info.naiv.lab.java.jmt.tquery.command.Command;
 
 /**
  *
  * @author enlo
  */
 public class ClasspathResourceMvelQueryTemplateLoader
-        extends ClasspathResourceTemplateLoader<MvelQueryTemplate> {
+        extends ClasspathResourceTemplateLoader<Command> {
 
-    public ClasspathResourceMvelQueryTemplateLoader() {    
+    public ClasspathResourceMvelQueryTemplateLoader() {
         setTemplateBuilder(new MvelQueryTemplateBuilder());
     }
-    
-    
-    
+
 }

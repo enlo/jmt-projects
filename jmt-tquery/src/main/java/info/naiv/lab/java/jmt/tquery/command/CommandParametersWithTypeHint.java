@@ -26,7 +26,6 @@ package info.naiv.lab.java.jmt.tquery.command;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import lombok.SneakyThrows;
 
 /**
  *

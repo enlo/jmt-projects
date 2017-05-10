@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2017 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.template;
+package info.naiv.lab.java.jmt.jdbc;
 
-import info.naiv.lab.java.jmt.io.NIOUtils;
-import java.io.IOException;
 import java.io.InputStream;
-import java.nio.charset.Charset;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.core.io.Resource;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.sql.Clob;
+import java.sql.NClob;
+import java.util.Date;
 
 /**
  *
  * @author enlo
- * @param <TResult>
  */
-public class ClasspathResourceTemplateLoader<TResult> extends AbstractClasspathResourceTemplateLoader<TResult> {
+class JDBCConstants {
 
-    /**
-     *
-     */
-    @Getter
-    @Setter
-    protected TemplateBuilder<TResult> templateBuilder;
+    public static final Class<?>[] NUMBER_COMPATIBLE_CLASSES
+            = {Byte.class, Short.class, Integer.class, Long.class, Float.class,
+                Double.class, BigDecimal.class, Boolean.class, String.class,
+                byte.class, short.class, int.class, long.class, float.class, double.class};
 
-    @Override
-    protected Template<TResult> createTemplateFromResource(String name, Resource resource, Charset charset) throws IOException {
-        try (InputStream is = resource.getInputStream()) {
-            String template = NIOUtils.toString(is, charset);
-            return getTemplateBuilder().build(name, template);
-        }
-    }
+    public static final Class<?>[] BINARY_COMPATIBLE_CLASSES
+            = {String.class, byte[].class};
 
-    @Override
-    protected Template<TResult> doFromString(String name, String template) {
-        return getTemplateBuilder().build(name, template);
-    }
+    public static final Class<?>[] STRING_COMPATIBLE_CLASSES
+            = {Byte.class, Short.class, Integer.class, Long.class, Float.class,
+                Double.class, BigDecimal.class, Boolean.class, String.class,
+                byte.class, short.class, int.class, long.class, float.class, double.class,
+                java.sql.Date.class, java.sql.Time.class, java.sql.Timestamp.class};
 
+    public static final Class<?>[] CLOB_COMPATIBLE_CLASSES
+            = {Clob.class, NClob.class};
 }

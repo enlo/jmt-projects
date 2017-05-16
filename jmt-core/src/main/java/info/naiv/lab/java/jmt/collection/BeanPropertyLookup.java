@@ -25,13 +25,17 @@ package info.naiv.lab.java.jmt.collection;
 
 import java.beans.PropertyDescriptor;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import lombok.NonNull;
 import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.beans.NotReadablePropertyException;
+import org.springframework.beans.PropertyAccessorFactory;
 
 /**
  *
@@ -39,40 +43,55 @@ import org.springframework.beans.BeanWrapperImpl;
  */
 public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entry<String, Object>> {
 
+    final boolean caseSensitive;
     final BeanWrapper beanWrapper;
-    final Set<String> propertyNames;
+    final Map<String, PropertyDescriptor> propertyNames;
 
     /**
      *
      * @param bean
      */
     public BeanPropertyLookup(@NonNull Object bean) {
-        beanWrapper = new BeanWrapperImpl(bean);
+        this(bean, true);
+    }
+
+    /**
+     *
+     * @param bean Bean.
+     * @param caseSensitive プロパティ名の大文字小文字を区別するかどうか.
+     */
+    public BeanPropertyLookup(@NonNull Object bean, boolean caseSensitive) {
+        this.caseSensitive = caseSensitive;
+        this.beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(bean);
         PropertyDescriptor[] pds = beanWrapper.getPropertyDescriptors();
-        propertyNames = new HashSet<>(pds.length);
+        this.propertyNames = createMap(pds.length, caseSensitive);
         for (PropertyDescriptor pd : pds) {
-            if (beanWrapper.isReadableProperty(pd.getName())) {
-                propertyNames.add(pd.getName());
+            if (this.beanWrapper.isReadableProperty(pd.getName())) {
+                this.propertyNames.put(pd.getName(), pd);
             }
         }
     }
 
     @Override
     public boolean containsKey(String key) {
-        return propertyNames.contains(key);
+        return propertyNames.containsKey(key);
     }
 
     @Override
     public Object get(String key) {
-        Object value = beanWrapper.getPropertyValue(key);
-        return value;
+        PropertyDescriptor pd = propertyNames.get(key);
+        if (pd == null) {
+            throw new NotReadablePropertyException(beanWrapper.getWrappedClass(),
+                                                   key, "readable property not found.");
+        }
+        return beanWrapper.getPropertyValue(pd.getName());
     }
 
     @Override
     public Iterator<Entry<String, Object>> iterator() {
         Set<Entry<String, Object>> result = new HashSet<>(propertyNames.size());
-        for (String name : propertyNames) {
-            result.add(new SimpleImmutableEntry<>(name, get(name)));
+        for (Entry<String, PropertyDescriptor> e : propertyNames.entrySet()) {
+            result.add(new SimpleImmutableEntry<>(e.getKey(), get(e.getValue().getName())));
         }
         return result.iterator();
     }
@@ -84,6 +103,15 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
      */
     public int size() {
         return propertyNames.size();
+    }
+
+    private static <T> Map<String, T> createMap(int length, boolean caseSensitive) {
+        if (caseSensitive) {
+            return new HashMap<>(length);
+        }
+        else {
+            return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        }
     }
 
 }

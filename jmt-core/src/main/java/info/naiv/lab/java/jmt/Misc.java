@@ -46,6 +46,7 @@ import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import static java.lang.Character.isSpaceChar;
 import static java.lang.Character.isWhitespace;
 import java.math.BigDecimal;
@@ -78,6 +79,7 @@ import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
+import org.springframework.util.SerializationUtils;
 
 /**
  *
@@ -151,6 +153,18 @@ public class Misc {
         else {
             return from.compareTo(value) <= 0 && value.compareTo(to) <= 0;
         }
+    }
+
+    /**
+     * 直列化を使用したクローン.
+     *
+     * @param <T>
+     * @param object
+     * @return
+     */
+    public static <T extends Serializable> T cloneThroughSerialize(T object) {
+        byte[] data = SerializationUtils.serialize(object);
+        return (T) SerializationUtils.deserialize(data);
     }
 
     /**

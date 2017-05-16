@@ -41,6 +41,7 @@ import org.springframework.beans.BeansException;
 public class BeanPropertyLookupTest {
 
     BeanPropertyLookup testLookup1;
+    BeanPropertyLookup testLookup2;
     TestUser testUser1;
 
     public BeanPropertyLookupTest() {
@@ -50,6 +51,7 @@ public class BeanPropertyLookupTest {
     public void init() {
         this.testUser1 = new TestUser("John Doe", 24, "ABC Street, USA.", true);
         this.testLookup1 = new BeanPropertyLookup(this.testUser1);
+        this.testLookup2 = new BeanPropertyLookup(this.testUser1, false);
     }
 
     /**
@@ -85,6 +87,34 @@ public class BeanPropertyLookupTest {
         enabled = this.testLookup1.get("enabled");
         assertThat(enabled, is((Object) false));
     }
+    
+    
+    /**
+     * Test of get method, of class BeanPropertyLookup.
+     */
+    @Test
+    public void testGet_IgnoreCase() {
+
+        Object name = this.testLookup2.get("NaMe");
+        Object age = this.testLookup2.get("AGE");
+        Object address = this.testLookup2.get("Address");
+        Object enabled = this.testLookup2.get("enableD");
+        Object clazz = this.testLookup2.get("Class");
+
+        assertThat(name, is((Object) this.testUser1.getName()));
+        assertThat(age, is((Object) this.testUser1.getAge()));
+        assertThat(address, is((Object) this.testUser1.getAddress()));
+        assertThat(enabled, is((Object) this.testUser1.isEnabled()));
+        assertThat(clazz, is((Object) this.testUser1.getClass()));
+
+        this.testUser1.setAge(30);
+        age = this.testLookup2.get("Age");
+        assertThat(age, is((Object) 30));
+
+        this.testUser1.setEnabled(false);
+        enabled = this.testLookup2.get("Enabled");
+        assertThat(enabled, is((Object) false));
+    }
 
     /**
      * Test of get method, of class BeanPropertyLookup.
@@ -92,6 +122,15 @@ public class BeanPropertyLookupTest {
     @Test(expected = BeansException.class)
     public void testGet_Error() {
         this.testLookup1.get("company");
+    }
+    
+    
+    /**
+     * Test of get method, of class BeanPropertyLookup.
+     */
+    @Test(expected = BeansException.class)
+    public void testGet_Error2() {
+        this.testLookup1.get("Name");
     }
 
     /**

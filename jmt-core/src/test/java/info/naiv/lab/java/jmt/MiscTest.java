@@ -17,9 +17,12 @@ import info.naiv.lab.java.jmt.iteration.ContinueException;
 import info.naiv.lab.java.jmt.iteration.LoopCondition;
 import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
+import info.naiv.lab.java.jmt.range.Range;
+import info.naiv.lab.java.jmt.range.Ranges;
 import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopier;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -187,6 +190,23 @@ public class MiscTest {
         assertThat(Misc.between(x, null, to), is(false));
         assertThat(Misc.between(x, from, null), is(false));
         assertThat(Misc.between(x, from, to), is(true));
+    }
+    /**
+     * Test of cloneThroughSerialize method, of class Misc.
+     */
+    @Test
+    public void testCloneThroughSerialize() {
+        TestCloneBase b = new TestClone("ABC");
+        b.values.add(Ranges.openRange(1, 10));
+        
+        TestCloneBase x = Misc.cloneThroughSerialize(b);
+        assertThat(x, is(not(sameInstance(b))));
+        assertThat(x, is(instanceOf(TestClone.class)));
+        
+        TestClone xx = (TestClone) x;
+        assertThat(xx.name, is("ABC"));
+        assertThat(xx.values, is(contains(Ranges.single(1), Ranges.single(2),
+                                                            Ranges.openRange(1, 10))));
     }
 
     /**
@@ -1726,4 +1746,26 @@ public class MiscTest {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
     }
 
+
+    @SuppressWarnings("serial")
+    static class TestClone extends TestCloneBase {
+
+        final String name;
+
+        public TestClone(String name) {
+            this.name = name;
+        }
+
+    }
+    @SuppressWarnings("serial")
+    static class TestCloneBase implements Serializable {
+        
+        final List<Range<Integer>> values = new ArrayList<>();
+        
+        public TestCloneBase() {
+            values.add(Ranges.single(1));
+            values.add(Ranges.single(2));
+        }
+        
+    }
 }

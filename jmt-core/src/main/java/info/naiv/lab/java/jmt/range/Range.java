@@ -23,14 +23,15 @@
  */
 package info.naiv.lab.java.jmt.range;
 
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import info.naiv.lab.java.jmt.ComparableComparator;
 import info.naiv.lab.java.jmt.IterationUnit;
 import info.naiv.lab.java.jmt.iteration.IterationUnitIterator;
+import info.naiv.lab.java.jmt.iteration.StandardIterationUnits;
 import java.io.Serializable;
 import java.util.Iterator;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.ToString;
 
 /**
@@ -42,10 +43,11 @@ import lombok.ToString;
 @ToString
 public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2520394186992026035L;
 
     @Getter
     protected final Bound<T> lowerBound;
+
     @Getter
     protected final IterationUnit<? super T> unit;
 
@@ -59,15 +61,12 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
      * @param lowerBound 下限.
      * @param upperBound 上限.
      */
-    public Range(IterationUnit<? super T> unit, Bound<T> lowerBound, Bound<T> upperBound) {
-        nonNull(upperBound, "upperBound");
-        nonNull(lowerBound, "lowerBound");
-
+    public Range(IterationUnit<? super T> unit, @NonNull Bound<T> lowerBound, @NonNull Bound<T> upperBound) {
         if (unit != null) {
             this.unit = unit;
         }
         else {
-            this.unit = new DefaultUnit<T>();
+            this.unit = StandardIterationUnits.COMPARE_ONLY;
         }
 
         this.lowerBound = lowerBound;
@@ -86,13 +85,9 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
 
     @Override
     @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    @SneakyThrows
     public Range<T> clone() {
-        try {
-            return (Range<T>) super.clone();
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
+        return (Range<T>) super.clone();
     }
 
     /**
@@ -165,35 +160,4 @@ public class Range<T extends Comparable<T>> implements Cloneable, Serializable {
         return lowerBound.on(value, unit) && upperBound.on(value, unit);
     }
 
-    private static class DefaultUnit<T extends Comparable<T>>
-            extends ComparableComparator<T> implements IterationUnit<T> {
-
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public T advance(T value, long n) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public long distance(T lhs, T rhs) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public T next(T value) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public T prior(T value) {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        @Override
-        public T truncate(T value) {
-            return value;
-        }
-
-    }
 }

@@ -23,10 +23,12 @@
  */
 package info.naiv.lab.java.jmt.iteration;
 
+import info.naiv.lab.java.jmt.ComparableComparator;
 import info.naiv.lab.java.jmt.IterationUnit;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import javax.annotation.Nonnull;
+import lombok.EqualsAndHashCode;
 
 /**
  *
@@ -209,6 +211,15 @@ public class StandardIterationUnits {
         };
     }
 
+    /**
+     *
+     */
+    public static final IterationUnit COMPARE_ONLY = new CompareOnlyUnit();
+
+    public static <T extends Comparable<T>> IterationUnit<T> comparable() {
+        return COMPARE_ONLY;
+    }
+
     private StandardIterationUnits() {
     }
 
@@ -270,5 +281,37 @@ public class StandardIterationUnits {
             return o1.compareTo(o2);
         }
 
+    }
+
+    @EqualsAndHashCode(callSuper = false)
+    static class CompareOnlyUnit<T extends Comparable<T>>
+            extends ComparableComparator<T> implements IterationUnit<T> {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public T advance(T value, long n) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public long distance(T lhs, T rhs) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T next(T value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T prior(T value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public T truncate(T value) {
+            return value;
+        }
     }
 }

@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.tuple;
 
+import java.io.Serializable;
 import lombok.Value;
 
 public class Tuples {
@@ -47,20 +48,26 @@ public class Tuples {
     }
 
     @Value
-    public static class Tuple1Impl<T> implements Tuple1<T> {
+    public static class Tuple1Impl<T> implements Tuple1<T>, Serializable {
+
+        private static final long serialVersionUID = 1544940561288300623L;
 
         T value1;
     }
 
     @Value
-    public static class Tuple2Impl<T1, T2> implements Tuple2<T1, T2> {
+    public static class Tuple2Impl<T1, T2> implements Tuple2<T1, T2>, Serializable {
+
+        private static final long serialVersionUID = -3173491363515736637L;
 
         T1 value1;
         T2 value2;
     }
 
     @Value
-    public static class Tuple3Impl<T1, T2, T3> implements Tuple3<T1, T2, T3> {
+    public static class Tuple3Impl<T1, T2, T3> implements Tuple3<T1, T2, T3>, Serializable {
+
+        private static final long serialVersionUID = 8669142330621944242L;
 
         T1 value1;
         T2 value2;
@@ -68,7 +75,9 @@ public class Tuples {
     }
 
     @Value
-    public static class Tuple4Impl<T1, T2, T3, T4> implements Tuple4<T1, T2, T3, T4> {
+    public static class Tuple4Impl<T1, T2, T3, T4> implements Tuple4<T1, T2, T3, T4>, Serializable {
+
+        private static final long serialVersionUID = 3698906526876032138L;
 
         T1 value1;
         T2 value2;

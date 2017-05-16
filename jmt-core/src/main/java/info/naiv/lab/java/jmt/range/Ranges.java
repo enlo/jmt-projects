@@ -132,6 +132,10 @@ public class Ranges {
         return openRange(first, end, null);
     }
 
+    public static <T extends Comparable<T>> Range<T> single(T value) {
+        return closedRange(value, value);
+    }
+
     private Ranges() {
     }
 

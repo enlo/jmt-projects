@@ -135,7 +135,7 @@ public abstract class CustomNode extends Node {
      */
     @Override
     public void calculateContents(char[] template) {
-        super.calculateContents(template); //To change body of generated methods, choose Tools | Templates.
+        super.calculateContents(template);
         onSetContents();
     }
 

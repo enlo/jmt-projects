@@ -29,7 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import lombok.Getter;
 import org.mvel2.templates.res.Node;
 
 /**
@@ -43,20 +42,24 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
      */
     public static final Map<String, Class<? extends Node>> NODES;
 
-    @Getter
-    private static final DefaultCustomNodesProvider globalInstance;
-
-    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
+    private static final DefaultCustomNodesProvider GLOBAL_INSTANCE;
 
     static {
 
         Map<String, Class<? extends Node>> nodes = new HashMap<>();
         nodes.put("format", FormatNode.class);
         nodes.put("numberFormat", NumberFormatNode.class);
+        nodes.put("message", MessageNode.class);
 
         NODES = Collections.unmodifiableMap(nodes);
-        globalInstance = new DefaultCustomNodesProvider();
+        GLOBAL_INSTANCE = new DefaultCustomNodesProvider();
     }
+
+    public static final DefaultCustomNodesProvider getGlobalInstance() {
+        return GLOBAL_INSTANCE;
+    }
+
+    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
 
     public DefaultCustomNodesProvider() {
         nodes.putAll(NODES);

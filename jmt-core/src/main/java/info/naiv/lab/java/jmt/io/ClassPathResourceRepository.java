@@ -42,7 +42,7 @@ import org.springframework.core.io.support.ResourcePatternResolver;
  */
 public class ClassPathResourceRepository extends AbstractResourceRepository {
 
-    private static final StringJoiner joiner = StringJoiner.valueOf("/");
+    private static final StringJoiner JOINER = StringJoiner.valueOf("/");
 
     @NonNull
     @Getter
@@ -80,7 +80,7 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
         if (globPattern == null) {
             globPattern = "*";
         }
-        String pattern = joiner.join(new String[]{ResourceLoader.CLASSPATH_URL_PREFIX, rootPath, category, globPattern}).toString();
+        String pattern = JOINER.join(new String[]{ResourceLoader.CLASSPATH_URL_PREFIX, rootPath, category, globPattern}).toString();
         return resolver.getResources(pattern);
     }
 
@@ -97,7 +97,7 @@ public class ClassPathResourceRepository extends AbstractResourceRepository {
      */
     @Override
     protected String resolveLocation(String category, String name) {
-        return joiner.join(new String[]{rootPath, category, name}).toString();
+        return JOINER.join(new String[]{rootPath, category, name}).toString();
     }
 
     /**

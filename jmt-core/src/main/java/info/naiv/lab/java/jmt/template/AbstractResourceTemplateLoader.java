@@ -43,7 +43,7 @@ public abstract class AbstractResourceTemplateLoader<TResult> extends AbstractTe
 
     @Getter
     @Setter
-    private final String extension = ".txt";
+    private String extension = ".txt";
 
     /**
      *

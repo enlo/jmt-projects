@@ -83,7 +83,7 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
     @CheckReturnValue
     private ParserContext callInitParserContext(ParserContext ctx) {
         ctx = initParserContext(ctx);
-        if (parserContextInitializer != null) {
+        if (ctx != null && parserContextInitializer != null) {
             ctx = parserContextInitializer.apply(ctx);
         }
         return ctx;

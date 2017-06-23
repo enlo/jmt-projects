@@ -65,7 +65,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ヤユヨ\n"
                 + "らりるれろ ラリルレロ\n"
                 + "わをん ワヲン\n"
-                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー";
+                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー"
+                + "神\uFA1E";
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
                 + "abcdefghijklmnopqrstuvwxyz\n"
                 + "1234567890\n"
@@ -84,7 +85,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ﾔﾕﾖ\n"
                 + "らりるれろ ﾗﾘﾙﾚﾛ\n"
                 + "わをん ﾜｦﾝ\n"
-                + "ぁぃぅぇぉ ｧｨｩｪｫ っゅょ ｯｭｮｰ";
+                + "ぁぃぅぇぉ ｧｨｩｪｫ っゅょ ｯｭｮｰ"
+                + "神\uFA1E";
         String actual = JapaneseHalfAndFullUtils.convertFullKanaToHalfKana(source, false);
         assertThat(actual, is(expected));
     }
@@ -110,7 +112,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ヤユヨ\n"
                 + "らりるれろ ラリルレロ\n"
                 + "わをん ワヲン\n"
-                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー";
+                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー"
+                + "神\uFA1E";
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
                 + "abcdefghijklmnopqrstuvwxyz\n"
                 + "1234567890\n"
@@ -125,7 +128,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ﾔﾕﾖ ﾔﾕﾖ\n"
                 + "ﾗﾘﾙﾚﾛ ﾗﾘﾙﾚﾛ\n"
                 + "ﾜｦﾝ ﾜｦﾝ\n"
-                + "ｧｨｩｪｫ ｧｨｩｪｫ ｯｭｮ ｯｭｮｰ";
+                + "ｧｨｩｪｫ ｧｨｩｪｫ ｯｭｮ ｯｭｮｰ"
+                + "神\uFA1E";
         String actual = JapaneseHalfAndFullUtils.convertFullKanaToHalfKana(source, true);
         assertThat(actual, is(expected));
     }
@@ -154,7 +158,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ヤユヨ\n"
                 + "らりるれろ ラリルレロ\n"
                 + "わをん ワヲン\n"
-                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー";
+                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー"
+                + "神\uFA1E";
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
                 + "abcdefghijklmnopqrstuvwxyz\n"
                 + "1234567890\n"
@@ -173,7 +178,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ﾔﾕﾖ\n"
                 + "らりるれろ ﾗﾘﾙﾚﾛ\n"
                 + "わをん ﾜｦﾝ\n"
-                + "ぁぃぅぇぉ ｧｨｩｪｫ っゅょ ｯｭｮｰ";
+                + "ぁぃぅぇぉ ｧｨｩｪｫ っゅょ ｯｭｮｰ"
+                + "神\uFA1E";
         String actual = JapaneseHalfAndFullUtils.convertFullToHalf(source, false);
         assertThat(actual, is(expected));
     }
@@ -201,7 +207,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "やゆよ ヤユヨ\n"
                 + "らりるれろ ラリルレロ\n"
                 + "わをん ワヲン\n"
-                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー";
+                + "ぁぃぅぇぉ ァィゥェォ っゅょ ッュョー"
+                + "神\uFA1E";
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
                 + "abcdefghijklmnopqrstuvwxyz\n"
                 + "1234567890\n"
@@ -220,7 +227,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ﾔﾕﾖ ﾔﾕﾖ\n"
                 + "ﾗﾘﾙﾚﾛ ﾗﾘﾙﾚﾛ\n"
                 + "ﾜｦﾝ ﾜｦﾝ\n"
-                + "ｧｨｩｪｫ ｧｨｩｪｫ ｯｭｮ ｯｭｮｰ";
+                + "ｧｨｩｪｫ ｧｨｩｪｫ ｯｭｮ ｯｭｮｰ"
+                + "神\uFA1E";
         String actual = JapaneseHalfAndFullUtils.convertFullToHalf(source, true);
         assertThat(actual, is(expected));
     }
@@ -249,7 +257,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ﾔﾕﾖ\n"
                 + "ﾗﾘﾙﾚﾛ\n"
                 + "ﾜｦﾝ\n"
-                + "ｧｨｩｪｫ ｯｭｮｰ";
+                + "ｧｨｩｪｫ ｯｭｮｰ"
+                + "神\uFA1E";
         String expected = "ABCDEFGHIJKLMNOPQRSTUVWXYZ\n"
                 + "abcdefghijklmnopqrstuvwxyz\n"
                 + "1234567890\n"
@@ -268,7 +277,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ヤユヨ\n"
                 + "ラリルレロ\n"
                 + "ワヲン\n"
-                + "ァィゥェォ ッュョー";
+                + "ァィゥェォ ッュョー"
+                + "神\uFA1E";
 
         String actual = JapaneseHalfAndFullUtils.convertHalfKanaToFullKana(source);
         assertThat(actual, is(expected));
@@ -293,7 +303,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ﾔﾕﾖ\n"
                 + "ﾗﾘﾙﾚﾛ\n"
                 + "ﾜｦﾝ\n"
-                + "ｧｨｩｪｫ ｯｭｮｰ";
+                + "ｧｨｩｪｫ ｯｭｮｰ"
+                + "神\uFA1E";
         String expected = "ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ\n"
                 + "ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ\n"
                 + "１２３４５６７８９０\n"
@@ -308,7 +319,8 @@ public class JapaneseHalfAndFullUtilsTest {
                 + "ヤユヨ\n"
                 + "ラリルレロ\n"
                 + "ワヲン\n"
-                + "ァィゥェォ ッュョー";
+                + "ァィゥェォ ッュョー"
+                + "神\uFA1E";
 
         String actual = JapaneseHalfAndFullUtils.convertHalfToFull(source);
         assertThat(actual, is(expected));

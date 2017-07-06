@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierFactory;
+import info.naiv.lab.java.jmt.bean.PDBasedBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.createDate;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getDatePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;

@@ -41,6 +41,10 @@ public class Initializer implements Runnable {
 
     private final AtomicInteger state = new AtomicInteger(UNINITIALIZED);
 
+    public final boolean isInitialized() {
+        return state.get() == INITIALIZED;
+    }
+
     @Override
     public final void run() {
         if (enterInitializePhase()) {
@@ -54,10 +58,6 @@ public class Initializer implements Runnable {
             }
         }
         spinWaitForInitialized();
-    }
-
-    public final boolean isInitialized() {
-        return state.get() == INITIALIZED;
     }
 
     public final void runInitializer(Runnable initializer) {

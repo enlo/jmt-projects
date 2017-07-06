@@ -69,24 +69,6 @@ public class Methods {
         return new MethodInvokerBinder(mi, new Object[]{arg1});
     }
 
-    public static <Duck> Duck duck(@Nonnull Object obj, Duck... dummy) {
-        Class<?> clazz = dummy.getClass().getComponentType();
-        if (clazz.isAssignableFrom(obj.getClass())) {
-            return (Duck) obj;
-        }
-
-        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
-        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
-    }
-
-    public static <Duck> Duck duck(Class<Duck> clazz, Object obj) {
-        if (clazz.isAssignableFrom(obj.getClass())) {
-            return (Duck) obj;
-        }
-        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
-        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
-    }
-
     public static boolean checkInvoke(@Nonnull Method method, Object... args) {
         Class<?>[] clzs = method.getParameterTypes();
         if (clzs.length != args.length) {
@@ -105,6 +87,24 @@ public class Methods {
             }
         }
         return true;
+    }
+
+    public static <Duck> Duck duck(@Nonnull Object obj, Duck... dummy) {
+        Class<?> clazz = dummy.getClass().getComponentType();
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            return (Duck) obj;
+        }
+
+        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
+        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
+    }
+
+    public static <Duck> Duck duck(Class<Duck> clazz, Object obj) {
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            return (Duck) obj;
+        }
+        InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
+        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
     }
 
     @Nonnull

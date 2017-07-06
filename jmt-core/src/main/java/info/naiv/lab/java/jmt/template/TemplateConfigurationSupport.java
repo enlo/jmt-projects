@@ -43,16 +43,18 @@ public class TemplateConfigurationSupport {
         return new StringMvelTemplateBuilder();
     }
 
+    private TemplateConfigurationSupport() {
+    }
+
     @Accessors(fluent = true)
     @RequiredArgsConstructor
     @Setter
     public static class ClasspathResourceTemplateLoaderBuilder<TResult> {
 
-        final TemplateBuilder<TResult> templateBuilder;
+        private String extension;
 
         private String suffix;
-
-        private String extension;
+        final TemplateBuilder<TResult> templateBuilder;
 
         public ClasspathResourceTemplateLoader<TResult> build() {
             ClasspathResourceTemplateLoader l = new ClasspathResourceTemplateLoader();

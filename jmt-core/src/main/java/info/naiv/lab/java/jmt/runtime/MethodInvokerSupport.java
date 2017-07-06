@@ -44,20 +44,16 @@ public class MethodInvokerSupport {
         this.method = method;
     }
 
-    public Class<?>[] getParameterTypes() {
-        return method.getParameterTypes();
-    }
-
-    public Object[] resolveArgs(Object[] args) {
-        return args;
+    public boolean checkParameterCount(int argc) {
+        return getParameterTypes().length == argc;
     }
 
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         return method.getAnnotation(annotationClass);
     }
 
-    public boolean checkParameterCount(int argc) {
-        return getParameterTypes().length == argc;
+    public Class<?>[] getParameterTypes() {
+        return method.getParameterTypes();
     }
 
     public Object invoke(Object target, Object... args) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
@@ -66,6 +62,10 @@ public class MethodInvokerSupport {
         }
         Object[] newArgs = resolveArgs(args);
         return method.invoke(target, newArgs);
+    }
+
+    public Object[] resolveArgs(Object[] args) {
+        return args;
     }
 
     public Callable<Object> toCallable(final Object target, Object[] args) {
@@ -87,11 +87,32 @@ public class MethodInvokerSupport {
         return new MethodCaller(target, method, args);
     }
 
+    public static class ArgsResolver {
+
+        public Object[] resolve(Object[] args) {
+            int pc = args.length;
+            int argc = args.length;
+            Object[] dest = new Object[pc];
+            if (argc < pc) {
+                copyArgs(dest, args, argc);
+                return dest;
+            }
+            else {
+                copyArgs(dest, args, argc);
+                return dest;
+            }
+        }
+
+        protected void copyArgs(Object[] dest, Object[] args, int argc) {
+            System.arraycopy(args, 0, dest, 0, argc);
+        }
+    }
+
     public static class MethodCaller implements Callable<Object> {
 
-        Object target;
-        Method method;
         Object[] args;
+        Method method;
+        Object target;
 
         public MethodCaller(@Nonnull Object target, @Nonnull Method method, @Nonnull Object[] args) {
             this.target = target;
@@ -113,30 +134,6 @@ public class MethodInvokerSupport {
                     throw ex;
                 }
             }
-        }
-
-    }
-
-
-    public static class ArgsResolver {
-        
-        
-        public Object[] resolve(Object[] args) {
-            int pc = args.length;
-            int argc = args.length;
-            Object[] dest = new Object[pc];
-            if (argc < pc) {
-                copyArgs(dest, args, argc);
-                return dest;
-            }
-            else {
-                copyArgs(dest, args, argc);
-                return dest;
-            }
-        }
-
-        protected void copyArgs(Object[] dest, Object[] args, int argc) {
-            System.arraycopy(args, 0, dest, 0, argc);
         }
     }
 }

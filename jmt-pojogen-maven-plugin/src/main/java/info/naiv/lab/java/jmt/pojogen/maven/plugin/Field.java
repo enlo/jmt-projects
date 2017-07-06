@@ -1,5 +1,6 @@
 package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
+import info.naiv.lab.java.jmt.jdbc.JDBCTypeTraits;
 import lombok.Data;
 import static org.springframework.jdbc.support.JdbcUtils.convertUnderscoreNameToPropertyName;
 
@@ -17,6 +18,7 @@ public class Field {
     boolean nonNull;
     boolean primaryKey;
     int primaryKeyIndex;
+    JDBCTypeTraits typeTraits;
 
     public void makeNameFromOriginalName() {
         setName(convertUnderscoreNameToPropertyName(getOriginalName()));

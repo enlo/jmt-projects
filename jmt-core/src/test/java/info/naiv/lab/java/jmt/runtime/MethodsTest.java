@@ -38,11 +38,24 @@ import static org.junit.Assert.*;
  */
 public class MethodsTest {
 
+    static double div(int x, int y) {
+        return x * 1.0 / y;
+    }
+
     public MethodsTest() {
     }
 
-    static double div(int x, int y) {
-        return x * 1.0 / y;
+    /**
+     * Test of bind1st method, of class Methods.
+     *
+     * @throws java.lang.ReflectiveOperationException
+     */
+    @Test
+    public void testBind1st_MethodInvoker_Object() throws ReflectiveOperationException {
+        MethodInvoker madd = new SimpleMethodInvoker(MethodsTest.class.getDeclaredMethod("div", int.class, int.class));
+        MethodInvoker mi = Methods.bind1st(madd, 8);
+        assertThat((double) mi.invoke(null, 1), is(8.0));
+        assertThat((double) mi.invoke(null, 4), is(2.0));
     }
 
     /**
@@ -59,16 +72,27 @@ public class MethodsTest {
     }
 
     /**
-     * Test of bind1st method, of class Methods.
-     *
-     * @throws java.lang.ReflectiveOperationException
+     * Test of checkInvoke method, of class Methods.
      */
     @Test
-    public void testBind1st_MethodInvoker_Object() throws ReflectiveOperationException {
-        MethodInvoker madd = new SimpleMethodInvoker(MethodsTest.class.getDeclaredMethod("div", int.class, int.class));
-        MethodInvoker mi = Methods.bind1st(madd, 8);
-        assertThat((double) mi.invoke(null, 1), is(8.0));
-        assertThat((double) mi.invoke(null, 4), is(2.0));
+    public void testCheckInvoke() {
+    }
+
+    /**
+     * Test of duck method, of class Methods.
+     */
+    @Test
+    public void testDuck_Object_Class() {
+        Duck duck1 = Methods.duck(Duck.class, new SilentDuck());
+        Duck duck2 = Methods.duck(Duck.class, new LoudDuck());
+        Duck duck3 = Methods.duck(Duck.class, new DuckImpl());
+        Duck duck4 = Methods.duck(Duck.class, new TalentedDog());
+
+        assertThat(duck1.quack(), is("quack"));
+        assertThat(duck2.quack(), is("QUACK"));
+        assertThat(duck3.quack(), is("Quack"));
+        assertThat(duck3, is(instanceOf(Duck.class)));
+        assertThat(duck4.quack(), is("quacklikesound []"));
     }
 
     /**
@@ -98,34 +122,23 @@ public class MethodsTest {
         duck1.quack();
     }
 
-    /**
-     * Test of duck method, of class Methods.
-     */
-    @Test
-    public void testDuck_Object_Class() {
-        Duck duck1 = Methods.duck(Duck.class, new SilentDuck());
-        Duck duck2 = Methods.duck(Duck.class, new LoudDuck());
-        Duck duck3 = Methods.duck(Duck.class, new DuckImpl());
-        Duck duck4 = Methods.duck(Duck.class, new TalentedDog());
+    public interface Duck {
 
-        assertThat(duck1.quack(), is("quack"));
-        assertThat(duck2.quack(), is("QUACK"));
-        assertThat(duck3.quack(), is("Quack"));
-        assertThat(duck3, is(instanceOf(Duck.class)));
-        assertThat(duck4.quack(), is("quacklikesound []"));
+        String quack();
     }
 
-    /**
-     * Test of checkInvoke method, of class Methods.
-     */
-    @Test
-    public void testCheckInvoke() {
+    public class AverageDog {
+
+        public String bark() {
+            return "bark";
+        }
     }
 
-    public class SilentDuck {
+    public class DuckImpl implements Duck {
 
+        @Override
         public String quack() {
-            return "quack";
+            return "Quack";
         }
     }
 
@@ -136,10 +149,10 @@ public class MethodsTest {
         }
     }
 
-    public class AverageDog {
+    public class SilentDuck {
 
-        public String bark() {
-            return "bark";
+        public String quack() {
+            return "quack";
         }
     }
 
@@ -152,19 +165,6 @@ public class MethodsTest {
         public String quack(String... cond) {
             return "quacklikesound " + Arrays.toString(cond);
         }
-    }
-
-    public class DuckImpl implements Duck {
-
-        @Override
-        public String quack() {
-            return "Quack";
-        }
-    }
-
-    public interface Duck {
-
-        String quack();
     }
 
 }

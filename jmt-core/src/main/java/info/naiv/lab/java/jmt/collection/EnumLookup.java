@@ -47,6 +47,9 @@ public class EnumLookup {
         return new NamedLookup<>(EnumSet.allOf(clazz));
     }
 
+    private EnumLookup() {
+    }
+
     @Value
     public static class IntegerEnumLookup<TEnum extends Enum & IntegerEnum>
             implements Lookup<Integer, TEnum> {
@@ -93,4 +96,5 @@ public class EnumLookup {
         }
 
     }
+
 }

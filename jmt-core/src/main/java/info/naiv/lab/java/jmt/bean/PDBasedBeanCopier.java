@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt.bean;
 
+import info.naiv.lab.java.jmt.BeanCopier;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.InvocationTargetException;
@@ -30,58 +31,67 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.Data;
 import lombok.NonNull;
+import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.FatalBeanException;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
 
 /**
+ * Bean を浅くコピーするための仕組み.
+ * {@link BeanUtils#copyProperties(java.lang.Object, java.lang.Object, java.lang.String...) }
+ * だと都度都度解析を行うため、必要となる部分をあらかじめキャッシュしておく.
  *
  * @author enlo
- * @param <TDest>
  * @param <TSource>
- * @param <TKey>
+ * @param <TDest>
  */
-public abstract class AbstractBeanWriter<TDest, TSource, TKey> {
+@Slf4j
+public class PDBasedBeanCopier<TSource, TDest> implements BeanCopier<TSource, TDest> {
 
     protected final GenericConversionService conversionService;
     protected final Map<String, PropertyEntry> properties;
-    protected final Class<?> dstType;
-    protected final PropertyDescriptor[] dstPds;
 
-    public AbstractBeanWriter(@NonNull Class<TDest> dstType, GenericConversionService conversionService) {
-        this.dstType = dstType;
-        this.dstPds = BeanUtils.getPropertyDescriptors(dstType);
-        this.properties = new HashMap<>(dstPds.length);
+    /**
+     *
+     * @param srcType
+     * @param dstType
+     * @param conversionService
+     * @param ignoreProperties
+     */
+    public PDBasedBeanCopier(@NonNull Class<TSource> srcType,
+                             @NonNull Class<TDest> dstType,
+                             GenericConversionService conversionService,
+                             String... ignoreProperties) {
+        PropertyDescriptor[] wrkDstPds = BeanUtils.getPropertyDescriptors(dstType);
+        this.properties = new HashMap<>(wrkDstPds.length);
         this.conversionService = conversionService;
-    }
-
-    protected abstract Object getSourceValue(TSource source, TKey key);
-
-    protected abstract TypeDescriptor getSourceType(TKey key, PropertyDescriptor dstProp);
-
-    protected abstract String getSourceName(TKey key);
-
-    protected abstract TKey createSourceKey(PropertyDescriptor dstPd);
-
-    protected void init(String... ignoreProperties) {
-        properties.clear();
-        for (PropertyDescriptor dstPd : dstPds) {
-            Method dstMethod = dstPd.getWriteMethod();
-            String key = dstPd.getName();
+        for (PropertyDescriptor wrkDstPd : wrkDstPds) {
+            Method dstMethod = wrkDstPd.getWriteMethod();
+            String key = wrkDstPd.getName();
             if (dstMethod != null && !arrayContains(ignoreProperties, key)) {
-                TKey srcKey = createSourceKey(dstPd);
-                if (srcKey != null) {
-                    PropertyEntry pe = new PropertyEntry(srcKey, dstPd, dstMethod);
-                    properties.put(key, pe);
+                PropertyDescriptor wrkSrcPd = BeanUtils.getPropertyDescriptor(srcType, key);
+                if (wrkSrcPd != null) {
+                    Method srcMethod = wrkSrcPd.getReadMethod();
+                    if (srcMethod != null) {
+                        PropertyEntry pe = new PropertyEntry(wrkSrcPd, srcMethod, wrkDstPd, dstMethod);
+                        properties.put(key, pe);
+                    }
                 }
             }
         }
     }
 
-    public TDest write(@NonNull TDest dest, @NonNull TSource source) {
+    /**
+     * プロパティのコピー
+     *
+     * @param source コピー元
+     * @param dest コピー先
+     */
+    @Override
+    public void copyProperties(@NonNull TSource source, @NonNull TDest dest) {
         if (this.conversionService != null) {
             for (PropertyEntry pe : properties.values()) {
                 pe.copy(source, dest, conversionService);
@@ -92,42 +102,34 @@ public abstract class AbstractBeanWriter<TDest, TSource, TKey> {
                 pe.copy(source, dest);
             }
         }
-        return dest;
     }
 
-    public TDest createFrom(TSource source) {
-        try {
-            TDest dest = (TDest) dstType.newInstance();
-            return write(dest, source);
-        }
-        catch (InstantiationException | IllegalAccessException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-    @Data
-    protected class PropertyEntry {
+    @Value
+    protected static final class PropertyEntry {
 
         TypeDescriptor dstType;
         Method dstWrite;
         boolean noConversion;
+        Method srcRead;
         TypeDescriptor srcType;
-        TKey srcKey;
 
-        PropertyEntry(TKey srcKey, PropertyDescriptor dstProp, Method dstWrite) {
-            this.srcKey = srcKey;
+        PropertyEntry(PropertyDescriptor srcProp, Method srcRead, PropertyDescriptor dstProp, Method dstWrite) {
+            this.srcRead = srcRead;
+            if (!Modifier.isPublic(this.srcRead.getDeclaringClass().getModifiers())) {
+                this.srcRead.setAccessible(true);
+            }
             this.dstWrite = dstWrite;
             if (!Modifier.isPublic(this.dstWrite.getDeclaringClass().getModifiers())) {
                 this.dstWrite.setAccessible(true);
             }
-            this.srcType = getSourceType(srcKey, dstProp);
+            this.srcType = TypeDescriptor.valueOf(srcProp.getPropertyType());
             this.dstType = TypeDescriptor.valueOf(dstProp.getPropertyType());
-            this.noConversion = srcType == null || dstType.equals(srcType);
+            this.noConversion = srcType.equals(dstType);
         }
 
-        public void copy(TSource src, Object dst) {
+        public void copy(Object src, Object dst) {
             try {
-                Object val = getSourceValue(src, srcKey);
+                Object val = srcRead.invoke(src);
                 dstWrite.invoke(dst, val);
             }
             catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -135,16 +137,11 @@ public abstract class AbstractBeanWriter<TDest, TSource, TKey> {
             }
         }
 
-        public void copy(TSource src, Object dst, GenericConversionService conversionService) {
+        public void copy(Object src, Object dst, GenericConversionService conversionService) {
             try {
-                Object val = getSourceValue(src, srcKey);
-                if (val != null && !noConversion) {
-                    if (srcType == null) {
-                        val = conversionService.convert(val, dstType);
-                    }
-                    else {
-                        val = conversionService.convert(val, srcType, dstType);
-                    }
+                Object val = srcRead.invoke(src);
+                if (!noConversion) {
+                    val = conversionService.convert(val, srcType, dstType);
                 }
                 dstWrite.invoke(dst, val);
             }
@@ -154,9 +151,8 @@ public abstract class AbstractBeanWriter<TDest, TSource, TKey> {
         }
 
         public void rethrow(final Exception ex) throws FatalBeanException {
-            String src = getSourceName(srcKey);
-            String dst = dstWrite.getName();
-            String message = String.format("Could not copy properties from source to target. [dst.%s(src.%s())]", dst, src);
+            String methodName = srcRead.getName();
+            String message = String.format("Could not copy properties from source to target. (%s) ", methodName);
             throw new FatalBeanException(message, ex);
         }
     }

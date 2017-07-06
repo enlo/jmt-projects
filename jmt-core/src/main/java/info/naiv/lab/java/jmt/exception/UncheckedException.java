@@ -34,10 +34,6 @@ public class UncheckedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public UncheckedException(Throwable cause) {
-        super(cause);
-    }
-
     @Nonnull
     @CheckReturnValue
     public static RuntimeException toUnchecked(@Nonnull Throwable e) {
@@ -45,5 +41,9 @@ public class UncheckedException extends RuntimeException {
             return (RuntimeException) e;
         }
         return new UncheckedException(e);
+    }
+
+    public UncheckedException(Throwable cause) {
+        super(cause);
     }
 }

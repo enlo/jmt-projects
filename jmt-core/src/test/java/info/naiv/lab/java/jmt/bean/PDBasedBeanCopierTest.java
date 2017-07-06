@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt.bean;
 
 import info.naiv.lab.java.jmt.datetime.DateOnly;
 import java.util.Date;

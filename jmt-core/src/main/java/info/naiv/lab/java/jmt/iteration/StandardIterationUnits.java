@@ -39,6 +39,11 @@ public class StandardIterationUnits {
     /**
      *
      */
+    public static final IterationUnit COMPARE_ONLY = new CompareOnlyUnit();
+
+    /**
+     *
+     */
     public static final IterationUnit<Date> DATE = new AbstractIterationUnit<Date>() {
         private static final long serialVersionUID = 1L;
 
@@ -183,6 +188,10 @@ public class StandardIterationUnits {
         }
     };
 
+    public static <T extends Comparable<T>> IterationUnit<T> comparable() {
+        return COMPARE_ONLY;
+    }
+
     /**
      *
      * @param step
@@ -209,15 +218,6 @@ public class StandardIterationUnits {
             }
 
         };
-    }
-
-    /**
-     *
-     */
-    public static final IterationUnit COMPARE_ONLY = new CompareOnlyUnit();
-
-    public static <T extends Comparable<T>> IterationUnit<T> comparable() {
-        return COMPARE_ONLY;
     }
 
     private StandardIterationUnits() {
@@ -262,27 +262,6 @@ public class StandardIterationUnits {
 
     }
 
-    static class DateDayIterationUnit extends AbstractIterationUnit<Date> {
-
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Date advance(Date value, long n) {
-            return new Date(value.getTime() + TimeUnit.DAYS.toMillis(n));
-        }
-
-        @Override
-        public long doDistance(Date lhs, Date rhs) {
-            return TimeUnit.MILLISECONDS.toDays(rhs.getTime() - lhs.getTime());
-        }
-
-        @Override
-        protected int doCompare(Date o1, Date o2) {
-            return o1.compareTo(o2);
-        }
-
-    }
-
     @EqualsAndHashCode(callSuper = false)
     static class CompareOnlyUnit<T extends Comparable<T>>
             extends ComparableComparator<T> implements IterationUnit<T> {
@@ -313,5 +292,26 @@ public class StandardIterationUnits {
         public T truncate(T value) {
             return value;
         }
+    }
+
+    static class DateDayIterationUnit extends AbstractIterationUnit<Date> {
+
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Date advance(Date value, long n) {
+            return new Date(value.getTime() + TimeUnit.DAYS.toMillis(n));
+        }
+
+        @Override
+        public long doDistance(Date lhs, Date rhs) {
+            return TimeUnit.MILLISECONDS.toDays(rhs.getTime() - lhs.getTime());
+        }
+
+        @Override
+        protected int doCompare(Date o1, Date o2) {
+            return o1.compareTo(o2);
+        }
+
     }
 }

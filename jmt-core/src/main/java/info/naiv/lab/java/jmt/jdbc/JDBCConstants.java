@@ -23,33 +23,27 @@
  */
 package info.naiv.lab.java.jmt.jdbc;
 
-import java.io.InputStream;
-import java.io.Reader;
 import java.math.BigDecimal;
 import java.sql.Clob;
 import java.sql.NClob;
-import java.util.Date;
 
-/**
- *
- * @author enlo
- */
 class JDBCConstants {
-
-    public static final Class<?>[] NUMBER_COMPATIBLE_CLASSES
-            = {Byte.class, Short.class, Integer.class, Long.class, Float.class,
-                Double.class, BigDecimal.class, Boolean.class, String.class,
-                byte.class, short.class, int.class, long.class, float.class, double.class};
 
     public static final Class<?>[] BINARY_COMPATIBLE_CLASSES
             = {String.class, byte[].class};
 
+    public static final Class<?>[] CLOB_COMPATIBLE_CLASSES
+            = {Clob.class, NClob.class};
+    public static final Class<?>[] NUMBER_COMPATIBLE_CLASSES
+            = {Byte.class, Short.class, Integer.class, Long.class, Float.class,
+                Double.class, BigDecimal.class, Boolean.class, String.class,
+                byte.class, short.class, int.class, long.class, float.class, double.class};
     public static final Class<?>[] STRING_COMPATIBLE_CLASSES
             = {Byte.class, Short.class, Integer.class, Long.class, Float.class,
                 Double.class, BigDecimal.class, Boolean.class, String.class,
                 byte.class, short.class, int.class, long.class, float.class, double.class,
                 java.sql.Date.class, java.sql.Time.class, java.sql.Timestamp.class};
 
-    public static final Class<?>[] CLOB_COMPATIBLE_CLASSES
-            = {Clob.class, NClob.class};
+    private JDBCConstants() {
+    }
 }

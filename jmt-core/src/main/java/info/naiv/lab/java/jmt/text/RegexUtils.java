@@ -29,20 +29,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
-/**
- *
- * @author enlo
- */
 public class RegexUtils {
-
-    public interface MatcherCallback<T> {
-
-        T onInit();
-
-        T onNext(T context, CharSequence source, int begin, int matchStart, MatchResult mr);
-
-        T onEnd(T context, CharSequence source, int begin, int end);
-    }
 
     public static <T> T fetch(@Nonnull CharSequence source,
                               @Nonnull Pattern pattern,
@@ -79,6 +66,20 @@ public class RegexUtils {
         else {
             return replaceForCharSeq(pattern, source, replacement);
         }
+    }
+
+    /**
+     * コールバック置換.
+     *
+     * @param source
+     * @param pattern
+     * @param replacement
+     * @return
+     */
+    public static String replaceAll(@Nonnull CharSequence source,
+                                    @Nonnull String pattern,
+                                    @Nonnull Function1<MatchResult, String> replacement) {
+        return replaceAll(source, Pattern.compile(pattern), replacement);
     }
 
     private static String replaceForCharSeq(Pattern pattern,
@@ -122,17 +123,15 @@ public class RegexUtils {
         return source;
     }
 
-    /**
-     * コールバック置換.
-     *
-     * @param source
-     * @param pattern
-     * @param replacement
-     * @return
-     */
-    public static String replaceAll(@Nonnull CharSequence source,
-                                    @Nonnull String pattern,
-                                    @Nonnull Function1<MatchResult, String> replacement) {
-        return replaceAll(source, Pattern.compile(pattern), replacement);
+    public interface MatcherCallback<T> {
+
+        T onInit();
+
+        T onNext(T context, CharSequence source, int begin, int matchStart, MatchResult mr);
+
+        T onEnd(T context, CharSequence source, int begin, int end);
+    }
+
+    private RegexUtils() {
     }
 }

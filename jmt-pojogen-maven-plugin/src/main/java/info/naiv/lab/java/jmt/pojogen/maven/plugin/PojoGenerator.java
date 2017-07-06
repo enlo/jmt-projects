@@ -1,6 +1,7 @@
 package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
 import info.naiv.lab.java.jmt.ComparableComparator;
+import info.naiv.lab.java.jmt.jdbc.JDBCTypeTraits;
 import info.naiv.lab.java.jmt.jdbc.JdbcType;
 import java.io.IOException;
 import java.sql.DatabaseMetaData;
@@ -82,6 +83,7 @@ public class PojoGenerator {
                 Field field = new Field();
                 field.setOriginalName(rs.getString("COLUMN_NAME"));
                 field.setOriginalTypeName(rs.getString("TYPE_NAME"));
+                field.setTypeTraits(getTypeTraits(rs));
                 field.makeNameFromOriginalName();
                 Class clz = getType(rs);
                 int nullable = rs.getInt("NULLABLE");
@@ -91,6 +93,12 @@ public class PojoGenerator {
             }
         }
         return fields;
+    }
+
+    protected JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
+        int dataType = rs.getInt("DATA_TYPE");
+        JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
+        return type;
     }
 
     protected Class getType(final ResultSet rs) throws SQLException {

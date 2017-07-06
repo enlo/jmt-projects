@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.template.mvel.node;
 
 import info.naiv.lab.java.jmt.Misc;
-import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -43,42 +42,13 @@ import org.springframework.util.MultiValueMap;
  */
 public class MessageNode extends MultiCompiledExpressionNode {
 
-    private static final long serialVersionUID = 1L;
+    private static final String[] DEFAULT_BUNDLE_VARNAMES = {"messageSource", "messages", "message"};
 
     private static final String DEFAULT_LOCALE_VARNAME = "locale";
-    private static final String[] DEFAULT_BUNDLE_VARNAMES = {"messageSource", "messages", "message"};
+    private static final long serialVersionUID = 1L;
 
     public MessageNode() {
         super(',', "code");
-    }
-
-    @Override
-    public String name() {
-        return "message";
-    }
-
-    protected String resolveMessage(MessageSourceResolvable message, Locale locale, Object ctx, VariableResolverFactory factory, Object bundle) {
-        if (bundle instanceof MessageSource) {
-            return ((MessageSource) bundle).getMessage(message, locale);
-        }
-        else if (bundle instanceof String) {
-            return ResourceBundle.getBundle((String) bundle, locale).getString(message.getCodes()[0]);
-        }
-        else {
-            return message.getDefaultMessage();
-        }
-    }
-
-    @Override
-    protected void doEval(MultiValueMap<String, Serializable> compiledExpressions, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
-        String[] codes = (String[]) executeAllExpression(compiledExpressions.get("code"), ctx, factory);
-        Locale locale = getLocale(compiledExpressions, ctx, factory);
-        Object[] args = executeAllExpression(compiledExpressions.get("value"), ctx, factory);
-        String defaultMessage = getDefaultMessage(compiledExpressions, ctx, factory);
-        Object bundle = getBundle(compiledExpressions, ctx, factory);
-        MessageSourceResolvable msr = new DefaultMessageSourceResolvable(codes, args, defaultMessage);
-        String message = resolveMessage(msr, locale, ctx, factory, bundle);
-        appender.append(message);
     }
 
     public Object getBundle(MultiValueMap<String, Serializable> compiledExpressions, Object ctx, VariableResolverFactory factory) {
@@ -117,6 +87,35 @@ public class MessageNode extends MultiCompiledExpressionNode {
             }
         }
         return Locale.getDefault();
+    }
+
+    @Override
+    public String name() {
+        return "message";
+    }
+
+    @Override
+    protected void doEval(MultiValueMap<String, Serializable> compiledExpressions, TemplateRuntime runtime, TemplateOutputStream appender, Object ctx, VariableResolverFactory factory) {
+        String[] codes = (String[]) executeAllExpression(compiledExpressions.get("code"), ctx, factory);
+        Locale locale = getLocale(compiledExpressions, ctx, factory);
+        Object[] args = executeAllExpression(compiledExpressions.get("value"), ctx, factory);
+        String defaultMessage = getDefaultMessage(compiledExpressions, ctx, factory);
+        Object bundle = getBundle(compiledExpressions, ctx, factory);
+        MessageSourceResolvable msr = new DefaultMessageSourceResolvable(codes, args, defaultMessage);
+        String message = resolveMessage(msr, locale, ctx, factory, bundle);
+        appender.append(message);
+    }
+
+    protected String resolveMessage(MessageSourceResolvable message, Locale locale, Object ctx, VariableResolverFactory factory, Object bundle) {
+        if (bundle instanceof MessageSource) {
+            return ((MessageSource) bundle).getMessage(message, locale);
+        }
+        else if (bundle instanceof String) {
+            return ResourceBundle.getBundle((String) bundle, locale).getString(message.getCodes()[0]);
+        }
+        else {
+            return message.getDefaultMessage();
+        }
     }
 
 }

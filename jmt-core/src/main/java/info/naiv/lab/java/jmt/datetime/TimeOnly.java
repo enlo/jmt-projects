@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import info.naiv.lab.java.jmt.Constants;
-import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierFactory;
+import info.naiv.lab.java.jmt.bean.PDBasedBeanCopierFactory;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.getTimePart;
 import static info.naiv.lab.java.jmt.datetime.ClassicDateUtils.now;
 import java.util.Calendar;

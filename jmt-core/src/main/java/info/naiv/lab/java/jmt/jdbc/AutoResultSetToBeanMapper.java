@@ -23,10 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc;
 
-import info.naiv.lab.java.jmt.jdbc.AutoResultSetToBeanMapper.Key;
-import info.naiv.lab.java.jmt.runtime.AbstractBeanWriter;
-import java.beans.PropertyDescriptor;
-import lombok.Value;
+import info.naiv.lab.java.jmt.bean.AbstractAnnotationBasedBeanWriter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -38,45 +35,27 @@ import org.springframework.core.convert.support.GenericConversionService;
  */
 @Slf4j
 public class AutoResultSetToBeanMapper<T>
-        extends AbstractBeanWriter<T, ResultSetAccessHelper, Key> {
-
-    @Value
-    public static class Key {
-
-        String name;
-        JDBCTypeTraits traits;
-    }
+        extends AbstractAnnotationBasedBeanWriter<ResultSetAccessHelper, T> {
 
     public AutoResultSetToBeanMapper(Class<T> clazz,
                                      GenericConversionService conversionService) {
         super(clazz, conversionService);
-        init();
     }
 
     @Override
-    protected Key createSourceKey(PropertyDescriptor dstPd) {
-        String pdn = dstPd.getName();
-        Class<?> pdt = dstPd.getPropertyType();
-        JDBCTypeTraits trt = JDBCTypeTraits.valueOf(pdt);
-        if (trt.equals(JDBCTypeTraits.OTHER)) {
-            logger.debug("JDBC Incompatible Type. {}, {}", pdn, pdt);
-        }
-        return new Key(pdn, trt);
+    protected boolean checkResolvable(ResultSetAccessHelper source, Key key) {
+        return source.containsKey(key.getName());
     }
 
     @Override
-    protected String getSourceName(Key key) {
-        return key.name;
+    protected Object resolveValue(ResultSetAccessHelper source, Key key) {
+        return source.get(key.getName());
     }
 
     @Override
-    protected TypeDescriptor getSourceType(Key key, PropertyDescriptor dstProp) {
-        return TypeDescriptor.valueOf(key.traits.getRecommendType());
-    }
-
-    @Override
-    protected Object getSourceValue(ResultSetAccessHelper source, Key key) {
-        return source.get(key.name, key.traits);
+    protected TypeDescriptor resolveValueDescriptor(ResultSetAccessHelper source, Key key) {
+        Class<?> clz = source.getMappedType(key.getName());
+        return TypeDescriptor.valueOf(clz);
     }
 
 }

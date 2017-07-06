@@ -87,8 +87,23 @@ public class BeanPropertyLookupTest {
         enabled = this.testLookup1.get("enabled");
         assertThat(enabled, is((Object) false));
     }
-    
-    
+
+    /**
+     * Test of get method, of class BeanPropertyLookup.
+     */
+    @Test(expected = BeansException.class)
+    public void testGet_Error() {
+        this.testLookup1.get("company");
+    }
+
+    /**
+     * Test of get method, of class BeanPropertyLookup.
+     */
+    @Test(expected = BeansException.class)
+    public void testGet_Error2() {
+        this.testLookup1.get("Name");
+    }
+
     /**
      * Test of get method, of class BeanPropertyLookup.
      */
@@ -114,23 +129,6 @@ public class BeanPropertyLookupTest {
         this.testUser1.setEnabled(false);
         enabled = this.testLookup2.get("Enabled");
         assertThat(enabled, is((Object) false));
-    }
-
-    /**
-     * Test of get method, of class BeanPropertyLookup.
-     */
-    @Test(expected = BeansException.class)
-    public void testGet_Error() {
-        this.testLookup1.get("company");
-    }
-    
-    
-    /**
-     * Test of get method, of class BeanPropertyLookup.
-     */
-    @Test(expected = BeansException.class)
-    public void testGet_Error2() {
-        this.testLookup1.get("Name");
     }
 
     /**

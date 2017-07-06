@@ -21,38 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt.bean;
 
-import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.util.concurrent.Callable;
-import javax.annotation.Nonnull;
+import java.util.Map;
+import org.springframework.core.convert.TypeDescriptor;
+import org.springframework.core.convert.support.DefaultConversionService;
+import org.springframework.core.convert.support.GenericConversionService;
 
 /**
  *
  * @author enlo
+ * @param <TDest>
  */
-public class MethodInvokerInvocationHandler extends AbstractInvocationHandler {
+public class AnnotationBasedMapToBeanWriter<TDest> extends AbstractAnnotationBasedBeanWriter<Map<String, Object>, TDest> {
 
-    private final MethodInvokerRegistry mir;
-    private final Object target;
+    public AnnotationBasedMapToBeanWriter(Class<TDest> destType) {
+        super(destType, new DefaultConversionService());
+    }
 
-    public MethodInvokerInvocationHandler(@Nonnull Object target, AccessControlContext accCtrlContext) {
-        super(accCtrlContext);
-        this.target = target;
-        this.mir = new MethodInvokerRegistry(target.getClass(), false);
-        this.mir.prepare();
+    public AnnotationBasedMapToBeanWriter(Class<TDest> destType, GenericConversionService conversionService) {
+        super(destType, conversionService);
     }
 
     @Override
-    protected Object internalInvoke(Method method, Object[] args) throws Exception {
-        for (MethodInvoker mi : mir.get(method.getName())) {
-            Callable<Object> c = mi.toCallable(target, args);
-            if (c != null) {
-                return c.call();
-            }
-        }
-        throw new IllegalStateException(method.getName() + " is missing.");
+    protected boolean checkResolvable(Map<String, Object> source, Key key) {
+        return source.containsKey(key.getName());
+    }
+
+    @Override
+    protected Object resolveValue(Map<String, Object> source, Key key) {
+        return source.get(key.getName());
+    }
+
+    @Override
+    protected TypeDescriptor resolveValueDescriptor(Map<String, Object> source, Key key) {
+        return null;
     }
 
 }

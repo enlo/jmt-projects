@@ -5,7 +5,7 @@
  */
 package info.naiv.lab.java.jmt;
 
-import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopierTest;
+import info.naiv.lab.java.jmt.bean.PDBasedBeanCopierTest;
 import info.naiv.lab.java.jmt.datetime.DateOnly;
 import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
@@ -19,7 +19,7 @@ import info.naiv.lab.java.jmt.monad.Iteratee;
 import info.naiv.lab.java.jmt.monad.Optional;
 import info.naiv.lab.java.jmt.range.Range;
 import info.naiv.lab.java.jmt.range.Ranges;
-import info.naiv.lab.java.jmt.runtime.PDBasedBeanCopier;
+import info.naiv.lab.java.jmt.bean.PDBasedBeanCopier;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
@@ -191,6 +191,7 @@ public class MiscTest {
         assertThat(Misc.between(x, from, null), is(false));
         assertThat(Misc.between(x, from, to), is(true));
     }
+
     /**
      * Test of cloneThroughSerialize method, of class Misc.
      */
@@ -198,15 +199,15 @@ public class MiscTest {
     public void testCloneThroughSerialize() {
         TestCloneBase b = new TestClone("ABC");
         b.values.add(Ranges.openRange(1, 10));
-        
+
         TestCloneBase x = Misc.cloneThroughSerialize(b);
         assertThat(x, is(not(sameInstance(b))));
         assertThat(x, is(instanceOf(TestClone.class)));
-        
+
         TestClone xx = (TestClone) x;
         assertThat(xx.name, is("ABC"));
         assertThat(xx.values, is(contains(Ranges.single(1), Ranges.single(2),
-                                                            Ranges.openRange(1, 10))));
+                                          Ranges.openRange(1, 10))));
     }
 
     /**
@@ -1746,26 +1747,26 @@ public class MiscTest {
         assertThat(Misc.toURL("jmt-projects"), is(nullValue()));
     }
 
-
     @SuppressWarnings("serial")
     static class TestClone extends TestCloneBase {
 
         final String name;
 
-        public TestClone(String name) {
+        TestClone(String name) {
             this.name = name;
         }
 
     }
+
     @SuppressWarnings("serial")
     static class TestCloneBase implements Serializable {
-        
+
         final List<Range<Integer>> values = new ArrayList<>();
-        
-        public TestCloneBase() {
+
+        TestCloneBase() {
             values.add(Ranges.single(1));
             values.add(Ranges.single(2));
         }
-        
+
     }
 }

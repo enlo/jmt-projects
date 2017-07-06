@@ -43,8 +43,16 @@ import org.springframework.beans.PropertyAccessorFactory;
  */
 public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entry<String, Object>> {
 
-    final boolean caseSensitive;
+    private static <T> Map<String, T> createMap(int length, boolean caseSensitive) {
+        if (caseSensitive) {
+            return new HashMap<>(length);
+        }
+        else {
+            return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
+        }
+    }
     final BeanWrapper beanWrapper;
+    final boolean caseSensitive;
     final Map<String, PropertyDescriptor> propertyNames;
 
     /**
@@ -103,15 +111,6 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
      */
     public int size() {
         return propertyNames.size();
-    }
-
-    private static <T> Map<String, T> createMap(int length, boolean caseSensitive) {
-        if (caseSensitive) {
-            return new HashMap<>(length);
-        }
-        else {
-            return new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-        }
     }
 
 }

@@ -21,38 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt.bean;
 
-import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.util.concurrent.Callable;
-import javax.annotation.Nonnull;
+import java.lang.reflect.Member;
+import org.springframework.core.convert.TypeDescriptor;
 
 /**
  *
  * @author enlo
  */
-public class MethodInvokerInvocationHandler extends AbstractInvocationHandler {
+public interface BeanWritingErrorHandler {
 
-    private final MethodInvokerRegistry mir;
-    private final Object target;
-
-    public MethodInvokerInvocationHandler(@Nonnull Object target, AccessControlContext accCtrlContext) {
-        super(accCtrlContext);
-        this.target = target;
-        this.mir = new MethodInvokerRegistry(target.getClass(), false);
-        this.mir.prepare();
-    }
-
-    @Override
-    protected Object internalInvoke(Method method, Object[] args) throws Exception {
-        for (MethodInvoker mi : mir.get(method.getName())) {
-            Callable<Object> c = mi.toCallable(target, args);
-            if (c != null) {
-                return c.call();
-            }
-        }
-        throw new IllegalStateException(method.getName() + " is missing.");
-    }
-
+    /**
+     * エラーハンドリング.
+     *
+     * @param target 処理対象
+     * @param type 対象の型情報
+     * @param value 設定したい値（変換前）
+     * @param ex 発生した例外
+     * @return 処理を継続する場合は true.
+     */
+    boolean handleError(Member target, TypeDescriptor type, Object value, Exception ex);
 }

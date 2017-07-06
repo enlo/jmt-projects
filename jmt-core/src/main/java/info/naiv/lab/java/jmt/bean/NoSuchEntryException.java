@@ -21,38 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.runtime;
+package info.naiv.lab.java.jmt.bean;
 
-import java.lang.reflect.Method;
-import java.security.AccessControlContext;
-import java.util.concurrent.Callable;
-import javax.annotation.Nonnull;
+import lombok.Getter;
 
 /**
  *
  * @author enlo
  */
-public class MethodInvokerInvocationHandler extends AbstractInvocationHandler {
+@Getter
+public class NoSuchEntryException extends RuntimeException {
 
-    private final MethodInvokerRegistry mir;
-    private final Object target;
+    private static final long serialVersionUID = -4627618135289533106L;
 
-    public MethodInvokerInvocationHandler(@Nonnull Object target, AccessControlContext accCtrlContext) {
-        super(accCtrlContext);
-        this.target = target;
-        this.mir = new MethodInvokerRegistry(target.getClass(), false);
-        this.mir.prepare();
-    }
+    private String entryName;
 
-    @Override
-    protected Object internalInvoke(Method method, Object[] args) throws Exception {
-        for (MethodInvoker mi : mir.get(method.getName())) {
-            Callable<Object> c = mi.toCallable(target, args);
-            if (c != null) {
-                return c.call();
-            }
-        }
-        throw new IllegalStateException(method.getName() + " is missing.");
+    public NoSuchEntryException(String entryName) {
+        super(entryName + " is not found.");
+        this.entryName = entryName;
     }
 
 }

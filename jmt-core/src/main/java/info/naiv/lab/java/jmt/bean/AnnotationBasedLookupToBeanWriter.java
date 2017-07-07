@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.bean;
 
-import java.util.Map;
+import info.naiv.lab.java.jmt.collection.Lookup;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.support.DefaultConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
@@ -33,28 +33,28 @@ import org.springframework.core.convert.support.GenericConversionService;
  * @author enlo
  * @param <TDest>
  */
-public class AnnotationBasedMapToBeanWriter<TDest> extends AbstractAnnotationBasedBeanWriter<Map<String, ?>, TDest> {
+public class AnnotationBasedLookupToBeanWriter<TDest> extends AbstractAnnotationBasedBeanWriter<Lookup<String, ?>, TDest> {
 
-    public AnnotationBasedMapToBeanWriter(Class<TDest> destType) {
+    public AnnotationBasedLookupToBeanWriter(Class<TDest> destType) {
         super(destType, new DefaultConversionService());
     }
 
-    public AnnotationBasedMapToBeanWriter(Class<TDest> destType, GenericConversionService conversionService) {
+    public AnnotationBasedLookupToBeanWriter(Class<TDest> destType, GenericConversionService conversionService) {
         super(destType, conversionService);
     }
 
     @Override
-    protected boolean checkResolvable(Map<String, ?> source, Key key) {
+    protected boolean checkResolvable(Lookup<String, ?> source, Key key) {
         return source.containsKey(key.getName());
     }
 
     @Override
-    protected Object resolveValue(Map<String, ?> source, Key key) {
+    protected Object resolveValue(Lookup<String, ?> source, Key key) {
         return source.get(key.getName());
     }
 
     @Override
-    protected TypeDescriptor resolveValueDescriptor(Map<String, ?> source, Key key) {
+    protected TypeDescriptor resolveValueDescriptor(Lookup<String, ?> source, Key key) {
         return null;
     }
 

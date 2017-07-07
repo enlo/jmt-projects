@@ -21,41 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.bean;
+package info.naiv.lab.java.jmt.collection;
 
-import java.util.Map;
-import org.springframework.core.convert.TypeDescriptor;
-import org.springframework.core.convert.support.DefaultConversionService;
-import org.springframework.core.convert.support.GenericConversionService;
+import java.util.List;
+import lombok.Getter;
 
 /**
  *
  * @author enlo
- * @param <TDest>
+ * @param <TValue>
  */
-public class AnnotationBasedMapToBeanWriter<TDest> extends AbstractAnnotationBasedBeanWriter<Map<String, ?>, TDest> {
+@Getter
+public class HeaderAndValuesLookup<TValue> implements Lookup<String, TValue> {
 
-    public AnnotationBasedMapToBeanWriter(Class<TDest> destType) {
-        super(destType, new DefaultConversionService());
-    }
+    private final List<String> header;
+    private final List<TValue> values;
 
-    public AnnotationBasedMapToBeanWriter(Class<TDest> destType, GenericConversionService conversionService) {
-        super(destType, conversionService);
-    }
-
-    @Override
-    protected boolean checkResolvable(Map<String, ?> source, Key key) {
-        return source.containsKey(key.getName());
+    public HeaderAndValuesLookup(List<String> header, List<TValue> values) {
+        this.header = header;
+        this.values = values;
     }
 
     @Override
-    protected Object resolveValue(Map<String, ?> source, Key key) {
-        return source.get(key.getName());
+    public boolean containsKey(String key) {
+        return header.contains(key);
     }
 
     @Override
-    protected TypeDescriptor resolveValueDescriptor(Map<String, ?> source, Key key) {
-        return null;
+    public TValue get(String key) {
+        int pos = header.indexOf(key);
+        return values.get(pos);
+    }
+
+    public int indexOf(String key) {
+        return header.indexOf(key);
     }
 
 }

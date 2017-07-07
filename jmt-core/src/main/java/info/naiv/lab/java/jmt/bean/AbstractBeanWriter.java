@@ -57,7 +57,8 @@ public abstract class AbstractBeanWriter<TSource, TDest, TKey> implements BeanWr
     protected final Map<String, Entry<TKey>> destEntries = new HashMap<>();
     protected final Class<?> destType;
 
-    public AbstractBeanWriter(@NonNull Class<TDest> destType, GenericConversionService conversionService) {
+    public AbstractBeanWriter(@NonNull Class<TDest> destType,
+                              GenericConversionService conversionService) {
         this.destType = destType;
         this.conversionService = conversionService;
     }
@@ -87,10 +88,13 @@ public abstract class AbstractBeanWriter<TSource, TDest, TKey> implements BeanWr
 
     @Override
     public TDest write(@NonNull TSource source, @NonNull TDest dest) {
-        SourceValueResolver<TKey> resolver = createResolver(source);
+        SourceValueResolver<TKey> resolver = getResolver(source);
+        if (isIgnoreSource(source)) {
+            return handleIgnoreSource(source, dest);
+        }
         for (Entry<TKey> e : destEntries.values()) {
             TypeDescriptor td = e.destTypeDescriptor;
-            Object dv = null;
+            Object dv;
             Object sv = null;
             try {
                 if (!resolver.containsKey(e.key)) {
@@ -124,14 +128,41 @@ public abstract class AbstractBeanWriter<TSource, TDest, TKey> implements BeanWr
         return dest;
     }
 
+    /**
+     *
+     * プロパティからキーを生成
+     *
+     * @param pd
+     * @param type
+     * @return
+     */
     @CheckForNull
     protected abstract TKey createKey(PropertyDescriptor pd, TypeDescriptor type);
 
+    /**
+     * フィールドからキーを生成
+     *
+     * @param field
+     * @param type
+     * @return
+     */
     @CheckForNull
     protected abstract TKey createKey(Field field, TypeDescriptor type);
 
-    protected abstract SourceValueResolver<TKey> createResolver(TSource source);
+    /**
+     * ソースから値を取得するためのリゾルバを取得.
+     *
+     * @param source
+     * @return
+     */
+    protected abstract SourceValueResolver<TKey> getResolver(TSource source);
 
+    /**
+     * ソースにキーが存在しない場合.
+     *
+     * @param source
+     * @param key
+     */
     protected void handleEntryNotFound(TSource source, TKey key) {
     }
 
@@ -143,6 +174,32 @@ public abstract class AbstractBeanWriter<TSource, TDest, TKey> implements BeanWr
         return cont;
     }
 
+    /**
+     * ソースを無視する場合の処理.
+     *
+     * @param source
+     * @param dest
+     * @return
+     */
+    protected TDest handleIgnoreSource(TSource source, TDest dest) {
+        return dest;
+    }
+
+    /**
+     * ソースを無視するかどうか.
+     *
+     * @param source
+     * @return
+     */
+    protected boolean isIgnoreSource(TSource source) {
+        return false;
+    }
+
+    /**
+     * 準備
+     *
+     * @param ignoreProperties
+     */
     protected void prepare(String... ignoreProperties) {
         destEntries.clear();
         PropertyDescriptor[] pds = BeanUtils.getPropertyDescriptors(destType);
@@ -173,6 +230,13 @@ public abstract class AbstractBeanWriter<TSource, TDest, TKey> implements BeanWr
         }
     }
 
+    /**
+     * 値の検証. エラーの場合は例外を出す.
+     *
+     * @param key
+     * @param td
+     * @param value
+     */
     protected void validate(TKey key, TypeDescriptor td, Object value) {
     }
 

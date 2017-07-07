@@ -63,7 +63,7 @@ public abstract class AbstractAnnotationBasedBeanWriter<TSource, TDest>
     }
 
     @Override
-    protected SourceValueResolver<Key> createResolver(final TSource source) {
+    protected SourceValueResolver<Key> getResolver(final TSource source) {
 
         return new SourceValueResolver<Key>() {
             @Override

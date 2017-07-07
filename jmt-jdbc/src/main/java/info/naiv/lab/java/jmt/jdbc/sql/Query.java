@@ -126,6 +126,16 @@ public interface Query {
      *
      * @param <T>
      * @param jdbcOperations
+     * @param rowMapperFactory
+     * @return
+     */
+    <T> T queryForBean(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory);
+
+    /**
+     * 単一の行を取得し、Bean に詰め替える.
+     *
+     * @param <T>
+     * @param jdbcOperations
      * @param mappedClass
      * @return
      */

@@ -112,27 +112,27 @@ public class SqlQuery implements Query {
     public int[] batchUpadate(JdbcOperations jdbcOperations, final List<Object[]> batchValues, final int[] columnTypes) {
         return batchUpadate(jdbcOperations, new BatchPreparedStatementSetter() {
 
-            @Override
-            public int getBatchSize() {
-                return batchValues.size();
-            }
+                        @Override
+                        public int getBatchSize() {
+                            return batchValues.size();
+                        }
 
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                Object[] values = batchValues.get(i);
-                for (int colIndex = 0; colIndex < values.length; colIndex++) {
-                    Object value = values[colIndex];
-                    int colType;
-                    if (columnTypes == null || columnTypes.length <= colIndex) {
-                        colType = SqlTypeValue.TYPE_UNKNOWN;
-                    }
-                    else {
-                        colType = columnTypes[colIndex];
-                    }
-                    StatementCreatorUtils.setParameterValue(ps, colIndex + 1, colType, value);
-                }
-            }
-        });
+                        @Override
+                        public void setValues(PreparedStatement ps, int i) throws SQLException {
+                            Object[] values = batchValues.get(i);
+                            for (int colIndex = 0; colIndex < values.length; colIndex++) {
+                                Object value = values[colIndex];
+                                int colType;
+                                if (columnTypes == null || columnTypes.length <= colIndex) {
+                                    colType = SqlTypeValue.TYPE_UNKNOWN;
+                                }
+                                else {
+                                    colType = columnTypes[colIndex];
+                                }
+                                StatementCreatorUtils.setParameterValue(ps, colIndex + 1, colType, value);
+                            }
+                        }
+                    });
     }
 
     @Override
@@ -201,13 +201,13 @@ public class SqlQuery implements Query {
         String q = modifyForQuery(getMergedSql());
         jdbcOperations.execute(q, new PreparedStatementCallback<Void>() {
 
-            @Override
-            public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                setter.setValues(ps);
-                ps.execute();
-                return null;
-            }
-        });
+                           @Override
+                           public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                               setter.setValues(ps);
+                               ps.execute();
+                               return null;
+                           }
+                       });
     }
 
     @Override
@@ -217,12 +217,12 @@ public class SqlQuery implements Query {
             logger.debug("execute Sql={}", q);
         }
         return jdbcOperations.execute(q, new PreparedStatementCallback<T>() {
-            @Override
-            public T doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                setter.setValues(ps);
-                return action.doInPreparedStatement(ps);
-            }
-        });
+                                  @Override
+                                  public T doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                                      setter.setValues(ps);
+                                      return action.doInPreparedStatement(ps);
+                                  }
+                              });
     }
 
     @Override
@@ -265,6 +265,12 @@ public class SqlQuery implements Query {
             logger.debug("query Sql={}", q);
         }
         return jdbcOperations.query(q, setter, new RowMapperFactoryResultSetExtractor<>(rowMapperFactory));
+    }
+
+    @Override
+    public <T> T queryForBean(JdbcOperations jdbcOperations, RowMapperFactory<T> rowMapperFactory) {
+        List<T> results = query(jdbcOperations, rowMapperFactory);
+        return DataAccessUtils.requiredSingleResult(results);
     }
 
     @Override

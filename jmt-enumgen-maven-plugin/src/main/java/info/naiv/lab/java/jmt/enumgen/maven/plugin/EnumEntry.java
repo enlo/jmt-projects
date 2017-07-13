@@ -24,28 +24,41 @@
 package info.naiv.lab.java.jmt.enumgen.maven.plugin;
 
 import com.google.common.base.Objects;
+import lombok.Builder;
 import lombok.Value;
 
 /**
  *
  * @author enlo
  */
+@Builder
 @Value
-public class PropertyEntry implements Comparable<PropertyEntry> {
-    String fieldName;
+public class EnumEntry implements Comparable<EnumEntry> {
 
+    public static EnumEntry forEnumSource(String name, String fieldName, String value, String comment) {
+        return builder().name(name)
+                .comment(comment)
+                .fieldName(fieldName.toUpperCase().replaceAll("[\\.\\-]", "_"))
+                .value(value)
+                .build();
+    }
+
+    public static EnumEntry forProperties(String name, String value, String fieldPrefix) {
+        return builder().name(name)
+                .comment(value)
+                .fieldName(Objects.firstNonNull(fieldPrefix, "")
+                        + name.toUpperCase().replaceAll("[\\.\\-]", "_"))
+                .value(name)
+                .build();
+    }
+
+    String comment;
+    String fieldName;
     String name;
     String value;
 
-    public PropertyEntry(String name, String value, String fieldPrefix) {
-        this.name = name;
-        this.value = value;
-        this.fieldName = Objects.firstNonNull(fieldPrefix, "")
-                + name.toUpperCase().replaceAll("[\\.\\-]", "_");
-    }
-
     @Override
-    public int compareTo(PropertyEntry o) {
+    public int compareTo(EnumEntry o) {
         return name.compareTo(o.name);
     }
 

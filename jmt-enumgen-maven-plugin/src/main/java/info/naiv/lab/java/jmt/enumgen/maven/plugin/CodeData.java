@@ -11,4 +11,10 @@ public class CodeData {
 
     String code;
     String name;
+
+    public CodeData(String name, String code) {
+        this.code = code;
+        this.name = name;
+    }
+
 }

@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.enumgen.maven.plugin;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -39,28 +40,39 @@ import org.mvel2.templates.TemplateRuntime;
 public class EnumGenerator {
 
     final CompiledTemplate classTemplate;
-    final String enumName;
-    final String fieldPrefix;
     final String packageName;
 
-    public EnumGenerator(String packageName, String enumName, String fieldPrefix, CompiledTemplate classTemplate) {
+    public EnumGenerator(String packageName, CompiledTemplate classTemplate) {
         this.packageName = packageName;
-        this.enumName = enumName;
-        this.fieldPrefix = fieldPrefix;
         this.classTemplate = classTemplate;
     }
 
-    public CodeData propertiesToCode(Properties properties) {
+    public CodeData entriesToCode(String className, Collection<EnumEntry> entries) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("packageName", packageName);
+        params.put("enumName", className);
+        params.put("generateDate", new Date());
+
+        List<EnumEntry> ni = new ArrayList<>(entries);
+        Collections.sort(ni);
+        params.put("entries", ni);
+
+        String code = (String) TemplateRuntime.execute(classTemplate, params);
+        return new CodeData(className, code);
+    }
+
+    public CodeData propertiesToCode(final String enumName,
+                                     final String fieldPrefix,
+                                     Properties properties) {
 
         HashMap<String, Object> params = new HashMap<>();
         params.put("packageName", packageName);
         params.put("enumName", enumName);
-        params.put("properties", properties);
         params.put("generateDate", new Date());
 
-        List<PropertyEntry> entries = new ArrayList<>(properties.size());
+        List<EnumEntry> entries = new ArrayList<>(properties.size());
         for (String key : properties.stringPropertyNames()) {
-            PropertyEntry e = new PropertyEntry(key, properties.getProperty(key), fieldPrefix);
+            EnumEntry e = EnumEntry.forProperties(key, properties.getProperty(key), fieldPrefix);
             entries.add(e);
         }
         Collections.sort(entries);

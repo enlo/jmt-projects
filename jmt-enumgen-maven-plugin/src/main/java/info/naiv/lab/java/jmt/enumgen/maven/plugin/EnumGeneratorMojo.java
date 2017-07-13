@@ -23,6 +23,8 @@
  */
 package info.naiv.lab.java.jmt.enumgen.maven.plugin;
 
+import com.google.common.collect.Multimap;
+import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import info.naiv.lab.java.jmt.io.NIOUtils;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -65,30 +67,33 @@ public class EnumGeneratorMojo extends AbstractMojo {
 
     @Parameter(defaultValue = "${project}")
     private MavenProject project;
-    
+
     @Parameter
     protected String classTemplate;
 
     @Parameter(property = "project.build.sourceEncoding", defaultValue = "UTF-8")
     protected String encoding;
-
-    @Parameter(required = true)
-    protected String enumName;
-
-    @Parameter(defaultValue = "")
-    protected String fieldPrefix;
+    
+    @Parameter
+    protected String enumSourceCsv;
 
     @Parameter(required = true, defaultValue = "*")
     protected String filter;
-    
-    @Parameter(defaultValue = "${project.build.directory}/generated-sources/jmtPojo")
+
+    @Parameter(defaultValue = "${project.build.directory}/generated-sources/jmt")
     protected String outputDirectory;
-    
+
     @Parameter(required = true)
     protected String packageName;
-    
+
     @Parameter
-    protected List<String> properties;
+    protected String propertiesSourceEnumName;
+
+    @Parameter(defaultValue = "")
+    protected String propertiesSourceFieldPrefix;
+
+    @Parameter
+    protected List<String> propertiesSourceList;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -101,10 +106,26 @@ public class EnumGeneratorMojo extends AbstractMojo {
 
             final Charset charset = Charset.forName(encoding);
             final CompiledTemplate clsTempl = getClassTemplate();
-            final EnumGenerator builder = new EnumGenerator(packageName, enumName, fieldPrefix, clsTempl);
+            final EnumGenerator builder = new EnumGenerator(packageName, clsTempl);
             final Properties props = getProperties();
-            CodeData code = builder.propertiesToCode(props);
-            writeCode(path, code, charset);
+            if (!props.stringPropertyNames().isEmpty()) {
+                log.info("properties found. ");
+                CodeData code = builder.propertiesToCode(propertiesSourceEnumName,
+                                                         propertiesSourceFieldPrefix,
+                                                         props);
+                log.info("generate " + code.getName());
+                writeCode(path, code, charset);
+            }
+            if (isNotBlank(enumSourceCsv)) {
+                log.info("enumSourceCsv found. ");
+                Multimap<String, EnumEntry> entries
+                        = EnumSource.createEnumEntries(Paths.get(enumSourceCsv), charset);
+                for (String key : entries.keySet()) {
+                    CodeData code = builder.entriesToCode(key, entries.get(key));
+                    log.info("generate " + code.getName());
+                    writeCode(path, code, charset);
+                }
+            }
         }
         catch (IOException ex) {
             log.error(ex);
@@ -120,11 +141,16 @@ public class EnumGeneratorMojo extends AbstractMojo {
     }
 
     public Properties getProperties() throws IOException {
+
+        if (propertiesSourceList == null || propertiesSourceList.isEmpty()) {
+            return new Properties();
+        }
+
         final AntPathMatcher matcher = new AntPathMatcher();
         final PropertiesFactoryBean pfb = new PropertiesFactoryBean();
-        Resource[] resources = new Resource[properties.size()];
-        for (int i = 0; i < properties.size(); i++) {
-            FileSystemResource p = new FileSystemResource(properties.get(i));
+        Resource[] resources = new Resource[propertiesSourceList.size()];
+        for (int i = 0; i < propertiesSourceList.size(); i++) {
+            FileSystemResource p = new FileSystemResource(propertiesSourceList.get(i));
             resources[i] = p;
         }
         pfb.setLocations(resources);

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <metadata>
-  <plugins>
-    <plugin>
-      <name>jmt-pojogen-maven-plugin</name>
-      <prefix>jmt-pojogen-maven-plugin</prefix>
-      <artifactId>jmt-pojogen-maven-plugin</artifactId>
-    </plugin>
-  </plugins>
+    <plugins>
+        <plugin>
+            <name>jmt-enumgen-maven-plugin Maven Plugin</name>
+            <prefix>jmt-enumgen-maven-plugin</prefix>
+            <artifactId>jmt-enumgen-maven-plugin</artifactId>
+        </plugin>
+    </plugins>
 </metadata>

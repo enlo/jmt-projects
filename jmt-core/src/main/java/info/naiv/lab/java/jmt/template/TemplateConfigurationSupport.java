@@ -43,7 +43,7 @@ public class TemplateConfigurationSupport {
         return new StringMvelTemplateBuilder();
     }
 
-    protected TemplateConfigurationSupport() {
+    private TemplateConfigurationSupport() {
     }
 
     @Accessors(fluent = true)

@@ -123,6 +123,9 @@ public class RegexUtils {
         return source;
     }
 
+    private RegexUtils() {
+    }
+
     public interface MatcherCallback<T> {
 
         T onInit();
@@ -130,8 +133,5 @@ public class RegexUtils {
         T onNext(T context, CharSequence source, int begin, int matchStart, MatchResult mr);
 
         T onEnd(T context, CharSequence source, int begin, int end);
-    }
-
-    private RegexUtils() {
     }
 }

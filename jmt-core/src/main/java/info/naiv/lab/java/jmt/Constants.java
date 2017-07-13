@@ -44,6 +44,7 @@ public class Constants {
      * 改行コード CR+LF
      */
     public static final String CRLF = "\r\n";
+
     /**
      * 1日のミリ秒.
      */

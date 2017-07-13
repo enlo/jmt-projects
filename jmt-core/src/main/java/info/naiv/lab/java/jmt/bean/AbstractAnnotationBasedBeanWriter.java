@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.bean;
 
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
 import info.naiv.lab.java.jmt.bean.annotation.Mapping;
@@ -119,5 +120,12 @@ public abstract class AbstractAnnotationBasedBeanWriter<TSource, TDest>
             this.map = map;
         }
 
+        public boolean isByName() {
+            return !isByPosition();
+        }
+
+        public boolean isByPosition() {
+            return 0 <= map.byIndex() && isEmpty(map.byName());
+        }
     }
 }

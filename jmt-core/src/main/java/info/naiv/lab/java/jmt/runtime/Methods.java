@@ -104,7 +104,7 @@ public class Methods {
             return (Duck) obj;
         }
         InvocationHandler ih = new MethodInvokerInvocationHandler(obj, AccessController.getContext());
-        return (Duck) InterfaceImplementor.getInterface(clazz, ih);
+        return InterfaceImplementor.getInterface(clazz, ih);
     }
 
     @Nonnull

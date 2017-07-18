@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.infrastructure;
 
 import java.util.Comparator;
+import org.springframework.core.OrderComparator;
 
 /**
  *
@@ -35,7 +36,10 @@ public class ServiceConnectionComparator implements Comparator<ServiceConnection
     public int compare(ServiceConnection o1, ServiceConnection o2) {
         int c = o1.getContainer().id().compareTo(o2.getContainer().id());
         if (c == 0) {
-            c = o2.getPriority() - o1.getPriority();
+            c = Integer.compare(o1.getPriority(), o2.getPriority());
+            if (c == 0) {
+                c = OrderComparator.INSTANCE.compare(o1, o2);
+            }
         }
         return c;
     }

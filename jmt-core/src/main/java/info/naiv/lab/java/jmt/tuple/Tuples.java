@@ -24,9 +24,71 @@
 package info.naiv.lab.java.jmt.tuple;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import lombok.Value;
 
 public class Tuples {
+
+    public static <T1 extends Comparable>
+            Comparator<Tuple1<T1>> getTuple1Comparator() {
+        return new Comparator<Tuple1<T1>>() {
+            @Override
+            public int compare(Tuple1<T1> o1, Tuple1<T1> o2) {
+                return o1.getValue1().compareTo(o2.getValue1());
+            }
+        };
+    }
+
+    public static <T1 extends Comparable, T2 extends Comparable>
+            Comparator<Tuple2<T1, T2>> getTuple2Comparator() {
+        return new Comparator<Tuple2<T1, T2>>() {
+            @Override
+            public int compare(Tuple2<T1, T2> o1, Tuple2<T1, T2> o2) {
+                int c = o1.getValue1().compareTo(o2.getValue1());
+                if (c == 0) {
+                    c = o1.getValue2().compareTo(o2.getValue2());
+                }
+                return c;
+            }
+        };
+    }
+
+    public static <T1 extends Comparable, T2 extends Comparable, T3 extends Comparable>
+            Comparator<Tuple3<T1, T2, T3>> getTuple3Comparator() {
+        return new Comparator<Tuple3<T1, T2, T3>>() {
+            @Override
+            public int compare(Tuple3<T1, T2, T3> o1, Tuple3<T1, T2, T3> o2) {
+                int c = o1.getValue1().compareTo(o2.getValue1());
+                if (c == 0) {
+                    c = o1.getValue2().compareTo(o2.getValue2());
+                    if (c == 0) {
+                        c = o1.getValue3().compareTo(o2.getValue3());
+                    }
+                }
+                return c;
+            }
+        };
+    }
+
+    public static <T1 extends Comparable, T2 extends Comparable, T3 extends Comparable, T4 extends Comparable>
+            Comparator<Tuple4<T1, T2, T3, T4>> getTuple4Comparator() {
+        return new Comparator<Tuple4<T1, T2, T3, T4>>() {
+            @Override
+            public int compare(Tuple4<T1, T2, T3, T4> o1, Tuple4<T1, T2, T3, T4> o2) {
+                int c = o1.getValue1().compareTo(o2.getValue1());
+                if (c == 0) {
+                    c = o1.getValue2().compareTo(o2.getValue2());
+                    if (c == 0) {
+                        c = o1.getValue3().compareTo(o2.getValue3());
+                        if (c == 0) {
+                            c = o1.getValue4().compareTo(o2.getValue4());
+                        }
+                    }
+                }
+                return c;
+            }
+        };
+    }
 
     public static <T> Tuple1<T> tie(T value) {
         return new Tuple1Impl(value);

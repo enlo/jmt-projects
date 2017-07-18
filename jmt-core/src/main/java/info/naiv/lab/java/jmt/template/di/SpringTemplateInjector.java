@@ -36,6 +36,7 @@ import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 import org.springframework.util.ReflectionUtils.MethodCallback;
 import org.springframework.util.ReflectionUtils.MethodFilter;
@@ -129,7 +130,7 @@ public class SpringTemplateInjector extends AbstractTemplateInjector implements 
             }
 
             Class<?>[] paramTypes = method.getParameterTypes();
-            return paramTypes.length == 1 && paramTypes[0].isAssignableFrom(Template.class);
+            return paramTypes.length == 1 && ClassUtils.isAssignable(Template.class, paramTypes[0]);
         }
     }
 

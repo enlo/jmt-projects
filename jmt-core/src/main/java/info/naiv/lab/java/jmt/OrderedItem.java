@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2017 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,42 +24,39 @@
 package info.naiv.lab.java.jmt;
 
 import java.io.Serializable;
-import java.util.Comparator;
-import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.Value;
+import org.springframework.core.Ordered;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
+ * @param <T>
  */
-@Data
-@RequiredArgsConstructor(staticName = "of")
-@AllArgsConstructor(staticName = "of")
-public class KeyValuePair<TKey, TValue> implements Map.Entry<TKey, TValue>, Serializable {
+@Value
+public class OrderedItem<T> implements Comparable<OrderedItem>, Ordered, Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static <TKey extends Comparable> Comparator<KeyValuePair<TKey, ?>> getKeyComparator() {
-        return new Comparator<KeyValuePair<TKey, ?>>() {
-            @Override
-            public int compare(KeyValuePair<TKey, ?> o1, KeyValuePair<TKey, ?> o2) {
-                return o1.key.compareTo(o2.key);
-            }
-        };
+    private int order;
+    private T value;
+
+    public OrderedItem(int order, T value) {
+        this.order = order;
+        this.value = value;
     }
 
-    private final TKey key;
-    private TValue value;
+    public OrderedItem(T value) {
+        int o = Ordered.LOWEST_PRECEDENCE;
+        if (value instanceof Ordered) {
+            o = ((Ordered) value).getOrder();
+        }
+        this.order = o;
+        this.value = value;
+    }
 
     @Override
-    public TValue setValue(TValue value) {
-        TValue oldVal = this.value;
-        this.value = value;
-        return oldVal;
+    public int compareTo(OrderedItem o) {
+        return Integer.compare(order, o.order);
     }
 
 }

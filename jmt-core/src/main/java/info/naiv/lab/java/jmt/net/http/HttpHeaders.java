@@ -71,6 +71,10 @@ public class HttpHeaders extends KeyedValueCollection<String, HttpHeader> implem
         return setBuilder(new HttpHeaderBuilder(headerName).headerValue(headerName));
     }
 
+    public HttpHeaderBuilder setHeader(HttpHeaderElement header) {
+        return setBuilder(header.toHttpHeaderBuilder());
+    }
+
     @Override
     public void writeTo(OutputStream out, Charset charset) throws IOException {
         for (HttpHeader h : this) {

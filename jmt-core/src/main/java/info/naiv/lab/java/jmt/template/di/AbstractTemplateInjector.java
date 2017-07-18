@@ -73,14 +73,14 @@ public abstract class AbstractTemplateInjector {
      *
      * @param anno
      * @param categoryAnno
-     * @param field
+     * @param member
      * @return
      */
-    protected Template getTemplate(InjectTemplate anno, TemplateCategoryOf categoryAnno, Member field) {
+    protected Template getTemplate(InjectTemplate anno, TemplateCategoryOf categoryAnno, Member member) {
         TemplateLoader templ = getTemplateLoader(anno);
         if (templ != null) {
             String category = getCategory(anno, categoryAnno);
-            String name = getName(anno, field);
+            String name = getName(anno, member);
             String charset = anno.charset();
             if (isNotBlank(charset) && Charset.isSupported(charset)) {
                 logger.debug("load(category={}, name={}, charset={})", category, name, charset);

@@ -28,13 +28,14 @@ import java.lang.ref.WeakReference;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import javax.annotation.Nonnull;
+import org.springframework.core.Ordered;
 
 /**
  * サービスコンテナーとのコネクション.
  *
  * @author enlo
  */
-public abstract class AbstractServiceConnection implements ServiceConnection {
+public abstract class AbstractServiceConnection implements ServiceConnection, Ordered {
 
     final AtomicBoolean closed = new AtomicBoolean(false);
     final Reference<AbstractServiceContainer> container;
@@ -72,6 +73,11 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
             throw new IllegalStateException("connection closed");
         }
         return c;
+    }
+
+    @Override
+    public final int getOrder() {
+        return getPriority();
     }
 
     @Override
@@ -133,4 +139,5 @@ public abstract class AbstractServiceConnection implements ServiceConnection {
     protected void setPriority(int priority) {
         this.priority.set(priority);
     }
+
 }

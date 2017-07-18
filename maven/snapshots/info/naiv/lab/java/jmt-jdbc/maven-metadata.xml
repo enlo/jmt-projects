@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>info.naiv.lab.java</groupId>
+  <artifactId>jmt-jdbc</artifactId>
+  <versioning>
+    <versions>
+      <version>1.0.3-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20170718062332</lastUpdated>
+  </versioning>
+</metadata>

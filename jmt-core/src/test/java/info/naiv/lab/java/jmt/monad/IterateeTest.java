@@ -154,7 +154,7 @@ public class IterateeTest {
     @Test
     public void testIterator() {
         List<Integer> list = Arrays.asList(1, 2, 3);
-        Iteratee<Integer> im = new Iteratee(list);
+        Iteratee<Integer> im = new Iteratee<>(list);
         assertThat(im, contains(1, 2, 3));
     }
 

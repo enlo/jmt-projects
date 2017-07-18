@@ -36,7 +36,8 @@ public class ServiceConnectionComparator implements Comparator<ServiceConnection
     public int compare(ServiceConnection o1, ServiceConnection o2) {
         int c = o1.getContainer().id().compareTo(o2.getContainer().id());
         if (c == 0) {
-            c = Integer.compare(o1.getPriority(), o2.getPriority());
+            // 優先順位は大きいほうが先.
+            c = Integer.compare(o2.getPriority(), o1.getPriority());
             if (c == 0) {
                 c = OrderComparator.INSTANCE.compare(o1, o2);
             }

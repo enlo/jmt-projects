@@ -38,7 +38,7 @@ public interface ServiceConnection extends AutoCloseable {
     Tag getTag();
 
     /**
-     * @return 優先順位
+     * @return 優先順位. 値が大きいほど優先順位が高い.
      */
     int getPriority();
 

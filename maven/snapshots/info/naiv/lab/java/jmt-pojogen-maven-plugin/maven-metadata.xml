@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <groupId>info.naiv.lab.java</groupId>
+  <artifactId>jmt-pojogen-maven-plugin</artifactId>
+  <versioning>
+    <latest>1.0.3-SNAPSHOT</latest>
+    <versions>
+      <version>1.0.3-SNAPSHOT</version>
+    </versions>
+    <lastUpdated>20170718233726</lastUpdated>
+  </versioning>
+</metadata>

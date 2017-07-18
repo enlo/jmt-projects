@@ -1,7 +1,6 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.Arguments.between;
-import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static info.naiv.lab.java.jmt.Misc.toCalendar;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
@@ -169,9 +168,7 @@ public class ClassicDateUtils {
      * @return dest.
      */
     @Nonnull
-    static public Calendar copyFields(Calendar dest, Calendar src, int... copyFields) throws IllegalArgumentException {
-        nonNull(dest, "dest");
-        nonNull(src, "src");
+    static public Calendar copyFields(@NonNull Calendar dest, @NonNull Calendar src, int... copyFields) throws IllegalArgumentException {
         for (int copyField : copyFields) {
             dest.set(copyField, src.get(copyField));
         }
@@ -340,8 +337,7 @@ public class ClassicDateUtils {
      * @return 日付部分のみを取り出した日付型
      */
     @Nonnull
-    public static Date getDatePart(Date date) {
-        nonNull(date, "date");
+    public static Date getDatePart(@NonNull Date date) {
         return getDatePart(toCalendar(date, null)).getTime();
     }
 
@@ -352,8 +348,7 @@ public class ClassicDateUtils {
      * @return 日付部分のみを取り出した日付型
      */
     @Nonnull
-    public static Calendar getDatePart(Calendar cal) {
-        nonNull(cal, "cal");
+    public static Calendar getDatePart(@NonNull Calendar cal) {
         Calendar newCal = (Calendar) cal.clone();
         newCal.clear();
         return copyFields(newCal, cal, DATE_PART_FIELDS);

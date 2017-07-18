@@ -113,7 +113,7 @@ public class TimeOnly extends java.sql.Time {
 
     @Override
     public void setTime(long time) {
-        long mills = time % Constants.DAY_IN_MILLS;
+        long mills = new TimeOnly(time).getTime();
         super.setTime(mills);
     }
 

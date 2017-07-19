@@ -25,3 +25,5 @@ hs_err_pid*
 /jmt-tquery/target/
 /jmt-core/nbproject/
 /jmt-enumgen-maven-plugin/target/
+/jmt-pojogen-maven-plugin/nbactions.xml
+/jmt-enumgen-maven-plugin/nbactions.xml

@@ -21,40 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.net.http;
+package info.naiv.lab.java.jmt.net;
 
-import info.naiv.lab.java.jmt.collection.KeyedValue;
-import info.naiv.lab.java.jmt.net.StringEncoder;
-import info.naiv.lab.java.jmt.net.URLCodec;
+import java.nio.charset.Charset;
 
 /**
  *
  * @author enlo
  */
-public enum ContentDispositionType implements KeyedValue<String> {
-    ATTACHMENT("attachment"),
-    INLINE("inline"),
-    FORMDATA("form-data") {
-        @Override
-        public StringEncoder getEncoder() {
-            return URLCodec.FORM_URL_ENCODER;
-        }
+public interface StringEncoder {
 
-    };
+    boolean shouldEncode(String data);
 
-    final String key;
-
-    private ContentDispositionType(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    public StringEncoder getEncoder() {
-        return URLCodec.RFC3986_URL_ENCODER;
-    }
-
+    String encode(String data, Charset charset);
 }

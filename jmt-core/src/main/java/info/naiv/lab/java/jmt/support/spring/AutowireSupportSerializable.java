@@ -21,40 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.net.http;
+package info.naiv.lab.java.jmt.support.spring;
 
-import info.naiv.lab.java.jmt.collection.KeyedValue;
-import info.naiv.lab.java.jmt.net.StringEncoder;
-import info.naiv.lab.java.jmt.net.URLCodec;
+import info.naiv.lab.java.jmt.fx.Consumer1;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author enlo
  */
-public enum ContentDispositionType implements KeyedValue<String> {
-    ATTACHMENT("attachment"),
-    INLINE("inline"),
-    FORMDATA("form-data") {
-        @Override
-        public StringEncoder getEncoder() {
-            return URLCodec.FORM_URL_ENCODER;
-        }
+@SuppressWarnings("serial")
+public abstract class AutowireSupportSerializable implements Serializable {
 
-    };
-
-    final String key;
-
-    private ContentDispositionType(String key) {
-        this.key = key;
-    }
-
-    @Override
-    public String getKey() {
-        return key;
-    }
-
-    public StringEncoder getEncoder() {
-        return URLCodec.RFC3986_URL_ENCODER;
+    private void readObject(ObjectInputStream ois) throws ClassNotFoundException, IOException {
+        ois.defaultReadObject();
+        GlobalApplicationContextHolder.runWithApplicationContext(new Consumer1<ApplicationContext>() {
+            @Override
+            public void accept(ApplicationContext a1) {
+                a1.getAutowireCapableBeanFactory().autowireBean(this);
+            }
+        });
     }
 
 }

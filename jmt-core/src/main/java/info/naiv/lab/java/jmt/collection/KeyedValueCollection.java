@@ -28,6 +28,7 @@ import java.util.AbstractCollection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import javax.annotation.Nonnull;
 
 /**
  *
@@ -51,11 +52,12 @@ public class KeyedValueCollection<TKey extends Comparable, TValue extends KeyedV
     }
 
     public KeyedValueCollection(Collection<? extends TValue> initialValues) {
-        values = new ArrayList<TValue>(initialValues);
+        values = new ArrayList<>(initialValues.size());
+        addAll(initialValues);
     }
 
     @Override
-    public boolean add(TValue e) {
+    public boolean add(@Nonnull TValue e) {
         int index = indexOf(e.getKey());
         if (0 <= index) {
             return false;
@@ -103,13 +105,20 @@ public class KeyedValueCollection<TKey extends Comparable, TValue extends KeyedV
         return values.iterator();
     }
 
-    public TValue put(TValue e) {
+    public TValue put(@Nonnull TValue e) {
         int index = indexOf(e.getKey());
         if (0 <= index) {
             return values.set(index, e);
         }
         values.add(e);
         return null;
+    }
+
+    public void putAll(Collection<? extends TValue> values) {
+        this.values.ensureCapacity(values.size());
+        for (TValue val : values) {
+            put(val);
+        }
     }
 
     @Override

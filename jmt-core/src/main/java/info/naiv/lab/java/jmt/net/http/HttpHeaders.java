@@ -68,7 +68,7 @@ public class HttpHeaders extends KeyedValueCollection<String, HttpHeader> implem
     }
 
     public HttpHeaderBuilder setHeader(String headerName, String value) {
-        return setBuilder(new HttpHeaderBuilder(headerName).headerValue(headerName));
+        return setBuilder(new HttpHeaderBuilder(headerName).headerValue(value));
     }
 
     public HttpHeaderBuilder setHeader(HttpHeaderElement header) {

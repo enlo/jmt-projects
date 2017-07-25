@@ -43,7 +43,7 @@ public interface TemplateRepository {
      * @return
      */
     @CheckForNull
-    <T extends Template> T getTemplate(String category, String name, Class<T> clazz);
+    <T extends Template> T getTemplate(String category, @Nonnull String name, @Nonnull Class<T> clazz);
 
     /**
      *
@@ -53,6 +53,6 @@ public interface TemplateRepository {
      * @return
      */
     @Nonnull
-    <T extends Template> Iterable<T> getTemplateList(String category, Class<T> clazz);
+    <T extends Template> Iterable<T> getTemplateList(String category, @Nonnull Class<T> clazz);
 
 }

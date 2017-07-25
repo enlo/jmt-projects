@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import lombok.NonNull;
 import lombok.Synchronized;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.LinkedMultiValueMap;
@@ -99,6 +100,11 @@ public class SimpleTemplateRepository implements TemplateRepository {
         return result;
     }
 
+    public Template putTemplate(String category, @NonNull String name, @NonNull Template template) {
+        MultiValueMap<String, Template> locals = getTemplatesInCategory(category);
+        return put(locals, category, name, template);
+    }
+
     @Synchronized
     public void setTemplateLoader(TemplateLoader loader) {
         templateLoaderList.clear();
@@ -124,6 +130,7 @@ public class SimpleTemplateRepository implements TemplateRepository {
                     locals.add(name, tpl);
                 }
             }
+            sameNames = locals.get(name);
         }
         return sameNames;
     }
@@ -152,6 +159,26 @@ public class SimpleTemplateRepository implements TemplateRepository {
                     locals.add(tpl.getName(), tpl);
                 }
             }
+        }
+    }
+
+    @Synchronized
+    private Template put(MultiValueMap<String, Template> locals, String category, String name, Template template) {
+        List<Template> sameNames = locals.get(name);
+        if (isEmpty(sameNames)) {
+            locals.set(name, template);
+            return null;
+        }
+        else {
+            Class<?> clazz = template.getClass();
+            for (int i = 0; i < sameNames.size(); i++) {
+                Template tpl = sameNames.get(i);
+                if (tpl.getClass().isAssignableFrom(clazz)) {
+                    return sameNames.set(i, template);
+                }
+            }
+            sameNames.add(0, template);
+            return null;
         }
     }
 

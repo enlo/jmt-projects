@@ -99,9 +99,9 @@ public class MultipartContentBuilder {
                 contentType = "application/octet-stream";
             }
             headers.setContentType(contentType);
-            headers.setContentLength(data.length);
             setContentDisposition().parameter("filename", filename).update();
             headers.setContentTransferEncoding(ContentTransferEncodingType.BINARY);
+            headers.setContentLength(data.length);
         }
 
         @Override

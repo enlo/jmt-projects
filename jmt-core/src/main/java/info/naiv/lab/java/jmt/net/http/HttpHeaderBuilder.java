@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.net.http;
 
+import info.naiv.lab.java.jmt.net.StringEncoder;
 import info.naiv.lab.java.jmt.net.URLCodec;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
@@ -42,15 +43,16 @@ import lombok.experimental.Accessors;
 public class HttpHeaderBuilder {
 
     public static HttpHeaderBuilder contentDisposition() {
-        return new HttpHeaderBuilder("Content-Disposition");
+        return new HttpHeaderBuilder("Content-Disposition")
+                .alwaysNoEncode(false);
     }
 
     public static HttpHeaderBuilder contentDisposition(@Nonnull ContentDispositionType type) {
-        return contentDisposition().headerValue(type.getKey());
+        return contentDisposition().headerValue(type.getKey()).urlEncoder(type.getEncoder());
     }
 
     public static HttpHeaderBuilder contentType() {
-        return new HttpHeaderBuilder("Content-Disposition");
+        return new HttpHeaderBuilder("Content-Type");
     }
 
     public static HttpHeaderBuilder contentType(@Nonnull String contentType) {
@@ -61,17 +63,26 @@ public class HttpHeaderBuilder {
         return contentType(contentType).parameter("charset", charset.name());
     }
 
-    private boolean alwaysNoEncode = true;
+    private boolean alwaysNoEncode = false;
+
     private Charset charset = StandardCharsets.UTF_8;
+
     private Charset forOldInternetExplorerCharset = Charset.defaultCharset();
+
     private Locale locale = null;
+
     private boolean oldInterExplorer = false;
+
     private boolean quote = true;
 
+    private StringEncoder urlEncoder = URLCodec.RFC3986_URL_ENCODER;
+
     protected final String headerName;
+
     protected String headerValue;
 
     protected HttpHeaders headers;
+
     protected final Map<String, String> parameters = new HashMap<>();
 
     public HttpHeaderBuilder(String headerName) {
@@ -96,16 +107,26 @@ public class HttpHeaderBuilder {
         return sb.toString();
     }
 
-    public HttpHeaderBuilder parameter(@Nonnull String name, String value) {
+    public HttpHeaderBuilder joinParameter(@Nonnull String name, String value) {
         if (value != null) {
             String current = parameters.get(name);
-            if (current != null) {
+            if (current == null) {
                 current = value;
             }
             else {
                 current += value;
             }
             parameters.put(name, current);
+        }
+        return this;
+    }
+
+    public HttpHeaderBuilder parameter(@Nonnull String name, String value) {
+        if (value != null) {
+            parameters.put(name, value);
+        }
+        else {
+            parameters.remove(name);
         }
         return this;
     }
@@ -125,14 +146,14 @@ public class HttpHeaderBuilder {
 
         String key = entry.getKey();
         String value = entry.getValue();
-        boolean mustEncode = !alwaysNoEncode && URLCodec.isMustEncode(value);
-
+        boolean mustEncode = !alwaysNoEncode && urlEncoder.shouldEncode(value);
         sb.append(entry.getKey()).append("=");
         if (quote) {
             sb.append('"');
         }
         if (mustEncode && oldInterExplorer) {
-            String encoded = URLCodec.encode(value, forOldInternetExplorerCharset);
+            String encoded = urlEncoder.encode(value, forOldInternetExplorerCharset);
+            encoded = encoded.replace("%20", " ");
             sb.append(encoded);
             mustEncode = false;
         }
@@ -148,7 +169,7 @@ public class HttpHeaderBuilder {
             if (locale != null) {
                 sb.append(locale.getLanguage());
             }
-            sb.append("'").append(URLCodec.encode(value, charset));
+            sb.append("'").append(urlEncoder.encode(value, charset));
         }
     }
 

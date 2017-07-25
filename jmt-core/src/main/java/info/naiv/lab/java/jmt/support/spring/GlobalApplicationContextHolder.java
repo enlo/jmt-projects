@@ -21,40 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.net.http;
+package info.naiv.lab.java.jmt.support.spring;
 
-import info.naiv.lab.java.jmt.collection.KeyedValue;
-import info.naiv.lab.java.jmt.net.StringEncoder;
-import info.naiv.lab.java.jmt.net.URLCodec;
+import info.naiv.lab.java.jmt.fx.Consumer1;
+import info.naiv.lab.java.jmt.monad.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+import javax.annotation.Nonnull;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ApplicationObjectSupport;
 
 /**
  *
  * @author enlo
  */
-public enum ContentDispositionType implements KeyedValue<String> {
-    ATTACHMENT("attachment"),
-    INLINE("inline"),
-    FORMDATA("form-data") {
-        @Override
-        public StringEncoder getEncoder() {
-            return URLCodec.FORM_URL_ENCODER;
+public class GlobalApplicationContextHolder extends ApplicationObjectSupport {
+
+    private static final AtomicReference<ApplicationObjectSupport> APPCTX = new AtomicReference<>();
+
+    public static ApplicationObjectSupport getInstance() {
+        return APPCTX.get();
+    }
+
+    public static void runWithApplicationContext(@Nonnull Consumer1<ApplicationContext> consumer) {
+        ApplicationObjectSupport aos = APPCTX.get();
+        if (aos != null) {
+            Optional.ofNullable(aos.getApplicationContext()).bind(consumer);
         }
-
-    };
-
-    final String key;
-
-    private ContentDispositionType(String key) {
-        this.key = key;
     }
 
     @Override
-    public String getKey() {
-        return key;
+    protected void initApplicationContext() throws BeansException {
+        APPCTX.set(this);
     }
-
-    public StringEncoder getEncoder() {
-        return URLCodec.RFC3986_URL_ENCODER;
-    }
-
 }

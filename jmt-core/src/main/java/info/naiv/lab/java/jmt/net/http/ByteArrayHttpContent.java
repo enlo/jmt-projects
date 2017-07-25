@@ -23,38 +23,43 @@
  */
 package info.naiv.lab.java.jmt.net.http;
 
-import info.naiv.lab.java.jmt.collection.KeyedValue;
-import info.naiv.lab.java.jmt.net.StringEncoder;
-import info.naiv.lab.java.jmt.net.URLCodec;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
+import lombok.Getter;
+import lombok.NonNull;
 
 /**
  *
  * @author enlo
  */
-public enum ContentDispositionType implements KeyedValue<String> {
-    ATTACHMENT("attachment"),
-    INLINE("inline"),
-    FORMDATA("form-data") {
-        @Override
-        public StringEncoder getEncoder() {
-            return URLCodec.FORM_URL_ENCODER;
-        }
+public class ByteArrayHttpContent extends HttpContent {
 
-    };
+    private static final long serialVersionUID = 7464315067899447425L;
 
-    final String key;
+    @Getter
+    private byte[] data;
 
-    private ContentDispositionType(String key) {
-        this.key = key;
+    public ByteArrayHttpContent() {
+        this(new byte[]{});
+    }
+
+    public ByteArrayHttpContent(@NonNull byte[] data) {
+        this.data = data;
+        headers.setContentType("application/octet-stream");
+        headers.setContentLength(data.length);
+    }
+
+    public void setData(@NonNull byte[] data) {
+        this.data = data;
+        headers.setContentLength(data.length);
     }
 
     @Override
-    public String getKey() {
-        return key;
-    }
-
-    public StringEncoder getEncoder() {
-        return URLCodec.RFC3986_URL_ENCODER;
+    public void writeTo(OutputStream stream, Charset charset) throws IOException {
+        headers.writeTo(stream, charset);
+        stream.write(CRLF);
+        stream.write(data);
     }
 
 }

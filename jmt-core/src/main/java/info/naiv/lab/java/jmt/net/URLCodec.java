@@ -28,7 +28,6 @@ import static java.lang.Character.forDigit;
 import static java.lang.Character.toUpperCase;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import static java.util.Arrays.sort;
 
 /**
  * URL Encode / Decode
@@ -38,15 +37,32 @@ import static java.util.Arrays.sort;
 public class URLCodec {
 
     public static final byte ESCAPE_CHAR = '%';
-    public static final char[] WWW_FORM_URL;
-    static final int RADIX = 16;
 
-    static {
-        char[] special = "-_.* 1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-                .toCharArray();
-        sort(special);
-        WWW_FORM_URL = special;
-    }
+    public static StringEncoder FORM_URL_ENCODER = new StringEncoder() {
+        @Override
+        public String encode(String data, Charset charset) {
+            return URLCodec.encodeForHttpPost(data, charset);
+        }
+
+        @Override
+        public boolean shouldEncode(String data) {
+            return URLCodec.shouldEncodeForHttpPost(data);
+        }
+    };
+
+    public static StringEncoder RFC3986_URL_ENCODER = new StringEncoder() {
+        @Override
+        public String encode(String data, Charset charset) {
+            return URLCodec.encode(data, charset);
+        }
+
+        @Override
+        public boolean shouldEncode(String data) {
+            return URLCodec.shouldEncode(data);
+        }
+
+    };
+    static final int RADIX = 16;
 
     /**
      * URLデコード.
@@ -101,7 +117,7 @@ public class URLCodec {
     }
 
     /**
-     * URLエンコード.
+     * RFC3986 URLエンコード.
      *
      * @param data
      * @param charset
@@ -112,11 +128,11 @@ public class URLCodec {
             return null;
         }
         byte[] bytes = data.getBytes(charset);
-        return new String(encode(bytes), StandardCharsets.US_ASCII);
+        return new String(URLCodec.encode(bytes), StandardCharsets.US_ASCII);
     }
 
     /**
-     * URLエンコード.
+     * RFC3986 URLエンコード
      *
      * @param data
      * @return
@@ -126,6 +142,45 @@ public class URLCodec {
         for (byte c : data) {
             char b = (char) (c & 0xFF);
             if (nonEscape(b)) {
+                baos.write(b);
+            }
+            else {
+                baos.write(ESCAPE_CHAR);
+                char hex1 = toUpperCase(forDigit((b >> 4) & 0xF, RADIX));
+                char hex2 = toUpperCase(forDigit(b & 0xF, RADIX));
+                baos.write(hex1);
+                baos.write(hex2);
+            }
+        }
+        return baos.toByteArray();
+    }
+
+    /**
+     * HTTP Post 用 URLエンコード.
+     *
+     * @param data
+     * @param charset
+     * @return
+     */
+    public static String encodeForHttpPost(String data, Charset charset) {
+        if (data == null) {
+            return null;
+        }
+        byte[] bytes = data.getBytes(charset);
+        return new String(URLCodec.encodeForHttpPost(bytes), StandardCharsets.US_ASCII);
+    }
+
+    /**
+     * URLエンコード.
+     *
+     * @param data
+     * @return
+     */
+    public static byte[] encodeForHttpPost(byte[] data) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream((data.length * 3) / 2);
+        for (byte c : data) {
+            char b = (char) (c & 0xFF);
+            if (nonEscapeForHttpPost(b)) {
                 if (b == ' ') {
                     b = '+';
                 }
@@ -148,9 +203,18 @@ public class URLCodec {
      * @param data
      * @return
      */
-    public static boolean isMustEncode(String data) {
+    public static boolean shouldEncode(String data) {
         for (char ch : data.toCharArray()) {
             if (!nonEscape(ch)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean shouldEncodeForHttpPost(String data) {
+        for (char ch : data.toCharArray()) {
+            if (!nonEscapeForHttpPost(ch)) {
                 return true;
             }
         }
@@ -166,6 +230,13 @@ public class URLCodec {
     }
 
     static boolean nonEscape(char ch) {
+        return (('a' <= ch && ch <= 'z')
+                || ('A' <= ch && ch <= 'Z')
+                || ('0' <= ch && ch <= '9')
+                || (ch == '-' || ch == '_' || ch == '.'));
+    }
+
+    static boolean nonEscapeForHttpPost(char ch) {
         return (('a' <= ch && ch <= 'z')
                 || ('A' <= ch && ch <= 'Z')
                 || ('0' <= ch && ch <= '9')

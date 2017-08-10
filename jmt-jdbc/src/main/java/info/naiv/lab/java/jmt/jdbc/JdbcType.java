@@ -314,11 +314,11 @@ public enum JdbcType implements IntegerEnum {
      */
     public boolean isAssignableFrom(final Class<?> type) {
         return arrayContains(compatibleTypes, new Predicate1<Class<?>>() {
-            @Override
-            public boolean test(Class<?> obj) {
-                return obj.isAssignableFrom(type);
-            }
-        });
+                         @Override
+                         public boolean test(Class<?> obj) {
+                             return obj.isAssignableFrom(type);
+                         }
+                     });
     }
 
     /**

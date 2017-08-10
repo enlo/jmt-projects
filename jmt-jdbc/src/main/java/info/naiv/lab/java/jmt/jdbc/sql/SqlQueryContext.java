@@ -38,14 +38,14 @@ import lombok.NonNull;
 @Data
 public class SqlQueryContext {
 
-    Object parameterSource;
-
-    List<Object> parameters;
+    @NonNull
+    private ParameterBinder parameterBinder = new DefaultParameterBinder();
 
     Dialect dialect;
 
-    @NonNull
-    private ParameterBinder parameterBinder = new DefaultParameterBinder();
+    Object parameterSource;
+
+    List<Object> parameters;
 
     public SqlQueryContext(Dialect dialect) {
         this.parameters = new ArrayList<>();

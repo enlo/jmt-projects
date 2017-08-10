@@ -120,16 +120,16 @@ public class SqlQueryTest {
 
         int[] affected = query.batchUpadate(jdbcTemplate, new BatchPreparedStatementSetter() {
 
-            @Override
-            public int getBatchSize() {
-                return batchArgs.size();
-            }
+                                        @Override
+                                        public int getBatchSize() {
+                                            return batchArgs.size();
+                                        }
 
-            @Override
-            public void setValues(PreparedStatement ps, int i) throws SQLException {
-                new ArgumentPreparedStatementSetter(batchArgs.get(i)).setValues(ps);
-            }
-        });
+                                        @Override
+                                        public void setValues(PreparedStatement ps, int i) throws SQLException {
+                                            new ArgumentPreparedStatementSetter(batchArgs.get(i)).setValues(ps);
+                                        }
+                                    });
         assertArrayEquals(new int[]{1, 1, 1}, affected);
 
         count = cq.queryForObject(jdbcTemplate, Integer.class);
@@ -231,11 +231,11 @@ public class SqlQueryTest {
         u.setPostal("123-4567");
         Query query = loader.load("C3", "insert1").merge(u);
         int affected = query.execute(jdbcTemplate, new PreparedStatementCallback<Integer>() {
-            @Override
-            public Integer doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                return ps.executeUpdate();
-            }
-        });
+                                 @Override
+                                 public Integer doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                                     return ps.executeUpdate();
+                                 }
+                             });
         assertThat(affected, is(1));
 
         count = cq.queryForObject(jdbcTemplate, Integer.class);
@@ -275,7 +275,7 @@ public class SqlQueryTest {
     @Test
     public void testGetSql() {
         Query query = loader.fromString("select count(*) from Users").merge();
-        assertThat(((SqlQuery) query).getMergedSql(), is("select count(*) from Users"));
+        assertThat(query.getMergedSql(), is("select count(*) from Users"));
     }
 
     /**
@@ -373,11 +373,11 @@ public class SqlQueryTest {
     public void testQueryForObject_JdbcOperations_RowMapper() {
         Query query = loader.fromString("select count(*) from Users").merge();
         int count = query.queryForObject(jdbcTemplate, new RowMapper<Integer>() {
-            @Override
-            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return rs.getInt(1);
-            }
-        });
+                                     @Override
+                                     public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                                         return rs.getInt(1);
+                                     }
+                                 });
         assertThat(count, is(100));
     }
 
@@ -497,12 +497,12 @@ public class SqlQueryTest {
         query.setFetchSize(10);
         assertThat(query.getFetchSize(), is(10));
         query.execute(jdbcTemplate, new PreparedStatementCallback<Void>() {
-            @Override
-            public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
-                assertThat(ps.getFetchSize(), is(10));
-                return null;
-            }
-        });
+                  @Override
+                  public Void doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+                      assertThat(ps.getFetchSize(), is(10));
+                      return null;
+                  }
+              });
     }
 
     /**
@@ -518,18 +518,6 @@ public class SqlQueryTest {
         assertThat(query.getMaxRowSize(), is(10));
         list = query.queryForMapList(jdbcTemplate);
         assertThat(list, hasSize(10));
-    }
-
-    Dialect[] dialects() {
-        return new Dialect[]{
-            new H2Dialect(),
-            new MySqlDialect(),
-            new Oracle12Dialect(),
-            new OracleDialect(),
-            new PostgreSqlDialect(),
-            new SqlServer2012Dialect(),
-            new SqlServerDialect(),
-            new StandardDialect(),};
     }
 
     /**
@@ -631,16 +619,29 @@ public class SqlQueryTest {
         assertThat(name, list.get(0).getId(), is(16));
     }
 
+    Dialect[] dialects() {
+        return new Dialect[]{
+            new H2Dialect(),
+            new MySqlDialect(),
+            new Oracle12Dialect(),
+            new OracleDialect(),
+            new PostgreSqlDialect(),
+            new SqlServer2012Dialect(),
+            new SqlServerDialect(),
+            new StandardDialect(),};
+    }
+
     @Data
     public static class User {
 
+        String country;
+        String email;
+        String fax;
+
         int id;
         String name;
-        String email;
         String phone;
-        String fax;
         String postal;
-        String country;
     }
 
 }

@@ -77,22 +77,6 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
         return mergeParameterSource(parameters);
     }
 
-    private VariableResolverFactory createFactory(Object value) {
-        if (value instanceof Map) {
-            return new MapVariableResolverFactory((Map) value);
-        }
-        else if (value instanceof SqlParameterSource) {
-            return new SqlParameterSourceVariableResolverFactory((SqlParameterSource) value);
-        }
-        else if (value instanceof VariableResolverFactory) {
-            return (VariableResolverFactory) value;
-        }
-        else {
-            SqlParameterSource ps = new BeanPropertySqlParameterSource(value);
-            return new SqlParameterSourceVariableResolverFactory(ps);
-        }
-    }
-
     @Override
     public SqlQuery merge(Object bean) {
         VariableResolverFactory factory = createFactory(bean);
@@ -122,6 +106,22 @@ public class MvelSqlTemplate implements SqlTemplate, Serializable {
     public SqlQuery mergeParameterSource(SqlParameterSource parameters) {
         VariableResolverFactory factory = new SqlParameterSourceVariableResolverFactory(parameters);
         return createQuery(factory, parameters);
+    }
+
+    private VariableResolverFactory createFactory(Object value) {
+        if (value instanceof Map) {
+            return new MapVariableResolverFactory((Map) value);
+        }
+        else if (value instanceof SqlParameterSource) {
+            return new SqlParameterSourceVariableResolverFactory((SqlParameterSource) value);
+        }
+        else if (value instanceof VariableResolverFactory) {
+            return (VariableResolverFactory) value;
+        }
+        else {
+            SqlParameterSource ps = new BeanPropertySqlParameterSource(value);
+            return new SqlParameterSourceVariableResolverFactory(ps);
+        }
     }
 
     protected SqlQuery createQuery(VariableResolverFactory factory, Object sourceBean) {

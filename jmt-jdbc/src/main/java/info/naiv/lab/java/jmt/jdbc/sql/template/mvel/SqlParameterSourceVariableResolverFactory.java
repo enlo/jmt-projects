@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel;
 
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.mvel2.UnresolveablePropertyException;
 import org.mvel2.integration.VariableResolver;
@@ -39,6 +40,9 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 @SuppressWarnings("serial")
 @Slf4j
 public class SqlParameterSourceVariableResolverFactory extends BaseVariableResolverFactory {
+
+    @Setter
+    protected boolean enableUnresolveProperty = false;
 
     /**
      *
@@ -67,12 +71,17 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
     public VariableResolver createVariable(String name, Object value) {
         VariableResolver vr;
         try {
-            vr = getVariableResolver(name);
-            vr.setValue(value);
-            return vr;
+            vr = getVariableResolverCore(name);
         }
         catch (UnresolveablePropertyException e) {
             logger.trace("getVariableResolver() fail. {}", e.getMessage());
+            vr = null;
+        }
+
+        if (vr != null) {
+            throw new RuntimeException("variable already defined within scope: " + vr.getType() + " " + name);
+        }
+        else {
             vr = new SimpleValueResolver(value);
             variableResolvers.put(name, vr);
             return vr;
@@ -83,7 +92,7 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
     public VariableResolver createVariable(String name, Object value, Class<?> type) {
         VariableResolver vr;
         try {
-            vr = getVariableResolver(name);
+            vr = getVariableResolverCore(name);
         }
         catch (UnresolveablePropertyException e) {
             logger.trace("getVariableResolver() fail. {}", e.getMessage());
@@ -102,6 +111,35 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
 
     @Override
     public VariableResolver getVariableResolver(String name) {
+        try {
+            return getVariableResolverCore(name);
+        }
+        catch (UnresolveablePropertyException ex) {
+            if (enableUnresolveProperty) {
+                VariableResolver vr = new SimpleValueResolver(null);
+                variableResolvers.put(name, vr);
+                return vr;
+            }
+            else {
+                throw ex;
+            }
+        }
+    }
+
+    @Override
+    public boolean isResolveable(String name) {
+        return enableUnresolveProperty
+                || variableResolvers.containsKey(name)
+                || (parameterSource != null && name != null && parameterSource.hasValue(name))
+                || isNextResolveable(name);
+    }
+
+    @Override
+    public boolean isTarget(String name) {
+        return variableResolvers.containsKey(name);
+    }
+
+    private VariableResolver getVariableResolverCore(String name) throws UnresolveablePropertyException {
         VariableResolver vr = variableResolvers.get(name);
         if (vr != null) {
             return vr;
@@ -116,18 +154,6 @@ public class SqlParameterSourceVariableResolverFactory extends BaseVariableResol
         }
 
         throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
-    }
-
-    @Override
-    public boolean isResolveable(String name) {
-        return variableResolvers.containsKey(name)
-                || (parameterSource != null && name != null && parameterSource.hasValue(name))
-                || (nextFactory != null && nextFactory.isResolveable(name));
-    }
-
-    @Override
-    public boolean isTarget(String name) {
-        return variableResolvers.containsKey(name);
     }
 
 }

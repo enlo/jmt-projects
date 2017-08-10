@@ -43,15 +43,14 @@ public class RowMapperFactoryResultSetExtractor<T>
         implements ResultSetExtractor<List<T>> {
 
     /**
+     * 配列の初期サイズ
+     */
+    private int capacity = 0;
+    /**
      * RowMapperFactory.
      */
     @NonNull
     private RowMapperFactory<T> rowMapperFactory;
-
-    /**
-     * 配列の初期サイズ
-     */
-    private int capacity = 0;
 
     public RowMapperFactoryResultSetExtractor(RowMapperFactory<T> rowMapperFactory) {
         this.rowMapperFactory = rowMapperFactory;

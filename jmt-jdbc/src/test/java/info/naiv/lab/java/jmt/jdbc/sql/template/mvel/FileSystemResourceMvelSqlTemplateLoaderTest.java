@@ -60,13 +60,13 @@ public class FileSystemResourceMvelSqlTemplateLoaderTest
         Iterable<SqlTemplate> templ = instance.loadCategory("C1");
         assertThat(templ, Matchers.<SqlTemplate>iterableWithSize(3));
         assertThat(Misc.map(templ, new Function1<SqlTemplate, String>() {
-            @Override
-            public String apply(SqlTemplate a1) {
-                return ((MvelSqlTemplate) a1).getTemplateText();
-            }
-        }), containsInAnyOrder("select top(1) * from Emploee where id = @bind{id}",
-                               "\r\nselect * from Emploee where id = @bind{id}",
-                               "\nselect * from Emp;\n\n"));
+                        @Override
+                        public String apply(SqlTemplate a1) {
+                            return ((MvelSqlTemplate) a1).getTemplateText();
+                        }
+                    }), containsInAnyOrder("select top(1) * from Emploee where id = @bind{id}",
+                                           "\r\nselect * from Emploee where id = @bind{id}",
+                                           "\nselect * from Emp;\n\n"));
     }
 
     @Override
@@ -75,11 +75,11 @@ public class FileSystemResourceMvelSqlTemplateLoaderTest
         Iterable<SqlTemplate> templ = instance.loadCategory("C2", Charset.forName("MS932"));
         assertThat(templ, Matchers.<SqlTemplate>iterableWithSize(2));
         assertThat(Misc.map(templ, new Function1<SqlTemplate, String>() {
-            @Override
-            public String apply(SqlTemplate a1) {
-                return ((MvelSqlTemplate) a1).getTemplateText();
-            }
-        }), containsInAnyOrder("select * from 日本語テーブル", "select * from 日本語テーブル where 名前 = @bind{name}"));
+                        @Override
+                        public String apply(SqlTemplate a1) {
+                            return ((MvelSqlTemplate) a1).getTemplateText();
+                        }
+                    }), containsInAnyOrder("select * from 日本語テーブル", "select * from 日本語テーブル where 名前 = @bind{name}"));
     }
 
     @Override

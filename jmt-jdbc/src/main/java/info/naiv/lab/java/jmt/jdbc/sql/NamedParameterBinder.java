@@ -49,6 +49,15 @@ public class NamedParameterBinder implements ParameterBinder {
         this.prefix = prefix;
     }
 
+    public List<String> addParameters(Iterable<?> items, SqlQueryContext context) {
+        List<String> keys = new ArrayList<>();
+        for (Object item : items) {
+            String key = bind(item, context);
+            keys.add(key);
+        }
+        return keys;
+    }
+
     @Override
     public String bind(Object value, SqlQueryContext context) {
         String key = prefix + "param" + namedParameters.size();
@@ -73,15 +82,6 @@ public class NamedParameterBinder implements ParameterBinder {
             }
         }
         return joiner.join(keys).toString();
-    }
-
-    public List<String> addParameters(Iterable<?> items, SqlQueryContext context) {
-        List<String> keys = new ArrayList<>();
-        for (Object item : items) {
-            String key = bind(item, context);
-            keys.add(key);
-        }
-        return keys;
     }
 
 }

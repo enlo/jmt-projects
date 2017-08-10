@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2017 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,33 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
+package info.naiv.lab.java.jmt.io.codec;
 
-import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.TemplateRuntime;
-import org.mvel2.templates.util.TemplateOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import javax.annotation.Nonnull;
 
 /**
  *
  * @author enlo
  */
-public class BindManyNode extends CustomNode {
+public interface Decoder {
 
-    private static final long serialVersionUID = 1L;
+    @Nonnull
+    ByteBuffer decode(@Nonnull ByteBuffer input);
 
-    /**
-     *
-     * @param value
-     * @param runtime
-     * @param appender
-     * @param ctx
-     * @param factory
-     */
-    @Override
-    public void onEval(Object value, TemplateRuntime runtime, TemplateOutputStream appender, SqlQueryContext ctx, VariableResolverFactory factory) {
-        String bound = ctx.getParameterBinder().bindMany(value, ctx);
-        appender.append(bound);
-    }
+    @Nonnull
+    ByteBuffer decode(@Nonnull InputStream input) throws IOException;
 
+    long decode(@Nonnull ByteBuffer input, @Nonnull OutputStream os) throws IOException;
+
+    long decode(@Nonnull InputStream input, @Nonnull OutputStream os) throws IOException;
 }

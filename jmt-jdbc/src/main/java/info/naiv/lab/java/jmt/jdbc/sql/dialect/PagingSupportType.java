@@ -66,11 +66,11 @@ public enum PagingSupportType {
      * サポート無し. 例外を送出.
      */
     UNDEFINED("", "") {
-                @Override
-                public String modify(String sql, Dialect dialect, int offset, int rowSize) {
-                    throw new UnsupportedOperationException("offset and rowsize not supported.");
-                }
-            },;
+        @Override
+        public String modify(String sql, Dialect dialect, int offset, int rowSize) {
+            throw new UnsupportedOperationException("offset and rowsize not supported.");
+        }
+    },;
 
     final CompiledTemplate offsetOnly;
     final CompiledTemplate offsetAndSize;

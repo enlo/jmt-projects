@@ -32,6 +32,8 @@ import static org.junit.Assert.assertThat;
 import org.junit.Test;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 
 /**
  *
@@ -70,6 +72,19 @@ public class SqlParameterSourceVariableResolverFactoryTest {
         assertThat(result2, is("%ABCD%"));
     }
 
+    /**
+     * Test of createVariable method, of class
+     * SqlParameterSourceVariableResolverFactory.
+     */
+    @Test
+    public void test003() {
+        MvelSqlTemplate t = build("@if{ name != empty }@{name}@end{}");
+
+        SqlParameterSource params = new MapSqlParameterSource("name", null);
+        String result = t.merge(params).getMergedSql();
+        assertThat(result, is(""));
+    }
+
     MvelSqlTemplate build(String templ) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(templ, CustomNodes.NODES);
         return new MvelSqlTemplate("template", ct, new StandardDialect());
@@ -79,8 +94,8 @@ public class SqlParameterSourceVariableResolverFactoryTest {
     @Builder
     static class Cond {
 
-        String name;
         int age;
         String country;
+        String name;
     }
 }

@@ -4,8 +4,8 @@
   <artifactId>jmt-jdbc</artifactId>
   <versioning>
     <versions>
-      <version>1.0.3-SNAPSHOT</version>
+      <version>1.0.4-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20170815021637</lastUpdated>
+    <lastUpdated>20170914061922</lastUpdated>
   </versioning>
 </metadata>

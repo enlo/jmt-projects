@@ -4,7 +4,7 @@
     <parent>
         <groupId>info.naiv.lab.java</groupId>
         <artifactId>jmt-projects</artifactId>
-        <version>1.0.3-SNAPSHOT</version>
+        <version>1.0.3</version>
     </parent>
     <artifactId>jmt-tquery</artifactId>
     <packaging>jar</packaging>

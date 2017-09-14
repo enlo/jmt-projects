@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.enumgen.maven.plugin;
 import com.google.common.base.Splitter;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
+import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static info.naiv.lab.java.jmt.Misc.isNotBlank;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -40,8 +41,11 @@ import java.util.regex.Pattern;
  */
 public class EnumSource {
 
-    public static Multimap<String, EnumEntry> createEnumEntries(Path path, Charset charset) throws IOException {
-        Splitter st = Splitter.on(Pattern.compile("\\s+")).trimResults();
+    public static Multimap<String, EnumEntry> createEnumEntries(Path path, Charset charset, String delimiter) throws IOException {
+        if (isEmpty(delimiter)) {
+            delimiter = "\\s+";
+        }
+        Splitter st = Splitter.on(Pattern.compile(delimiter)).trimResults();
         List<String> lines = Files.readAllLines(path, charset);
         Multimap<String, EnumEntry> result = HashMultimap.create();
         for (String line : lines) {

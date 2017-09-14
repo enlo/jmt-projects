@@ -73,7 +73,7 @@ public class EnumGeneratorMojo extends AbstractMojo {
 
     @Parameter(property = "project.build.sourceEncoding", defaultValue = "UTF-8")
     protected String encoding;
-    
+
     @Parameter
     protected String enumSourceCsv;
 
@@ -94,6 +94,9 @@ public class EnumGeneratorMojo extends AbstractMojo {
 
     @Parameter
     protected List<String> propertiesSourceList;
+
+    @Parameter(required = true, defaultValue = "\\s+")
+    protected String delimiter;
 
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
@@ -119,7 +122,7 @@ public class EnumGeneratorMojo extends AbstractMojo {
             if (isNotBlank(enumSourceCsv)) {
                 log.info("enumSourceCsv found. ");
                 Multimap<String, EnumEntry> entries
-                        = EnumSource.createEnumEntries(Paths.get(enumSourceCsv), charset);
+                        = EnumSource.createEnumEntries(Paths.get(enumSourceCsv), charset, delimiter);
                 for (String key : entries.keySet()) {
                     CodeData code = builder.entriesToCode(key, entries.get(key));
                     log.info("generate " + code.getName());

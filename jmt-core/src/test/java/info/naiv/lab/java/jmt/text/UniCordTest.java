@@ -23,13 +23,22 @@
  */
 package info.naiv.lab.java.jmt.text;
 
+import com.google.common.base.Stopwatch;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.BreakIterator;
 import java.util.Iterator;
 import java.util.Locale;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.util.SerializationUtils;
 
 /**
  *
@@ -555,4 +564,25 @@ public class UniCordTest {
         assertThat(UniCord.valueOf("123"), is(new UniCord("123")));
     }
 
+    @Test
+    public void testSerialize() throws IOException {
+        UniCord src = new UniCord("\u0065\u0301");
+        byte[] bin = SerializationUtils.serialize(src);
+        UniCord dest = (UniCord) SerializationUtils.deserialize(bin);
+        assertThat(dest, is(src));
+    }
+
+    @Test
+    public void testLargeText() throws IOException {
+        try (ClassPathXmlApplicationContext context
+                = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
+
+            Resource res = context.getResource("classpath:TEXT/largeText.txt");
+            try (InputStream is = res.getInputStream()) {
+                String text = IOUtils.toString(is, StandardCharsets.UTF_8);
+                UniCord test = UniCord.valueOf(text);
+                StopWatch sw = new StopWatch();
+            }
+        }
+    }
 }

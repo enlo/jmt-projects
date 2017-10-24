@@ -28,6 +28,9 @@ import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayCompareTo;
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayToString;
 import info.naiv.lab.java.jmt.Lazy;
 import info.naiv.lab.java.jmt.iteration.ReverseIterator;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.BreakIterator;
 import static java.text.BreakIterator.DONE;
@@ -58,7 +61,7 @@ public final class UnicodeVector implements Comparable<UnicodeVector>, Cloneable
     @Getter
     private final boolean decomposed;
 
-    private final Lazy<UnicodeScalar[]> elements;
+    private volatile transient Lazy<UnicodeScalar[]> elements;
 
     @Getter
     private final String source;
@@ -207,11 +210,35 @@ public final class UnicodeVector implements Comparable<UnicodeVector>, Cloneable
         return result.toArray(array);
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        elements = new Lazy<>((UnicodeScalar[]) stream.readObject());
+    }
+
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeObject(elements.get());
+    }
+
     class Analyzer extends Lazy<UnicodeScalar[]> {
+
+        Analyzer() {
+        }
+
+        Analyzer(UnicodeScalar[] init) {
+            super(init);
+        }
 
         @Override
         public UnicodeScalar[] initialValue() {
             return analyze();
         }
+
+        @Override
+        protected UnicodeScalar[] rawValue() {
+            return super.rawValue();
+        }
+
     }
+
 }

@@ -23,7 +23,12 @@
  */
 package info.naiv.lab.java.jmt.text;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.time.StopWatch;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -32,6 +37,9 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.io.Resource;
+import org.springframework.util.SerializationUtils;
 
 /**
  *
@@ -243,6 +251,18 @@ public class UnicodeVectorTest {
         assertThat(result.hasNext(), is(false));
     }
 
+    @Test
+    public void testSerialize() {
+
+        UnicodeVector src = new UnicodeVector("あかさたな");
+
+        UnicodeScalar[] expected = src.elements();
+        byte[] bin = SerializationUtils.serialize(src);
+        UnicodeVector dest = (UnicodeVector) SerializationUtils.deserialize(bin);
+        UnicodeScalar[] actual = dest.elements();
+        assertThat(actual, is(expected));
+    }
+
     /**
      * Test of subSequence method, of class UnicodeVector.
      */
@@ -338,4 +358,81 @@ public class UnicodeVectorTest {
         assertThat(str1.toString(), is("\u0065\u0301㋐"));
     }
 
+    @Test
+    public void testLargeText() throws IOException {
+        try (ClassPathXmlApplicationContext context
+                = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
+
+            Resource res = context.getResource("classpath:TEXT/largeText.txt");
+            try (InputStream is = res.getInputStream()) {
+                String text = IOUtils.toString(is, StandardCharsets.UTF_8);
+                UnicodeVector test = new UnicodeVector(text);
+                StopWatch sw = new StopWatch();
+                sw.start();
+                UnicodeVector decomposed = test.decompose();
+                for (int i = 0; i < 1000; i++) {
+                    decomposed = test.decompose();
+                }
+                sw.stop();
+                System.out.println("decompose time is " + sw.toString());
+                sw.reset();
+                sw.start();
+                UnicodeVector decomposed2 = UnicodeVectorCache.getDecomposed(test);
+                for (int i = 0; i < 1000; i++) {
+                    decomposed2 = UnicodeVectorCache.getDecomposed(test);
+                }
+                sw.stop();
+                assertThat(decomposed2, is(decomposed));
+                System.out.println("decompose time (use cache) is " + sw.toString());
+                sw.reset();
+                sw.start();
+                boolean b = true;
+                for (int i = 0; i < 1000; i++) {
+                    b = test.equals(decomposed);
+                }
+                sw.stop();
+                assertThat(b, is(false));
+                System.out.println("compare time is " + sw.toString() + ": ");
+            }
+        }
+    }
+
+    @Test
+    public void testSmallText() throws IOException {
+        try (ClassPathXmlApplicationContext context
+                = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
+
+            Resource res = context.getResource("classpath:TEXT/nobomtext.txt");
+            try (InputStream is = res.getInputStream()) {
+                String text = IOUtils.toString(is, StandardCharsets.UTF_8);
+                UnicodeVector test = new UnicodeVector(text);
+                StopWatch sw = new StopWatch();
+                sw.start();
+                UnicodeVector decomposed = test.decompose();
+                for (int i = 0; i < 1000; i++) {
+                    decomposed = test.decompose();
+                }
+                sw.stop();
+                System.out.println("decompose time is " + sw.toString());
+                sw.reset();
+                sw.start();
+                UnicodeVector decomposed2 = UnicodeVectorCache.getDecomposed(test);
+                for (int i = 0; i < 1000; i++) {
+                    decomposed2 = UnicodeVectorCache.getDecomposed(test);
+                }
+                sw.stop();
+                assertThat(decomposed2, is(decomposed));
+                System.out.println("decompose time (use cache) is " + sw.toString());
+                sw.reset();
+                sw.start();
+                boolean b = true;
+                for (int i = 0; i < 1000; i++) {
+                    b = test.equals(decomposed);
+                }
+                sw.stop();
+                assertThat(b, is(false));
+                System.out.println("compare time is " + sw.toString() + ": ");
+            }
+        }
+    }
 }

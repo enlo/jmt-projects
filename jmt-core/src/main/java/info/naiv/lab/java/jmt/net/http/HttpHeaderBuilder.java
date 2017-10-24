@@ -27,7 +27,7 @@ import info.naiv.lab.java.jmt.net.StringEncoder;
 import info.naiv.lab.java.jmt.net.URLCodec;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 import javax.annotation.Nonnull;
@@ -83,7 +83,7 @@ public class HttpHeaderBuilder {
 
     protected HttpHeaders headers;
 
-    protected final Map<String, String> parameters = new HashMap<>();
+    protected final Map<String, String> parameters = new LinkedHashMap<>();
 
     public HttpHeaderBuilder(String headerName) {
         this.headerName = headerName;

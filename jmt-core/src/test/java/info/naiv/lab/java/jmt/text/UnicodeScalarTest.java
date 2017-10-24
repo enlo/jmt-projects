@@ -30,6 +30,7 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
+import org.springframework.util.SerializationUtils;
 
 /**
  *
@@ -152,6 +153,14 @@ public class UnicodeScalarTest {
         assertThat(instance.length(), is(2));
     }
 
+    @Test
+    public void testSerialize() {
+        UnicodeScalar src = new UnicodeScalar("\u0065\u0301");
+        byte[] bin = SerializationUtils.serialize(src);
+        UnicodeScalar dest = (UnicodeScalar) SerializationUtils.deserialize(bin);
+        assertThat(dest.getDecomposed(), is(src.getDecomposed()));
+    }
+
     /**
      * Test of subSequence method, of class UnicodeScalar.
      */
@@ -170,4 +179,5 @@ public class UnicodeScalarTest {
         UnicodeScalar str1 = new UnicodeScalar("\u0065\u0301");
         assertThat(str1.toString(), is("\u0065\u0301"));
     }
+
 }

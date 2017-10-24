@@ -24,6 +24,9 @@
 package info.naiv.lab.java.jmt.text;
 
 import info.naiv.lab.java.jmt.Lazy;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import static java.text.Normalizer.Form.NFD;
 import static java.text.Normalizer.normalize;
@@ -61,7 +64,8 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
         return new UnicodeScalar(source.subSequence(i, j).toString());
     }
 
-    private final Lazy<String> decomposed;
+    private volatile transient Lazy<String> decomposed;
+
     @Getter
     private final String element;
 
@@ -114,6 +118,16 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
         return element;
     }
 
+    private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
+        stream.defaultReadObject();
+        decomposed = new Lazy<>(stream.readUTF());
+    }
+
+    private void writeObject(ObjectOutputStream stream) throws IOException {
+        stream.defaultWriteObject();
+        stream.writeUTF(decomposed.get());
+    }
+
     class Decomp extends Lazy<String> {
 
         @Override
@@ -121,5 +135,4 @@ public final class UnicodeScalar implements CharSequence, Comparable<UnicodeScal
             return normalize(element, NFD);
         }
     }
-
 }

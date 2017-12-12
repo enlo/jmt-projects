@@ -38,6 +38,15 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode
 public class MethodInvokerSupport {
 
+    public static <A extends Annotation> A findAnnotation(Annotation[] annotations, Class<A> annotationClass) {
+        for (Annotation annotation : annotations) {
+            if (annotationClass.isInstance(annotation)) {
+                return (A) annotation;
+            }
+        }
+        return null;
+    }
+
     private final Method method;
 
     public MethodInvokerSupport(Method method) {
@@ -50,6 +59,11 @@ public class MethodInvokerSupport {
 
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         return method.getAnnotation(annotationClass);
+    }
+
+    public <A extends Annotation> A getParameterAnnotation(int i, Class<A> annotationClass) {
+        Annotation[] annotations = method.getParameterAnnotations()[i];
+        return findAnnotation(annotations, annotationClass);
     }
 
     public Class<?>[] getParameterTypes() {

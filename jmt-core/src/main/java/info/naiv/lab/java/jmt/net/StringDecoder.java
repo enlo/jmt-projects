@@ -30,6 +30,6 @@ import java.nio.charset.Charset;
  * @author enlo
  */
 public interface StringDecoder {
-    
+
     String decode(String data, Charset charset);
 }

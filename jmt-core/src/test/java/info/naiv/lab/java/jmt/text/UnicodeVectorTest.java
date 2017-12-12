@@ -27,8 +27,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Iterator;
+import java.util.concurrent.ThreadLocalRandom;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.time.StopWatch;
+import org.apache.commons.text.RandomStringGenerator;
 import static org.hamcrest.Matchers.arrayContaining;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
@@ -36,6 +39,7 @@ import static org.hamcrest.Matchers.lessThan;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.core.io.Resource;
@@ -45,7 +49,13 @@ import org.springframework.util.SerializationUtils;
  *
  * @author enlo
  */
+@Slf4j
 public class UnicodeVectorTest {
+
+    @BeforeClass
+    public static void setUp() {
+        initUnicodeVectorCache();
+    }
 
     /**
      *
@@ -369,6 +379,12 @@ public class UnicodeVectorTest {
                 UnicodeVector test = new UnicodeVector(text);
                 StopWatch sw = new StopWatch();
                 sw.start();
+                int length = test.length();
+                sw.stop();
+                System.out.println("length time is " + sw.toString());
+                sw.reset();
+                sw.start();
+
                 UnicodeVector decomposed = test.decompose();
                 for (int i = 0; i < 1000; i++) {
                     decomposed = test.decompose();
@@ -402,6 +418,8 @@ public class UnicodeVectorTest {
         try (ClassPathXmlApplicationContext context
                 = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
 
+            initUnicodeVectorCache();
+
             Resource res = context.getResource("classpath:TEXT/nobomtext.txt");
             try (InputStream is = res.getInputStream()) {
                 String text = IOUtils.toString(is, StandardCharsets.UTF_8);
@@ -434,5 +452,14 @@ public class UnicodeVectorTest {
                 System.out.println("compare time is " + sw.toString() + ": ");
             }
         }
+    }
+
+    private static void initUnicodeVectorCache() {
+        RandomStringGenerator generator = new RandomStringGenerator.Builder().build();
+        for (int i = 0; i < 100; i++) {
+            String gen = generator.generate(ThreadLocalRandom.current().nextInt(10, 100000));
+            UnicodeVectorCache.getDecomposed(gen);
+        }
+        logger.info("cache stats is {}", UnicodeVectorCache.DECOMP);
     }
 }

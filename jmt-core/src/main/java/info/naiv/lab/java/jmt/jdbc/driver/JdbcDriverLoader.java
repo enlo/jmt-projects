@@ -29,26 +29,32 @@ import java.net.URLClassLoader;
 import java.nio.file.Path;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import static java.sql.DriverManager.registerDriver;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Deque;
 import java.util.HashSet;
 import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import javax.annotation.Nonnull;
+import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.DisposableBean;
 
 /**
  *
  * @author enlo
  */
 @Slf4j
-public class JdbcDriverLoader {
+public class JdbcDriverLoader implements DisposableBean {
 
     @NonNull
     private final ClassLoader parentClassLoader;
+
+    private final Deque<DriverRelease> release = new ConcurrentLinkedDeque<>();
 
     /**
      *
@@ -63,6 +69,16 @@ public class JdbcDriverLoader {
      */
     public JdbcDriverLoader() {
         this.parentClassLoader = this.getClass().getClassLoader();
+    }
+
+    @Override
+    public void destroy() throws Exception {
+        while (!release.isEmpty()) {
+            DriverRelease dr = release.pollFirst();
+            if (dr != null) {
+                dr.run();
+            }
+        }
     }
 
     /**
@@ -107,7 +123,7 @@ public class JdbcDriverLoader {
         Set<Driver> result = new HashSet<>();
         for (Driver drv : drivers) {
             if (drv != null) {
-                registerDriver(new JdbcDriverProxy(drv));
+                registerDriver(drv);
                 result.add(drv);
                 logger.info("Load JDBC Driver. {}", drv);
             }
@@ -142,7 +158,7 @@ public class JdbcDriverLoader {
                     // 登録処理は行わない.
                     if (Driver.class.isAssignableFrom(driverClass)) {
                         Driver driver = (Driver) driverClass.newInstance();
-                        registerDriver(new JdbcDriverProxy(driver));
+                        registerDriver(driver);
                         result.add(driver);
                         logger.info("Load JDBC Driver. {}", driver);
                     }
@@ -172,6 +188,35 @@ public class JdbcDriverLoader {
         }
         URLClassLoader cl = builder.build();
         return cl;
+    }
+
+    protected void registerDriver(@NonNull Driver driver) throws SQLException {
+        Driver d;
+        if (driver instanceof JdbcDriverProxy) {
+            d = driver;
+        }
+        else {
+            d = new JdbcDriverProxy(driver);
+        }
+        DriverManager.registerDriver(d);
+        release.push(new DriverRelease(d));
+    }
+
+    @AllArgsConstructor
+    public static class DriverRelease implements Runnable {
+
+        private Driver loaded;
+
+        @Override
+        @SneakyThrows
+        public void run() {
+            Driver d = loaded;
+            if (d != null) {
+                DriverManager.deregisterDriver(d);
+                loaded = null;
+            }
+        }
+
     }
 
 }

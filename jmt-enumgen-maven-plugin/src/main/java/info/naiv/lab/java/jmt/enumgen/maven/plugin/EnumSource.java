@@ -52,14 +52,21 @@ public class EnumSource {
             if (isNotBlank(line)) {
                 List<String> source = st.splitToList(line);
                 String key = source.get(0);
-                EnumEntry e = EnumEntry.forEnumSource(source.get(1),
-                                                      source.get(2),
-                                                      source.get(3),
-                                                      source.get(4));
+                EnumEntry e = EnumEntry.forEnumSource(getSource(source, 1),
+                                                      getSource(source, 2),
+                                                      getSource(source, 3),
+                                                      getSource(source, 4));
                 result.put(key, e);
             }
         }
         return result;
+    }
+
+    private static String getSource(List<String> source, int idx) {
+        if (idx < source.size()) {
+            return source.get(idx);
+        }
+        return "";
     }
 
     private EnumSource() {

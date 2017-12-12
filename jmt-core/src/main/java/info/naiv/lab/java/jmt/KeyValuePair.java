@@ -26,9 +26,9 @@ package info.naiv.lab.java.jmt;
 import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Map;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
 
 /**
  *
@@ -36,9 +36,8 @@ import lombok.RequiredArgsConstructor;
  * @param <TKey>
  * @param <TValue>
  */
-@Data
-@RequiredArgsConstructor(staticName = "of")
-@AllArgsConstructor(staticName = "of")
+@Getter
+@EqualsAndHashCode
 public class KeyValuePair<TKey, TValue> implements Map.Entry<TKey, TValue>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,8 +51,17 @@ public class KeyValuePair<TKey, TValue> implements Map.Entry<TKey, TValue>, Seri
         };
     }
 
+    public static <K, V> KeyValuePair<K, V> of(K key, V value) {
+        return new KeyValuePair<>(key, value);
+    }
+
     private final TKey key;
     private TValue value;
+
+    protected KeyValuePair(@NonNull TKey key, TValue value) {
+        this.key = key;
+        this.value = value;
+    }
 
     @Override
     public TValue setValue(TValue value) {

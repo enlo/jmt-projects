@@ -121,12 +121,16 @@ public class Methods {
         Object[] bound;
         Method method;
         Class<?>[] parameterTypes;
+        Annotation[][] annotations;
+        int annotationOffset;
 
         MethodBinder(Method method, Object[] bound) {
             this.method = method;
             this.bound = bound;
             Class<?>[] ptypes = method.getParameterTypes();
             this.parameterTypes = Arrays.copyOfRange(ptypes, bound.length, ptypes.length);
+            this.annotations = method.getParameterAnnotations();
+            this.annotationOffset = bound.length;
         }
 
         @Override
@@ -137,6 +141,11 @@ public class Methods {
         @Override
         public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
             return method.getAnnotation(annotationClass);
+        }
+
+        @Override
+        public <A extends Annotation> A getParameterAnnotation(int i, Class<A> annotationClass) {
+            return MethodInvokerSupport.findAnnotation(annotations[i + annotationOffset], annotationClass);
         }
 
         @Override
@@ -159,12 +168,14 @@ public class Methods {
         Object[] bound;
         MethodInvoker mi;
         Class<?>[] parameterTypes;
+        int annotationOffset;
 
         MethodInvokerBinder(MethodInvoker mi, Object[] bound) {
             this.mi = mi;
             this.bound = bound;
             Class<?>[] ptypes = mi.getParameterTypes();
             this.parameterTypes = Arrays.copyOfRange(ptypes, bound.length, ptypes.length);
+            this.annotationOffset = bound.length;
         }
 
         @Override
@@ -175,6 +186,11 @@ public class Methods {
         @Override
         public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
             return mi.getAnnotation(annotationClass);
+        }
+
+        @Override
+        public <A extends Annotation> A getParameterAnnotation(int i, Class<A> annotationClass) {
+            return mi.getParameterAnnotation(i + annotationOffset, annotationClass);
         }
 
         @Override

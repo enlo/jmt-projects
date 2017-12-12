@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import static info.naiv.lab.java.jmt.Arguments.nonMinus;
+import static info.naiv.lab.java.jmt.Arguments.nonNegative;
 import info.naiv.lab.java.jmt.infrastructure.component.SystemComponent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -43,7 +43,7 @@ public class DefaultShortYearConverter
 
     @Override
     public int convert(int shortYear, Calendar baseDate) throws IllegalArgumentException {
-        nonMinus(shortYear, "shortYear");
+        nonNegative(shortYear, "shortYear");
 
         int year = baseDate.get(Calendar.YEAR);
         int baseYear = year % 100;

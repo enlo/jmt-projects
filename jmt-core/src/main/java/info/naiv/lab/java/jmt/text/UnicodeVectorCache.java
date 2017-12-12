@@ -23,61 +23,61 @@
  */
 package info.naiv.lab.java.jmt.text;
 
-import info.naiv.lab.java.jmt.collection.LRUHashMap;
+import info.naiv.lab.java.jmt.AbstractLRUCache;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 /**
  *
  * @author enlo
  */
-public class UnicodeVectorCache {
+public abstract class UnicodeVectorCache extends AbstractLRUCache<String, UnicodeVector> {
 
-    private static final int INITIAL_CACHE_SIZE = 100;
+    static final float INITIAL_CACHE_SIZE = 1 / 64f;
 
-    private static final Lock LK = new ReentrantLock();
-    private static final LRUHashMap<String, UnicodeVector> CACHE = new LRUHashMap<>(INITIAL_CACHE_SIZE);
-
-    public static void setMaxCacheSize(int size) {
-        LK.lock();
-        try {
-            CACHE.setMaxCapacity(size);
-        }
-        finally {
-            LK.unlock();
-        }
+    public UnicodeVectorCache() {
+        super(INITIAL_CACHE_SIZE);
     }
 
-    public static UnicodeVector getDecomposed(String value) {
-        return getDecomposed(new UnicodeVector(value));
+    @Override
+    protected int computeSize(String key, UnicodeVector value) {
+        return key.length() * 4;
     }
 
-    public static UnicodeVector getDecomposed(UnicodeVector value) {
-        if (value.isDecomposed()) {
-            return value;
-        }
-        else {
-            String source = value.getSource();
-            LK.lock();
-            try {
-                UnicodeVector found = CACHE.get(source);
-                if (found != null) {
-                    return found;
-                }
-            }
-            finally {
-                LK.unlock();
-            }
-            UnicodeVector result = value.decompose();
-            LK.lock();
-            try {
-                CACHE.put(source, result);
-                return result;
-            }
-            finally {
-                LK.unlock();
-            }
-        }
+    public UnicodeVector getOrCreate(UnicodeVector uv) {
+        return getOrCreate(uv.getSource(), uv);
     }
 
+    public static final UnicodeVectorCache NORMAL = new UnicodeVectorCache() {
+        @Override
+        protected UnicodeVector createInstance(String key, UnicodeVector hint) {
+            if (hint != null) {
+                return hint;
+            }
+            return new UnicodeVector(key);
+        }
+
+        @Override
+        protected UnicodeVector fallBack(Lock lock, String key) {
+            return DECOMP.get(key);
+        }
+
+    };
+
+    public static final UnicodeVectorCache DECOMP = new UnicodeVectorCache() {
+        @Override
+        protected UnicodeVector createInstance(String key, UnicodeVector hint) {
+            if (hint != null) {
+                return hint.decompose();
+            }
+            return NORMAL.getOrCreate(key).decompose();
+        }
+    };
+
+    public static UnicodeVector getDecomposed(UnicodeVector uv) {
+        return DECOMP.getOrCreate(uv);
+    }
+
+    public static UnicodeVector getDecomposed(String str) {
+        return DECOMP.getOrCreate(str);
+    }
 }

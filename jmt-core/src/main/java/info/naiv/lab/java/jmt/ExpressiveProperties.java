@@ -49,7 +49,7 @@ public abstract class ExpressiveProperties extends Properties {
 
     @Override
     public synchronized Object clone() {
-        return super.clone(); //To change body of generated methods, choose Tools | Templates.
+        return super.clone();
     }
 
     /**

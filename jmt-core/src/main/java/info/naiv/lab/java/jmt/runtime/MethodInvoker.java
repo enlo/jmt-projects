@@ -65,6 +65,16 @@ public interface MethodInvoker {
     Class<?>[] getParameterTypes();
 
     /**
+     * パラメータのアノテーションを取得する.
+     *
+     * @param <A>
+     * @param i
+     * @param annotationClass
+     * @return
+     */
+    <A extends Annotation> A getParameterAnnotation(int i, Class<A> annotationClass);
+
+    /**
      * メソッド呼び出し.
      *
      * @param target

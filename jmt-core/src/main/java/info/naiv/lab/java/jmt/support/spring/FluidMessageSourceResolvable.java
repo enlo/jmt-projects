@@ -40,13 +40,17 @@ import org.springframework.context.MessageSourceResolvable;
 @Getter
 public final class FluidMessageSourceResolvable implements MessageSourceResolvable {
 
-    private Object[] arguments = null;
+    @Builder.Default
+    private final Object[] arguments = null;
+
     @Singular
     private final List<String> codes;
 
-    private String defaultMessage = "";
+    @Builder.Default
+    private final String defaultMessage = "";
 
-    private Locale locale = Locale.getDefault();
+    @Builder.Default
+    private final Locale locale = Locale.getDefault();
 
     @Override
     public String[] getCodes() {

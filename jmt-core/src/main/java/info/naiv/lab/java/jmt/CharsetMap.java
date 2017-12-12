@@ -39,13 +39,12 @@ import javax.annotation.Nonnull;
  *
  * @author enlo
  */
-@Deprecated
 public final class CharsetMap extends SingletonMapSupport<String, Charset> {
 
-    private static final CharsetMap instance;
+    private static final CharsetMap INSTANCE;
 
     static {
-        instance = new CharsetMap();
+        INSTANCE = new CharsetMap();
     }
 
     /**
@@ -60,7 +59,7 @@ public final class CharsetMap extends SingletonMapSupport<String, Charset> {
         if (name == null) {
             return defaultCharset();
         }
-        return instance.internalGet(name);
+        return INSTANCE.internalGet(name);
     }
 
     private CharsetMap() {

@@ -27,8 +27,10 @@ import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.monad.Optional;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
+import javax.annotation.Nonnull;
 import lombok.SneakyThrows;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 import org.junit.Test;
@@ -141,6 +143,39 @@ public class OptionalSupportMethodInvokerTest {
                        assertThat("s10(1, 2, 3, 4)", a1.invoke(null, 1, 2, 3, 4), is((Object) 10L));
                        assertThat("s10(0, 1, {2, 3})", a1.invoke(null, 0, 1, new int[]{2, 3}), is((Object) 6L));
                        assertThat("s10(1, opt(1), 1)", a1.invoke(null, 1, Optional.of(1), 1), is((Object) 3L));
+                   }
+               });
+    }
+
+    /**
+     * Test of invoke method, of class OptionalSupportMethodInvoker.
+     */
+    @Test
+    public void testInvoke_s11() {
+        testInvokeCore("s11", new Consumer1<OptionalSupportMethodInvoker>() {
+                   @SneakyThrows
+                   @Override
+                   public void accept(OptionalSupportMethodInvoker a1) {
+                       assertThat("s11(%s, 1)", a1.invoke(null, "%s", 1), is((Object) "1"));
+                       assertThat("s11(%s %s, aaa, 123)", a1.invoke(null, "%s=%s", "aaa", 123), is((Object) "aaa=123"));
+                   }
+               });
+    }
+
+    /**
+     * Test of invoke method, of class OptionalSupportMethodInvoker.
+     */
+    @Test
+    public void testInvoke_s12() {
+        testInvokeCore("s12", new Consumer1<OptionalSupportMethodInvoker>() {
+                   @SneakyThrows
+                   @Override
+                   public void accept(OptionalSupportMethodInvoker a1) {
+
+                       assertThat("0", a1.getParameterAnnotation(0, Nonnull.class), is(not(nullValue())));
+                       assertThat("1", a1.getParameterAnnotation(1, Nonnull.class), is(nullValue()));
+                       assertThat("2", a1.getParameterAnnotation(2, Nonnull.class), is(not(nullValue())));
+                       assertThat("3", a1.getParameterAnnotation(3, Nonnull.class), is(nullValue()));
                    }
                });
     }
@@ -329,6 +364,14 @@ public class OptionalSupportMethodInvokerTest {
                 x += a;
             }
             return x;
+        }
+
+        public static String s11(@Nonnull String format, Object... args) {
+            return String.format(format, args);
+        }
+
+        public static String s12(@Nonnull String format, int a1, @Nonnull Long a2, String a3) {
+            return String.format(format, a1, a2, a3);
         }
 
         public static void s2(int x) {

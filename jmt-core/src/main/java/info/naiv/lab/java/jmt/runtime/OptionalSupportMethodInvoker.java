@@ -127,6 +127,11 @@ public class OptionalSupportMethodInvoker implements MethodInvoker {
     }
 
     @Override
+    public <A extends Annotation> A getParameterAnnotation(int i, Class<A> annotationClass) {
+        return MethodInvokerSupport.findAnnotation(method.getParameterAnnotations()[i], annotationClass);
+    }
+
+    @Override
     public Class<?>[] getParameterTypes() {
         return method.getParameterTypes();
     }

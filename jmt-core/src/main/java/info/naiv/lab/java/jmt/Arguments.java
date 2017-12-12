@@ -104,6 +104,24 @@ public abstract class Arguments {
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
      */
+    public static float between(float arg, float begin, float end, @Nonempty String varname) throws IllegalArgumentException {
+        if (arg < begin || end < arg) {
+            String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
+            throw new IllegalArgumentException(msg);
+        }
+        return arg;
+    }
+
+    /**
+     * 引数の範囲チェック.
+     *
+     * @param arg チェックする値.
+     * @param begin 下限値
+     * @param end 上限値
+     * @param varname 引数名.
+     * @return arg
+     * @throws IllegalArgumentException arg が範囲外.
+     */
     public static double between(double arg, double begin, double end, @Nonempty String varname) throws IllegalArgumentException {
         if (arg < begin || end < arg) {
             String msg = arrayToString(varname, " is must be between ", begin, " and ", end, ".");
@@ -251,8 +269,10 @@ public abstract class Arguments {
      * @param varname 引数名.
      * @return arg
      * @throws IllegalArgumentException arg が範囲外.
+     * @deprecated use {@link #nonNegative}
      */
     @Nonnegative
+    @Deprecated
     public static long nonMinus(long arg, @Nonempty String varname) throws IllegalArgumentException {
         return nonNegative(arg, varname);
     }
@@ -268,7 +288,23 @@ public abstract class Arguments {
     @Nonnegative
     public static long nonNegative(long arg, @Nonempty String varname) throws IllegalArgumentException {
         if (arg < 0) {
-            throw new IllegalArgumentException(varname + " is must be plus.");
+            throw new IllegalArgumentException(varname + " must be positive.");
+        }
+        return arg;
+    }
+
+    /**
+     * 引数がマイナスでないことをチェック.
+     *
+     * @param arg チェックする値.
+     * @param varname 引数名.
+     * @return arg
+     * @throws IllegalArgumentException arg が範囲外.
+     */
+    @Nonnegative
+    public static int nonNegative(int arg, @Nonempty String varname) throws IllegalArgumentException {
+        if (arg < 0) {
+            throw new IllegalArgumentException(varname + " must be positive.");
         }
         return arg;
     }

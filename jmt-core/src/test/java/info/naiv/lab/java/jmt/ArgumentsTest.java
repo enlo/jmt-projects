@@ -406,17 +406,17 @@ public class ArgumentsTest {
      *
      */
     @Test(expected = IllegalArgumentException.class)
-    public void testNonMinus() {
-        Arguments.nonMinus(-1, "arg");
+    public void testNonNegative() {
+        Arguments.nonNegative(-1, "arg");
     }
 
     /**
      *
      */
     @Test
-    public void testNonMinus_2() {
-        assertThat(Arguments.nonMinus(0, "arg"), is(0l));
-        assertThat(Arguments.nonMinus(10, "arg"), is(10l));
+    public void testNonNegative_2() {
+        assertThat(Arguments.nonNegative(0, "arg"), is(0));
+        assertThat(Arguments.nonNegative(10, "arg"), is(10));
     }
 
     /**

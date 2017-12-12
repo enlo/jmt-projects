@@ -28,8 +28,11 @@ import info.naiv.lab.java.jmt.Lazy;
 import info.naiv.lab.java.jmt.Misc;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.iteration.MappingIterator;
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Comparator;
@@ -38,6 +41,7 @@ import java.util.Locale;
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.ThreadSafe;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -105,23 +109,23 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
         }
     }
 
-    transient volatile Lazy<UnicodeVector> decomposed = new Decomp();
-
-    final UnicodeVector source;
+    final String source;
+    final UBlock ublock;
 
     public UnicodeText(String value) {
-        this.source = new UnicodeVector(value);
+        this.source = value;
+        this.ublock = new UBlock(source);
     }
 
     @Override
     public int compareTo(UnicodeText o) {
-        return decomposed.get().compareTo(o.decomposed.get());
+        return ublock.decomp.get().compareTo(o.ublock.decomp.get());
     }
 
     /**
      * 文字列が存在するかどうか.
      *
-     * @see UniCord#indexOf(Rope)
+     * @see #indexOf(UnicodeText)
      *
      * @param search 検索対象
      * @return 検索対象が存在すればtrue. ただし、検索対象が空なら常にfalse.
@@ -136,7 +140,7 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
     /**
      * 文字列が存在するかどうか.
      *
-     * @see UniCord#indexOf(Rope)
+     * @see #indexOf(UnicodeText)
      *
      * @param search 検索対象
      * @return 検索対象が存在すればtrue. ただし、検索対象が空なら常にfalse.
@@ -167,7 +171,7 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
      * @return 指定された文字列で終了していれば true.
      */
     public boolean endsWith(UnicodeText str, int offset) {
-        return endsWith(str.decomposed.get().elements(), offset);
+        return endsWith(str.ublock.decomp.get().elements(), offset);
     }
 
     /**
@@ -188,8 +192,8 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
      * @return 見つかった位置。見つからない場合は-1.
      */
     public int indexOf(@Nonnull UnicodeText searchString, int offset) {
-        UnicodeScalar[] search = searchString.decomposed.get().elements();
-        UnicodeScalar[] elem = decomposed.get().elements();
+        UnicodeScalar[] search = searchString.ublock.decomp.get().elements();
+        UnicodeScalar[] elem = ublock.decomp.get().elements();
         for (int i = offset; i < elem.length; i++) {
             if (startsWith(search, i)) {
                 return i;
@@ -200,7 +204,11 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
 
     @Override
     public Iterator<String> iterator() {
-        return new Iter(source.iterator());
+        return new Iter(ublock.elements.iterator());
+    }
+
+    public String toDecomposedString() {
+        return ublock.decomp.get().getSource();
     }
 
     /**
@@ -210,7 +218,7 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
      */
     @Nonnull
     public UnicodeText toLowerCase() {
-        String lc = source.getSource().toLowerCase(Locale.getDefault());
+        String lc = source.toLowerCase(Locale.getDefault());
         return valueOf(lc);
     }
 
@@ -222,18 +230,18 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
      */
     @Nonnull
     public UnicodeText toLowerCase(Locale locale) {
-        String lc = source.getSource().toLowerCase(locale);
+        String lc = source.toLowerCase(locale);
         return valueOf(lc);
     }
 
     @Override
     public String toString() {
-        return source.getSource();
+        return source;
     }
 
     private boolean endsWith(UnicodeScalar[] search, int offset) {
         int len = search.length;
-        UnicodeScalar[] elem = decomposed.get().elements();
+        UnicodeScalar[] elem = ublock.decomp.get().elements();
         int idx = elem.length - offset - len;
         if (idx < 0) {
             return false;
@@ -243,12 +251,12 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
 
     private void readObject(ObjectInputStream stream) throws IOException, ClassNotFoundException {
         stream.defaultReadObject();
-        decomposed = new Lazy<>((UnicodeVector) stream.readObject());
+        ublock.decomp = new Lazy<>((UnicodeVector) stream.readObject());
     }
 
     private boolean startsWith(UnicodeScalar[] search, int offset) {
         int len = search.length;
-        UnicodeScalar[] elem = decomposed.get().elements();
+        UnicodeScalar[] elem = ublock.decomp.get().elements();
         int idx = elem.length - offset - len;
         if (idx < 0) {
             return false;
@@ -258,7 +266,7 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
 
     private void writeObject(ObjectOutputStream stream) throws IOException {
         stream.defaultWriteObject();
-        stream.writeObject(decomposed.get());
+        stream.writeObject(ublock.decomp.get());
     }
 
     static class Iter extends MappingIterator<UnicodeScalar, String> {
@@ -273,18 +281,35 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
         }
     }
 
-    class Decomp extends Lazy<UnicodeVector> {
+    @Getter
+    static class UBlock implements Externalizable {
 
-        @Override
-        protected UnicodeVector initialValue() {
-            return UnicodeVectorCache.getDecomposed(source);
+        private static final long serialVersionUID = -7951404676481901952L;
+
+        UnicodeVector elements;
+        Lazy<UnicodeVector> decomp;
+
+        public UBlock(final String source) {
+            this.elements = new UnicodeVector(source);
+            this.decomp = new Lazy<UnicodeVector>() {
+                @Override
+                protected UnicodeVector initialValue() {
+                    return elements.decompose();
+                }
+            };
         }
 
+        @Override
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
+            elements = (UnicodeVector) in.readObject();
+            decomp = new Lazy((UnicodeVector) in.readObject());
+        }
+
+        @Override
+        public void writeExternal(ObjectOutput out) throws IOException {
+            out.writeObject(elements);
+            out.writeObject(decomp.get());
+        }
     }
 
-    public String toDecomposedString() {
-        return decomposed.get().getSource();
-    }
-
-    
 }

@@ -21,46 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
-
-import lombok.Value;
+package info.naiv.lab.java.jmt;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-@Value
-public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue> {
-
-    Iterable<TValue> values;
-
-    @Override
-    public boolean containsKey(TKey key) {
-        return get(key) != null;
-    }
-
-    @Override
-    public TValue get(TKey key) {
-        return lookup(values, key);
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(TValue[] values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(Iterable<TValue> values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
+public interface StringPropertyResolver {
+    
+    String getProperty(String key);
+    
+    String getProperty(String key, String defaultValue);
+    
+    boolean containsProperty(String key);
+    
 }

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2017 enlo.
+ * Copyright 2018 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,46 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt.jdbc.metadata;
 
-import lombok.Value;
+import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import info.naiv.lab.java.jmt.jdbc.JDBCTypeTraits;
+import java.io.Serializable;
+import lombok.Data;
+import static org.springframework.jdbc.support.JdbcUtils.convertUnderscoreNameToPropertyName;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-@Value
-public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue> {
+@Data
+public class Column implements Serializable {
 
-    Iterable<TValue> values;
+    private static final long serialVersionUID = 3009006641174950928L;
+    private final String name;
+    private final String originalName;
+    private final String typeName;
+    private final JDBCTypeTraits typeTraits;
+    private String originalTypeName;
+    private boolean nonNull;
+    private boolean primaryKey;
+    private int primaryKeyIndex;
 
-    @Override
-    public boolean containsKey(TKey key) {
-        return get(key) != null;
+    public Column(String originalColumnName, Class type, String originalTypeName) {
+        this.originalName = originalColumnName;
+        this.name = convertUnderscoreNameToPropertyName(getOriginalName());
+        this.typeName = type.getCanonicalName();
+        this.typeTraits = JDBCTypeTraits.valueOf(type);
+        this.originalTypeName = isNotBlank(originalTypeName) ? originalTypeName : type.getSimpleName();
     }
 
-    @Override
-    public TValue get(TKey key) {
-        return lookup(values, key);
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(TValue[] values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(Iterable<TValue> values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
 }

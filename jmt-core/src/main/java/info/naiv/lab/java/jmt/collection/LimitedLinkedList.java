@@ -23,44 +23,47 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
-import lombok.Value;
+import info.naiv.lab.java.jmt.Arguments;
+import java.util.Collection;
+import java.util.LinkedList;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-@Value
-public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue> {
+public class LimitedLinkedList<T> extends LinkedList<T> {
 
-    Iterable<TValue> values;
+    private static final long serialVersionUID = 1L;
+    private int maxSize;
 
-    @Override
-    public boolean containsKey(TKey key) {
-        return get(key) != null;
+    public LimitedLinkedList() {
+        this(Integer.MAX_VALUE);
+    }
+
+    public LimitedLinkedList(int maxSize) {
+        Arguments.nonNegative(maxSize, "maxSize");
+        this.maxSize = maxSize;
+    }
+
+    public LimitedLinkedList(int maxSize, Collection<? extends T> c) {
+        super(c);
+        this.maxSize = maxSize;
     }
 
     @Override
-    public TValue get(TKey key) {
-        return lookup(values, key);
+    public boolean add(T e) {
+        if (size() >= maxSize) {
+            remove(0);
+        }
+        return super.add(e);
     }
 
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(TValue[] values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
+    @Override
+    public void add(int index, T element) {
+        if (size() >= maxSize) {
+            remove(0);
         }
-        return null;
+        super.add(index, element); 
     }
 
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(Iterable<TValue> values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
 }

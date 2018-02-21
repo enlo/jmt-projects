@@ -178,4 +178,9 @@ public abstract class ExpressiveProperties extends Properties {
         return value;
     }
 
+    public Properties exportRawProperties() {
+        Properties result = new Properties(defaults);
+        result.putAll(this);
+        return result;
+    }
 }

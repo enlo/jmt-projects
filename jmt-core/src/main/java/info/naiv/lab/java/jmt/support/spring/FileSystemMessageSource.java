@@ -44,7 +44,7 @@ public class FileSystemMessageSource extends ReloadableResourceBundleMessageSour
      */
     public FileSystemMessageSource() {
         localResourceLoader = new ResourceLoader();
-        setResourceLoader(localResourceLoader);
+        super.setResourceLoader(localResourceLoader);
     }
 
     /**

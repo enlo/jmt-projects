@@ -38,7 +38,7 @@ public abstract class FinalizerGuardian {
      * ファイナライズ不要なら true.
      */
     @Setter
-    boolean closed = false;
+    private boolean closed = false;
 
     @Override
     @SuppressWarnings("FinalizeDeclaration")

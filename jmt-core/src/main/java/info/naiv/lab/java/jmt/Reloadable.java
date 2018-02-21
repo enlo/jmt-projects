@@ -21,46 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt;
 
-import lombok.Value;
+import java.util.concurrent.locks.Lock;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-@Value
-public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue> {
-
-    Iterable<TValue> values;
-
-    @Override
-    public boolean containsKey(TKey key) {
-        return get(key) != null;
-    }
-
-    @Override
-    public TValue get(TKey key) {
-        return lookup(values, key);
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(TValue[] values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
-
-    public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(Iterable<TValue> values, TKey key) {
-        for (TValue v : values) {
-            if (v.getKey().compareTo(key) == 0) {
-                return v;
-            }
-        }
-        return null;
-    }
+public interface Reloadable {
+    
+    Lock getReloadLock();
+    
+    void reload() throws Exception;
 }

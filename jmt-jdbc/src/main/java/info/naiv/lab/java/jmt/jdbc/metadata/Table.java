@@ -28,6 +28,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.sql.DataSource;
 import lombok.Data;
@@ -61,6 +62,17 @@ public class Table implements Serializable {
         String nm = JdbcUtils.convertUnderscoreNameToPropertyName(orginalTableName);
         this.name = StringUtils.capitalize(nm);
         this.columns = columns;
+    }
+
+    public Column[] getPrimaryKeys() {
+        List<Column> pkey = new ArrayList<>();
+        for (Column column : columns) {
+            if (column.isPrimaryKey()) {
+                pkey.add(column);
+            }
+        }
+        Collections.sort(pkey, new Columns.PrimaryKeyComparator());
+        return pkey.toArray(new Column[pkey.size()]);
     }
 
     public static Table fromDatabaseMetadata(DatabaseMetaData metaData, String schema, String tablename) throws SQLException {

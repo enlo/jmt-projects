@@ -44,7 +44,7 @@ public class Column implements Serializable {
     private String originalTypeName;
     private boolean nonNull;
     private boolean primaryKey;
-    private int primaryKeyIndex;
+    private int primaryKeyIndex = -1;
 
     public Column(String originalColumnName, Class type, String originalTypeName) {
         this.originalName = originalColumnName;

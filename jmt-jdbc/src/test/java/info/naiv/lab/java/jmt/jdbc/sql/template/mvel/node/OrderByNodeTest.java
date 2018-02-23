@@ -23,8 +23,10 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
+import info.naiv.lab.java.jmt.jdbc.metadata.Column;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.jdbc.sql.template.OrderBy;
+import java.util.Arrays;
 import static java.util.Arrays.asList;
 import java.util.HashMap;
 import java.util.Map;
@@ -149,6 +151,31 @@ public class OrderByNodeTest {
         map.put("orders", new String[]{"AAA", "BBB desc"});
         String actualSql = makeSql(template, map);
         assertThat(actualSql, is("select * from Users  order by AAA, BBB desc"));
+    }
+
+    /**
+     * Test of eval method, of class OrderByNode.
+     */
+    @Test
+    public void testEval_9() {
+        String template = "select * from Users @orderBy{ orders }";
+        Map<String, Object> map = new HashMap<>();
+        map.put("orders", new Column("USER_ID", String.class, "varchar(20)"));
+        String actualSql = makeSql(template, map);
+        assertThat(actualSql, is("select * from Users  order by USER_ID"));
+    }
+
+    /**
+     * Test of eval method, of class OrderByNode.
+     */
+    @Test
+    public void testEval_10() {
+        String template = "select * from Users @orderBy{ orders }";
+        Map<String, Object> map = new HashMap<>();
+        map.put("orders", Arrays.asList(new Column("USER_ID", String.class, "varchar(20)"),
+                                        new Column("AGE", Integer.class, "integer")));
+        String actualSql = makeSql(template, map);
+        assertThat(actualSql, is("select * from Users  order by USER_ID, AGE"));
     }
 
     /**

@@ -24,6 +24,7 @@
 package info.naiv.lab.java.jmt.jdbc.sql.template.mvel.node;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.asObjectArray;
+import info.naiv.lab.java.jmt.jdbc.metadata.Column;
 import info.naiv.lab.java.jmt.jdbc.sql.SqlQueryContext;
 import info.naiv.lab.java.jmt.jdbc.sql.template.OrderBy;
 import org.mvel2.integration.VariableResolverFactory;
@@ -71,7 +72,7 @@ public class OrderByNode extends CustomNode {
             }
             else if (value != null) {
                 appender.append(ORDER_BY_PREFIX);
-                appender.append(value.toString());
+                appender.append(Joiner.resolve(value));
             }
         }
     }
@@ -93,14 +94,22 @@ public class OrderByNode extends CustomNode {
 
         @Override
         protected TemplateOutputStream append(TemplateOutputStream output, Object value) {
-            return output.append(value.toString());
+            return output.append(resolve(value));
         }
 
         @Override
         protected TemplateOutputStream appendFirst(TemplateOutputStream output, Object value) {
             output.append(ORDER_BY_PREFIX);
-            return output.append(value.toString());
+            return output.append(resolve(value));
         }
 
+        public static String resolve(Object value) {
+            if (value instanceof Column) {
+                return ((Column) value).getOriginalName();
+            }
+            else {
+                return value.toString();
+            }
+        }
     }
 }

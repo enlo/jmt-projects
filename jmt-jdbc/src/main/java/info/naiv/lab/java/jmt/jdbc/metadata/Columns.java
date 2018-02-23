@@ -29,6 +29,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -48,6 +49,20 @@ public class Columns {
                 columnlist.add(field);
             }
         }
+        if (!columnlist.isEmpty()) {
+            try (ResultSet rs = meta.getPrimaryKeys(null, schema, tablename)) {
+                while (rs.next()) {
+                    String cname = rs.getString("COLUMN_NAME");
+                    short seq = rs.getShort("KEY_SEQ");
+                    for (Column field : columnlist) {
+                        if (field.getOriginalName().equals(cname)) {
+                            field.setPrimaryKey(true);
+                            field.setPrimaryKeyIndex(seq);
+                        }
+                    }
+                }
+            }
+        }
         return columnlist;
     }
 
@@ -61,5 +76,16 @@ public class Columns {
         int dataType = rs.getInt("DATA_TYPE");
         JdbcType type = JdbcType.valueOf(dataType);
         return type.getMappedType();
+    }
+    
+    public static class PrimaryKeyComparator implements Comparator<Column> {
+
+        @Override
+        public int compare(Column o1, Column o2) {
+            int cx = o1.isPrimaryKey() ? o1.getPrimaryKeyIndex() : Integer.MAX_VALUE;
+            int cy = o2.isPrimaryKey() ? o2.getPrimaryKeyIndex() : Integer.MAX_VALUE;
+            return Integer.compare(cx, cy);
+        }
+
     }
 }

@@ -37,7 +37,7 @@ import java.util.List;
  * @author enlo
  */
 public class Columns {
-
+    
     public static List<Column> fromDatabaseMetadata(DatabaseMetaData meta, String schema, String tablename) throws SQLException {
         List<Column> columnlist = new ArrayList<>();
         try (ResultSet rs = meta.getColumns(null, schema, tablename, "%")) {
@@ -46,6 +46,8 @@ public class Columns {
                                           getType(rs), rs.getString("TYPE_NAME"));
                 int nullable = rs.getInt("NULLABLE");
                 field.setNonNull(nullable == DatabaseMetaData.columnNoNulls);
+                field.setSize(rs.getInt("COLUMN_SIZE"));
+                field.setScale(rs.getInt("DECIMAL_DIGITS"));
                 columnlist.add(field);
             }
         }
@@ -65,13 +67,13 @@ public class Columns {
         }
         return columnlist;
     }
-
+    
     protected static JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
         int dataType = rs.getInt("DATA_TYPE");
         JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
         return type;
     }
-
+    
     protected static Class getType(final ResultSet rs) throws SQLException {
         int dataType = rs.getInt("DATA_TYPE");
         JdbcType type = JdbcType.valueOf(dataType);
@@ -79,13 +81,13 @@ public class Columns {
     }
     
     public static class PrimaryKeyComparator implements Comparator<Column> {
-
+        
         @Override
         public int compare(Column o1, Column o2) {
             int cx = o1.isPrimaryKey() ? o1.getPrimaryKeyIndex() : Integer.MAX_VALUE;
             int cy = o2.isPrimaryKey() ? o2.getPrimaryKeyIndex() : Integer.MAX_VALUE;
             return Integer.compare(cx, cy);
         }
-
+        
     }
 }

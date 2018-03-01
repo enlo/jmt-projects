@@ -95,17 +95,17 @@ public class PojoGenerator {
         return fields;
     }
 
-    protected JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
-        int dataType = rs.getInt("DATA_TYPE");
-        JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
-        return type;
-    }
+        protected JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
+            int dataType = rs.getInt("DATA_TYPE");
+            JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
+            return type;
+        }
 
-    protected Class getType(final ResultSet rs) throws SQLException {
-        int dataType = rs.getInt("DATA_TYPE");
-        JdbcType type = JdbcType.valueOf(dataType);
-        return type.getMappedType();
-    }
+        protected Class getType(final ResultSet rs) throws SQLException {
+            int dataType = rs.getInt("DATA_TYPE");
+            JdbcType type = JdbcType.valueOf(dataType);
+            return type.getMappedType();
+        }
 
     protected String toBeanName(String tablename) {
         String beanName = JdbcUtils.convertUnderscoreNameToPropertyName(tablename);

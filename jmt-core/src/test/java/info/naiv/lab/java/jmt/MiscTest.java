@@ -1192,6 +1192,7 @@ public class MiscTest {
      * @throws java.io.IOException
      */
     @Test
+    @Deprecated
     public void testRemoveZwnbsp() throws IOException {
         Resource nobomres = context.getResource("classpath:TEXT/nobomtext.txt");
         Resource bomres = context.getResource("classpath:TEXT/bomtext.txt");

@@ -31,7 +31,7 @@ import javax.annotation.Nonnull;
  * @author enlo
  * @param <T>
  */
-public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, StringBuilder> {
+public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, StringBuilderCB> {
 
     /**
      * コンストラクタ
@@ -39,8 +39,8 @@ public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, S
      * @param first
      * @param more
      */
-    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilder> first,
-                                       @Nonnull Adder<T, StringBuilder> more) {
+    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilderCB> first,
+                                       @Nonnull Adder<T, StringBuilderCB> more) {
         super(first, more);
     }
 
@@ -49,13 +49,13 @@ public abstract class AbstractStringBuilderJoiner<T> extends AbstractJoiner<T, S
      *
      * @param adder
      */
-    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilder> adder) {
+    public AbstractStringBuilderJoiner(@Nonnull Adder<T, StringBuilderCB> adder) {
         super(adder);
     }
 
     @Override
-    protected final StringBuilder createResult() {
-        return new StringBuilder();
+    protected final StringBuilderCB createResult() {
+        return new StringBuilderCB();
     }
 
 }

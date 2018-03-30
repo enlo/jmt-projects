@@ -192,20 +192,7 @@ public class Misc {
      */
     @Nonnull
     public static String concatnate(String... items) {
-        int size = 0;
-        for (String item : items) {
-            if (item != null) {
-                size += item.length();
-            }
-        }
-        CharBuffer buffer = CharBuffer.allocate(size);
-        for (String item : items) {
-            if (item != null) {
-                buffer.append(item);
-            }
-        }
-        buffer.flip();
-        return buffer.toString();
+        return Strings.concatnate(items);
     }
 
     /**
@@ -451,19 +438,7 @@ public class Misc {
      * @see Character#isWhitespace(char)
      */
     public static boolean isBlank(CharSequence object) {
-        if (isEmpty(object)) {
-            return true;
-        }
-        else {
-            int l = object.length();
-            for (int i = 0; i < l; i++) {
-                char ch = object.charAt(i);
-                if (!isWhitespace(ch) && !isSpaceChar(ch) && ch != 0xFEFF) {
-                    return false;
-                }
-            }
-            return true;
-        }
+        return Strings.isBlank(object);
     }
 
     /**
@@ -473,7 +448,7 @@ public class Misc {
      * @return 空ならば true.
      */
     public static boolean isEmpty(CharSequence object) {
-        return object == null || object.length() == 0;
+        return Strings.isEmpty(object);
     }
 
     /**

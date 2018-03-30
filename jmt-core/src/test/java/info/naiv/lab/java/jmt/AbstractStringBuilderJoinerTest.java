@@ -35,18 +35,18 @@ import org.junit.Test;
  * @author enlo
  * @param <T>
  */
-public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, StringBuilder> {
+public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, StringBuilderCB> {
 
-    final Joiner.Adder<T, StringBuilder> ADDER1 = new Joiner.Adder<T, StringBuilder>() {
+    final Joiner.Adder<T, StringBuilderCB> ADDER1 = new Joiner.Adder<T, StringBuilderCB>() {
         @Override
-        public StringBuilder add(StringBuilder obj, T value, int idx) {
+        public StringBuilderCB add(StringBuilderCB obj, T value, int idx) {
             return obj;
         }
     };
 
-    final Joiner.Adder<T, StringBuilder> ADDER2 = new Joiner.Adder<T, StringBuilder>() {
+    final Joiner.Adder<T, StringBuilderCB> ADDER2 = new Joiner.Adder<T, StringBuilderCB>() {
         @Override
-        public StringBuilder add(StringBuilder obj, T value, int idx) {
+        public StringBuilderCB add(StringBuilderCB obj, T value, int idx) {
             return obj;
         }
     };
@@ -102,7 +102,7 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
      */
     @Test
     public void testGetFirst() {
-        Joiner.Adder<T, StringBuilder> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
+        Joiner.Adder<T, StringBuilderCB> addr = new AbstractStringJoinerImpl(ADDER1, ADDER2).getFirst();
         assertThat(addr, sameInstance(ADDER1));
     }
 
@@ -111,17 +111,17 @@ public abstract class AbstractStringBuilderJoinerTest<T> extends JoinerTest<T, S
      */
     @Test
     public void testGetMore() {
-        Joiner.Adder<T, StringBuilder> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();
+        Joiner.Adder<T, StringBuilderCB> more = new AbstractStringJoinerImpl(ADDER1, ADDER2).getMore();
         assertThat(more, sameInstance(ADDER2));
     }
 
     private class AbstractStringJoinerImpl extends AbstractStringBuilderJoiner<T> {
 
-        AbstractStringJoinerImpl(Adder<T, StringBuilder> first, Adder<T, StringBuilder> more) {
+        AbstractStringJoinerImpl(Adder<T, StringBuilderCB> first, Adder<T, StringBuilderCB> more) {
             super(first, more);
         }
 
-        AbstractStringJoinerImpl(Adder<T, StringBuilder> adder) {
+        AbstractStringJoinerImpl(Adder<T, StringBuilderCB> adder) {
             super(adder);
         }
     }

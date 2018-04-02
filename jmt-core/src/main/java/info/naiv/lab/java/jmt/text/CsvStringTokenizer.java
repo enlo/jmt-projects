@@ -24,13 +24,14 @@
 package info.naiv.lab.java.jmt.text;
 
 import java.nio.CharBuffer;
+import javax.annotation.Nonnull;
 import lombok.NonNull;
 
 /**
  *
  * @author enlo
  */
-public class CsvStringStream {
+public class CsvStringTokenizer {
 
     final char[] source;
     final CharBuffer cb;
@@ -38,15 +39,15 @@ public class CsvStringStream {
     int row;
     int column;
 
-    public CsvStringStream(@NonNull CharSequence source) {
+    public CsvStringTokenizer(@NonNull CharSequence source) {
         this(source.toString().toCharArray());
     }
 
-    public CsvStringStream(@NonNull String source) {
+    public CsvStringTokenizer(@NonNull String source) {
         this(source.toCharArray());
     }
 
-    public CsvStringStream(@NonNull char[] source) {
+    public CsvStringTokenizer(@NonNull char[] source) {
         this.source = source;
         cb = CharBuffer.allocate(source.length);
         index = 0;
@@ -55,6 +56,7 @@ public class CsvStringStream {
     }
 
     public boolean skipColumn() {
+
         if (isEol()) {
             return false;
         }
@@ -94,7 +96,9 @@ public class CsvStringStream {
         }
     }
 
+    @Nonnull
     public String getColumn() {
+
         cb.clear();
         if (isEol()) {
             return "";
@@ -140,6 +144,7 @@ public class CsvStringStream {
         }
     }
 
+    @Nonnull
     public String getRemaining() {
         if (check()) {
             return new String(source, index, source.length - index);
@@ -212,4 +217,5 @@ public class CsvStringStream {
             }
         }
     }
+
 }

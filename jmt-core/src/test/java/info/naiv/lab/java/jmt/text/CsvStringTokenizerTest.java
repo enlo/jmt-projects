@@ -31,18 +31,18 @@ import static org.junit.Assert.*;
  *
  * @author enlo
  */
-public class CsvStringStreamTest {
+public class CsvStringTokenizerTest {
 
-    public CsvStringStreamTest() {
+    public CsvStringTokenizerTest() {
     }
 
     /**
-     * Test of skipColumn method, of class CsvStringStream.
+     * Test of skipColumn method, of class CsvStringTokenizer.
      */
     @Test
     public void testSkipColumn() {
         String sampleCsv = "\"ABC\",CDF, E F G  ,\" A B \r\n C\"\"\"";
-        CsvStringStream css = new CsvStringStream(sampleCsv);
+        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
         assertThat(css.skipColumn(), is(true));
         assertThat(css.index, is(6));
         assertThat(css.skipColumn(), is(true));
@@ -56,12 +56,12 @@ public class CsvStringStreamTest {
     }
 
     /**
-     * Test of getColumn method, of class CsvStringStream.
+     * Test of getColumn method, of class CsvStringTokenizer.
      */
     @Test
     public void testGetColumn() {
         String sampleCsv = "\"ABC\",CDF, E F G  ,\" A B, \r\n C\"\"\"";
-        CsvStringStream css = new CsvStringStream(sampleCsv);
+        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
         assertThat(css.getColumn(), is("ABC"));
         assertThat(css.getColumn(), is("CDF"));
         assertThat(css.getColumn(), is(" E F G  "));
@@ -70,12 +70,12 @@ public class CsvStringStreamTest {
     }
 
     /**
-     * Test of getRemaining method, of class CsvStringStream.
+     * Test of getRemaining method, of class CsvStringTokenizer.
      */
     @Test
     public void testGetRemaining() {
         String sampleCsv = "\"ABC\",CDF, E F G  ,\" A B, \r\n C\"\"\"";
-        CsvStringStream css = new CsvStringStream(sampleCsv);
+        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
         assertThat(css.skipColumn(), is(true));
         assertThat(css.getRemaining(), is("CDF, E F G  ,\" A B, \r\n C\"\"\""));
         assertThat(css.skipColumn(), is(true));
@@ -89,7 +89,7 @@ public class CsvStringStreamTest {
     }
 
     /**
-     * Test of nextLine method, of class CsvStringStream.
+     * Test of nextLine method, of class CsvStringTokenizer.
      */
     @Test
     public void testNextLine() {
@@ -98,7 +98,7 @@ public class CsvStringStreamTest {
                 + "あいう,えおか,きくけ,さしす\r"
                 + "漢字,かな,カタカナ,\u0208";
 
-        CsvStringStream css = new CsvStringStream(sampleCsv);
+        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
         assertThat(css.skipColumn(), is(true));
         assertThat(css.getColumn(), is("CDF"));
         assertThat(css.skipColumn(), is(true));

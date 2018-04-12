@@ -67,7 +67,7 @@ public class DateTimePatternTest {
         Calendar out = Calendar.getInstance();
         boolean result = DATETIME_PATTERN.toCalendar(source, out);
         assertThat(result, is(true));
-        assertThat(out.getTime(), is(DateFormatUtils.ISO_DATETIME_FORMAT.parse(source)));
+        assertThat(out.getTime(), is(DateFormatUtils.ISO_8601_EXTENDED_DATETIME_FORMAT.parse(source)));
     }
 
     /**

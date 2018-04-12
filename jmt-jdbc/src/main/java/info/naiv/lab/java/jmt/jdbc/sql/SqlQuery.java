@@ -29,6 +29,7 @@ import info.naiv.lab.java.jmt.jdbc.sql.dialect.Dialect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
@@ -370,7 +371,7 @@ public class SqlQuery implements Query {
                 if (db) {
                     logger.debug("update Sql={}", q);
                 }
-                PreparedStatement ps = con.prepareStatement(q);
+                PreparedStatement ps = con.prepareStatement(q, Statement.RETURN_GENERATED_KEYS);
                 setter.setValues(ps);
                 return ps;
             }

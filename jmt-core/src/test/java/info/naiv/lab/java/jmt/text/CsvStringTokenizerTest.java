@@ -87,7 +87,7 @@ public class CsvStringTokenizerTest {
         assertThat(css.skipColumn(), is(false));
         assertThat(css.getRemaining(), is(""));
     }
-
+    
     /**
      * Test of nextLine method, of class CsvStringTokenizer.
      */

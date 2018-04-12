@@ -592,7 +592,7 @@ public class SqlQueryTest {
         Query query = loader.load("C3", "insert1").merge(u);
         int affected = query.update(jdbcTemplate, keyHolder);
         assertThat(affected, is(1));
-        assertThat((int) keyHolder.getKey(), is(greaterThan(100)));
+        assertThat((int) keyHolder.getKeys().get("ID"), is(greaterThan(100)));
 
         count = cq.queryForObject(jdbcTemplate, Integer.class);
         assertThat(count, is(101));

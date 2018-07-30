@@ -24,17 +24,22 @@
 package info.naiv.lab.java.jmt.enumgen.maven.plugin;
 
 import com.google.common.collect.Multimap;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.io.NIOUtils;
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
+import static java.nio.charset.StandardCharsets.UTF_8;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -74,8 +79,11 @@ public class EnumGeneratorMojo extends AbstractMojo {
     @Parameter(property = "project.build.sourceEncoding", defaultValue = "UTF-8")
     protected String encoding;
 
-    @Parameter
+    @Parameter(defaultValue = "")
     protected String enumSourceCsv;
+
+    @Parameter(defaultValue = "")
+    protected String enumSourceDirectory;
 
     @Parameter(required = true, defaultValue = "*")
     protected String filter;
@@ -128,6 +136,45 @@ public class EnumGeneratorMojo extends AbstractMojo {
                     log.info("generate " + code.getName());
                     writeCode(path, code, charset);
                 }
+            }
+            if (isNotBlank(enumSourceDirectory)) {
+                List<Path> fileList = new ArrayList<>();
+                for (String dir : project.getCompileSourceRoots()) {
+                    Path p = Paths.get(dir, enumSourceDirectory);
+                    List<Path> files = NIOUtils.listPaths(p, filter);
+                    log.info("listup " + p + "," + files.size());
+                    fileList.addAll(files);
+                }
+                Properties np = new Properties();
+                Pattern packagePattern = Pattern.compile("^package\\s+([^;]+);");
+                Pattern classPattern = Pattern.compile("class\\s+(\\w+)");
+                for (Path key : fileList) {
+                    String className = "";
+                    String packName = "";
+                    try (BufferedReader reader = Files.newBufferedReader(key, UTF_8);) {
+                        String line;
+                        do {
+                            line = reader.readLine();
+                            Matcher mp = packagePattern.matcher(line);
+                            if (mp.find()) {
+                                packName = mp.group(1) + ".";
+                            }
+                            Matcher mc = classPattern.matcher(line);
+                            if (mc.find()) {
+                                className = mc.group(1);
+                                break;
+                            }
+                        }
+                        while (line != null);
+                    }
+                    String fullName = packName + className;
+                    np.setProperty(fullName, className);
+                }
+                CodeData code = builder.propertiesToCode(propertiesSourceEnumName,
+                                                         propertiesSourceFieldPrefix,
+                                                         np);
+                log.info("generate " + code.getName());
+                writeCode(path, code, charset);
             }
         }
         catch (IOException ex) {

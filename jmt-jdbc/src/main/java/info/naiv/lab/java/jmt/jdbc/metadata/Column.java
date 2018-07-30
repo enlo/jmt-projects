@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.metadata;
 
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.isNotBlank;
 import info.naiv.lab.java.jmt.jdbc.JDBCTypeTraits;
 import java.io.Serializable;
 import lombok.Data;

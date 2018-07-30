@@ -23,8 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc.sql.template.config;
 
-import static info.naiv.lab.java.jmt.Misc.isBlank;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.infrastructure.ServiceProviders;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.jdbc.sql.template.SqlTemplate;

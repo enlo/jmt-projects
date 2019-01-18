@@ -23,9 +23,7 @@
  */
 package info.naiv.lab.java.jmt.bean;
 
-import static info.naiv.lab.java.jmt.Misc.isEmpty;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.bean.annotation.Mapping;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;

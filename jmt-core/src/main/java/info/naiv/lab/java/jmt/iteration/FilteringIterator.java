@@ -26,6 +26,8 @@ package info.naiv.lab.java.jmt.iteration;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
 
 /**
@@ -33,15 +35,11 @@ import lombok.NonNull;
  * @author enlo
  * @param <T>
  */
-public final class FilteringIterator<T> implements Iterator<T> {
+public final class FilteringIterator<T> extends AbstractIteratorAdapter<T, T> implements Iterator<T> {
 
-    @NonNull
+    @Getter(AccessLevel.PROTECTED)
     private final Iterator<T> baseIterator;
-    private boolean cont;
-    @NonNull
     private final Predicate1<? super T> filter;
-
-    private T nextElement;
 
     /**
      * コンストラクター.
@@ -49,41 +47,14 @@ public final class FilteringIterator<T> implements Iterator<T> {
      * @param iterator 基本となる反復子
      * @param filter フィルター
      */
-    public FilteringIterator(Iterator<T> iterator, Predicate1<? super T> filter) {
+    public FilteringIterator(@NonNull Iterator<T> iterator, @NonNull Predicate1<? super T> filter) {
         this.baseIterator = iterator;
         this.filter = filter;
-        doNext();
     }
 
     @Override
-    public boolean hasNext() {
-        return cont;
+    protected boolean filter(T value) {
+        return filter.test(value);
     }
 
-    @Override
-    public T next() {
-        if (!cont) {
-            throw new NoSuchElementException();
-        }
-        return doNext();
-    }
-
-    @Override
-    public void remove() {
-        baseIterator.remove();
-    }
-
-    private T doNext() {
-        T result = nextElement;
-        while (baseIterator.hasNext()) {
-            T v = baseIterator.next();
-            if (filter.test(v)) {
-                cont = true;
-                nextElement = v;
-                return result;
-            }
-        }
-        cont = false;
-        return result;
-    }
 }

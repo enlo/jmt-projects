@@ -15,11 +15,10 @@
  */
 package info.naiv.lab.java.jmt.pojogen.maven.plugin;
 
-import info.naiv.lab.java.jmt.Misc;
-import static info.naiv.lab.java.jmt.Misc.isEmpty;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Misc.*;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.io.NIOUtils;
+import static info.naiv.lab.java.jmt.iteration.IterationUtils.contains;
 import info.naiv.lab.java.jmt.jdbc.driver.ExternalJdbcDriverLoader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -150,7 +149,7 @@ public class PojoGeneratorMojo extends AbstractMojo {
                     if (isEmpty(excludeTables)) {
                         return false;
                     }
-                    return Misc.contains(excludeTables, new Predicate1<String>() {
+                    return contains(excludeTables, new Predicate1<String>() {
                         @Override
                         public boolean test(String obj) {
                             return matcher.match(obj, tableName);

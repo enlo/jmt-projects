@@ -26,6 +26,7 @@ package info.naiv.lab.java.jmt.jdbc.metadata;
 import static info.naiv.lab.java.jmt.Strings.isNotBlank;
 import info.naiv.lab.java.jmt.jdbc.JDBCTypeTraits;
 import java.io.Serializable;
+import javax.annotation.Nonnull;
 import lombok.Data;
 import static org.springframework.jdbc.support.JdbcUtils.convertUnderscoreNameToPropertyName;
 
@@ -48,9 +49,9 @@ public class Column implements Serializable {
     private int size;
     private int scale;
 
-    public Column(String originalColumnName, Class type, String originalTypeName) {
+    public Column(@Nonnull String originalColumnName, @Nonnull Class type, @Nonnull String originalTypeName) {
         this.originalName = originalColumnName;
-        this.name = convertUnderscoreNameToPropertyName(getOriginalName());
+        this.name = convertUnderscoreNameToPropertyName(originalName);
         this.typeName = type.getCanonicalName();
         this.typeTraits = JDBCTypeTraits.valueOf(type);
         this.originalTypeName = isNotBlank(originalTypeName) ? originalTypeName : type.getSimpleName();

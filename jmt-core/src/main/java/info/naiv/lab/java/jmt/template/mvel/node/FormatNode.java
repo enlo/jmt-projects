@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.template.mvel.node;
 
 import info.naiv.lab.java.jmt.Misc;
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
+import static info.naiv.lab.java.jmt.Strings.isNotEmpty;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Locale;

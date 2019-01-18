@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt.template;
 
 import info.naiv.lab.java.jmt.Initializer;
-import static info.naiv.lab.java.jmt.Misc.isBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.StringJoiner;
 import java.io.IOException;
 import java.nio.charset.Charset;

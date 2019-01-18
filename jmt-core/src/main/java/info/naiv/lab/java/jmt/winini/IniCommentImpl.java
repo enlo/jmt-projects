@@ -21,28 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt.winini;
 
-import java.util.Map;
+import lombok.Value;
 
 /**
  *
  * @author enlo
- * @param <TKey1>
- * @param <TKey2>
- * @param <TValue>
  */
-public interface Directory2<TKey1, TKey2, TValue>
-        extends Lookup<TKey1, Directory1<TKey2, TValue>>,
-                Map<TKey1, Directory1<TKey2, TValue>> {
+@Value
+public class IniCommentImpl implements IniComment {
 
-    TValue get(TKey1 key1, TKey2 key2);
+    private static final long serialVersionUID = -324068397901384743L;
 
-    TValue put(TKey1 key1, TKey2 key2, TValue value);
+    String comment;
 
-    boolean containsKey(TKey1 key1, TKey2 key2);
-
-    TValue remove(TKey1 key1, TKey2 key2);
-    
-    Directory1<TKey2, TValue> replace(TKey1 key, Directory1<TKey2, TValue> value);
 }

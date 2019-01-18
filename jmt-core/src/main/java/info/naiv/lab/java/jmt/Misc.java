@@ -47,14 +47,11 @@ import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
-import static java.lang.Character.isSpaceChar;
-import static java.lang.Character.isWhitespace;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.text.Format;
 import java.text.NumberFormat;
@@ -540,7 +537,7 @@ public class Misc {
      * @return 空でも空白でなければ true.
      */
     public static boolean isNotBlank(String object) {
-        return !isBlank(object);
+        return Strings.isNotBlank(object);
     }
 
     /**
@@ -1097,7 +1094,7 @@ public class Misc {
      * @return 変換結果. source が null なら defaultValue.
      */
     public static BigDecimal toBigDecimal(String source, BigDecimal defaultValue) {
-        if (isNotEmpty(source)) {
+        if (Strings.isNotEmpty(source)) {
             try {
                 return new BigDecimal(source);
             }
@@ -1198,7 +1195,7 @@ public class Misc {
      * @return 値
      */
     public static Calendar toCalendar(String dateText, Calendar defaultValue) {
-        if (isNotEmpty(dateText)) {
+        if (Strings.isNotEmpty(dateText)) {
             try {
                 return parseCalendar(dateText);
             }
@@ -1239,7 +1236,7 @@ public class Misc {
      * @return 値
      */
     public static Date toDate(String dateText, Date defaultValue) {
-        if (isNotEmpty(dateText)) {
+        if (Strings.isNotEmpty(dateText)) {
             try {
                 Calendar c = parseCalendar(dateText);
                 return c.getTime();
@@ -1477,7 +1474,7 @@ public class Misc {
      * @return 結果.
      */
     public static Number toNumber(String source, Number defaultValue, Class<? extends Number> hint) {
-        if (isNotEmpty(source)) {
+        if (Strings.isNotEmpty(source)) {
             try {
                 ServiceProvider sp = getThreadContainer();
                 Tag tag = hint != null ? Tag.of(hint) : Tag.of(Number.class);

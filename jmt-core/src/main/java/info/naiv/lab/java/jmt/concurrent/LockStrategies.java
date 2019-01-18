@@ -26,7 +26,9 @@ package info.naiv.lab.java.jmt.concurrent;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 
 /**
@@ -68,22 +70,50 @@ public class LockStrategies {
 
     public static final Lock NOLOCK = new NoLock();
 
+    public static final ReadWriteLock NORWLOCK = new ReadWriteLock() {
+        @Override
+        public Lock readLock() {
+            return NOLOCK;
+        }
+
+        @Override
+        public Lock writeLock() {
+            return NOLOCK;
+        }
+    };
+
+    public static class NoLockStrategy implements LockStrategy {
+
+        @Override
+        public Lock createLock() {
+            return NOLOCK;
+        }
+
+        @Override
+        public ReadWriteLock createReadWriteLock() {
+            return NORWLOCK;
+        }
+    }
+
+    public static class ReentrantLockStrategy implements LockStrategy {
+
+        @Override
+        public Lock createLock() {
+            return new ReentrantLock();
+        }
+
+        @Override
+        public ReadWriteLock createReadWriteLock() {
+            return new ReentrantReadWriteLock();
+        }
+    }
+
     @Nonnull
     public static LockStrategy noLock() {
-        return new LockStrategy() {
-            @Override
-            public Lock createLock() {
-                return NOLOCK;
-            }
-        };
+        return new NoLockStrategy();
     }
-    
-    public static LockStrategy reentrantLock(){
-        return new LockStrategy() {
-            @Override
-            public Lock createLock() {
-                return new ReentrantLock();
-            }
-        };
+
+    public static LockStrategy reentrantLock() {
+        return new ReentrantLockStrategy();
     }
 }

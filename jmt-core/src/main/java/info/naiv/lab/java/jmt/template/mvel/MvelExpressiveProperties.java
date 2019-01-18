@@ -1,7 +1,7 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.ExpressiveProperties;
-import static info.naiv.lab.java.jmt.Misc.isBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.collection.Lookup;
 import java.io.Serializable;
 import java.util.Map;

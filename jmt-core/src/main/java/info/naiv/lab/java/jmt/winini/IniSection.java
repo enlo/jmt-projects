@@ -21,18 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.concurrent;
+package info.naiv.lab.java.jmt.winini;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
+import info.naiv.lab.java.jmt.collection.KeyedValue;
+import info.naiv.lab.java.jmt.collection.MultiValueLookup;
+import java.util.Properties;
 
 /**
  *
  * @author enlo
  */
-public interface LockStrategy {
+public interface IniSection extends MultiValueLookup<String, String>, Iterable<IniNode>, KeyedValue<String>, IniNode {
 
-    Lock createLock();
+    void add(IniEntry entry);
 
-    ReadWriteLock createReadWriteLock();
+    void add(IniComment comment);
+
+    IniEntry put(IniEntry entry);
+
+    String put(String key, String value);
+
+    void addEntry(String key, String value);
+
+    void addComment(String comment);
+
+    IniEntry getEntry(String key);
+
+    Iterable<IniEntry> getEntries(String key);
+
+    Iterable<IniEntry> getEntries();
+
+    Properties toProperties();
+
+    boolean isEmpty();
+
+    int size();
 }

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.datetime;
 
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
+import static info.naiv.lab.java.jmt.Strings.isNotEmpty;
 import static info.naiv.lab.java.jmt.Misc.toInt;
 import java.util.Calendar;
 import java.util.TimeZone;

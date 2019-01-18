@@ -25,8 +25,7 @@ package info.naiv.lab.java.jmt.io;
 
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
 import info.naiv.lab.java.jmt.FinalizerGuardian;
-import static info.naiv.lab.java.jmt.Misc.isBlank;
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import static info.naiv.lab.java.jmt.io.NIOUtils.copyAll;
 import static info.naiv.lab.java.jmt.io.NIOUtils.deleteRecursive;
 import java.io.Closeable;

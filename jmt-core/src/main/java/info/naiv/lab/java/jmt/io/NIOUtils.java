@@ -24,8 +24,8 @@
 package info.naiv.lab.java.jmt.io;
 
 import static info.naiv.lab.java.jmt.Arguments.lessThan;
-import info.naiv.lab.java.jmt.Misc;
 import static info.naiv.lab.java.jmt.Misc.toStringList;
+import static info.naiv.lab.java.jmt.iteration.IterationUtils.getFirst;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
@@ -190,7 +190,7 @@ public class NIOUtils {
                 return filepath;
             }
         }
-        return Misc.getFirst(founds.values());
+        return getFirst(founds.values());
     }
 
     /**

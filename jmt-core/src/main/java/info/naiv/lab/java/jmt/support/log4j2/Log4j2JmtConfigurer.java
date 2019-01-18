@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.support.log4j2;
 
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
+import static info.naiv.lab.java.jmt.Strings.isNotEmpty;
 import java.net.URI;
 import java.util.Properties;
 import lombok.NonNull;

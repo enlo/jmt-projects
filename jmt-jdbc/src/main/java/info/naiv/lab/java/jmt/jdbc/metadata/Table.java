@@ -30,6 +30,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 import lombok.Data;
 import org.springframework.dao.DataAccessException;
@@ -49,21 +51,49 @@ public class Table implements Serializable {
 
     private static final long serialVersionUID = 5356801277458353958L;
 
+    public static Table fromDataSource(DataSource dataSource, final String schema, final String tablename) throws MetaDataAccessException {
+        return (Table) JdbcUtils.extractDatabaseMetaData(dataSource, new DatabaseMetaDataCallback() {
+                                                     @Override
+                                                     public Object processMetaData(DatabaseMetaData dbmd) throws SQLException, MetaDataAccessException {
+                                                         return fromDatabaseMetadata(dbmd, schema, tablename);
+                                                     }
+                                                 });
+    }
+
+    public static Table fromDatabaseMetadata(DatabaseMetaData metaData, String schema, String tablename) throws SQLException {
+        return new Table(tablename, Columns.fromDatabaseMetadata(metaData, schema, tablename));
+    }
+
+    public static Table fromJdbcTemplate(JdbcTemplate template, final String schema, final String tablename) {
+        return template.execute(new ConnectionCallback<Table>() {
+            @Override
+            public Table doInConnection(Connection con) throws SQLException, DataAccessException {
+                return fromDatabaseMetadata(con.getMetaData(), schema, tablename);
+            }
+        });
+    }
+
+    private List<Column> columns;
     private final String name;
     private final String originalName;
-    private List<Column> columns;
 
-    public Table(String orginalTableName) {
+    public Table(@Nonnull String orginalTableName) {
         this(orginalTableName, new ArrayList<Column>());
     }
 
-    public Table(String orginalTableName, List<Column> columns) {
+    public Table(@Nonnull String orginalTableName, @Nonnull List<Column> columns) {
         this.originalName = orginalTableName;
         String nm = JdbcUtils.convertUnderscoreNameToPropertyName(orginalTableName);
         this.name = StringUtils.capitalize(nm);
         this.columns = columns;
     }
 
+    @CheckForNull
+    public Column findColumn(String name) {
+        return Columns.find(columns, name);
+    }
+
+    @Nonnull
     public Column[] getPrimaryKeys() {
         List<Column> pkey = new ArrayList<>();
         for (Column column : columns) {
@@ -75,25 +105,4 @@ public class Table implements Serializable {
         return pkey.toArray(new Column[pkey.size()]);
     }
 
-    public static Table fromDatabaseMetadata(DatabaseMetaData metaData, String schema, String tablename) throws SQLException {
-        return new Table(tablename, Columns.fromDatabaseMetadata(metaData, schema, tablename));
-    }
-
-    public static Table fromDataSource(DataSource dataSource, final String schema, final String tablename) throws MetaDataAccessException {
-        return (Table) JdbcUtils.extractDatabaseMetaData(dataSource, new DatabaseMetaDataCallback() {
-                                                     @Override
-                                                     public Object processMetaData(DatabaseMetaData dbmd) throws SQLException, MetaDataAccessException {
-                                                         return fromDatabaseMetadata(dbmd, schema, tablename);
-                                                     }
-                                                 });
-    }
-
-    public static Table fromJdbcTemplate(JdbcTemplate template, final String schema, final String tablename) {
-        return template.execute(new ConnectionCallback<Table>() {
-            @Override
-            public Table doInConnection(Connection con) throws SQLException, DataAccessException {
-                return fromDatabaseMetadata(con.getMetaData(), schema, tablename);
-            }
-        });
-    }
 }

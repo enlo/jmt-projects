@@ -25,8 +25,9 @@ package info.naiv.lab.java.jmt.iteration;
 
 import info.naiv.lab.java.jmt.fx.Function1;
 import java.util.Iterator;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 
 /**
  *
@@ -34,27 +35,21 @@ import lombok.RequiredArgsConstructor;
  * @param <T>
  * @param <R>
  */
-@RequiredArgsConstructor
-public class MappingIterator<T, R> implements Iterator<R> {
+public class MappingIterator<T, R> extends AbstractIteratorAdapter<T, R> implements Iterator<R> {
 
-    @NonNull
+    @Getter(AccessLevel.PROTECTED)
     final Iterator<T> baseIterator;
-    @NonNull
     final Function1<? super T, ? extends R> mapper;
 
-    @Override
-    public boolean hasNext() {
-        return baseIterator.hasNext();
+    public MappingIterator(@NonNull Iterator<T> baseIterator,
+                           @NonNull Function1<? super T, ? extends R> mapper) {
+        this.baseIterator = baseIterator;
+        this.mapper = mapper;
     }
 
     @Override
-    public R next() {
-        return mapper.apply(baseIterator.next());
-    }
-
-    @Override
-    public void remove() {
-        baseIterator.remove();
+    protected R map(T value) {
+        return mapper.apply(value);
     }
 
 }

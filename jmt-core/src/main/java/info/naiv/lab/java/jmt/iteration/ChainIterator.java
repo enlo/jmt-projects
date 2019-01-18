@@ -21,18 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.concurrent;
+package info.naiv.lab.java.jmt.iteration;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
+import java.util.Iterator;
+import lombok.Value;
 
 /**
  *
  * @author enlo
  */
-public interface LockStrategy {
+@Value
+public class ChainIterator<T> implements Iterator<T> {
 
-    Lock createLock();
+    Iterator<T> first;
+    Iterator<T> more;
 
-    ReadWriteLock createReadWriteLock();
+    public ChainIterator(Iterator<T> first, Iterator<T> more) {
+        this.first = first;
+        this.more = more;
+    }
+
+    @Override
+    public boolean hasNext() {
+        if (first.hasNext()) {
+            return true;
+        }
+        return more.hasNext();
+    }
+
+    @Override
+    public T next() {
+        if (first.hasNext()) {
+            return first.next();
+        }
+        return more.next();
+    }
+
+    @Override
+    public void remove() {        
+        throw new UnsupportedOperationException("ChainIterator Not supported yet.");
+    }
+
 }

@@ -21,17 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
-
-import java.util.Map;
+package info.naiv.lab.java.jmt.concurrent;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-public interface Directory1<TKey, TValue>
-        extends Lookup<TKey, TValue>, Map<TKey, TValue> {
+public interface LockStrategyAware {
 
+    void setLockStrategy(LockStrategy lockStrategy);
+    
 }

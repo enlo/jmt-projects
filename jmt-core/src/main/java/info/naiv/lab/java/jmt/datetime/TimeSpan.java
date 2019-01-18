@@ -24,8 +24,7 @@
 package info.naiv.lab.java.jmt.datetime;
 
 import static info.naiv.lab.java.jmt.ClassicArrayUtils.arrayContains;
-import static info.naiv.lab.java.jmt.Misc.isBlank;
-import static info.naiv.lab.java.jmt.Misc.isEmpty;
+import static info.naiv.lab.java.jmt.Strings.*;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.util.Collections;

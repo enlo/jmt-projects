@@ -31,13 +31,46 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
 
 /**
  *
  * @author enlo
  */
 public class Columns {
-    
+
+    @CheckForNull
+    public static Column find(@Nonnull Iterable<Column> columns, @Nonnull String columnName) {
+        for (Column c : columns) {
+            if (c.getName().equalsIgnoreCase(columnName)
+                    || c.getOriginalName().equalsIgnoreCase(columnName)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    @CheckForNull
+    public static Column findByName(@Nonnull Iterable<Column> columns, @Nonnull String columnName) {
+        for (Column c : columns) {
+            if (c.getName().equalsIgnoreCase(columnName)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
+    @CheckForNull
+    public static Column findByOriginalName(@Nonnull Iterable<Column> columns, @Nonnull String columnName) {
+        for (Column c : columns) {
+            if (c.getOriginalName().equalsIgnoreCase(columnName)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
     public static List<Column> fromDatabaseMetadata(DatabaseMetaData meta, String schema, String tablename) throws SQLException {
         List<Column> columnlist = new ArrayList<>();
         try (ResultSet rs = meta.getColumns(null, schema, tablename, "%")) {
@@ -67,27 +100,27 @@ public class Columns {
         }
         return columnlist;
     }
-    
-    protected static JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
-        int dataType = rs.getInt("DATA_TYPE");
-        JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
-        return type;
-    }
-    
+
     protected static Class getType(final ResultSet rs) throws SQLException {
         int dataType = rs.getInt("DATA_TYPE");
         JdbcType type = JdbcType.valueOf(dataType);
         return type.getMappedType();
     }
-    
+
+    protected static JDBCTypeTraits getTypeTraits(final ResultSet rs) throws SQLException {
+        int dataType = rs.getInt("DATA_TYPE");
+        JDBCTypeTraits type = JDBCTypeTraits.valueOf(dataType);
+        return type;
+    }
+
     public static class PrimaryKeyComparator implements Comparator<Column> {
-        
+
         @Override
         public int compare(Column o1, Column o2) {
             int cx = o1.isPrimaryKey() ? o1.getPrimaryKeyIndex() : Integer.MAX_VALUE;
             int cy = o2.isPrimaryKey() ? o2.getPrimaryKeyIndex() : Integer.MAX_VALUE;
             return Integer.compare(cx, cy);
         }
-        
+
     }
 }

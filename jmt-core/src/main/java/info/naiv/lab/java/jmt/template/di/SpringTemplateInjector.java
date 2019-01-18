@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.template.di;
 
-import static info.naiv.lab.java.jmt.Misc.isBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.TemplateLoader;
 import info.naiv.lab.java.jmt.template.annotation.InjectTemplate;

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.io;
 
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import java.io.IOException;
 import java.nio.file.DirectoryStream;
 import java.nio.file.Path;

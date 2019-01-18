@@ -21,46 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt.winini;
 
-import info.naiv.lab.java.jmt.concurrent.LockStrategy;
-import info.naiv.lab.java.jmt.fx.Supplier;
-import java.util.HashMap;
+import info.naiv.lab.java.jmt.collection.KeyedValue;
 import java.util.Map;
 
 /**
  *
  * @author enlo
- * @param <TKey>
- * @param <TValue>
  */
-public class MapDirectory1<TKey, TValue>
-        extends AbstractMapDirectory<TKey, TValue>
-        implements Directory1<TKey, TValue> {
-
-    public MapDirectory1() {
-        super(new Supplier<Map>() {
-            @Override
-            public Map get() {
-                return new HashMap<>();
-            }
-        });
-    }
-
-    public MapDirectory1(Supplier<? extends Map> mapSuplier, LockStrategy lockStrategy) {
-        super(mapSuplier, lockStrategy);
-    }
-
-    public MapDirectory1(Supplier<? extends Map> mapSuplier, LockStrategy lockStrategy, Map<TKey, TValue> impl) {
-        super(mapSuplier, lockStrategy, impl);
-    }
-
-    public MapDirectory1(Supplier<? extends Map> mapSuplier) {
-        super(mapSuplier);
-    }
-
-    public MapDirectory1(Supplier<? extends Map> mapSuplier, Map<TKey, TValue> impl) {
-        super(mapSuplier, impl);
-    }
+public interface IniEntry extends KeyedValue<String>, Map.Entry<String, String>, IniNode {
 
 }

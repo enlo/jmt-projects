@@ -21,18 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.concurrent;
-
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
+package info.naiv.lab.java.jmt.winini;
 
 /**
  *
  * @author enlo
  */
-public interface LockStrategy {
-
-    Lock createLock();
-
-    ReadWriteLock createReadWriteLock();
+public interface IniComment extends IniNode {
+    String getComment();
 }

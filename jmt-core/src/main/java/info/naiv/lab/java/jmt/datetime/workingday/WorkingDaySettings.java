@@ -26,7 +26,7 @@ package info.naiv.lab.java.jmt.datetime.workingday;
 import info.naiv.lab.java.jmt.datetime.WeekSettings;
 import info.naiv.lab.java.jmt.datetime.SameDayPredicate;
 import static info.naiv.lab.java.jmt.Arguments.nonNull;
-import static info.naiv.lab.java.jmt.Misc.contains;
+import static info.naiv.lab.java.jmt.iteration.IterationUtils.contains;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Calendar;

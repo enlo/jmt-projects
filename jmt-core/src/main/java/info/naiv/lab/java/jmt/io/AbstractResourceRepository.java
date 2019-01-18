@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.io;
 
-import info.naiv.lab.java.jmt.Misc;
+import static info.naiv.lab.java.jmt.iteration.IterationUtils.getFirst;
 import info.naiv.lab.java.jmt.monad.Optional;
 import java.io.IOException;
 import java.nio.file.Watchable;
@@ -76,7 +76,7 @@ public abstract class AbstractResourceRepository implements ResourceRepository {
                 break;
             }
         }
-        return Misc.getFirst(result.values());
+        return getFirst(result.values());
     }
 
     @Override

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.infrastructure.di;
 
-import static info.naiv.lab.java.jmt.Misc.isNotEmpty;
+import static info.naiv.lab.java.jmt.Strings.isNotEmpty;
 import static info.naiv.lab.java.jmt.infrastructure.ServiceProviders.resolveService;
 import info.naiv.lab.java.jmt.infrastructure.Tag;
 import info.naiv.lab.java.jmt.infrastructure.annotation.InjectService;

@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Misc.isNotBlank;
+import static info.naiv.lab.java.jmt.Strings.*;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.Properties;

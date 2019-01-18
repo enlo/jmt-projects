@@ -23,12 +23,9 @@
  */
 package info.naiv.lab.java.jmt;
 
-import static info.naiv.lab.java.jmt.Misc.isBlank;
-import static info.naiv.lab.java.jmt.Misc.isEmpty;
 import static java.lang.Character.isSpaceChar;
 import static java.lang.Character.isWhitespace;
 import java.nio.CharBuffer;
-import java.util.Arrays;
 import javax.annotation.Nonnull;
 
 /**
@@ -137,5 +134,32 @@ public class Strings {
     @Nonnull
     public static String join(@Nonnull Iterable<?> items, String delim) {
         return (StringJoiner.valueOf(delim)).join(items).toString();
+    }
+
+    @Nonnull
+    public static String trimToEmpty(String str) {
+        if (str == null) {
+            return "";
+        }
+        else {
+            return str.trim();
+        }
+    }
+
+    public static String trimLeft(String str) {
+        int len;
+        if (str == null || (len = str.length()) == 0) {
+            return "";
+        }
+        else {
+            int i = 0;
+            while ((i < len) && (str.charAt(i) <= ' ')) {
+                i++;
+            }
+            if (0 < i) {
+                return str.substring(i);
+            }
+            return str;
+        }
     }
 }

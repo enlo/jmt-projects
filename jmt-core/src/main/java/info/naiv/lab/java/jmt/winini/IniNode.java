@@ -21,18 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.concurrent;
+package info.naiv.lab.java.jmt.winini;
 
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
+import java.io.Serializable;
 
 /**
  *
  * @author enlo
  */
-public interface LockStrategy {
+public interface IniNode extends Serializable {
 
-    Lock createLock();
-
-    ReadWriteLock createReadWriteLock();
 }

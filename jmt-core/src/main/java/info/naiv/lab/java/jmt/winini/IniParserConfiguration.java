@@ -21,40 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package info.naiv.lab.java.jmt.collection;
+package info.naiv.lab.java.jmt.winini;
 
-import java.util.Map;
+import static info.naiv.lab.java.jmt.Strings.concatnate;
+import java.io.Serializable;
+import java.util.regex.Pattern;
+import lombok.Builder;
+import lombok.Value;
 
 /**
  *
  * @author enlo
- * @param <TKey1>
- * @param <TKey2>
- * @param <TKey3>
- * @param <TValue>
  */
-public interface Directory3<TKey1, TKey2, TKey3, TValue>
-        extends Lookup<TKey1, Directory2<TKey2, TKey3, TValue>>,
-                Map<TKey1, Directory2<TKey2, TKey3, TValue>> {
+@Builder
+@Value
+public class IniParserConfiguration implements Serializable {
 
-    Directory1<TKey3, TValue> get(TKey1 key1, TKey2 key2);
+    private static final long serialVersionUID = -4663454663499523139L;
+    @Builder.Default
+    boolean allowDuplicateKeys = true;
+    @Builder.Default
+    boolean allowDuplicateSections = false;
+    @Builder.Default
+    boolean allowKeysWithoutSection = true;
+    @Builder.Default
+    boolean caseSensitive = false;
+    @Builder.Default
+    String commentPrefix = ";";
+    @Builder.Default
+    boolean concatenateDuplicateKeys = false;
+    @Builder.Default
+    char keyValueAssigmentChar = '=';
+    @Builder.Default
+    char sectionEnd = ']';
+    @Builder.Default
+    char sectionStart = '[';
+    @Builder.Default
+    boolean skipInvalidLines = true;
 
-    TValue get(TKey1 key1, TKey2 key2, TKey3 key3);
-
-    Directory2<TKey2, TKey3, TValue> put(TKey1 key, Directory1<TKey2, Directory1<TKey3, TValue>> value);
-
-    Directory1<TKey3, TValue> put(TKey1 key1, TKey2 key2, Directory1<TKey3, TValue> value);
-
-    TValue put(TKey1 key1, TKey2 key2, TKey3 key3, TValue value);
-
-    boolean containsKey(TKey1 key1, TKey2 key2);
-
-    boolean containsKey(TKey1 key1, TKey2 key2, TKey3 key3);
-
-    TValue remove(TKey1 key1, TKey2 key2, TKey3 key3);
-
-    Directory1<TKey3, TValue> remove(TKey1 key1, TKey2 key2);
-
-    Directory2<TKey2, TKey3, TValue> replace(TKey1 key, Directory2<TKey2, TKey3, TValue> value);
-
+    public Pattern createCommentPrefixPattern() {
+        return Pattern.compile(concatnate("^", commentPrefix, "(.*)$"));
+    }
 }

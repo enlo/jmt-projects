@@ -33,8 +33,8 @@ import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.fx.StandardFunctions;
 import info.naiv.lab.java.jmt.iteration.FilteringIterator;
+import info.naiv.lab.java.jmt.iteration.IterationUtils;
 import static info.naiv.lab.java.jmt.iteration.IterationUtils.flat;
-import static info.naiv.lab.java.jmt.iteration.IterationUtils.forEach;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -145,7 +145,7 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
      * @param action
      */
     public void each(Consumer1<? super T> action) {
-        forEach(value, action);
+        IterationUtils.<T>forEach(value, action);
     }
 
     /**
@@ -154,7 +154,7 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
      * @param action
      */
     public void each(Consumer2<? super T, LoopCondition> action) {
-        forEach(value, action);
+        IterationUtils.<T>forEach(value, action);
     }
 
     /**

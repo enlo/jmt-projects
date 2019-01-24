@@ -150,7 +150,7 @@ public class WaitForZeroTest {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(320);
                 }
                 catch (InterruptedException ex) {
                 }
@@ -164,7 +164,7 @@ public class WaitForZeroTest {
             pool.submit(task);
         }
 
-        value.doAwait(100, TimeUnit.MILLISECONDS);
+        value.doAwait(160, TimeUnit.MILLISECONDS);
         assertThat("getUnarrivedParties", value.count.getUnarrivedParties(), is(1));
     }
 

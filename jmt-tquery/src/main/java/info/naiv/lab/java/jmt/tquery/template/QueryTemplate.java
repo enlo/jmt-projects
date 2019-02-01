@@ -23,8 +23,12 @@
  */
 package info.naiv.lab.java.jmt.tquery.template;
 
+import info.naiv.lab.java.jmt.collection.Lookup;
 import info.naiv.lab.java.jmt.template.Template;
+import info.naiv.lab.java.jmt.tquery.command.BatchCommand;
 import info.naiv.lab.java.jmt.tquery.command.Command;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SqlTemplate
@@ -33,4 +37,7 @@ import info.naiv.lab.java.jmt.tquery.command.Command;
  */
 public interface QueryTemplate extends Template<Command> {
 
+    List<BatchCommand> mergeMapList(List<Map<String, String>> parameters);
+
+    List<BatchCommand> mergeLookupList(List<Lookup<String, String>> parameters);
 }

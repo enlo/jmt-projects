@@ -26,8 +26,8 @@ package info.naiv.lab.java.jmt.tquery;
 import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.CommandParametersBuilder;
 import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
-import info.naiv.lab.java.jmt.tquery.command.ParameterBinder;
 import info.naiv.lab.java.jmt.tquery.command.DefaultParameterBinder;
+import info.naiv.lab.java.jmt.tquery.command.ParameterBinder;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
@@ -39,16 +39,15 @@ import lombok.NonNull;
  */
 @Data
 public class QueryContext {
+    protected final Map<String, Object> attributes;
 
     @NonNull
     ParameterBinder parameterBinder;
 
-    @NonNull
-    CommandParameters parameters;
 
-    Object source;
-    
-    Map<String, Object> attributes;
+    Object parameterSource;
+    @NonNull
+            CommandParameters parameters;
 
     public QueryContext() {
         this.parameterBinder = new DefaultParameterBinder();

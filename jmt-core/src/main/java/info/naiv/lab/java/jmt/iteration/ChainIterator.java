@@ -58,7 +58,7 @@ public class ChainIterator<T> implements Iterator<T> {
     }
 
     @Override
-    public void remove() {        
+    public void remove() {
         throw new UnsupportedOperationException("ChainIterator Not supported yet.");
     }
 

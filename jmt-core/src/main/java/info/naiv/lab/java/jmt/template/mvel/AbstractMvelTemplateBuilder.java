@@ -23,10 +23,10 @@
  */
 package info.naiv.lab.java.jmt.template.mvel;
 
-import static info.naiv.lab.java.jmt.Misc.toCharArray;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.TemplateBuilder;
+import info.naiv.lab.java.jmt.template.TemplateSourceResolver;
 import javax.annotation.CheckReturnValue;
 import javax.annotation.Nonnull;
 import lombok.Getter;
@@ -39,7 +39,12 @@ import org.mvel2.templates.CompiledTemplate;
  * @author enlo
  * @param <TResult>
  */
-public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBuilder<TResult> {
+public abstract class AbstractMvelTemplateBuilder<TResult>
+        implements TemplateBuilder<TResult>, MvelTemplateCompiler {
+
+    @Getter
+    @Setter
+    protected MvelTemplateContextFactory<TResult> contextFactory;
 
     /**
      * Custom node provider.
@@ -57,21 +62,21 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
     protected Function1<ParserContext, ParserContext> parserContextInitializer;
 
     @Override
-    public Template<TResult> build(String name, String template) {
-        CompiledTemplate compiled = compile(template.toCharArray());
-        return build(name, compiled);
+    public Template<TResult> build(String name, TemplateSourceResolver template) {
+        return build(name, new DefaultMvelCompiledTemplateResolver(this, template));
     }
 
+    /**
+     * 文字列から CompiledTemplate を生成する.
+     *
+     * @param template
+     * @return
+     */
     @Override
-    public Template<TResult> build(String name, CharSequence template) {
-        CompiledTemplate compiled = compile(toCharArray(template));
-        return build(name, compiled);
-    }
-
-    @Override
-    public Template<TResult> build(String name, char[] template) {
-        CompiledTemplate compiled = compile(template);
-        return build(name, compiled);
+    public CompiledTemplate compile(char[] template) {
+        ParserContext ctx = ParserContext.create();
+        ctx = callInitParserContext(ctx);
+        return MvelTemplateUtils.compile(template, ctx, customNodesProvider);
     }
 
     /**
@@ -97,23 +102,11 @@ public abstract class AbstractMvelTemplateBuilder<TResult> implements TemplateBu
      * @return
      */
     @Nonnull
-    protected abstract Template<TResult> build(String name, @Nonnull CompiledTemplate template);
-
-    /**
-     * 文字列から CompiledTemplate を生成する.
-     *
-     * @param template
-     * @return
-     */
-    @Nonnull
-    protected CompiledTemplate compile(char[] template) {
-        ParserContext ctx = ParserContext.create();
-        ctx = callInitParserContext(ctx);
-        return MvelTemplateUtils.compile(template, ctx, customNodesProvider);
-    }
+    protected abstract Template<TResult> build(String name, @Nonnull MvelCompiledTemplateResolver template);
 
     @CheckReturnValue
     protected ParserContext initParserContext(ParserContext ctx) {
         return ctx;
     }
+
 }

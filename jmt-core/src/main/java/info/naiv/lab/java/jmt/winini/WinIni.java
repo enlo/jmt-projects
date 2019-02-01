@@ -23,11 +23,8 @@
  */
 package info.naiv.lab.java.jmt.winini;
 
-import info.naiv.lab.java.jmt.fx.Predicate1;
 import info.naiv.lab.java.jmt.iteration.AbstractIteratorAdapter;
 import info.naiv.lab.java.jmt.iteration.ChainIterator;
-import info.naiv.lab.java.jmt.iteration.FilteringIterator;
-import info.naiv.lab.java.jmt.iteration.IterationUtils;
 import info.naiv.lab.java.jmt.iteration.SingleIterator;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -40,8 +37,8 @@ import java.util.Properties;
  */
 public class WinIni implements Ini {
 
-    private final IniSection unnamedSection;
     private final List<IniNode> iniNodes;
+    private final IniSection unnamedSection;
 
     public WinIni() {
         unnamedSection = new WinIniSection("");
@@ -78,6 +75,11 @@ public class WinIni implements Ini {
 
     @Override
     public IniSection get(String key) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public Iterable<String> getKeys() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
@@ -129,14 +131,15 @@ public class WinIni implements Ini {
         public Iterator<IniSection> iterator() {
 
             Iterator<IniSection> sections = new AbstractIteratorAdapter<IniNode, IniSection>() {
-                @Override
-                protected Iterator<IniNode> getBaseIterator() {
-                    return iniNodes.iterator();
-                }
 
                 @Override
                 protected boolean filter(IniNode value) {
                     return (value instanceof IniSection);
+                }
+
+                @Override
+                protected Iterator<IniNode> getBaseIterator() {
+                    return iniNodes.iterator();
                 }
 
             };

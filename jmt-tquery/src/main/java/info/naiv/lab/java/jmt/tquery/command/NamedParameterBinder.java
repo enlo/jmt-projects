@@ -46,6 +46,14 @@ public class NamedParameterBinder implements ParameterBinder {
     public NamedParameterBinder(String prefix) {
         this.prefix = prefix;
     }
+    public List<String> addParameters(Iterable<?> items, CommandParameters params) {
+        List<String> keys = new ArrayList<>();
+        for (Object item : items) {
+            String key = params.addValueWithPrefix(prefix, item);
+            keys.add(key);
+        }
+        return keys;
+    }
 
     @Override
     public String bind(Object value, QueryContext context) {
@@ -63,6 +71,11 @@ public class NamedParameterBinder implements ParameterBinder {
         return bindManyCore(value, params);
     }
 
+
+    @Override
+    public String bindMany(Object value, QueryContext context, Object typeHint) {
+        return bindManyCore(value, CommandParametersWithTypeHint.wrap(context.getParameters(), typeHint));
+    }
     protected String bindManyCore(Object value, CommandParameters params) {
         List<String> keys;
         if (value instanceof Iterable) {
@@ -78,20 +91,6 @@ public class NamedParameterBinder implements ParameterBinder {
             }
         }
         return JOINER.join(keys).toString();
-    }
-
-    public List<String> addParameters(Iterable<?> items, CommandParameters params) {
-        List<String> keys = new ArrayList<>();
-        for (Object item : items) {
-            String key = params.addValueWithPrefix(prefix, item);
-            keys.add(key);
-        }
-        return keys;
-    }
-
-    @Override
-    public String bindMany(Object value, QueryContext context, Object typeHint) {
-        return bindManyCore(value, CommandParametersWithTypeHint.wrap(context.getParameters(), typeHint));
     }
 
 }

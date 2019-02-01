@@ -31,29 +31,20 @@ package info.naiv.lab.java.jmt.template;
 public interface TemplateBuilder<TResult> {
 
     /**
-     * 文字列からテンプレートを作成する.
+     * テンプレートを受け入れ可能な型かどうか.
      *
-     * @param name
-     * @param template
+     * @param templateType
      * @return
      */
-    Template<TResult> build(String name, String template);
+    boolean isInstanceOf(Class<? extends Template> templateType);
 
     /**
-     * 文字のシーケンスからテンプレートを作成する.
+     * テンプレートを作成する.
      *
      * @param name
-     * @param template
+     * @param templateSourceResolver
      * @return
      */
-    Template<TResult> build(String name, CharSequence template);
+    Template<TResult> build(String name, TemplateSourceResolver templateSourceResolver);
 
-    /**
-     * 文字配列からテンプレートを作成する.
-     *
-     * @param name
-     * @param template
-     * @return
-     */
-    Template<TResult> build(String name, char[] template);
 }

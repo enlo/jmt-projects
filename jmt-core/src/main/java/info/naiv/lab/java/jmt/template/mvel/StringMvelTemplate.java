@@ -23,45 +23,15 @@
  */
 package info.naiv.lab.java.jmt.template.mvel;
 
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.CompiledTemplate;
-
 /**
  *
  * @author enlo
  */
 @SuppressWarnings("serial")
-public class StringMvelTemplate extends AbstractMvelTemplate<String, Object> {
+public class StringMvelTemplate extends MvelTemplate<String> {
 
-    /**
-     *
-     * @param name
-     * @param template
-     */
-    public StringMvelTemplate(String name, CompiledTemplate template) {
-        super(name, template);
-    }
-
-    /**
-     *
-     * @param factory
-     * @param source
-     * @return
-     */
-    @Override
-    protected Object createContext(VariableResolverFactory factory, Object source) {
-        return null;
-    }
-
-    /**
-     *
-     * @param result
-     * @param context
-     * @return
-     */
-    @Override
-    protected String createResult(Object result, Object context) {
-        return (String) result;
+    public StringMvelTemplate(String name, MvelCompiledTemplateResolver templateResolver, MvelTemplateContextFactory<String> contextFactory) {
+        super(name, templateResolver, contextFactory);
     }
 
 }

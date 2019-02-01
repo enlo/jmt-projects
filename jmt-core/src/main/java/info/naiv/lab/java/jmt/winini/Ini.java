@@ -23,14 +23,14 @@
  */
 package info.naiv.lab.java.jmt.winini;
 
-import info.naiv.lab.java.jmt.collection.Lookup;
+import info.naiv.lab.java.jmt.collection.IterableLookup;
 import java.util.Properties;
 
 /**
  *
  * @author enlo
  */
-public interface Ini extends Lookup<String, IniSection>, Iterable<IniNode> {
+public interface Ini extends IterableLookup<String, IniSection>, Iterable<IniNode> {
 
     void add(IniNode node);
 
@@ -46,5 +46,4 @@ public interface Ini extends Lookup<String, IniSection>, Iterable<IniNode> {
 
     Iterable<IniSection> getSections();
 
-    int size();
 }

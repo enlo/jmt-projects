@@ -23,24 +23,112 @@
  */
 package info.naiv.lab.java.jmt.template.mvel;
 
+import info.naiv.lab.java.jmt.collection.BeanPropertyLookup;
+import info.naiv.lab.java.jmt.collection.Lookup;
 import info.naiv.lab.java.jmt.template.Template;
+import java.util.HashMap;
+import java.util.Map;
+import javax.annotation.Nonnull;
+import lombok.Getter;
+import lombok.Setter;
+import org.mvel2.integration.VariableResolverFactory;
+import org.mvel2.integration.impl.MapVariableResolverFactory;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateRegistry;
+import org.mvel2.templates.TemplateRuntime;
 
 /**
  *
  * @author enlo
  * @param <TResult>
  */
-public interface MvelTemplate<TResult> extends Template<TResult> {
+@Getter
+@Setter
+public class MvelTemplate<TResult> implements Template<TResult> {
 
-    @Override
-    CompiledTemplate getTemplateObject();
+    private MvelTemplateContextFactory<TResult> contextFactory;
+
+    private final String name;
+    private TemplateRegistry templateRegistry;
+    private final MvelCompiledTemplateResolver templateResolver;
 
     /**
-     * TemplateResistry の登録.
      *
-     * @param templateRegistry
+     * @param name
+     * @param templateResolver
+     * @param contextFactory
      */
-    void setTemplateRegistry(TemplateRegistry templateRegistry);
+    public MvelTemplate(@Nonnull String name,
+                        @Nonnull MvelCompiledTemplateResolver templateResolver,
+                        @Nonnull MvelTemplateContextFactory<TResult> contextFactory) {
+        this.name = name;
+        this.templateResolver = templateResolver;
+        this.contextFactory = contextFactory;
+    }
+
+    @Override
+    public CompiledTemplate getTemplateObject() {
+        return templateResolver.resolve();
+    }
+
+    @Override
+    public String getTemplateSource() {
+        return new String(getTemplateObject().getTemplate());
+    }
+
+    @Override
+    public TResult merge() {
+        return merge(new HashMap<String, Object>());
+    }
+
+    @Override
+    public <TArg> TResult merge(Map<String, TArg> parameters) {
+        return execute(new MvelTemplateVariableResolverFactory(parameters));
+    }
+
+    @Override
+    public <TArg> TResult merge(Lookup<String, TArg> parameters) {
+        return execute(new MvelTemplateVariableResolverFactory(parameters));
+    }
+
+    @Override
+    public TResult mergeBean(Object bean) {
+        VariableResolverFactory factory = createFactory(bean);
+        return execute(new MvelTemplateVariableResolverFactory(factory));
+    }
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    protected VariableResolverFactory createFactory(Object value) {
+        if (value instanceof Map) {
+            return new MapVariableResolverFactory((Map) value);
+        }
+        else if (value instanceof Lookup) {
+            return new LookupVariableResolverFactory((Lookup<String, Object>) value);
+        }
+        else if (value instanceof VariableResolverFactory) {
+            return (VariableResolverFactory) value;
+        }
+        else {
+            Lookup ps = new BeanPropertyLookup(value);
+            return new LookupVariableResolverFactory(ps);
+        }
+    }
+
+    /**
+     * テンプレートから実際のオブジェクトを取得
+     *
+     * @param factory
+     * @return
+     */
+    protected TResult execute(MvelTemplateVariableResolverFactory factory) {
+        MvelTemplateContext<TResult> context = contextFactory.createContext(factory);
+        context.initVariableResolverFactory(factory);
+        Object result = TemplateRuntime.execute(getTemplateObject(), context, factory, templateRegistry);
+        return context.createResult(result);
+    }
+
 }

@@ -65,4 +65,6 @@ public interface CommandParameters extends Collection<CommandParameter>, Seriali
      */
     Map<String, Object> toMap();
 
+    Object[] toValueArray();
+
 }

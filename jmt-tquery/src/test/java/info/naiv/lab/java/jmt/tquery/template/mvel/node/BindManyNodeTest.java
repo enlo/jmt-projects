@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
 import info.naiv.lab.java.jmt.tquery.QueryContext;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.NamedParameterBinder;
 import java.util.Arrays;

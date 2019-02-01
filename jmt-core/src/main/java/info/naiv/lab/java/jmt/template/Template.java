@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.template;
 
 import info.naiv.lab.java.jmt.collection.Lookup;
-import java.io.Serializable;
 import java.util.Map;
 import javax.annotation.Nonnull;
 
@@ -33,7 +32,7 @@ import javax.annotation.Nonnull;
  * @author enlo
  * @param <TResult>
  */
-public interface Template<TResult> extends Serializable {
+public interface Template<TResult> {
 
     /**
      *

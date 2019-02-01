@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.collection;
 
+import java.util.Iterator;
 import lombok.Value;
 
 /**
@@ -32,19 +33,7 @@ import lombok.Value;
  * @param <TValue>
  */
 @Value
-public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue> {
-
-    Iterable<TValue> values;
-
-    @Override
-    public boolean containsKey(TKey key) {
-        return get(key) != null;
-    }
-
-    @Override
-    public TValue get(TKey key) {
-        return lookup(values, key);
-    }
+public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue<TKey>> implements Lookup<TKey, TValue>, Iterable<TValue> {
 
     public static <TKey extends Comparable, TValue extends KeyedValue<TKey>> TValue lookup(TValue[] values, TKey key) {
         for (TValue v : values) {
@@ -62,5 +51,22 @@ public class KeyedValueLookup<TKey extends Comparable, TValue extends KeyedValue
             }
         }
         return null;
+    }
+
+    Iterable<TValue> values;
+
+    @Override
+    public boolean containsKey(TKey key) {
+        return get(key) != null;
+    }
+
+    @Override
+    public TValue get(TKey key) {
+        return lookup(values, key);
+    }
+
+    @Override
+    public Iterator<TValue> iterator() {
+        return values.iterator();
     }
 }

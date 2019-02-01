@@ -23,13 +23,14 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel;
 
+import info.naiv.lab.java.jmt.template.Template;
 import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplateBuilder;
 import info.naiv.lab.java.jmt.tquery.command.Command;
 import info.naiv.lab.java.jmt.tquery.template.mvel.node.TQueryCustomNodesProvider;
 import java.util.Arrays;
 import java.util.List;
 import org.mvel2.ParserContext;
-import org.mvel2.templates.CompiledTemplate;
+import info.naiv.lab.java.jmt.template.mvel.MvelCompiledTemplateResolver;
 
 /**
  *
@@ -43,13 +44,18 @@ public class MvelQueryTemplateBuilder extends AbstractMvelTemplateBuilder<Comman
         this.setCustomNodesProvider(new TQueryCustomNodesProvider());
     }
 
+    @Override
+    public boolean isInstanceOf(Class<? extends Template> templateType) {
+        return templateType.isAssignableFrom(MvelQueryTemplate.class);
+    }
+
     public void setImportClasses(Class<?>... importClasses) {
         this.importClasses = Arrays.asList(importClasses);
     }
 
     @Override
-    protected MvelQueryTemplate build(String name, CompiledTemplate template) {
-        return new MvelQueryTemplate(name, template);
+    protected MvelQueryTemplate build(String name, MvelCompiledTemplateResolver template) {
+        return new MvelQueryTemplate(name, template, contextFactory);
     }
 
     @Override

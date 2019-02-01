@@ -30,8 +30,8 @@ import java.util.concurrent.locks.Lock;
  * @author enlo
  */
 public interface Reloadable {
-    
+
     Lock getReloadLock();
-    
+
     void reload() throws Exception;
 }

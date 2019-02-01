@@ -35,20 +35,19 @@ import lombok.NonNull;
  * @author enlo
  */
 public class IniParser {
-    
-    private final IniParserConfiguration configuration;
-    
+
     private final Pattern commentPattern;
-    
+    private final IniParserConfiguration configuration;
+
     public IniParser() {
         this(IniParserConfiguration.builder().build());
     }
-    
+
     public IniParser(@NonNull IniParserConfiguration configuration) {
         this.configuration = configuration;
         this.commentPattern = configuration.createCommentPrefixPattern();
     }
-    
+
     public Ini parse(String data) {
         String[] lines = data.split("\r\n|\r|\n");
         Ini ini = new WinIni();
@@ -57,18 +56,18 @@ public class IniParser {
             if (isEmpty(line)) {
                 continue;
             }
-            if(parseComment(ini, line)){
+            if (parseComment(ini, line)) {
                 continue;
             }
-            
+
             if (isEmpty(line)) {
                 continue;
             }
-            
+
         }
         return ini;
     }
-    
+
     public boolean parseComment(Ini ini, String line) {
         Matcher cm = commentPattern.matcher(line);
         if (cm.find()) {

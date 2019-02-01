@@ -41,12 +41,12 @@ public class OrderByNode extends CustomNode {
 
     private static final long serialVersionUID = -915298491003931475L;
 
-    private Serializable[] ces;
 
     /**
      *
      */
     protected static final String ORDER_BY_PREFIX = " order by ";
+    private Serializable[] ces;
 
     @Override
     public String name() {

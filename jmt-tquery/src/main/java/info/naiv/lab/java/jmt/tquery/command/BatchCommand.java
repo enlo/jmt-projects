@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2016 enlo.
+ * Copyright 2019 enlo.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,8 +23,9 @@
  */
 package info.naiv.lab.java.jmt.tquery.command;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Data;
 
@@ -33,22 +34,21 @@ import lombok.Data;
  * @author enlo
  */
 @Data
-public class CommandImpl implements Command {
+public class BatchCommand implements Cloneable, Serializable {
 
-    private static final long serialVersionUID = -7816515353531445011L;
+    private static final long serialVersionUID = -7689234361248547232L;
 
-    String query;
 
-    CommandParameters parameters;
+    List<CommandParameters> parametersList;
+    final String query;
 
     /**
      * コンストラクタ.
      *
      * @param query
-     * @param parameters
      */
-    public CommandImpl(String query, Collection<CommandParameter> parameters) {
-        this(query, new DefaultCommandParameters(parameters));
+    public BatchCommand(String query) {
+        this(query, new ArrayList<CommandParameters>());
     }
 
     /**
@@ -57,17 +57,30 @@ public class CommandImpl implements Command {
      * @param query
      * @param parameters
      */
-    public CommandImpl(String query, CommandParameters parameters) {
+    public BatchCommand(String query, List<CommandParameters> parameters) {
         this.query = query;
-        this.parameters = parameters;
+        this.parametersList = parameters;
+    }
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public BatchCommand clone() {
+        try {
+            BatchCommand cmd = (BatchCommand) super.clone();
+            cmd.parametersList = new ArrayList<>(parametersList.size());
+            for (CommandParameters commandParameters : parametersList) {
+                cmd.parametersList.add(new DefaultCommandParameters(commandParameters));
+            }
+            return cmd;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
     }
 
-    @Override
-    public Object[] getParameterValueArray() {
-        int sz = parameters.size();
-        Object[] result = new Object[sz];
-        for (int i = 0; i < sz; i++) {
-            result[i] = parameters.get(i).getValue();
+    public List<Object[]> getParameterValueArray() {
+        List<Object[]> result = new ArrayList<>();
+        for (CommandParameters parameters : parametersList) {
+            result.add(parameters.toValueArray());
         }
         return result;
     }
@@ -76,25 +89,12 @@ public class CommandImpl implements Command {
      *
      * @return パラメータ値リスト
      */
-    @Override
-    public List<Object> getParameterValueList() {
-        List<Object> result = new ArrayList<>(parameters.size());
-        for (CommandParameter p : parameters) {
-            result.add(p.getValue());
+    public List<List<Object>> getParameterValueList() {
+        List<List<Object>> result = new ArrayList<>();
+        for (CommandParameters parameters : parametersList) {
+            result.add(Arrays.asList(parameters.toValueArray()));
         }
         return result;
     }
 
-    @Override
-    @SuppressWarnings("CloneDeclaresCloneNotSupported")
-    public CommandImpl clone() {
-        try {
-            CommandImpl cmd = (CommandImpl) super.clone();
-            cmd.parameters = new DefaultCommandParameters(this.parameters);
-            return cmd;
-        }
-        catch (CloneNotSupportedException ex) {
-            throw new InternalError(ex.getMessage());
-        }
-    }
 }

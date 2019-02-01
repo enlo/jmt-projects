@@ -28,10 +28,6 @@ import static java.lang.Character.isWhitespace;
 import java.nio.CharBuffer;
 import javax.annotation.Nonnull;
 
-/**
- *
- * @author enlo
- */
 public class Strings {
 
     @Nonnull
@@ -136,16 +132,6 @@ public class Strings {
         return (StringJoiner.valueOf(delim)).join(items).toString();
     }
 
-    @Nonnull
-    public static String trimToEmpty(String str) {
-        if (str == null) {
-            return "";
-        }
-        else {
-            return str.trim();
-        }
-    }
-
     public static String trimLeft(String str) {
         int len;
         if (str == null || (len = str.length()) == 0) {
@@ -160,6 +146,16 @@ public class Strings {
                 return str.substring(i);
             }
             return str;
+        }
+    }
+
+    @Nonnull
+    public static String trimToEmpty(String str) {
+        if (str == null) {
+            return "";
+        }
+        else {
+            return str.trim();
         }
     }
 }

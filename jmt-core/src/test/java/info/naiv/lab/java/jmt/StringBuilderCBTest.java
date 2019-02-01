@@ -35,7 +35,56 @@ public class StringBuilderCBTest {
 
     public StringBuilderCBTest() {
     }
+    /**
+     * Test of appendFormat method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppendFormat_3args() {
+    }
+    /**
+     * Test of appendFormat method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppendFormat_String_Object() {
+    }
+    /**
+     * Test of appendFormat method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppendFormat_String_ObjectArr() {
+    }
+    /**
+     * Test of append method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppend_3args() {
+    }
 
+    /**
+     * Test of append method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppend_CharSequence_NonNull() {
+        CharSequence cs = new StringBuilder("hello.");
+        StringBuilderCB sb = new StringBuilderCB();
+        sb.append(cs);
+    }
+    /**
+     * Test of append method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppend_CharSequence_Null() {
+        CharSequence cs = null;
+        StringBuilderCB sb = new StringBuilderCB();
+        sb.append(cs);
+    }
+    @Test
+    public void testAppend_String_NonNull() {
+        StringBuilderCB sb = new StringBuilderCB();
+        sb.append("Hello").append(" ").append("World");
+        assertThat(sb.length(), is("Hello World".length()));
+        assertThat(sb.toString(), is("Hello World"));
+    }
     /**
      * Test of append method, of class StringBuilderCB.
      */
@@ -51,40 +100,17 @@ public class StringBuilderCBTest {
         assertThat(sb.length(), is(9));
         assertThat(sb.toString(), is("null[nil]"));
     }
-
-    @Test
-    public void testAppend_String_NonNull() {
-        StringBuilderCB sb = new StringBuilderCB();
-        sb.append("Hello").append(" ").append("World");
-        assertThat(sb.length(), is("Hello World".length()));
-        assertThat(sb.toString(), is("Hello World"));
-    }
-
     /**
      * Test of append method, of class StringBuilderCB.
      */
     @Test
-    public void testAppend_CharSequence_Null() {
-        CharSequence cs = null;
-        StringBuilderCB sb = new StringBuilderCB();
-        sb.append(cs);
+    public void testAppend_boolean() {
     }
-
     /**
      * Test of append method, of class StringBuilderCB.
      */
     @Test
-    public void testAppend_CharSequence_NonNull() {
-        CharSequence cs = new StringBuilder("hello.");
-        StringBuilderCB sb = new StringBuilderCB();
-        sb.append(cs);
-    }
-
-    /**
-     * Test of append method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppend_3args() {
+    public void testAppend_byte() {
     }
 
     /**
@@ -92,6 +118,18 @@ public class StringBuilderCBTest {
      */
     @Test
     public void testAppend_char() {
+    }
+    /**
+     * Test of append method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppend_double() {
+    }
+    /**
+     * Test of append method, of class StringBuilderCB.
+     */
+    @Test
+    public void testAppend_float() {
     }
 
     /**
@@ -115,54 +153,6 @@ public class StringBuilderCBTest {
     public void testAppend_short() {
     }
 
-    /**
-     * Test of append method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppend_double() {
-    }
-
-    /**
-     * Test of append method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppend_float() {
-    }
-
-    /**
-     * Test of append method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppend_byte() {
-    }
-
-    /**
-     * Test of append method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppend_boolean() {
-    }
-
-    /**
-     * Test of appendFormat method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppendFormat_String_Object() {
-    }
-
-    /**
-     * Test of appendFormat method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppendFormat_3args() {
-    }
-
-    /**
-     * Test of appendFormat method, of class StringBuilderCB.
-     */
-    @Test
-    public void testAppendFormat_String_ObjectArr() {
-    }
 
     /**
      * Test of charAt method, of class StringBuilderCB.

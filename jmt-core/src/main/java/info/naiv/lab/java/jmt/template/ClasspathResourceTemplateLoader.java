@@ -23,39 +23,11 @@
  */
 package info.naiv.lab.java.jmt.template;
 
-import info.naiv.lab.java.jmt.io.NIOUtils;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.core.io.Resource;
-
 /**
  *
  * @author enlo
  * @param <TResult>
  */
 public class ClasspathResourceTemplateLoader<TResult> extends AbstractClasspathResourceTemplateLoader<TResult> {
-
-    /**
-     *
-     */
-    @Getter
-    @Setter
-    protected TemplateBuilder<TResult> templateBuilder;
-
-    @Override
-    protected Template<TResult> createTemplateFromResource(String name, Resource resource, Charset charset) throws IOException {
-        try (InputStream is = resource.getInputStream()) {
-            String template = NIOUtils.toString(is, charset);
-            return getTemplateBuilder().build(name, template);
-        }
-    }
-
-    @Override
-    protected Template<TResult> doFromString(String name, String template) {
-        return getTemplateBuilder().build(name, template);
-    }
 
 }

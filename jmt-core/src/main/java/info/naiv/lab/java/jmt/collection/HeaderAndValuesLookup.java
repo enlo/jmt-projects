@@ -32,7 +32,7 @@ import lombok.Getter;
  * @param <TValue>
  */
 @Getter
-public class HeaderAndValuesLookup<TValue> implements Lookup<String, TValue> {
+public class HeaderAndValuesLookup<TValue> implements IterableLookup<String, TValue> {
 
     private final List<String> header;
     private final List<TValue> values;
@@ -53,8 +53,18 @@ public class HeaderAndValuesLookup<TValue> implements Lookup<String, TValue> {
         return values.get(pos);
     }
 
+    @Override
+    public Iterable<String> getKeys() {
+        return header;
+    }
+
     public int indexOf(String key) {
         return header.indexOf(key);
+    }
+
+    @Override
+    public int size() {
+        return header.size();
     }
 
 }

@@ -23,6 +23,7 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
+import info.naiv.lab.java.jmt.template.DefaultTemplateSourceResolver;
 import info.naiv.lab.java.jmt.tquery.QueryContext;
 import info.naiv.lab.java.jmt.tquery.command.CommandParameter;
 import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
@@ -33,7 +34,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.lang.model.util.Types;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.hasEntry;
 import static org.hamcrest.Matchers.is;
@@ -75,9 +75,10 @@ public class BindNodeTest {
         map.put("category", category);
         map.put("names", names);
 
-        MvelQueryTemplate templ = (MvelQueryTemplate) builder.build("template1", template);
+        MvelQueryTemplate templ = (MvelQueryTemplate) builder.build("template1",
+                                                                    new DefaultTemplateSourceResolver(template));
         QueryContext ctx = new QueryContext();
-        String actualSql = (String) TemplateRuntime.execute(templ.getTemplate(), ctx, map);
+        String actualSql = (String) TemplateRuntime.execute(templ.getTemplateObject(), ctx, map);
 
         assertThat(actualSql, is(expectedSql));
         assertThat(ctx.getParameters(), contains(DefaultCommandParameters.builder(category, names.get(0), names.get(1), names.get(2)).toArray()));

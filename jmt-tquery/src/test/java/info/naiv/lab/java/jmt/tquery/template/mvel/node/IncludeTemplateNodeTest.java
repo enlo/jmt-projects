@@ -23,9 +23,10 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel.node;
 
+import info.naiv.lab.java.jmt.template.mvel.SimpleCompiledTemplateResolver;
 import info.naiv.lab.java.jmt.tquery.command.Command;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
 import info.naiv.lab.java.jmt.tquery.command.DefaultCommandParameters;
+import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryContextFactory;
 import info.naiv.lab.java.jmt.tquery.template.mvel.MvelQueryTemplate;
 import java.util.HashMap;
 import java.util.Map;
@@ -71,7 +72,9 @@ public class IncludeTemplateNodeTest {
      */
     MvelQueryTemplate compile(String name, String template) {
         CompiledTemplate ct = TemplateCompiler.compileTemplate(template, CustomNodes.NODES);
-        return new MvelQueryTemplate(name, ct);
+
+        return new MvelQueryTemplate(name, new SimpleCompiledTemplateResolver(ct),
+                                     new MvelQueryContextFactory());
     }
 
 }

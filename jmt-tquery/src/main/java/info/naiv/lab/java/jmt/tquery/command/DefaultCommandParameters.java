@@ -36,6 +36,23 @@ public class DefaultCommandParameters extends ArrayList<CommandParameter> implem
 
     private static final long serialVersionUID = -8025210291274076721L;
 
+    public static CommandParametersBuilder builder() {
+        return new CommandParametersBuilder();
+    }
+
+    public static CommandParametersBuilder builder(Object... args) {
+        CommandParametersBuilder builder = new CommandParametersBuilder(args.length);
+        for (Object arg : args) {
+            if (arg instanceof CommandParameter) {
+                builder.add((CommandParameter) arg);
+            }
+            else {
+                builder.addValue(arg);
+            }
+        }
+        return builder;
+    }
+
     public DefaultCommandParameters() {
     }
 
@@ -96,32 +113,20 @@ public class DefaultCommandParameters extends ArrayList<CommandParameter> implem
         return addNamedValue(name, value, typeHint);
     }
 
-    public static CommandParametersBuilder builder() {
-        return new CommandParametersBuilder();
+    @Override
+    public Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public static CommandParametersBuilder builder(Object... args) {
-        CommandParametersBuilder builder = new CommandParametersBuilder(args.length);
-        for (Object arg : args) {
-            if (arg instanceof CommandParameter) {
-                builder.add((CommandParameter) arg);
-            }
-            else {
-                builder.addValue(arg);
-            }
-        }
-        return builder;
+    @Override
+    public CommandParameters copy() {
+        return new DefaultCommandParameters(this);
     }
 
     @Override
     public CommandParameter[] toArray() {
         CommandParameter[] result = new CommandParameter[size()];
         return super.toArray(result);
-    }
-
-    @Override
-    public CommandParameters copy() {
-        return new DefaultCommandParameters(this);
     }
 
     /**
@@ -134,6 +139,16 @@ public class DefaultCommandParameters extends ArrayList<CommandParameter> implem
         Map<String, Object> result = new HashMap<>(size());
         for (CommandParameter p : this) {
             result.put(p.getKey(), p.getValue());
+        }
+        return result;
+    }
+
+    @Override
+    public Object[] toValueArray() {
+        int sz = size();
+        Object[] result = new Object[sz];
+        for (int i = 0; i < sz; i++) {
+            result[i] = get(i).getValue();
         }
         return result;
     }

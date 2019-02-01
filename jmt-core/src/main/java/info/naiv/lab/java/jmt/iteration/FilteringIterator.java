@@ -25,7 +25,6 @@ package info.naiv.lab.java.jmt.iteration;
 
 import info.naiv.lab.java.jmt.fx.Predicate1;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;

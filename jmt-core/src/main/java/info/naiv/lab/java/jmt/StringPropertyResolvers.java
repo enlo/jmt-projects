@@ -28,10 +28,6 @@ import static java.util.Arrays.asList;
 import java.util.Map;
 import java.util.Properties;
 
-/**
- *
- * @author enlo
- */
 public class StringPropertyResolvers {
 
     public static StringPropertyResolver EMPTY = new StringPropertyResolver() {
@@ -51,6 +47,40 @@ public class StringPropertyResolvers {
         }
 
     };
+
+    public static StringPropertyResolver compose(final StringPropertyResolver... resolvers) {
+        return compose(asList(resolvers));
+    }
+
+    public static StringPropertyResolver compose(final Iterable<StringPropertyResolver> resolvers) {
+        return new StringPropertyResolver() {
+            @Override
+            public boolean containsProperty(String key) {
+                for (StringPropertyResolver resolver : resolvers) {
+                    if (resolver.containsProperty(key)) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            @Override
+            public String getProperty(String key) {
+                return getProperty(key, null);
+            }
+
+            @Override
+            public String getProperty(String key, String defaultValue) {
+                for (StringPropertyResolver resolver : resolvers) {
+                    String value = resolver.getProperty(key);
+                    if (value != null) {
+                        return value;
+                    }
+                }
+                return defaultValue;
+            }
+        };
+    }
 
     public static StringPropertyResolver wrap(final Properties props) {
         return new StringPropertyResolver() {
@@ -107,40 +137,6 @@ public class StringPropertyResolvers {
             public String getProperty(String key, String defaultValue) {
                 String val = props.get(key);
                 return val != null ? val : defaultValue;
-            }
-        };
-    }
-
-    public static StringPropertyResolver compose(final StringPropertyResolver... resolvers) {
-        return compose(asList(resolvers));
-    }
-
-    public static StringPropertyResolver compose(final Iterable<StringPropertyResolver> resolvers) {
-        return new StringPropertyResolver() {
-            @Override
-            public boolean containsProperty(String key) {
-                for (StringPropertyResolver resolver : resolvers) {
-                    if (resolver.containsProperty(key)) {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            @Override
-            public String getProperty(String key) {
-                return getProperty(key, null);
-            }
-
-            @Override
-            public String getProperty(String key, String defaultValue) {
-                for (StringPropertyResolver resolver : resolvers) {
-                    String value = resolver.getProperty(key);
-                    if (value != null) {
-                        return value;
-                    }
-                }
-                return defaultValue;
             }
         };
     }

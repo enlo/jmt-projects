@@ -43,6 +43,7 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
     public static final Map<String, Class<? extends Node>> NODES;
 
     private static final DefaultCustomNodesProvider GLOBAL_INSTANCE;
+    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
 
     static {
 
@@ -58,7 +59,6 @@ public class DefaultCustomNodesProvider implements MvelCustomNodesProvider {
     public static final DefaultCustomNodesProvider getGlobalInstance() {
         return GLOBAL_INSTANCE;
     }
-    private final ConcurrentMap<String, Class<? extends Node>> nodes = new ConcurrentHashMap<>();
 
     public DefaultCustomNodesProvider() {
         nodes.putAll(NODES);

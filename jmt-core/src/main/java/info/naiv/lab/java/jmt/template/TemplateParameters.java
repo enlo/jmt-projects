@@ -23,17 +23,16 @@
  */
 package info.naiv.lab.java.jmt.template;
 
+import info.naiv.lab.java.jmt.collection.MutableLookup;
+import java.io.Serializable;
+
 /**
  *
  * @author enlo
  */
-public interface TemplateParameters {
+public class TemplateParameters
+        extends MutableLookup<String, Object> implements Serializable {
 
-    /**
-     *
-     * @param name
-     * @return
-     */
-    boolean hasValue(String name);
+    private static final long serialVersionUID = -6366844181518257816L;
 
 }

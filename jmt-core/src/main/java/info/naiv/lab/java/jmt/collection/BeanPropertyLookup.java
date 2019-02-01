@@ -41,7 +41,7 @@ import org.springframework.beans.PropertyAccessorFactory;
  *
  * @author enlo
  */
-public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entry<String, Object>> {
+public class BeanPropertyLookup implements IterableLookup<String, Object>, Iterable<Entry<String, Object>> {
 
     private static <T> Map<String, T> createMap(int length, boolean caseSensitive) {
         if (caseSensitive) {
@@ -96,6 +96,11 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
     }
 
     @Override
+    public Iterable<String> getKeys() {
+        return propertyNames.keySet();
+    }
+
+    @Override
     public Iterator<Entry<String, Object>> iterator() {
         Set<Entry<String, Object>> result = new HashSet<>(propertyNames.size());
         for (Entry<String, PropertyDescriptor> e : propertyNames.entrySet()) {
@@ -109,6 +114,7 @@ public class BeanPropertyLookup implements Lookup<String, Object>, Iterable<Entr
      *
      * @return
      */
+    @Override
     public int size() {
         return propertyNames.size();
     }

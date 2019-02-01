@@ -45,5 +45,4 @@ public interface Lookup<TKey, TValue> {
      * @return キーに対応する値
      */
     TValue get(TKey key);
-
 }

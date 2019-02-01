@@ -34,6 +34,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListSet;
 import javax.annotation.Nonnull;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -58,10 +59,21 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
 
     @Setter
     private String suffix = DEFAULT_SUFFIX;
+    /**
+     *
+     */
+    @Getter
+    @Setter
+    protected TemplateBuilder<TResult> templateBuilder;
 
     @Override
     public boolean addTemplateLoaderListener(@NonNull TemplateLoaderListener listener) {
         return listnenrs.add(listener);
+    }
+
+    @Override
+    public Template<TResult> fromSourceResolver(TemplateSourceResolver sourceResolver) {
+        return getTemplateBuilder().build(suffix, sourceResolver);
     }
 
     @Override
@@ -161,7 +173,9 @@ public abstract class AbstractTemplateLoader<TResult> implements TemplateLoader<
      * @return
      */
     @Nonnull
-    protected abstract Template<TResult> doFromString(String name, String template);
+    protected Template<TResult> doFromString(String name, String template) {
+        return getTemplateBuilder().build(name, new DefaultTemplateSourceResolver(template));
+    }
 
     /**
      *

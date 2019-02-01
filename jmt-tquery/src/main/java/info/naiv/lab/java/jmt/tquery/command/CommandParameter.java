@@ -36,8 +36,8 @@ public class CommandParameter implements Serializable, Cloneable, KeyedValue<Str
 
     private static final long serialVersionUID = -6521832621632523550L;
     
-    private Object typeHint;
     private String key;
+    private Object typeHint;
     private Object value;
 
     public CommandParameter(int index, Object value) {

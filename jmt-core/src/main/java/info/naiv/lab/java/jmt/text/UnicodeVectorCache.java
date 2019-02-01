@@ -32,20 +32,15 @@ import java.util.concurrent.locks.Lock;
  */
 public abstract class UnicodeVectorCache extends AbstractLRUCache<String, UnicodeVector> {
 
-    static final float INITIAL_CACHE_SIZE = 1 / 64f;
-
-    public UnicodeVectorCache() {
-        super(INITIAL_CACHE_SIZE);
-    }
-
-    @Override
-    protected int computeSize(String key, UnicodeVector value) {
-        return key.length() * 4;
-    }
-
-    public UnicodeVector getOrCreate(UnicodeVector uv) {
-        return getOrCreate(uv.getSource(), uv);
-    }
+    public static final UnicodeVectorCache DECOMP = new UnicodeVectorCache() {
+        @Override
+        protected UnicodeVector createInstance(String key, UnicodeVector hint) {
+            if (hint != null) {
+                return hint.decompose();
+            }
+            return NORMAL.getOrCreate(key).decompose();
+        }
+    };
 
     public static final UnicodeVectorCache NORMAL = new UnicodeVectorCache() {
         @Override
@@ -62,16 +57,7 @@ public abstract class UnicodeVectorCache extends AbstractLRUCache<String, Unicod
         }
 
     };
-
-    public static final UnicodeVectorCache DECOMP = new UnicodeVectorCache() {
-        @Override
-        protected UnicodeVector createInstance(String key, UnicodeVector hint) {
-            if (hint != null) {
-                return hint.decompose();
-            }
-            return NORMAL.getOrCreate(key).decompose();
-        }
-    };
+    static final float INITIAL_CACHE_SIZE = 1 / 64f;
 
     public static UnicodeVector getDecomposed(UnicodeVector uv) {
         return DECOMP.getOrCreate(uv);
@@ -79,5 +65,18 @@ public abstract class UnicodeVectorCache extends AbstractLRUCache<String, Unicod
 
     public static UnicodeVector getDecomposed(String str) {
         return DECOMP.getOrCreate(str);
+    }
+
+    public UnicodeVectorCache() {
+        super(INITIAL_CACHE_SIZE);
+    }
+
+    public UnicodeVector getOrCreate(UnicodeVector uv) {
+        return getOrCreate(uv.getSource(), uv);
+    }
+
+    @Override
+    protected int computeSize(String key, UnicodeVector value) {
+        return key.length() * 4;
     }
 }

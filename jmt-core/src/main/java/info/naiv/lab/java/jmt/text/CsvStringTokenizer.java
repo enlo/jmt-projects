@@ -33,11 +33,11 @@ import lombok.NonNull;
  */
 public class CsvStringTokenizer {
 
-    final char[] source;
     final CharBuffer cb;
+    int column;
     int index;
     int row;
-    int column;
+    final char[] source;
 
     public CsvStringTokenizer(@NonNull CharSequence source) {
         this(source.toString().toCharArray());
@@ -53,47 +53,6 @@ public class CsvStringTokenizer {
         index = 0;
         row = 0;
         column = 0;
-    }
-
-    public boolean skipColumn() {
-
-        if (isEol()) {
-            return false;
-        }
-        char ch = source[index];
-        if (ch == '"') {
-            boolean inQuote = true;
-            index++;
-            while (inQuote) {
-                if (source[index] == '"') {
-                    if (peek() == '"') {
-                        index += 2;
-                        continue;
-                    }
-                    else {
-                        inQuote = false;
-                    }
-                }
-                index++;
-            }
-            if (isEoc()) {
-                skipEoc();
-                column++;
-                return true;
-            }
-            throw new IllegalStateException("[,] is not found.");
-        }
-        else {
-            if (isEol()) {
-                return false;
-            }
-            while (!isEoc()) {
-                index++;
-            }
-            skipEoc();
-            column++;
-            return true;
-        }
     }
 
     @Nonnull
@@ -167,15 +126,56 @@ public class CsvStringTokenizer {
         return false;
     }
 
-    private char peek() {
-        if ((index + 1) < source.length) {
-            return source[index + 1];
+    public boolean skipColumn() {
+
+        if (isEol()) {
+            return false;
         }
-        return 0;
+        char ch = source[index];
+        if (ch == '"') {
+            boolean inQuote = true;
+            index++;
+            while (inQuote) {
+                if (source[index] == '"') {
+                    if (peek() == '"') {
+                        index += 2;
+                        continue;
+                    }
+                    else {
+                        inQuote = false;
+                    }
+                }
+                index++;
+            }
+            if (isEoc()) {
+                skipEoc();
+                column++;
+                return true;
+            }
+            throw new IllegalStateException("[,] is not found.");
+        }
+        else {
+            if (isEol()) {
+                return false;
+            }
+            while (!isEoc()) {
+                index++;
+            }
+            skipEoc();
+            column++;
+            return true;
+        }
     }
 
     private boolean check() {
         return index < source.length;
+    }
+
+    private boolean isEoc() {
+        if (isEol()) {
+            return true;
+        }
+        return source[index] == ',';
     }
 
     private boolean isEol() {
@@ -188,11 +188,11 @@ public class CsvStringTokenizer {
         }
     }
 
-    private boolean isEoc() {
-        if (isEol()) {
-            return true;
+    private char peek() {
+        if ((index + 1) < source.length) {
+            return source[index + 1];
         }
-        return source[index] == ',';
+        return 0;
     }
 
     private void skipEoc() {

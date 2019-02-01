@@ -24,15 +24,13 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.collection.Lookup;
+import java.util.Collections;
 import javax.annotation.Nonnull;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.mvel2.UnresolveablePropertyException;
 import org.mvel2.integration.VariableResolver;
 import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.integration.impl.BaseVariableResolverFactory;
-import org.mvel2.integration.impl.SimpleSTValueResolver;
-import org.mvel2.integration.impl.SimpleValueResolver;
+import org.mvel2.integration.impl.SimpleVariableResolverFactory;
 
 /**
  *
@@ -40,14 +38,12 @@ import org.mvel2.integration.impl.SimpleValueResolver;
  */
 @SuppressWarnings("serial")
 @Slf4j
-public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
+public class LookupVariableResolverFactory extends SimpleVariableResolverFactory {
 
-    @Setter
-    protected boolean enableUnresolveProperty = true;
     /**
      *
      */
-    protected final Lookup<String, ?> parameters;
+    protected final Lookup<String, ?> lookup;
 
     /**
      *
@@ -63,7 +59,8 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
      * @param nextFactory
      */
     public LookupVariableResolverFactory(@Nonnull Lookup<String, ?> parameters, VariableResolverFactory nextFactory) {
-        this.parameters = parameters;
+        super(Collections.EMPTY_MAP);
+        this.lookup = parameters;
         this.nextFactory = nextFactory;
     }
 
@@ -77,74 +74,49 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
             logger.trace("getVariableResolver() fail. {}", e.getMessage());
             vr = null;
         }
-        if (vr != null) {
+        if (vr instanceof LookupVariableResolver) {
             throw new RuntimeException("variable already defined within scope: " + name);
         }
         else {
-            vr = new SimpleValueResolver(value);
-            variableResolvers.put(name, vr);
-            return vr;
+            return super.createVariable(name, value);
         }
     }
 
+    /**
+     * 自スコープ内
+     *
+     * @param name
+     * @param value
+     * @param type
+     * @return
+     */
     @Override
     public VariableResolver createVariable(String name, Object value, Class<?> type) {
         VariableResolver vr;
         try {
-            vr = getVariableResolverCore(name);
+            vr = getVariableResolver(name);
         }
         catch (UnresolveablePropertyException e) {
             logger.trace("getVariableResolver() fail. {}", e.getMessage());
             vr = null;
         }
 
-        if (vr != null && vr.getType() != null) {
+        if (vr instanceof LookupVariableResolver) {
             throw new RuntimeException("variable already defined within scope: " + vr.getType() + " " + name);
         }
         else {
-            vr = new SimpleSTValueResolver(value, type);
-            variableResolvers.put(name, vr);
-            return vr;
+            return super.createVariable(name, value, type);
         }
     }
 
     @Override
     public VariableResolver getVariableResolver(String name) {
-        try {
-            return getVariableResolverCore(name);
-        }
-        catch (UnresolveablePropertyException ex) {
-            if (enableUnresolveProperty) {
-                VariableResolver vr = new SimpleValueResolver(null);
-                variableResolvers.put(name, vr);
-                return vr;
-            }
-            else {
-                throw ex;
-            }
-        }
-    }
-
-    @Override
-    public boolean isResolveable(String name) {
-        return enableUnresolveProperty
-                || variableResolvers.containsKey(name)
-                || (parameters != null && name != null && parameters.containsKey(name))
-                || (nextFactory != null && nextFactory.isResolveable(name));
-    }
-
-    @Override
-    public boolean isTarget(String name) {
-        return variableResolvers.containsKey(name);
-    }
-
-    private VariableResolver getVariableResolverCore(String name) throws UnresolveablePropertyException {
         VariableResolver vr = variableResolvers.get(name);
         if (vr != null) {
             return vr;
         }
-        else if (parameters.containsKey(name)) {
-            vr = new LookupVariableResolver(parameters, name);
+        else if (lookup.containsKey(name)) {
+            vr = new LookupVariableResolver(lookup, name);
             variableResolvers.put(name, vr);
             return vr;
         }
@@ -153,6 +125,13 @@ public class LookupVariableResolverFactory extends BaseVariableResolverFactory {
         }
 
         throw new UnresolveablePropertyException("unable to resolve variable '" + name + "'");
+    }
+
+    @Override
+    public boolean isResolveable(String name) {
+        return variableResolvers.containsKey(name)
+                || (lookup != null && name != null && lookup.containsKey(name))
+                || (nextFactory != null && nextFactory.isResolveable(name));
     }
 
 }

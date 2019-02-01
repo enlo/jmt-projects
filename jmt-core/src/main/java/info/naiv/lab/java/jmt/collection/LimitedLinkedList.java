@@ -63,7 +63,12 @@ public class LimitedLinkedList<T> extends LinkedList<T> {
         if (size() >= maxSize) {
             remove(0);
         }
-        super.add(index, element); 
+        super.add(index, element);
+    }
+
+    @Override
+    public Object clone() {
+        return super.clone(); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

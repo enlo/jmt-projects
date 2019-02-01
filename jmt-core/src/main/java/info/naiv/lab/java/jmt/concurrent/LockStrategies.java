@@ -31,11 +31,30 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nonnull;
 
-/**
- *
- * @author enlo
- */
 public class LockStrategies {
+
+    public static final Lock NOLOCK = new NoLock();
+
+    public static final ReadWriteLock NORWLOCK = new ReadWriteLock() {
+        @Override
+        public Lock readLock() {
+            return NOLOCK;
+        }
+
+        @Override
+        public Lock writeLock() {
+            return NOLOCK;
+        }
+    };
+
+    @Nonnull
+    public static LockStrategy noLock() {
+        return new NoLockStrategy();
+    }
+
+    public static LockStrategy reentrantLock() {
+        return new ReentrantLockStrategy();
+    }
 
     public static class NoLock implements Lock {
 
@@ -68,20 +87,6 @@ public class LockStrategies {
         }
     }
 
-    public static final Lock NOLOCK = new NoLock();
-
-    public static final ReadWriteLock NORWLOCK = new ReadWriteLock() {
-        @Override
-        public Lock readLock() {
-            return NOLOCK;
-        }
-
-        @Override
-        public Lock writeLock() {
-            return NOLOCK;
-        }
-    };
-
     public static class NoLockStrategy implements LockStrategy {
 
         @Override
@@ -106,14 +111,5 @@ public class LockStrategies {
         public ReadWriteLock createReadWriteLock() {
             return new ReentrantReadWriteLock();
         }
-    }
-
-    @Nonnull
-    public static LockStrategy noLock() {
-        return new NoLockStrategy();
-    }
-
-    public static LockStrategy reentrantLock() {
-        return new ReentrantLockStrategy();
     }
 }

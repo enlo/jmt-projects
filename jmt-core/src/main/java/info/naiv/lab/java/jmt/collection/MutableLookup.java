@@ -35,7 +35,7 @@ import lombok.NonNull;
  * @param <TKey>
  * @param <TValue>
  */
-public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterable<Map.Entry<TKey, TValue>> {
+public class MutableLookup<TKey, TValue> implements IterableLookup<TKey, TValue>, Iterable<Map.Entry<TKey, TValue>> {
 
     final Map<TKey, TValue> map;
 
@@ -65,6 +65,11 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterab
     }
 
     @Override
+    public Iterable<TKey> getKeys() {
+        return map.keySet();
+    }
+
+    @Override
     public Iterator<Map.Entry<TKey, TValue>> iterator() {
         return map.entrySet().iterator();
     }
@@ -86,6 +91,7 @@ public class MutableLookup<TKey, TValue> implements Lookup<TKey, TValue>, Iterab
      *
      * @return
      */
+    @Override
     public int size() {
         return map.size();
     }

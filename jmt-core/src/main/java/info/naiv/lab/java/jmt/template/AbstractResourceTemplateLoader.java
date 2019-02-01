@@ -53,7 +53,11 @@ public abstract class AbstractResourceTemplateLoader<TResult> extends AbstractTe
      * @return
      * @throws IOException
      */
-    protected abstract Template<TResult> createTemplateFromResource(String name, Resource resource, Charset charset) throws IOException;
+    protected Template<TResult> createTemplateFromResource(String name, Resource resource, Charset charset) throws IOException {
+        TemplateSourceResolver resolver
+                = new ReloadableResourceTemplateSourceResolver(resource, charset);
+        return getTemplateBuilder().build(name, resolver);
+    }
 
     /**
      *

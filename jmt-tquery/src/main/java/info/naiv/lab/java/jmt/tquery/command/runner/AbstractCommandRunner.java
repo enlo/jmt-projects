@@ -59,18 +59,16 @@ public abstract class AbstractCommandRunner<TSession extends AutoCloseable, TQue
             throw runtimenize(e);
         }
     }
+    protected abstract TQuery createQuery(TSession session, String query);
     
     protected abstract <TResult> List<TResult> executeQuery(TQuery query, Class<TResult> clazz);
+    protected abstract TSession open();
+    protected RuntimeException runtimenize(Exception e) {
+        return new RuntimeException(e);
+    }
 
     protected abstract void setTypedParameter(TQuery query, int index, Object value, ParameterType type);
 
     protected abstract void setTypedParameterNull(TQuery query, int index, ParameterType type);
 
-    protected abstract TQuery createQuery(TSession session, String query);
-
-    protected RuntimeException runtimenize(Exception e) {
-        return new RuntimeException(e);
-    }
-
-    protected abstract TSession open();
 }

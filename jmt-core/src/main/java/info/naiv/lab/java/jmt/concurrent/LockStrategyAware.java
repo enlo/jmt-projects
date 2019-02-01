@@ -30,5 +30,5 @@ package info.naiv.lab.java.jmt.concurrent;
 public interface LockStrategyAware {
 
     void setLockStrategy(LockStrategy lockStrategy);
-    
+
 }

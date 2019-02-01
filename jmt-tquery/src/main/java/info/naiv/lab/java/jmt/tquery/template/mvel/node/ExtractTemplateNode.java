@@ -62,12 +62,12 @@ public class ExtractTemplateNode extends SingleCompiledExpressionNode {
         }
         else if (value instanceof QueryTemplate) {
             QueryTemplate templ = (QueryTemplate) value;
-            Command ct = templ.mergeBean(context.getSource());
+            Command ct = templ.mergeBean(context.getParameterSource());
             appendable = ct.getQuery();
         }
         else if (value instanceof Template) {
             Template templ = (Template) value;
-            Object obj = templ.mergeBean(context.getSource());
+            Object obj = templ.mergeBean(context.getParameterSource());
             appendable = Objects.toString(obj, "");
         }
         else {

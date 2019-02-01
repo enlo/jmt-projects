@@ -66,6 +66,9 @@ public interface TemplateLoader<TResult> {
     @Nonnull
     Template<TResult> fromString(String name, String template);
 
+    @Nonnull
+    Template<TResult> fromSourceResolver(TemplateSourceResolver sourceResolver);
+
     /**
      *
      * @return Suffix.

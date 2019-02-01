@@ -34,6 +34,9 @@ import java.util.Map;
 public abstract class CommandParametersWithTypeHint implements CommandParameters {
 
     private static final long serialVersionUID = 1L;
+    public static CommandParametersWithTypeHint wrap(CommandParameters base, Object typeHint) {
+        return new DefaultImpl(base, typeHint);
+    }
 
     final Object defaultTypeHint;
     final CommandParameters impl;
@@ -168,15 +171,17 @@ public abstract class CommandParametersWithTypeHint implements CommandParameters
         return impl.toMap();
     }
 
-    public static CommandParametersWithTypeHint wrap(CommandParameters base, Object typeHint) {
-        return new DefaultImpl(base, typeHint);
+
+    @Override
+    public Object[] toValueArray() {
+        return impl.toValueArray();
     }
 
     static class DefaultImpl extends CommandParametersWithTypeHint {
 
         private static final long serialVersionUID = 1L;
 
-        public DefaultImpl(CommandParameters impl, Object defaultTypeHint) {
+        DefaultImpl(CommandParameters impl, Object defaultTypeHint) {
             super(impl, defaultTypeHint);
         }
 

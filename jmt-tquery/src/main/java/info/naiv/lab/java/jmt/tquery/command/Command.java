@@ -24,40 +24,71 @@
 package info.naiv.lab.java.jmt.tquery.command;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import lombok.Data;
 
 /**
- * コマンド.
  *
  * @author enlo
  */
-public interface Command extends Cloneable, Serializable {
+@Data
+public class Command implements Cloneable, Serializable {
 
-    @SuppressWarnings(value = "CloneDeclaresCloneNotSupported")
-    Command clone();
+    private static final long serialVersionUID = -7816515353531445011L;
+
+
+    CommandParameters parameters;
+    final String query;
 
     /**
+     * コンストラクタ.
      *
-     * @return パラメータ値配列
+     * @param query
+     * @param parameters
      */
-    Object[] getParameterValueArray();
+    public Command(String query, Collection<CommandParameter> parameters) {
+        this(query, new DefaultCommandParameters(parameters));
+    }
+
+    /**
+     * コンストラクタ.
+     *
+     * @param query
+     * @param parameters
+     */
+    public Command(String query, CommandParameters parameters) {
+        this.query = query;
+        this.parameters = parameters;
+    }
+    @Override
+    @SuppressWarnings("CloneDeclaresCloneNotSupported")
+    public Command clone() {
+        try {
+            Command cmd = (Command) super.clone();
+            cmd.parameters = new DefaultCommandParameters(this.parameters);
+            return cmd;
+        }
+        catch (CloneNotSupportedException ex) {
+            throw new InternalError(ex.getMessage());
+        }
+    }
+
+    public Object[] getParameterValueArray() {
+        return parameters.toValueArray();
+    }
 
     /**
      *
      * @return パラメータ値リスト
      */
-    List<Object> getParameterValueList();
-
-    /**
-     *
-     * @return パラメータリスト.
-     */
-    CommandParameters getParameters();
-
-    /**
-     *
-     * @return 実際のSQL.
-     */
-    String getQuery();
+    public List<Object> getParameterValueList() {
+        List<Object> result = new ArrayList<>(parameters.size());
+        for (CommandParameter p : parameters) {
+            result.add(p.getValue());
+        }
+        return result;
+    }
 
 }

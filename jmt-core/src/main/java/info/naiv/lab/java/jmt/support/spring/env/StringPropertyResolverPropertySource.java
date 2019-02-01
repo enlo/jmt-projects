@@ -53,13 +53,13 @@ public class StringPropertyResolverPropertySource extends PropertySource<StringP
     }
 
     @Override
-    public Object getProperty(String name) {
-        return source.getProperty(name);
+    public boolean containsProperty(String name) {
+        return source.containsProperty(name);
     }
 
     @Override
-    public boolean containsProperty(String name) {
-        return source.containsProperty(name);
+    public Object getProperty(String name) {
+        return source.getProperty(name);
     }
 
 }

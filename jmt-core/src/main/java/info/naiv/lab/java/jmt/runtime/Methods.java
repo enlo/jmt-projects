@@ -118,11 +118,12 @@ public class Methods {
     @Value
     static class MethodBinder implements MethodInvoker {
 
+        int annotationOffset;
+        Annotation[][] annotations;
+
         Object[] bound;
         Method method;
         Class<?>[] parameterTypes;
-        Annotation[][] annotations;
-        int annotationOffset;
 
         MethodBinder(Method method, Object[] bound) {
             this.method = method;
@@ -165,10 +166,11 @@ public class Methods {
     @Value
     static class MethodInvokerBinder implements MethodInvoker {
 
+        int annotationOffset;
+
         Object[] bound;
         MethodInvoker mi;
         Class<?>[] parameterTypes;
-        int annotationOffset;
 
         MethodInvokerBinder(MethodInvoker mi, Object[] bound) {
             this.mi = mi;

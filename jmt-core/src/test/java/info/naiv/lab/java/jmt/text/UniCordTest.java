@@ -332,6 +332,19 @@ public class UniCordTest {
         assertThat(result.next(), is("い"));
         assertThat(result.hasNext(), is(false));
     }
+    @Test
+    public void testLargeText() throws IOException {
+        try (ClassPathXmlApplicationContext context
+                = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
+            
+            Resource res = context.getResource("classpath:TEXT/largeText.txt");
+            try (InputStream is = res.getInputStream()) {
+                String text = IOUtils.toString(is, StandardCharsets.UTF_8);
+                UniCord test = UniCord.valueOf(text);
+                StopWatch sw = new StopWatch();
+            }
+        }
+    }
 
     /**
      * Test of lastIndexOf method, of class UniCord.
@@ -426,6 +439,13 @@ public class UniCordTest {
         String expected = "か\u3099美味い";
         String actual = str.right(4);
         assertThat(actual, is(expected));
+    }
+    @Test
+    public void testSerialize() throws IOException {
+        UniCord src = new UniCord("\u0065\u0301");
+        byte[] bin = SerializationUtils.serialize(src);
+        UniCord dest = (UniCord) SerializationUtils.deserialize(bin);
+        assertThat(dest, is(src));
     }
 
     /**
@@ -564,25 +584,4 @@ public class UniCordTest {
         assertThat(UniCord.valueOf("123"), is(new UniCord("123")));
     }
 
-    @Test
-    public void testSerialize() throws IOException {
-        UniCord src = new UniCord("\u0065\u0301");
-        byte[] bin = SerializationUtils.serialize(src);
-        UniCord dest = (UniCord) SerializationUtils.deserialize(bin);
-        assertThat(dest, is(src));
-    }
-
-    @Test
-    public void testLargeText() throws IOException {
-        try (ClassPathXmlApplicationContext context
-                = new ClassPathXmlApplicationContext("/META-INF/test-application-context2.xml");) {
-
-            Resource res = context.getResource("classpath:TEXT/largeText.txt");
-            try (InputStream is = res.getInputStream()) {
-                String text = IOUtils.toString(is, StandardCharsets.UTF_8);
-                UniCord test = UniCord.valueOf(text);
-                StopWatch sw = new StopWatch();
-            }
-        }
-    }
 }

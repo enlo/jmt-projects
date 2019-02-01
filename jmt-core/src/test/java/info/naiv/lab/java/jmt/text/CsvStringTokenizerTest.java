@@ -36,24 +36,6 @@ public class CsvStringTokenizerTest {
     public CsvStringTokenizerTest() {
     }
 
-    /**
-     * Test of skipColumn method, of class CsvStringTokenizer.
-     */
-    @Test
-    public void testSkipColumn() {
-        String sampleCsv = "\"ABC\",CDF, E F G  ,\" A B \r\n C\"\"\"";
-        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
-        assertThat(css.skipColumn(), is(true));
-        assertThat(css.index, is(6));
-        assertThat(css.skipColumn(), is(true));
-        assertThat(css.index, is(10));
-        assertThat(css.skipColumn(), is(true));
-        assertThat(css.index, is(19));
-        assertThat(css.skipColumn(), is(true));
-        assertThat(css.index, is(32));
-        assertThat(css.skipColumn(), is(false));
-        assertThat(css.index, is(32));
-    }
 
     /**
      * Test of getColumn method, of class CsvStringTokenizer.
@@ -118,6 +100,24 @@ public class CsvStringTokenizerTest {
         assertThat(css.getRemaining(), is("漢字,かな,カタカナ,\u0208"));
         assertThat(css.nextLine(), is(false));
         assertThat(css.getRemaining(), is(""));
+    }
+    /**
+     * Test of skipColumn method, of class CsvStringTokenizer.
+     */
+    @Test
+    public void testSkipColumn() {
+        String sampleCsv = "\"ABC\",CDF, E F G  ,\" A B \r\n C\"\"\"";
+        CsvStringTokenizer css = new CsvStringTokenizer(sampleCsv);
+        assertThat(css.skipColumn(), is(true));
+        assertThat(css.index, is(6));
+        assertThat(css.skipColumn(), is(true));
+        assertThat(css.index, is(10));
+        assertThat(css.skipColumn(), is(true));
+        assertThat(css.index, is(19));
+        assertThat(css.skipColumn(), is(true));
+        assertThat(css.index, is(32));
+        assertThat(css.skipColumn(), is(false));
+        assertThat(css.index, is(32));
     }
 
 }

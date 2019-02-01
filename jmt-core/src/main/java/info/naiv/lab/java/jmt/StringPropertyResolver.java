@@ -28,11 +28,11 @@ package info.naiv.lab.java.jmt;
  * @author enlo
  */
 public interface StringPropertyResolver {
-    
+
     String getProperty(String key);
-    
+
     String getProperty(String key, String defaultValue);
-    
+
     boolean containsProperty(String key);
-    
+
 }

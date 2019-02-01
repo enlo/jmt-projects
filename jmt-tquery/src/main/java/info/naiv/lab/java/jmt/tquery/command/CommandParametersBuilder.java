@@ -75,14 +75,6 @@ public class CommandParametersBuilder {
         return new DefaultCommandParameters(impl);
     }
 
-    /**
-     * コマンドパラメーターリストを生成する.
-     *
-     * @return コマンドパラメーターリスト
-     */
-    public CommandParameters toList() {
-        return build();
-    }
 
     /**
      * コマンドパラメーター配列を生成する.
@@ -91,6 +83,14 @@ public class CommandParametersBuilder {
      */
     public CommandParameter[] toArray() {
         return impl.toArray();
+    }
+    /**
+     * コマンドパラメーターリストを生成する.
+     *
+     * @return コマンドパラメーターリスト
+     */
+    public CommandParameters toList() {
+        return build();
     }
 
 }

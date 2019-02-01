@@ -2,7 +2,7 @@ package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.ExpressiveProperties;
 import static info.naiv.lab.java.jmt.Strings.*;
-import info.naiv.lab.java.jmt.collection.Lookup;
+import info.naiv.lab.java.jmt.collection.IterableLookup;
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Properties;
@@ -70,7 +70,7 @@ public class MvelExpressiveProperties extends ExpressiveProperties {
         return (String) TemplateRuntime.execute(template, null, factory);
     }
 
-    private static class PropertiesLookup implements Lookup<String, String>, Serializable {
+    private static class PropertiesLookup implements IterableLookup<String, String>, Serializable {
 
         private static final long serialVersionUID = 1L;
 
@@ -95,6 +95,16 @@ public class MvelExpressiveProperties extends ExpressiveProperties {
                 }
             }
             return value;
+        }
+
+        @Override
+        public Iterable<String> getKeys() {
+            return props.stringPropertyNames();
+        }
+
+        @Override
+        public int size() {
+            return props.size();
         }
 
     }

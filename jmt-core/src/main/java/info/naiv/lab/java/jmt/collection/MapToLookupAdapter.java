@@ -33,7 +33,7 @@ import lombok.Value;
  * @param <TValue>
  */
 @Value
-public class MapToLookupAdapter<TKey, TValue> implements Lookup<TKey, TValue> {
+public class MapToLookupAdapter<TKey, TValue> implements IterableLookup<TKey, TValue> {
 
     Map<TKey, TValue> map;
 
@@ -49,6 +49,16 @@ public class MapToLookupAdapter<TKey, TValue> implements Lookup<TKey, TValue> {
     @Override
     public TValue get(TKey key) {
         return map.get(key);
+    }
+
+    @Override
+    public Iterable<TKey> getKeys() {
+        return map.keySet();
+    }
+
+    @Override
+    public int size() {
+        return map.size();
     }
 
 }

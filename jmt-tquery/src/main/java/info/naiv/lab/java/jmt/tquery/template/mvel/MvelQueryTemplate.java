@@ -23,39 +23,60 @@
  */
 package info.naiv.lab.java.jmt.tquery.template.mvel;
 
-import info.naiv.lab.java.jmt.template.mvel.AbstractMvelTemplate;
+import info.naiv.lab.java.jmt.collection.Lookup;
+import info.naiv.lab.java.jmt.template.mvel.MvelTemplate;
 import info.naiv.lab.java.jmt.tquery.command.Command;
-import info.naiv.lab.java.jmt.tquery.QueryContext;
-import info.naiv.lab.java.jmt.tquery.command.CommandImpl;
-import info.naiv.lab.java.jmt.tquery.command.CommandParameters;
+import info.naiv.lab.java.jmt.tquery.command.BatchCommand;
 import info.naiv.lab.java.jmt.tquery.template.QueryTemplate;
-import org.mvel2.integration.VariableResolverFactory;
-import org.mvel2.templates.CompiledTemplate;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import info.naiv.lab.java.jmt.template.mvel.MvelCompiledTemplateResolver;
+import info.naiv.lab.java.jmt.template.mvel.MvelTemplateContextFactory;
 
 /**
  *
  * @author enlo
  */
-@SuppressWarnings("serial")
-public class MvelQueryTemplate extends AbstractMvelTemplate<Command, QueryContext> implements QueryTemplate {
+public class MvelQueryTemplate extends MvelTemplate<Command> implements QueryTemplate {
 
-    public MvelQueryTemplate(String name, CompiledTemplate template) {
-        super(name, template);
+    public MvelQueryTemplate(String name,
+                             MvelCompiledTemplateResolver templateResolver,
+                             MvelTemplateContextFactory<Command> contextFactory) {
+        super(name, templateResolver, contextFactory);
     }
 
     @Override
-    protected QueryContext createContext(VariableResolverFactory factory, Object source) {
-        QueryContext context = new QueryContext();
-        context.setSource(source);
-        return context;
+    public List<BatchCommand> mergeLookupList(List<Lookup<String, String>> parameters) {
+        Map<String, BatchCommand> cmd = new HashMap<>(parameters.size());
+        for (Lookup<String, String> param : parameters) {
+            Command c = merge(param);
+            String q = c.getQuery();
+            BatchCommand bc = cmd.get(q);
+            if (bc == null) {
+                bc = new BatchCommand(q);
+                cmd.put(c.getQuery(), bc);
+            }
+            bc.getParametersList().add(c.getParameters());
+        }
+        return new ArrayList<>(cmd.values());
     }
 
     @Override
-    protected Command createResult(Object result, QueryContext context) {
-        CommandParameters parameters = context.getParameters().copy();
-        String queryString = (String) result;
-        Command query = new CommandImpl(queryString, parameters);
-        return query;
+    public List<BatchCommand> mergeMapList(List<Map<String, String>> parameters) {
+        Map<String, BatchCommand> cmd = new HashMap<>(parameters.size());
+        for (Map<String, String> param : parameters) {
+            Command c = merge(param);
+            String q = c.getQuery();
+            BatchCommand bc = cmd.get(q);
+            if (bc == null) {
+                bc = new BatchCommand(q);
+                cmd.put(c.getQuery(), bc);
+            }
+            bc.getParametersList().add(c.getParameters());
+        }
+        return new ArrayList<>(cmd.values());
     }
 
 }

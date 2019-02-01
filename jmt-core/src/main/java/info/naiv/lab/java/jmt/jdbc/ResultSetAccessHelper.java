@@ -23,7 +23,7 @@
  */
 package info.naiv.lab.java.jmt.jdbc;
 
-import info.naiv.lab.java.jmt.collection.Lookup;
+import info.naiv.lab.java.jmt.collection.IterableLookup;
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
@@ -56,7 +56,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ResultSetAccessHelper
-        implements Lookup<String, Object>, AutoCloseable {
+        implements IterableLookup<String, Object>, AutoCloseable {
 
     private final ResultSet baseResultSet;
     private final Map<String, Integer> columnMap = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
@@ -380,6 +380,11 @@ public class ResultSetAccessHelper
         return getInteger(baseResultSet, columnName);
     }
 
+    @Override
+    public Iterable<String> getKeys() {
+        return this.columnMap.keySet();
+    }
+
     /**
      *
      * @param rs
@@ -669,6 +674,11 @@ public class ResultSetAccessHelper
 
     public URL getURL(@Nonnull String columnName) throws SQLException {
         return getURL(baseResultSet, columnName);
+    }
+
+    @Override
+    public int size() {
+        return columnMap.size();
     }
 
 }

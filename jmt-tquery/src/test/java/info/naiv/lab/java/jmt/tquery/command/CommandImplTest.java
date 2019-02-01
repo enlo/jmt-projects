@@ -41,12 +41,12 @@ import org.junit.Before;
  */
 public class CommandImplTest {
 
-    public CommandImplTest() {
-    }
 
     static final String TEST_QUERY = "select * from Table where id = ?";
     Collection<CommandParameter> testParameters;
-    CommandImpl testTarget;
+    Command testTarget;
+    public CommandImplTest() {
+    }
 
     @Before
     public void setup() {
@@ -55,9 +55,19 @@ public class CommandImplTest {
         ctx.getParameters().addValue(123);
 
         testParameters = new ArrayList<>(ctx.getParameters());
-        testTarget = new CommandImpl(TEST_QUERY, ctx.getParameters());
+        testTarget = new Command(TEST_QUERY, ctx.getParameters());
     }
 
+
+    /**
+     * Test of clone method, of class Command.
+     */
+    @Test
+    public void testClone() {
+        Command cloned = testTarget.clone();
+        assertThat(cloned, is(not(Matchers.sameInstance(testTarget))));
+        assertThat(cloned, is(testTarget));
+    }
     /**
      * Test of getParameterValueList method, of class Command.
      */
@@ -67,38 +77,18 @@ public class CommandImplTest {
     }
 
     /**
-     * Test of clone method, of class Command.
-     */
-    @Test
-    public void testClone() {
-        CommandImpl cloned = testTarget.clone();
-        assertThat(cloned, is(not(Matchers.sameInstance(testTarget))));
-        assertThat(cloned, is(testTarget));
-    }
-
-    /**
-     * Test of getQuery method, of class Command.
-     */
-    @Test
-    public void testGetQuery() {
-        assertThat(testTarget.getQuery(), is(TEST_QUERY));
-    }
-
-    /**
      * Test of getParameters method, of class Command.
      */
     @Test
     public void testGetParameters() {
         assertThat(testTarget.getParameters(), is(testParameters));
     }
-
     /**
-     * Test of setQuery method, of class Command.
+     * Test of getQuery method, of class Command.
      */
     @Test
-    public void testSetQuery() {
-        testTarget.setQuery("aaaa");
-        assertThat(testTarget.getQuery(), is("aaaa"));
+    public void testGetQuery() {
+        assertThat(testTarget.getQuery(), is(TEST_QUERY));
     }
 
     /**

@@ -27,7 +27,6 @@ import info.naiv.lab.java.jmt.io.NIOUtils;
 import info.naiv.lab.java.jmt.io.ResourceRepository;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,14 +58,14 @@ public class DelegatingTemplateLoader<TResult> extends AbstractResourceTemplateL
     @Override
     protected Template<TResult> createTemplateFromResource(String name, Resource resource, Charset charset) throws IOException {
         try (InputStream is = resource.getInputStream()) {
-            CharBuffer templ = NIOUtils.toCharBuffer(is, charset);
-            return templateBuilder.build(name, templ);
+            String template = NIOUtils.toString(is, charset);
+            return templateBuilder.build(name, new DefaultTemplateSourceResolver(template));
         }
     }
 
     @Override
     protected Template<TResult> doFromString(String name, String template) {
-        return templateBuilder.build(name, template);
+        return templateBuilder.build(name, new DefaultTemplateSourceResolver(template));
     }
 
 }

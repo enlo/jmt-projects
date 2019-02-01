@@ -28,5 +28,6 @@ package info.naiv.lab.java.jmt.winini;
  * @author enlo
  */
 public interface IniComment extends IniNode {
+
     String getComment();
 }

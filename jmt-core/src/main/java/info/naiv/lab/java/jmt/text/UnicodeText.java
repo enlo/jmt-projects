@@ -286,10 +286,10 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
 
         private static final long serialVersionUID = -7951404676481901952L;
 
-        UnicodeVector elements;
         Lazy<UnicodeVector> decomp;
+        UnicodeVector elements;
 
-        public UBlock(final String source) {
+        UBlock(final String source) {
             this.elements = new UnicodeVector(source);
             this.decomp = new Lazy<UnicodeVector>() {
                 @Override
@@ -302,7 +302,7 @@ public class UnicodeText implements Comparable<UnicodeText>, Iterable<String>, S
         @Override
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
             elements = (UnicodeVector) in.readObject();
-            decomp = new Lazy((UnicodeVector) in.readObject());
+            decomp = new Lazy(in.readObject());
         }
 
         @Override

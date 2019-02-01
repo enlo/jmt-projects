@@ -24,7 +24,6 @@
 package info.naiv.lab.java.jmt.template.mvel;
 
 import info.naiv.lab.java.jmt.template.Template;
-import org.mvel2.templates.CompiledTemplate;
 
 /**
  *
@@ -32,9 +31,35 @@ import org.mvel2.templates.CompiledTemplate;
  */
 public class StringMvelTemplateBuilder extends AbstractMvelTemplateBuilder<String> {
 
-    @Override
-    protected Template<String> build(String name, CompiledTemplate template) {
-        return new StringMvelTemplate(name, template);
+    public StringMvelTemplateBuilder() {
+        super.setContextFactory(new ContextFactory());
     }
 
+    @Override
+    public boolean isInstanceOf(Class<? extends Template> templateType) {
+        return templateType.isAssignableFrom(StringMvelTemplate.class);
+    }
+
+    @Override
+    protected Template<String> build(String name, MvelCompiledTemplateResolver template) {
+        return new StringMvelTemplate(name, template, contextFactory);
+    }
+
+    static final class ContextFactory implements MvelTemplateContextFactory<String> {
+
+        @Override
+        public MvelTemplateContext<String> createContext(MvelTemplateVariableResolverFactory factory) {
+            return new MvelTemplateContext<String>() {
+                @Override
+                public String createResult(Object result) {
+                    return (String) result;
+                }
+
+                @Override
+                public void initVariableResolverFactory(MvelTemplateVariableResolverFactory vrf) {
+                }
+            };
+        }
+
+    }
 }

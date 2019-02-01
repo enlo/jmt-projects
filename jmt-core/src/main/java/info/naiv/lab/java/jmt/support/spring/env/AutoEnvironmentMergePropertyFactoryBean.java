@@ -50,21 +50,20 @@ public class AutoEnvironmentMergePropertyFactoryBean
         implements FactoryBean<StringPropertyResolver>,
                    EnvironmentAware, InitializingBean {
 
-    private String propertySourceName;
-
-    private String propertySourceBefore;
-
     private Environment environment;
 
     private List<Properties> properties;
 
-    public void setProperties(Properties... properties) {
-        this.properties = asList(properties);
-    }
+    private String propertySourceBefore;
+    private String propertySourceName;
 
     @Override
     public Class<?> getObjectType() {
         return StringPropertyResolver.class;
+    }
+
+    public void setProperties(Properties... properties) {
+        this.properties = asList(properties);
     }
 
     @Override

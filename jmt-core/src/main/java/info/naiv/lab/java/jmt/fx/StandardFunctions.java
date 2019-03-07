@@ -27,7 +27,6 @@ import info.naiv.lab.java.jmt.Holder;
 import info.naiv.lab.java.jmt.Misc;
 import static java.lang.Integer.parseInt;
 import java.lang.annotation.Annotation;
-import java.util.Objects;
 import java.util.regex.Pattern;
 import javax.annotation.Nonnull;
 
@@ -37,25 +36,8 @@ import javax.annotation.Nonnull;
  */
 public class StandardFunctions {
 
-    /**
-     *
-     */
-    public static final Predicate1 NON_NULL = new Predicate1<Object>() {
-        @Override
-        public boolean test(Object obj) {
-            return obj != null;
-        }
-    };
-
-    /**
-     *
-     */
-    public static Predicate1 NO_CHECK = new Predicate1() {
-        @Override
-        public boolean test(Object obj) {
-            return true;
-        }
-    };
+    public static final Predicate1 NON_NULL = Predicates.NON_NULL;
+    public static final Predicate1 NO_CHECK = Predicates.NO_CHECK;
 
     public static Predicate1<Annotation> annotationOf(final Class<? extends Annotation> clazz) {
         return new Predicate1<Annotation>() {
@@ -167,12 +149,7 @@ public class StandardFunctions {
      */
     @Nonnull
     public static <T> Predicate1<T> equal(final T value) {
-        return new Predicate1<T>() {
-            @Override
-            public boolean test(T obj) {
-                return Objects.equals(value, obj);
-            }
-        };
+        return Predicates.equal(value);
     }
 
     /**
@@ -193,12 +170,7 @@ public class StandardFunctions {
     }
 
     public static <T> Predicate1<? super T> isAssignableTo(final Class<? extends T> clazz) {
-        return new Predicate1<T>() {
-            @Override
-            public boolean test(T obj) {
-                return obj != null && clazz.isAssignableFrom(obj.getClass());
-            }
-        };
+        return Predicates.<T>isAssignableTo(clazz);
     }
 
     /**
@@ -246,7 +218,7 @@ public class StandardFunctions {
      */
     @Nonnull
     public static <T> Predicate1<T> noCheck() {
-        return NO_CHECK;
+        return Predicates.NO_CHECK;
     }
 
     /**
@@ -256,7 +228,7 @@ public class StandardFunctions {
      */
     @Nonnull
     public static <T> Predicate1<T> nonNull() {
-        return NON_NULL;
+        return Predicates.NON_NULL;
     }
 
     private StandardFunctions() {

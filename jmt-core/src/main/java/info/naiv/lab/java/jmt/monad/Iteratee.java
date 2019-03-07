@@ -31,7 +31,7 @@ import info.naiv.lab.java.jmt.fx.Consumer1;
 import info.naiv.lab.java.jmt.fx.Consumer2;
 import info.naiv.lab.java.jmt.fx.Function1;
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.fx.StandardFunctions;
+import info.naiv.lab.java.jmt.fx.Predicates;
 import info.naiv.lab.java.jmt.iteration.FilteringIterator;
 import info.naiv.lab.java.jmt.iteration.IterationUtils;
 import static info.naiv.lab.java.jmt.iteration.IterationUtils.flat;
@@ -101,7 +101,7 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
      * @param predicate
      */
     public Iteratee(Iterable<T> value, Predicate1<? super T> predicate) {
-        this.predicate = predicate != null ? predicate : StandardFunctions.NO_CHECK;
+        this.predicate = predicate != null ? predicate : Predicates.NO_CHECK;
         this.value = value != null ? value : Collections.EMPTY_LIST;
     }
 
@@ -118,7 +118,7 @@ public final class Iteratee<T> implements Iterable<T>, Serializable {
      * @param value
      */
     public Iteratee(T[] value) {
-        this(Arrays.asList(value), StandardFunctions.NO_CHECK);
+        this(Arrays.asList(value), Predicates.NO_CHECK);
     }
 
     Iteratee() {

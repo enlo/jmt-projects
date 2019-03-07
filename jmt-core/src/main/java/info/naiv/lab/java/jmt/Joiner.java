@@ -24,7 +24,7 @@
 package info.naiv.lab.java.jmt;
 
 import info.naiv.lab.java.jmt.fx.Predicate1;
-import info.naiv.lab.java.jmt.fx.StandardFunctions;
+import info.naiv.lab.java.jmt.fx.Predicates;
 import javax.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.Setter;
@@ -39,7 +39,7 @@ import lombok.Setter;
 public abstract class Joiner<T, R> {
 
     @Setter
-    private Predicate1<T> accepter = StandardFunctions.NON_NULL;
+    private Predicate1<T> accepter = Predicates.NON_NULL;
 
     /**
      * 連結処理.

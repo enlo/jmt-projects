@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -121,11 +122,19 @@ public class JdbcDriverLoader implements DisposableBean {
     public synchronized Set<Driver> load(ClassLoader loader, Iterable<String> classicDriverNames) throws SQLException {
         ServiceLoader<Driver> drivers = ServiceLoader.load(Driver.class, loader);
         Set<Driver> result = new HashSet<>();
-        for (Driver drv : drivers) {
-            if (drv != null) {
+        Iterator<Driver> it = drivers.iterator();
+        // Java8 以降、ODBC-JDBCブリッジを誤って読み込んでエラーしないように.
+        while (it.hasNext()) {
+            try {
+                Driver drv = it.next();
                 registerDriver(drv);
                 result.add(drv);
                 logger.info("Load JDBC Driver. {}", drv);
+            }
+            catch (Error ex) {
+                // ドライバーのロード失敗時も継続.
+                // 
+                logger.warn("Load JDBC Driver Failed. {}", ex.getMessage());
             }
         }
         loadClassicJdbcDrivers(classicDriverNames, loader, result);
